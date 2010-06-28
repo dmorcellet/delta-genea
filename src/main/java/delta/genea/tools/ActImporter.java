@@ -1,0 +1,367 @@
+package delta.genea.tools;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import delta.common.framework.objects.data.DataProxy;
+import delta.common.framework.objects.data.ObjectSource;
+import delta.genea.data.Act;
+import delta.genea.data.ActType;
+import delta.genea.data.ActsForPerson;
+import delta.genea.data.Person;
+import delta.genea.data.Place;
+import delta.genea.data.Union;
+import delta.genea.data.sources.GeneaDataSource;
+import delta.genea.data.trees.AncestorsTree;
+import delta.genea.time.FrenchRevolutionCalendar;
+import delta.genea.time.GregorianDate;
+
+/**
+ * @author DAM
+ */
+public class ActImporter
+{
+  private File _root;
+  private AncestorsTree _tree;
+  private GeneaDataSource _dataSource;
+  private HashMap<String,Act> _map;
+
+  private static final GregorianDate CHANGE_DATE=FrenchRevolutionCalendar.FIRST_DAY;
+
+  public void init(long id)
+  {
+    _map=new HashMap<String,Act>();
+    try
+    {
+      _dataSource=GeneaDataSource.getInstance("genea_ninie");
+      ObjectSource<Person> ds=_dataSource.getPersonDataSource();
+      DataProxy<Person> pp=new DataProxy<Person>(id,ds);
+      Person moi=pp.getDataObject();
+      _tree=new AncestorsTree(moi,1000);
+      _tree.build();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  private void handleFile(File fileName)
+  {
+    System.out.println("Handling file ["+fileName+"]");
+    ActType actType=ActType.BIRTH;
+    String name=fileName.getName();
+    //String newName="j_";
+    String newName="ninie/";
+    if (name.endsWith(".jpg"))
+    {
+      name=name.substring(0,name.length()-4);
+    }
+    if (name.startsWith("an"))
+    {
+      actType=ActType.BIRTH;
+    }
+    else if (name.startsWith("ad"))
+    {
+      actType=ActType.DEATH;
+    }
+    else if (name.startsWith("am"))
+    {
+      actType=ActType.UNION;
+    }
+    else
+    {
+      return;
+    }
+    newName=newName+name.substring(0,2);
+    name=name.substring(2);
+    long sosa1=0;
+    long sosa2=0;
+    {
+      int index=0;
+      int n=name.length();
+      while (index<n)
+      {
+        char c=name.charAt(index);
+        if (Character.isDigit(c))
+          sosa1=(sosa1*10)+(c-'0');
+        else break;
+        index++;
+      }
+      name=name.substring(index);
+    }
+    newName=newName+convertSosa(sosa1);
+    if (actType==ActType.UNION)
+    {
+      if ((name.length()==0) || (name.charAt(0)!='-'))
+        return;
+      name=name.substring(1);
+      {
+        int index=0; int n=name.length();
+        while (index<n)
+        {
+          char c=name.charAt(index);
+          if (Character.isDigit(c))
+          {
+            sosa2=(sosa2*10)+(c-'0');
+          }
+          else
+          {
+            break;
+          }
+          index++;
+        }
+        name=name.substring(index);
+      }
+      newName=newName+"-"+convertSosa(sosa2);
+    }
+    int pageIndex=0;
+    if ((name.length()>1) && (name.charAt(0)=='-'))
+    {
+      name=name.substring(1);
+      int index=0; int n=name.length();
+      while (index<n)
+      {
+        char c=name.charAt(index);
+        if (Character.isDigit(c))
+          pageIndex=(pageIndex*10)+(c-'0');
+        else break;
+        index++;
+      }
+      //name=name.substring(index);
+    }
+    else
+    {
+      pageIndex=1;
+    }
+    //System.out.println("Act "+actType+", sosa1="+sosa1+",sosa2="+sosa2+",pageIndex="+pageIndex);
+
+    Person p1=null;
+    Person p2=null;
+    if (sosa1!=0)
+    {
+      p1=_tree.getSosa(sosa1);
+      if (p1==null)
+      {
+        System.err.println("Erreur : pas de sosa "+sosa1);
+      }
+    }
+    if (sosa2!=0)
+    {
+      p2=_tree.getSosa(sosa2);
+      if (p2==null)
+      {
+        System.err.println("Erreur : pas de sosa "+sosa2);
+      }
+    }
+
+    ActsForPerson acts=new ActsForPerson(_dataSource,p1);
+    acts.build();
+    Long date=null;
+    Place place=null;
+    Act act=null;
+    if (actType==ActType.BIRTH)
+    {
+      act=_map.get(newName);
+      if (act==null)
+      {
+        date=p1.getBirthDate();
+        if (date==null)
+        {
+          System.err.println("Date is null for birth of sosa "+sosa1);
+        }
+        else
+        {
+          if (new GregorianDate(date).isBefore(CHANGE_DATE))
+          {
+            actType=ActType.BAPTEM;
+          }
+        }
+        place=p1.getBirthPlace();
+        act=acts.getBirthAct();
+        if (act==null)
+        {
+          act=new Act(0,_dataSource.getActDataSource());
+          act.setActType(actType);
+          act.setDate(date);
+          if (place!=null)
+          {
+            act.setPlaceProxy(new DataProxy<Place>(place.getPrimaryKey(),_dataSource.getPlaceDataSource()));
+          }
+          act.setNbFiles(pageIndex);
+          act.setTraite(false);
+          act.setP1Proxy(new DataProxy<Person>(p1.getPrimaryKey(),_dataSource.getPersonDataSource()));
+        }
+        else
+        {
+          long p1Key=act.getP1Key();
+          if (p1Key!=p1.getPrimaryKey())
+          {
+            System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
+          }
+          if (actType!=act.getActType())
+          {
+            System.err.println("Bad actType : "+actType+"!="+act.getActType());
+          }
+        }
+        act.setPath(newName);
+      }
+      if (pageIndex>act.getNbFiles()) act.setNbFiles(pageIndex);
+    }
+    else if (actType==ActType.DEATH)
+    {
+      act=_map.get(newName);
+      if (act==null)
+      {
+        date=p1.getDeathDate();
+        if (date==null) System.err.println("Date is null for death of sosa "+sosa1);
+        if (new GregorianDate(date).isBefore(CHANGE_DATE))
+        {
+          actType=ActType.BURIAL;
+        }
+        place=p1.getDeathPlace();
+        act=acts.getDeathAct();
+        if (act==null)
+        {
+          act=new Act(0,_dataSource.getActDataSource());
+          act.setActType(actType);
+          act.setDate(date);
+          if (place!=null)
+          {
+            act.setPlaceProxy(new DataProxy<Place>(place.getPrimaryKey(),_dataSource.getPlaceDataSource()));
+          }
+          act.setNbFiles(pageIndex);
+          act.setP1Proxy(new DataProxy<Person>(p1.getPrimaryKey(),_dataSource.getPersonDataSource()));
+        }
+        else
+        {
+          long p1Key=act.getP1Key();
+          if (p1Key!=p1.getPrimaryKey())
+          {
+            System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
+          }
+          if (actType!=act.getActType())
+          {
+            System.err.println("Bad actType : "+actType+"!="+act.getActType());
+          }
+        }
+        act.setPath(newName);
+      }
+      if (pageIndex>act.getNbFiles()) act.setNbFiles(pageIndex);
+    }
+    else if (actType==ActType.UNION)
+    {
+      if ((p1!=null) && (p2!=null))
+      {
+        act=_map.get(newName);
+        if (act==null)
+        {
+          Union u=acts.getUnionWith(p2.getPrimaryKey());
+          date=u.getDate();
+          if (date==null) System.err.println("Date is null for union of sosas "+sosa1+"/"+sosa2);
+          place=u.getPlace();
+          act=acts.getActOfUnionWith(p2.getPrimaryKey());
+          if (act==null)
+          {
+            act=new Act(0,_dataSource.getActDataSource());
+            act.setActType(actType);
+            act.setDate(date);
+            if (place!=null)
+            {
+              act.setPlaceProxy(new DataProxy<Place>(place.getPrimaryKey(),_dataSource.getPlaceDataSource()));
+            }
+            act.setNbFiles(pageIndex);
+            act.setP1Proxy(new DataProxy<Person>(p1.getPrimaryKey(),_dataSource.getPersonDataSource()));
+            act.setP2Proxy(new DataProxy<Person>(p2.getPrimaryKey(),_dataSource.getPersonDataSource()));
+          }
+          else
+          {
+            long p1Key=act.getP1Key();
+            if (p1Key!=p1.getPrimaryKey())
+            {
+              System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
+            }
+            long p2Key=act.getP2Key();
+            if (p2Key!=p2.getPrimaryKey())
+            {
+              System.err.println("Bad P2 : "+p2Key+"!="+p2.getPrimaryKey());
+            }
+            if (actType!=act.getActType())
+            {
+              System.err.println("Bad actType : "+actType+"!="+act.getActType());
+            }
+          }
+          act.setPath(newName);
+        }
+        if ((act!=null) && (pageIndex>act.getNbFiles())) 
+        {
+          act.setNbFiles(pageIndex);
+        }
+      }
+    }
+    if (act!=null)
+    {
+      _map.put(newName,act);
+    }
+    String newFileName=newName;
+    if (pageIndex>1) newFileName=newFileName+"-"+pageIndex;
+    newFileName=newFileName+".jpg";
+    //System.out.println("Renaming "+fileName.getName()+" to "+newFileName);
+    boolean same=(newFileName.equals(fileName.getName()));
+    if (!same)
+    {
+      System.out.println("Renommage : "+fileName.getName()+" to "+newFileName);
+      boolean ok=fileName.renameTo(new File(_root,newFileName));
+      if (!ok)
+      {
+        System.err.println("Erreur renommage : "+fileName.getName()+" to "+newFileName);
+      }
+    }
+  }
+
+  public void doIt()
+  {
+    _root=new File("/home/dm/data/genealogie/actes/ninie");
+    init(3);
+    File[] files=_root.listFiles();
+    for(int i=0;i<files.length;i++)
+    {
+      handleFile(files[i]);
+    }
+    //System.out.println(_map.size());
+
+    Act act;
+    ObjectSource<Act> dsActs=_dataSource.getActDataSource();
+    for(Iterator<Act> it=_map.values().iterator();it.hasNext();)
+    {
+      act=it.next();
+      if (act.getPrimaryKey()==0)
+      {
+        dsActs.create(act);
+      }
+      else
+      {
+        dsActs.update(act);
+      }
+    }
+  }
+
+  public static void main(String[] args)
+  {
+    new ActImporter().doIt();
+  }
+
+  public long convertSosa(long sosa)
+  {
+    return sosa;
+    /*
+    double log10=Math.log(sosa);
+    double log2=Math.log(2);
+    double log=log10/log2;
+    double same=Math.pow(2,Math.floor(log));
+    long tmp=sosa-(long)(same);
+    return tmp;
+    */
+  }
+}

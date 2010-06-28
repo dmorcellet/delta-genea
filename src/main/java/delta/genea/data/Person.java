@@ -1,0 +1,388 @@
+package delta.genea.data;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import delta.common.framework.objects.data.DataObject;
+import delta.common.framework.objects.data.DataProxy;
+import delta.common.framework.objects.data.ObjectSource;
+
+public class Person extends DataObject<Person>
+{
+  // Relations
+  public static final String CHILDREN_RELATION="CHILDREN";
+  public static final String GOD_CHILDREN_RELATION="GOD_CHILDREN";
+  public static final String COUSINS_RELATION="COUSINS";
+  // Sets
+  public static final String NAME_SET="NAME";
+
+  public static final String CLASS_NAME="PERSON";
+
+  private String _surName; // Nom
+  private String _firstName;  // Prénoms
+  private Sex _sex;
+  private String _signature;
+  // Birth
+  private final GeneaDate _birthDate;
+  private DataProxy<Place> _birthPlace;
+  // Death
+  private final GeneaDate _deathDate;
+  private DataProxy<Place> _deathPlace;
+  // Descendants ?
+  private boolean _noDescendants;
+
+  // Related persons
+  private DataProxy<Person> _father;
+  private DataProxy<Person> _mother;
+  private DataProxy<Person> _godFather;
+  private DataProxy<Person> _godMother;
+
+  // Known occupations
+  private List<OccupationForPerson> _occupations;
+  // Known homes
+  private List<HomeForPerson> _homes;
+
+  // Comments
+  private String _comments;
+
+  @Override
+  public String getClassName() { return CLASS_NAME; }
+
+  public Person(long primaryKey, ObjectSource<Person> source)
+  {
+    super(primaryKey,source);
+    _sex=Sex.MALE;
+    _noDescendants=false;
+    _surName="";
+    _firstName="";
+    _signature="";
+    _birthDate=new GeneaDate();
+    _deathDate=new GeneaDate();
+    _comments="";
+  }
+
+  public String getSurname()
+  {
+    return _surName;
+  }
+
+  public void setSurname(String surname)
+  {
+    if (surname==null)
+    {
+      surname="";
+    }
+    _surName=surname;
+  }
+
+  public String getFirstname()
+  {
+    return _firstName;
+  }
+
+  public void setFirstname(String firstname)
+  {
+    if (firstname==null)
+    {
+      firstname="";
+    }
+    _firstName=firstname;
+  }
+
+  @Override
+  public String getLabel()
+  {
+    String ret=getFullName();
+    return ret;
+  }
+
+  public String getFullName()
+  {
+    StringBuffer sb=new StringBuffer();
+    sb.append(_firstName);
+    sb.append(' ');
+    sb.append(_surName);
+    return sb.toString();
+  }
+
+  public Sex getSex()
+  {
+    return _sex;
+  }
+
+  public void setSex(Sex sex)
+  {
+    _sex=sex;
+  }
+
+  public String getSignature()
+  {
+    return _signature;
+  }
+
+  public void setSignature(String signature)
+  {
+    if (signature==null)
+    {
+      signature="";
+    }
+    _signature=signature;
+  }
+
+  public GeneaDate getBirthGeneaDate()
+  {
+    return _birthDate;
+  }
+
+  public Long getBirthDate()
+  {
+    return _birthDate.getDate();
+  }
+
+  public void setBirthDate(Long date, String infosDate)
+  {
+    _birthDate.setDate(date);
+    _birthDate.setInfosDate(infosDate);
+  }
+
+  public void setBirthDate(Date date, String infosDate)
+  {
+    _birthDate.setDate(date);
+    _birthDate.setInfosDate(infosDate);
+  }
+
+  public String getBirthInfos()
+  {
+    return _birthDate.getInfosDate();
+  }
+
+  public DataProxy<Place> getBirthPlaceProxy()
+  {
+    return _birthPlace;
+  }
+
+  public void setBirthPlaceProxy(DataProxy<Place> birthPlace)
+  {
+    _birthPlace=birthPlace;
+  }
+
+  public Place getBirthPlace()
+  {
+    if(_birthPlace!=null)
+    {
+      return _birthPlace.getDataObject();
+    }
+    return null;
+  }
+
+  public Long getDeathDate()
+  {
+    return _deathDate.getDate();
+  }
+
+  public GeneaDate getDeathGeneaDate()
+  {
+    return _deathDate;
+  }
+
+  public void setDeathDate(Long date, String infosDate)
+  {
+    _deathDate.setDate(date);
+    _deathDate.setInfosDate(infosDate);
+  }
+
+  public void setDeathDate(Date date, String infosDate)
+  {
+    _deathDate.setDate(date);
+    _deathDate.setInfosDate(infosDate);
+  }
+
+  public String getDeathInfos()
+  {
+    return _deathDate.getInfosDate();
+  }
+
+  public DataProxy<Place> getDeathPlaceProxy()
+  {
+    return _deathPlace;
+  }
+
+  public void setDeathPlaceProxy(DataProxy<Place> deathPlace)
+  {
+    _deathPlace=deathPlace;
+  }
+
+  public Place getDeathPlace()
+  {
+    if (_deathPlace!=null)
+    {
+      return _deathPlace.getDataObject();
+    }
+    return null;
+  }
+
+  public boolean getNoDescendants()
+  {
+    return _noDescendants;
+  }
+
+  public void setNoDescendants(boolean noDescendants)
+  {
+    _noDescendants=noDescendants;
+  }
+
+  public DataProxy<Person> getFatherProxy()
+  {
+    return _father;
+  }
+
+  public void setFatherProxy(DataProxy<Person> father)
+  {
+    _father=father;
+  }
+
+  public long getFatherKey()
+  {
+    long ret=0;
+    if (_father!=null)
+    {
+      ret=_father.getPrimaryKey();
+    }
+    return ret;
+  }
+
+  public Person getFather()
+  {
+    if (_father!=null)
+    {
+      return _father.getDataObject();
+    }
+    return null;
+  }
+
+  public DataProxy<Person> getMotherProxy()
+  {
+    return _mother;
+  }
+
+  public void setMotherProxy(DataProxy<Person> mother)
+  {
+    _mother=mother;
+  }
+
+  public long getMotherKey()
+  {
+    long ret=0;
+    if (_mother!=null)
+    {
+      ret=_mother.getPrimaryKey();
+    }
+    return ret;
+  }
+
+  public Person getMother()
+  {
+    if(_mother!=null)
+    {
+      return _mother.getDataObject();
+    }
+    return null;
+  }
+
+  public DataProxy<Person> getGodFatherProxy()
+  {
+    return _godFather;
+  }
+
+  public void setGodFatherProxy(DataProxy<Person> godFather)
+  {
+    _godFather=godFather;
+  }
+
+  public Person getGodFather()
+  {
+    if(_godFather!=null)
+    {
+      return _godFather.getDataObject();
+    }
+    return null;
+  }
+
+  public DataProxy<Person> getGodMotherProxy()
+  {
+    return _godMother;
+  }
+
+  public void setGodMotherProxy(DataProxy<Person> godMother)
+  {
+    _godMother=godMother;
+  }
+
+  public Person getGodMother()
+  {
+    if(_godMother!=null)
+    {
+      return _godMother.getDataObject();
+    }
+    return null;
+  }
+
+  public List<OccupationForPerson> getOccupations()
+  {
+    return _occupations;
+  }
+
+  public void setOccupations(List<OccupationForPerson> list)
+  {
+    _occupations=list;
+  }
+
+  public void addOccupation(OccupationForPerson o)
+  {
+    if (_occupations==null)
+    {
+      _occupations=new ArrayList<OccupationForPerson>();
+    }
+    _occupations.add(o);
+  }
+
+  public List<HomeForPerson> getHomes()
+  {
+    return _homes;
+  }
+
+  public void setHomes(List<HomeForPerson> list)
+  {
+    _homes=list;
+  }
+
+  public void addHome(HomeForPerson o)
+  {
+    if (_homes==null)
+    {
+      _homes=new ArrayList<HomeForPerson>();
+    }
+    _homes.add(o);
+  }
+
+  public String getComments()
+  {
+    return _comments;
+  }
+
+  public void setComments(String comments)
+  {
+    if (comments==null)
+    {
+      comments="";
+    }
+    _comments=comments;
+  }
+
+  @Override
+  public String toString()
+  {
+    return _surName+" "+_firstName;
+  }
+}

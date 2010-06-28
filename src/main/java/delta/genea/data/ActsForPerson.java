@@ -1,0 +1,221 @@
+package delta.genea.data;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import delta.common.framework.objects.data.ObjectSource;
+import delta.genea.data.sources.GeneaDataSource;
+
+/**
+ * @author DAM
+ */
+public class ActsForPerson
+{
+  private GeneaDataSource _dataSource;
+  private Person _rootPerson;
+  private Act _birthAct;
+  private Act _deathAct;
+  private List<Union> _unions;
+  private List<Act> _unionActs;
+  private List<Act> _weddingContractActs;
+  private List<Act> _otherActs;
+
+  public ActsForPerson(GeneaDataSource dataSource, Person rootPerson)
+  {
+    _dataSource=dataSource;
+    _rootPerson=rootPerson;
+  }
+
+  public boolean build()
+  {
+    long key=_rootPerson.getPrimaryKey();
+    ObjectSource<Act> actsSource=_dataSource.getActDataSource();
+    ObjectSource<Union> unionsSource=_dataSource.getUnionDataSource();
+
+    // Load unions
+    _unions=unionsSource.loadRelation(Union.UNIONS_RELATION,key);
+    List<Act> acts=actsSource.loadRelation(Act.MAIN_ACTS_RELATION,key);
+    _otherActs=actsSource.loadRelation(Act.OTHER_ACTS_RELATION,key);
+
+    Act current;
+    _unionActs=new ArrayList<Act>();
+    _weddingContractActs=new ArrayList<Act>();
+    for(int i=0;i<_unions.size();i++)
+    {
+      _unionActs.add(null);
+      _weddingContractActs.add(null);
+    }
+    for(Iterator<Act> it=acts.iterator();it.hasNext();)
+    {
+      current=it.next();
+      current.getP1();
+      current.getP2();
+      if (current.getActType().isBirthAct())
+      {
+        _birthAct=current;
+        it.remove();
+      }
+      else if (current.getActType().isDeathAct())
+      {
+        _deathAct=current;
+        it.remove();
+      }
+      else if (current.getActType()==ActType.UNION)
+      {
+        int index=0;
+        Union currentUnion;
+        for(Iterator<Union> it2=_unions.iterator();it2.hasNext();)
+        {
+          currentUnion=it2.next();
+          if ((currentUnion.getManKey()==current.getP1Key())
+              &&(currentUnion.getWomanKey()==current.getP2Key()))
+          {
+            _unionActs.set(index,current);
+            it.remove();
+            break;
+          }
+          index++;
+        }
+      }
+      else if (current.getActType()==ActType.WEDDING_CONTRACT)
+      {
+        int index=0;
+        Union currentUnion;
+        for(Iterator<Union> it2=_unions.iterator();it2.hasNext();)
+        {
+          currentUnion=it2.next();
+          if ((currentUnion.getManKey()==current.getP1Key())
+              &&(currentUnion.getWomanKey()==current.getP2Key()))
+          {
+            _weddingContractActs.set(index,current);
+            it.remove();
+            break;
+          }
+          index++;
+        }
+      }
+    }
+    _otherActs.addAll(acts);
+    return true;
+  }
+
+  public Act getBirthAct()
+  {
+    return _birthAct;
+  }
+
+  public Act getDeathAct()
+  {
+    return _deathAct;
+  }
+
+  public List<Union> getUnions()
+  {
+    return _unions;
+  }
+
+  public List<Act> getUnionActs()
+  {
+    return _unionActs;
+  }
+
+  public List<Act> getWeddingContractActs()
+  {
+    return _weddingContractActs;
+  }
+
+  public List<Act> getOtherActs()
+  {
+    return _otherActs;
+  }
+
+  public Act getActOfUnionWith(long otherKey)
+  {
+    if (otherKey==0)
+    {
+      return null;
+    }
+    Act act;
+    for(Iterator<Act> it=_unionActs.iterator();it.hasNext();)
+    {
+      act=it.next();
+      if (act!=null)
+      {
+        if ((act.getP1Key()==otherKey) || (act.getP2Key()==otherKey))
+        {
+          return act;
+        }
+      }
+    }
+    return null;
+  }
+
+  public Act getActOfWeddingContractWith(long otherKey)
+  {
+    if (otherKey==0)
+    {
+      return null;
+    }
+    Act act;
+    int i=0;
+    for(Iterator<Act> it=_weddingContractActs.iterator();it.hasNext();)
+    {
+      act=it.next();
+      if (act!=null)
+      {
+        if ((act.getP1Key()==otherKey) || (act.getP2Key()==otherKey))
+        {
+          return _weddingContractActs.get(i);
+        }
+      }
+      i++;
+    }
+    return null;
+  }
+
+  public Union getUnionWith(long otherKey)
+  {
+    if (otherKey==0)
+    {
+      return null;
+    }
+    Union union;
+    for(Iterator<Union> it=_unions.iterator();it.hasNext();)
+    {
+      union=it.next();
+      if (union!=null)
+      {
+        if ((union.getManKey()==otherKey) || (union.getWomanKey()==otherKey))
+        {
+          return union;
+        }
+      }
+    }
+    return null;
+  }
+
+  public List<Act> getAllActs()
+  {
+    ArrayList<Act> acts=new ArrayList<Act>();
+    if (_birthAct!=null)
+    {
+      acts.add(_birthAct);
+    }
+    if (_deathAct!=null)
+    {
+      acts.add(_deathAct);
+    }
+    Act current;
+    for(Iterator<Act> it=_unionActs.iterator();it.hasNext();)
+    {
+      current=it.next();
+      if (current!=null)
+      {
+        acts.add(current);
+      }
+    }
+    acts.addAll(_otherActs);
+    return acts;
+  }
+}

@@ -1,0 +1,123 @@
+package delta.genea.web.pages;
+
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+
+import delta.common.framework.objects.data.ObjectSource;
+import delta.common.framework.web.WebPageTools;
+import delta.common.utils.ParameterFinder;
+import delta.common.utils.tables.DataTableRow;
+import delta.common.utils.tables.DataTableSort;
+import delta.genea.data.Place;
+import delta.genea.data.Union;
+import delta.genea.data.formatters.GeneaDateFormatter;
+import delta.genea.data.tables.UnionsTable;
+import delta.genea.web.GeneaUserContext;
+import delta.genea.web.formatters.DataTableHtmlFormatter;
+import delta.genea.web.formatters.PersonHtmlFormatter;
+
+/**
+ * Builder for the 'unions' HTML page.
+ * @author DAM
+ */
+public class UnionsPage extends GeneaWebPage
+{
+  // HTML 4.01 strict validated
+  private String _name;
+  private long _key;
+  private Place _place;
+  private UnionsTable _unions;
+  private DataTableSort _sort;
+
+  @Override
+  public void parseParameters() throws Exception
+  {
+    _name=ParameterFinder.getStringParameter(_parameters,NamePageParameters.NAME,"MORCELLET");
+    _key=ParameterFinder.getLongParameter(_parameters,"KEY",76);
+    String sort=ParameterFinder.getStringParameter(_parameters,"SORT","");
+    if (sort.length()>0)
+    {
+      _sort=DataTableSort.buildSortFromString(sort);
+    }
+  }
+
+  @Override
+  public void fetchData() throws Exception
+  {
+    // Load data
+    ObjectSource<Place> pSource=getDataSource().getPlaceDataSource();
+    _place=pSource.load(_key);
+    ObjectSource<Union> uSource=getDataSource().getUnionDataSource();
+    Object[] params=new Object[]{_name,Long.valueOf(_key)};
+
+    List<Union> unions=uSource.loadObjectSet(Union.NAME_AND_PLACE_SET,params);
+    _unions=new UnionsTable();
+    Union u;
+    DataTableRow row;
+    int dateColumnIndex=_unions.getColumnByName(UnionsTable.DATE_COLUMN).getIndex();
+    int placeColumnIndex=_unions.getColumnByName(UnionsTable.PLACE_COLUMN).getIndex();
+    int manColumnIndex=_unions.getColumnByName(UnionsTable.MAN_COLUMN).getIndex();
+    int womanColumnIndex=_unions.getColumnByName(UnionsTable.WOMAN_COLUMN).getIndex();
+    for(Iterator<Union> it=unions.iterator();it.hasNext();)
+    {
+      u=it.next();
+      row=_unions.addRow();
+      row.setData(dateColumnIndex,u.getGeneaDate());
+      row.setData(placeColumnIndex,u.getPlace());
+      row.setData(manColumnIndex,u.getMan());
+      row.setData(womanColumnIndex,u.getWoman());
+    }
+
+    DataTableSort sort=_sort;
+    if (sort==null)
+    {
+      sort=_unions.getDefaultSort();
+    }
+    _unions.sort(sort);
+  }
+
+  @Override
+  public void generate(PrintWriter pw)
+  {
+    GeneaUserContext context=(GeneaUserContext)getUserContext();
+    long deCujus=context.getDeCujus();
+    PersonHtmlFormatter personsFormatter=new PersonHtmlFormatter(context);
+    personsFormatter.setAsLink(true);
+    personsFormatter.setDeCujus(deCujus);
+    personsFormatter.setUseSexIcon(false);
+    personsFormatter.setUseIsAncestorIcon(true);
+    personsFormatter.setUseNoDescendants(true);
+    personsFormatter.setUseLifeTime(false);
+    GeneaDateFormatter dateFormatter=new GeneaDateFormatter();
+    dateFormatter.setUseRevolutionaryCalendar(false);
+
+    String placeName="";
+    if (_place!=null)
+    {
+      placeName=_place.getFullName();
+    }
+    String title="Mariages "+_name+" à "+placeName;
+    WebPageTools.generatePageHeader(title,pw);
+    int nbUnions=_unions.getNbRows();
+    WebPageTools.generateHorizontalRuler(pw);
+    pw.println("<div>");
+    pw.print("<b>");
+    pw.print(title);
+    pw.print(" (");
+    pw.print(nbUnions);
+    pw.print(')');
+    pw.println("</b>");
+    WebPageTools.generateHorizontalRuler(pw);
+    DataTableHtmlFormatter tableFormatter=new DataTableHtmlFormatter();
+    tableFormatter.setFormatter(UnionsTable.DATE_COLUMN,dateFormatter);
+    tableFormatter.setFormatter(UnionsTable.MAN_COLUMN,personsFormatter);
+    tableFormatter.setFormatter(UnionsTable.WOMAN_COLUMN,personsFormatter);
+    StringBuilder sb=new StringBuilder();
+    tableFormatter.format(_unions,sb);
+    pw.print(sb);
+    // todo Manage wedding contract
+    pw.println("</div>");
+    WebPageTools.generatePageFooter(pw);
+  }
+}
