@@ -53,7 +53,7 @@ public class AncestorsListPage extends GeneaWebPage
 
     StringBuffer sb=new StringBuffer();
     sb.append("Ancêtres de ");
-    sb.append(_root.getSurname());
+    sb.append(_root.getLastName());
     sb.append(' ');
     sb.append(_root.getFirstname());
     String title=sb.toString();

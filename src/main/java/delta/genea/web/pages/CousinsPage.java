@@ -44,7 +44,7 @@ public class CousinsPage extends GeneaWebPage
     Person root=_data.getMainPerson();
     StringBuffer sb=new StringBuffer();
     sb.append("Cousins de ");
-    sb.append(root.getSurname());
+    sb.append(root.getLastName());
     sb.append(' ');
     sb.append(root.getFirstname());
 

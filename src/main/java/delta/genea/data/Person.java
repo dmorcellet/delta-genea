@@ -19,7 +19,7 @@ public class Person extends DataObject<Person>
 
   public static final String CLASS_NAME="PERSON";
 
-  private String _surName; // Nom
+  private String _lastName; // Nom
   private String _firstName;  // Prénoms
   private Sex _sex;
   private String _signature;
@@ -54,7 +54,7 @@ public class Person extends DataObject<Person>
     super(primaryKey,source);
     _sex=Sex.MALE;
     _noDescendants=false;
-    _surName="";
+    _lastName="";
     _firstName="";
     _signature="";
     _birthDate=new GeneaDate();
@@ -62,18 +62,18 @@ public class Person extends DataObject<Person>
     _comments="";
   }
 
-  public String getSurname()
+  public String getLastName()
   {
-    return _surName;
+    return _lastName;
   }
 
-  public void setSurname(String surname)
+  public void setLastName(String lastName)
   {
-    if (surname==null)
+    if (lastName==null)
     {
-      surname="";
+      lastName="";
     }
-    _surName=surname;
+    _lastName=lastName;
   }
 
   public String getFirstname()
@@ -102,7 +102,7 @@ public class Person extends DataObject<Person>
     StringBuffer sb=new StringBuffer();
     sb.append(_firstName);
     sb.append(' ');
-    sb.append(_surName);
+    sb.append(_lastName);
     return sb.toString();
   }
 
@@ -383,6 +383,6 @@ public class Person extends DataObject<Person>
   @Override
   public String toString()
   {
-    return _surName+" "+_firstName;
+    return _lastName+" "+_firstName;
   }
 }

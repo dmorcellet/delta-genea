@@ -104,7 +104,7 @@ public class EditPersonForm extends JDialog
 
   void okButtonCallback(ActionEvent e)
   {
-    _person.setSurname(_surnameTextField.getText());
+    _person.setLastName(_surnameTextField.getText());
     _person.setFirstname(_firstNameTextField.getText());
     _person.setSex((Sex)_sexCombo.getSelectedItem());
     System.out.println(_person);
@@ -120,7 +120,7 @@ public class EditPersonForm extends JDialog
   public void fillWithData(Person data)
   {
     _person=data;
-    _surnameTextField.setText(_person.getSurname());
+    _surnameTextField.setText(_person.getLastName());
     _firstNameTextField.setText(_person.getFirstname());
     _sexCombo.setSelectedItem(_person.getSex());
     _commentsTextField.setText(_person.getComments());

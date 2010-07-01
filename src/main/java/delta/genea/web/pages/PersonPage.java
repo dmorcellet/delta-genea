@@ -116,7 +116,7 @@ public class PersonPage extends GeneaWebPage
       pw.println("</b>");
     }
     // Patronyme
-    NamePageParameters namePage=new NamePageParameters(main.getSurname());
+    NamePageParameters namePage=new NamePageParameters(main.getLastName());
     pw.println(" <b>");
     pw.print("<a href=\"");
     pw.print(namePage.build());

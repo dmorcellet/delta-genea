@@ -209,7 +209,7 @@ public class Act extends DataObject<Act>
       label.append(" de ");
       if (p1!=null)
       {
-        label.append(p1.getSurname());
+        label.append(p1.getLastName());
         label.append(' ');
         label.append(p1.getFirstname());
       }
@@ -220,7 +220,7 @@ public class Act extends DataObject<Act>
       if (p2!=null)
       {
         label.append(" et de ");
-        label.append(p2.getSurname());
+        label.append(p2.getLastName());
         label.append(' ');
         label.append(p2.getFirstname());
       }

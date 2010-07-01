@@ -104,7 +104,7 @@ public class DumpAncestorsTree
     out.print("- ");
     out.print(p.getFirstname());
     out.print(" ");
-    out.println(p.getSurname());
+    out.println(p.getLastName());
     // Birth
     Long birthDate=p.getBirthDate();
     String birthInfos=p.getBirthInfos();
@@ -167,7 +167,7 @@ public class DumpAncestorsTree
       }
       if (partner!=null)
       {
-        out.println(" avec "+partner.getFirstname()+" "+partner.getSurname());
+        out.println(" avec "+partner.getFirstname()+" "+partner.getLastName());
       }
     }
   }

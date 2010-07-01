@@ -203,7 +203,7 @@ public class FromGEDCOM
             }
           }
           p.setFirstname(firstName);
-          p.setSurname(lastName);
+          p.setLastName(lastName);
         }
         // END OF NAME
         else if ((line.startsWith("1 BIRT"))||(line.startsWith("1 CHR")))

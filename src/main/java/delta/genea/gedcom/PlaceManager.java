@@ -29,7 +29,6 @@ public class PlaceManager
   private Map<String,Place> _townPlaces;
   private Map<String,Place> _deptPlaces;
   private Map<String,Place> _countryPlaces;
-  private ObjectSource<Place> _placeDataSource;
 
   public static final int UNUSED=0;
   public static final int TOWN_NAME=1;
@@ -56,7 +55,6 @@ public class PlaceManager
     _deptPlaces=new HashMap<String,Place>();
     _countryPlaces=new HashMap<String,Place>();
     _placeKey=1;
-    _placeDataSource=_dataSource.getPlaceDataSource();
   }
 
   /**
@@ -126,11 +124,12 @@ public class PlaceManager
 
   private Place getPlace(String name,String deptName,String deptCode,String country)
   {
+    ObjectSource<Place> placeDataSource=_dataSource.getPlaceDataSource();
     if ((country==null) || (country.length()==0)) country="FRANCE";
     Place countryPlace=_countryPlaces.get(country);
     if (countryPlace==null)
     {
-      countryPlace=new Place(_placeKey,_placeDataSource);
+      countryPlace=new Place(_placeKey,placeDataSource);
       countryPlace.setLevel(PlaceLevel.COUNTRY);
       countryPlace.setName(country);
       _countryPlaces.put(country,countryPlace);
@@ -160,24 +159,34 @@ public class PlaceManager
       deptPlace=_deptPlaces.get(deptKey);
       if (deptPlace==null)
       {
-        deptPlace=new Place(_placeKey,null);
+        deptPlace=new Place(_placeKey,placeDataSource);
         deptPlace.setLevel(PlaceLevel.DEPARTMENT);
         deptPlace.setName(deptName);
         deptPlace.setShortName(deptCode);
-        deptPlace.setParentPlaceProxy(new DataProxy<Place>(countryPlace.getPrimaryKey(),_placeDataSource));
+        deptPlace.setParentPlaceProxy(new DataProxy<Place>(countryPlace.getPrimaryKey(),placeDataSource));
         _deptPlaces.put(deptKey,deptPlace);
         _placeKey++;
       }
     }
     Place parent=countryPlace;
-    if (deptPlace!=null) parent=deptPlace;
+    if (deptPlace!=null)
+    {
+      parent=deptPlace;
+    }
     Place place=_townPlaces.get(name);
     if (place==null)
     {
-      place=new Place(_placeKey,null);
+      place=new Place(_placeKey,placeDataSource);
       place.setLevel(PlaceLevel.TOWN);
       place.setName(name);
-      place.setParentPlaceProxy(new DataProxy<Place>(parent.getPrimaryKey(),_placeDataSource));
+      if (parent!=null)
+      {
+        place.setParentPlaceProxy(new DataProxy<Place>(parent.getPrimaryKey(),placeDataSource));
+      }
+      else
+      {
+        place.setParentPlaceProxy(null);
+      }
       _townPlaces.put(name,place);
       _placeKey++;
     }

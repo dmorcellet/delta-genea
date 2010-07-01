@@ -19,7 +19,7 @@ public class DescendantsTree
     _depth=depth;
     _sameName=sameName;
     _tree=new TreeNode<Person>(rootPerson);
-    _mainName=rootPerson.getSurname();
+    _mainName=rootPerson.getLastName();
   }
 
   public TreeNode<Person> getRootNode()
@@ -52,7 +52,7 @@ public class DescendantsTree
       for(int i=0;i<nb;i++)
       {
         child=children.get(i);
-        if ((_sameName) && (!_mainName.equals(child.getSurname()))) continue;
+        if ((_sameName) && (!_mainName.equals(child.getLastName()))) continue;
         childTreeNode=node.addChild(child);
         build(child, childTreeNode, depth-1, usePartials);
       }

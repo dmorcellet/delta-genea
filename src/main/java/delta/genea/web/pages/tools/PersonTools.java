@@ -86,7 +86,7 @@ public class PersonTools
       }
       pw.print(person.getFirstname());
       pw.print(' ');
-      pw.print(person.getSurname());
+      pw.print(person.getLastName());
       if (_asLink)
       {
         pw.print("</A>");

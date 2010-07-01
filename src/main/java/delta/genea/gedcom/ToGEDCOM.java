@@ -346,11 +346,11 @@ public class ToGEDCOM
         {
           String id="0 @"+Long.toString(p.getPrimaryKey());
           writer.writeNextLine(id+"@ INDI");
-          String name="1 NAME "+p.getFirstname()+'/'+p.getSurname()+"/";
+          String name="1 NAME "+p.getFirstname()+'/'+p.getLastName()+"/";
           writer.writeNextLine(name);
           String givenName="2 GIVN "+p.getFirstname();
           writer.writeNextLine(givenName);
-          String surName="2 SURN "+p.getSurname();
+          String surName="2 SURN "+p.getLastName();
           writer.writeNextLine(surName);
           String sex="1 SEX "+p.getSex().getValue();
           writer.writeNextLine(sex);

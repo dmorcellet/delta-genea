@@ -5,21 +5,18 @@ import java.io.FileFilter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.FilesFinder;
 import delta.common.utils.files.TextFileReader;
-import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.files.filter.ExtensionPredicate;
 import delta.common.utils.text.EncodingNames;
 import delta.genea.webhoover.Downloader;
 import delta.genea.webhoover.TextTools;
 
 /**
- * @author dm
+ * @author DAM
  */
 public class Main
 {
@@ -33,10 +30,12 @@ public class Main
   private static final DateFormat DATE_FORMAT=new SimpleDateFormat("dd/MM/yyyy");
 
   private Downloader _d;
+  private int _nbDownloadedActs;
   
   public Main()
   {
     _d=new Downloader();
+    _nbDownloadedActs=0;
   }
 
   private BirthAct readFile(File f)
@@ -86,24 +85,16 @@ public class Main
     return act;
   }
 
-  private void downloadAct(int id)
-  {
-    File f=new File(Constants.OUT_DIR,String.valueOf(id)+".html");
-    f.getParentFile().mkdirs();
-    String url=Constants.ROOT_SITE_N+id;
-    _d.downloadPage(url,f);
-  }
-
-
-  private void doIt()
+  private void downloadBirthActs(String placeName)
   {
     String url=Constants.URL_BIRTH_ACTS_FOR_PLACE+"Billy-Berclau";
-    File main=new File(Constants.OUT_DIR2,"main.html");
-    main.getParentFile().mkdirs();
-    handleBirthPage(url,main,true);
+    TmpFilesManager tmp=new TmpFilesManager("gennpdc");
+    File tmpFile=tmp.newTmpFile("main.html");
+    handleBirthPage(url,tmpFile,true);
+    tmp.cleanup();
+    System.out.println(_nbDownloadedActs);
   }
   
-  private static int nb=0;
   private void handleBirthPage(String url, File out, boolean lookForMultiplePages)
   {
     _d.downloadPage(url,out);
@@ -125,7 +116,7 @@ public class Main
         String newURL=Constants.SITE+partialURL;
         System.out.println(newURL);
         foundBirthRefs=true;
-        nb++;
+        _nbDownloadedActs++;
         int index=newURL.indexOf("xid=");
         int id=NumericTools.parseInt(newURL.substring(index+4),-1);
         if (id!=-1)
@@ -148,7 +139,15 @@ public class Main
     }
   }
 
-  private void doIt2()
+  private void downloadAct(int id)
+  {
+    File f=new File(Constants.OUT_DIR,String.valueOf(id)+".html");
+    f.getParentFile().mkdirs();
+    String url=Constants.ROOT_SITE_N+id;
+    _d.downloadPage(url,f);
+  }
+
+  private void parseBirthActs()
   {
     List<BirthAct> acts=new ArrayList<BirthAct>();
     FilesFinder finder=new FilesFinder();
@@ -162,34 +161,11 @@ public class Main
         acts.add(act);
       }
     }
-    Comparator<BirthAct> c=new Comparator<BirthAct>()
-    {
-      public int compare(BirthAct o1, BirthAct o2)
-      {
-        return o1._date.compareTo(o2._date);
-      }
-    };
-    Collections.sort(acts,c);
-    File out=new File("/home/dm/bb2.txt");
-    TextFileWriter w=new TextFileWriter(out,EncodingNames.UTF_8);
-    if (w.start())
-    {
-      for(BirthAct act : acts)
-      {
-        w.writeNextLine(act._lastName);
-        w.writeNextLine(act._firstName);
-        w.writeNextLine(act._date.getTime());
-        w.writeNextLine(act._place);
-        w.writeNextLine(act._father);
-        w.writeNextLine(act._mother);
-      }
-      w.terminate();
-    }
+    BirthActsIO.writeActs(Constants.ACTS_FILE,acts);
   }
 
   public static void main(String[] args)
   {
-    new Main().doIt2();
-    System.out.println(nb);
+    new Main().parseBirthActs();
   }
 }

@@ -52,7 +52,7 @@ public class AncestorsPage extends GeneaWebPage
 
     StringBuffer sb=new StringBuffer();
     sb.append("Arbre ascendant de ");
-    sb.append(_root.getSurname());
+    sb.append(_root.getLastName());
     sb.append(' ');
     sb.append(_root.getFirstname());
     String title=sb.toString();

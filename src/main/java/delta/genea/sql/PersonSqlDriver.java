@@ -191,7 +191,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   private void fillPerson(Person person, ResultSet rs) throws SQLException
   {
     int n=2;
-    person.setSurname(rs.getString(n));
+    person.setLastName(rs.getString(n));
     n++;
     person.setFirstname(rs.getString(n));
     n++;
@@ -249,7 +249,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       throws SQLException
   {
     int n=2;
-    person.setSurname(rs.getString(n));
+    person.setLastName(rs.getString(n));
     n++;
     person.setFirstname(rs.getString(n));
     n++;
@@ -635,7 +635,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           _psInsert.setLong(n,key);
         }
         n++;
-        _psInsert.setString(n,person.getSurname());
+        _psInsert.setString(n,person.getLastName());
         n++;
         _psInsert.setString(n,person.getFirstname());
         n++;
