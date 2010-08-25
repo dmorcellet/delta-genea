@@ -16,8 +16,10 @@ public class BirthAct
   
   public BirthAct()
   {
+    // Nothing to do !! 
   }
 
+  @Override
   public String toString()
   {
     return _lastName+" "+_firstName+" "+_place+" "+_date+" "+_father+" "+_mother;

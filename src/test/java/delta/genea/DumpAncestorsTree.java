@@ -110,7 +110,7 @@ public class DumpAncestorsTree
     String birthInfos=p.getBirthInfos();
     Place birthPlace=p.getBirthPlace();
     boolean outBirth=false;
-    if ((birthDate!=null) || (birthInfos!=null) || (birthPlace!=null))
+    if ((birthDate!=null) || ((birthInfos!=null) && (birthInfos.length()>0)) || (birthPlace!=null))
     {
       for(int i=0;i<step;i++) out.print(' ');
       out.print("o ");
@@ -127,7 +127,7 @@ public class DumpAncestorsTree
     Long deathDate=p.getDeathDate();
     String deathInfos=p.getDeathInfos();
     Place deathPlace=p.getDeathPlace();
-    if ((deathDate!=null) || (deathInfos!=null) || (deathPlace!=null))
+    if ((deathDate!=null) || ((deathInfos!=null) && (deathInfos.length()>0)) || (deathPlace!=null))
     {
       if (!outBirth) for(int i=0;i<step;i++) out.print(' ');
       else out.print(", ");
@@ -159,15 +159,24 @@ public class DumpAncestorsTree
       unionPlace=union.getPlace();
       for(int i=0;i<step;i++) out.print(' ');
       out.print("x ");
-      if (unionDate!=null) out.print(new GregorianDate(unionDate)+" ");
-      else if (unionInfos!=null) out.print(unionInfos+" ");
+      if (unionDate!=null)
+      {
+        out.print(new GregorianDate(unionDate));
+        out.print(' ');
+      }
+      else if ((unionInfos!=null) && (unionInfos.length()>0))
+      {
+        out.print(unionInfos);
+        out.print(' ');
+      }
       if (unionPlace!=null)
       {
         out.print(unionPlace.getFullName());
+        out.print(' ');
       }
       if (partner!=null)
       {
-        out.println(" avec "+partner.getFirstname()+" "+partner.getLastName());
+        out.println("avec "+partner.getFirstname()+" "+partner.getLastName());
       }
     }
   }

@@ -9,6 +9,10 @@ import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.objects.data.ObjectSource;
 import delta.genea.misc.GeneaCfg;
 
+/**
+ * Act.
+ * @author DAM
+ */
 public class Act extends DataObject<Act>
 {
   /**

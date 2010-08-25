@@ -14,7 +14,7 @@ public class MainTestExportGEDCOM
   {
     try
     {
-      GeneaDataSource dataSource=GeneaDataSource.getInstance();
+      GeneaDataSource dataSource=GeneaDataSource.getInstance("genea");
 
       List<Person> persons=dataSource.getPersonDataSource().loadAll();
       List<Union> unions=dataSource.getUnionDataSource().loadAll();

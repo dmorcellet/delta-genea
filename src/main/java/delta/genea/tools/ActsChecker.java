@@ -72,14 +72,14 @@ public class ActsChecker
     }
   }
 
-  private static void browseAncestorsTree(AncestorsTree tree)
+  private void browseAncestorsTree(AncestorsTree tree)
   {
     browseAncestorsTree(System.out,1,tree.getRootNode(),null);
   }
 
-  private static void browseAncestorsTree(PrintStream out, int sosa, BinaryTreeNode<Person> fatherNode, BinaryTreeNode<Person> motherNode)
+  private void browseAncestorsTree(PrintStream out, int sosa, BinaryTreeNode<Person> fatherNode, BinaryTreeNode<Person> motherNode)
   {
-    GeneaDataSource dataSource=GeneaDataSource.getInstance("genea_ninie");
+    GeneaDataSource dataSource=GeneaDataSource.getInstance(_dbName);
     Person father=null;
     ActsForPerson fatherActs=null;
     if (fatherNode!=null)
@@ -127,7 +127,7 @@ public class ActsChecker
     }
   }
 
-  private static void handleAct(PrintStream out, int sosa1, int sosa2, String what, Person p, Person p2, Act act, Long date, Place place)
+  private void handleAct(PrintStream out, int sosa1, int sosa2, String what, Person p, Person p2, Act act, Long date, Place place)
   {
     StringBuffer sb=new StringBuffer();
     if (p!=null) sb.append(p.getFullName());
@@ -141,16 +141,7 @@ public class ActsChecker
     if (date==null) return;
     if (act==null)
     {
-      if (sosa1!=-1)
-      {
-        out.print(sosa1);
-      }
-      out.print("\t");
-      if (sosa2!=-1)
-      {
-        out.print(sosa2);
-      }
-      out.print("\t");
+      showSosa(out,sosa1,sosa2);
       out.print(persons+"\t");
       //out.print("manque acte de "+what+"\t");
       out.print(what+"\t");
@@ -164,6 +155,7 @@ public class ActsChecker
     {
       if (act.getNbFiles()==0)
       {
+        showSosa(out,sosa1,sosa2);
         out.print(persons+"\t");
         out.print("manque reproduction acte de "+what+"\t");
         if (place!=null) out.print(place.getName());
@@ -174,6 +166,7 @@ public class ActsChecker
       }
       if (!act.checkFiles())
       {
+        showSosa(out,sosa1,sosa2);
         out.print(persons+"\t");
         out.print("manque fichier(s) pour acte de "+what+"\t");
         if (place!=null) out.print(place.getName());
@@ -183,6 +176,20 @@ public class ActsChecker
         out.println(_format.format(new Date(date.longValue())));
       }
     }
+  }
+
+  private void showSosa(PrintStream out, long sosa1, long sosa2)
+  {
+    if (sosa1!=-1)
+    {
+      out.print(sosa1);
+    }
+    out.print("\t");
+    if (sosa2!=-1)
+    {
+      out.print(sosa2);
+    }
+    out.print("\t");
   }
 
   /**

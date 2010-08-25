@@ -20,7 +20,8 @@ public final class ActType
   public static final ActType WEDDING_CONTRACT=new ActType('C',"Contrat de mariage");
   public static final ActType LEASE=new ActType('b',"Bail");
   public static final ActType SHARE=new ActType('P',"Partage");
-  private static final ActType[] VALUES={BIRTH, BAPTEM, DEATH, BURIAL, UNION, WEDDING_CONTRACT, SELLING, TRANSACTION, LEASE, SHARE, OTHER};
+  public static final ActType TESTIMONIAL=new ActType('t',"Testament");
+  private static final ActType[] VALUES={BIRTH, BAPTEM, DEATH, BURIAL, UNION, WEDDING_CONTRACT, SELLING, TRANSACTION, LEASE, SHARE, TESTIMONIAL, OTHER};
 
   private char _value;
   private String _label;
