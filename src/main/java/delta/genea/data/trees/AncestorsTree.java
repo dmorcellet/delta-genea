@@ -9,6 +9,10 @@ import delta.common.utils.collections.BinaryTreeNode;
 import delta.genea.data.Couple;
 import delta.genea.data.Person;
 
+/**
+ * Tree of ancestors.
+ * @author DAM
+ */
 public class AncestorsTree
 {
   public static final int MAX_DEPTH=100;
@@ -17,6 +21,11 @@ public class AncestorsTree
   private BinaryTreeNode<Person> _tree;
   private int _depth;
 
+  /**
+   * Constructor.
+   * @param rootPerson Root persone.
+   * @param depth Depth of tree (0 means no ancestors,1 means parents only,...).
+   */
   public AncestorsTree(Person rootPerson, int depth)
   {
     _depth=depth;
@@ -24,16 +33,32 @@ public class AncestorsTree
     _tree=new BinaryTreeNode<Person>(null, rootPerson);
   }
 
+  /**
+   * Get the root node.
+   * @return the root node.
+   */
   public BinaryTreeNode<Person> getRootNode()
   {
     return _tree;
   }
 
+  /**
+   * Build this tree.
+   * @return <code>true</code> if this tree was successfully built, <code>false</code>
+   * otherwise.
+   */
   public boolean build()
   {
     return build(false);
   }
 
+  /**
+   * Build this tree.
+   * @param tolerantMode Indicates if the tree build continues if a referenced person
+   * cannot be loaded.
+   * @return <code>true</code> if this tree was successfully built, <code>false</code>
+   * otherwise.
+   */
   public boolean build(boolean tolerantMode)
   {
     return build(_rootPerson, _tree, _depth, tolerantMode);
@@ -43,22 +68,22 @@ public class AncestorsTree
   {
     boolean ret=true;
 
-    if(depth>0)
+    if (depth>0)
     {
-      if(person.getFatherProxy()!=null)
+      if (person.getFatherProxy()!=null)
       {
         Person father=person.getFather();
         node.setLeftData(father);
         if (father!=null)
         {
-          ret=build(father, node.getLeftNode(), depth-1,tolerantMode);
+          ret=build(father,node.getLeftNode(),depth-1,tolerantMode);
         }
         else
         {
           ret=tolerantMode;
         }
       }
-      if((ret)&&(person.getMotherProxy()!=null))
+      if ((ret)&&(person.getMotherProxy()!=null))
       {
         Person mother=person.getMother();
         node.setRightData(mother);
