@@ -21,7 +21,7 @@ public class TestDateInformation extends TestCase
   }
 
   /**
-   * Test date information building from string.
+   * Test build date information from string.
    */
   public void testDateInformationParsing()
   {
