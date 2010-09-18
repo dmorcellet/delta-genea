@@ -1,57 +1,27 @@
 package delta.genea.data.selections;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import delta.common.framework.objects.data.DataObject;
 
 /**
- * Base class for selections.
- * @author DAM
+ * Interface of an objects selection.
  * @param <T> Type of objects in this selection.
+ * @author DAM
  */
-public abstract class Selection<T extends DataObject>
+public interface Selection<T extends DataObject>
 {
-  private String _name;
-  private Set<T> _selectedObjects;
-  private HashSet<Long> _keys;
-
-  /**
-   * Constructor.
-   */
-  public Selection()
-  {
-    _name="";
-    _selectedObjects=new HashSet<T>();
-    _keys=new HashSet<Long>();
-  }
-  
   /**
    * Get the name of this selection.
    * @return the name of this selection.
    */
-  public String getName()
-  {
-    return _name;
-  }
+  String getName();
 
   /**
-   * Set the name of this selection.
-   * @param name Name to set.
+   * Get the objects in this selection.
+   * @return A set of objects.
    */
-  protected void setName(String name)
-  {
-    _name=name;
-  }
-
-  /**
-   * Get the selected objects.
-   * @return the selected objects.
-   */
-  public Set<T> getSelectedObjects()
-  {
-    return _selectedObjects;
-  }
+  Set<T> getSelectedObjects();
 
   /**
    * Indicates if this selection contains an object that has
@@ -60,30 +30,11 @@ public abstract class Selection<T extends DataObject>
    * @return <code>true</code> if the targeted object is in this selection,
    * <code>false</code> otherwise.
    */
-  public boolean hasObject(long key)
-  {
-    return _keys.contains(Long.valueOf(key));
-  }
+  boolean hasObject(long key);
 
   /**
-   * Build this selection.
+   * Get the size of this selection.
+   * @return the size of this selection.
    */
-  public abstract void build();
-
-  /**
-   * Add an object to this selection.
-   * @param object Object to add.
-   */
-  protected void addObject(T object)
-  {
-    if (object!=null)
-    {
-      long key=object.getPrimaryKey();
-      if (!hasObject(key))
-      {
-        _selectedObjects.add(object);
-        _keys.add(Long.valueOf(key));
-      }
-    }
-  }
+  public int getSize();
 }

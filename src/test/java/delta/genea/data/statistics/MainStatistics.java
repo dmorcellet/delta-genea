@@ -1,10 +1,16 @@
 package delta.genea.data.statistics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import delta.common.framework.objects.data.ObjectSource;
+import delta.genea.data.Person;
 import delta.genea.data.Place;
-import delta.genea.data.selections.AncestorsSelection;
+import delta.genea.data.selections.AncestorsSelectionBuilder;
+import delta.genea.data.selections.CompoundSelection;
+import delta.genea.data.selections.NameSelectionBuilder;
+import delta.genea.data.selections.Selection;
+import delta.genea.data.selections.CompoundSelection.Operator;
 import delta.genea.data.sources.GeneaDataSource;
 
 /**
@@ -21,12 +27,20 @@ public class MainStatistics
    */
   public static void main(String args[])
   {
-    AncestorsSelection selection=new AncestorsSelection(DATA_SOURCE,76,1000);
-    selection.build();
-    System.out.println(selection.getSelectedObjects().size());
-    QuanticDataCollection<Long> birthPlaceStats=PlaceStatistics.birthPlaceStats(selection);
+    ArrayList<Selection<Person>> selections=new ArrayList<Selection<Person>>();
+    AncestorsSelectionBuilder ancestorsBuilder=new AncestorsSelectionBuilder(DATA_SOURCE,76);
+    Selection<Person> ancestors=ancestorsBuilder.build();
+    selections.add(ancestors);
+    System.out.println(ancestors.getSize());
+    NameSelectionBuilder nameSelectionBuilder=new NameSelectionBuilder(DATA_SOURCE,"QUEVA");
+    Selection<Person> namedSelection=nameSelectionBuilder.build();
+    selections.add(namedSelection);
+    CompoundSelection<Person> compoundSelection=new CompoundSelection<Person>("compound",Operator.AND,selections);
+    System.out.println(compoundSelection.getSize());
+    
+    QuanticDataCollection<Long> birthPlaceStats=PlaceStatistics.birthPlaceStats(compoundSelection);
     showStats("Birth place",birthPlaceStats);
-    QuanticDataCollection<Long> deathPlaceStats=PlaceStatistics.deathPlaceStats(selection);
+    QuanticDataCollection<Long> deathPlaceStats=PlaceStatistics.deathPlaceStats(compoundSelection);
     showStats("Death place",deathPlaceStats);
   }
 
