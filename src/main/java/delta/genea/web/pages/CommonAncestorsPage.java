@@ -29,8 +29,8 @@ public class CommonAncestorsPage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _key1=ParameterFinder.getLongParameter(_parameters,"KEY1",76);
-    _key2=ParameterFinder.getLongParameter(_parameters,"KEY2",76);
+    _key1=ParameterFinder.getLongParameter(_request,"KEY1",76);
+    _key2=ParameterFinder.getLongParameter(_request,"KEY2",76);
   }
 
   @Override

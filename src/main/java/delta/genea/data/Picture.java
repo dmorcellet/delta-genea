@@ -10,6 +10,9 @@ import delta.genea.misc.GeneaCfg;
 
 public class Picture extends DataObject<Picture>
 {
+  /**
+   * Class name.
+   */
   public static final String CLASS_NAME="PICTURE";
   public static final String PICTURES_FOR_PERSON_RELATION="PICTURES_FOR_PERSON";
 
@@ -24,6 +27,11 @@ public class Picture extends DataObject<Picture>
     return CLASS_NAME;
   }
 
+  /**
+   * Constructor.
+   * @param primaryKey Primary key.
+   * @param source Attached objects source.
+   */
   public Picture(long primaryKey, ObjectSource<Picture> source)
   {
     super(primaryKey,source);

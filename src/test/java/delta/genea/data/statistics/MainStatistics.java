@@ -32,11 +32,15 @@ public class MainStatistics
     Selection<Person> ancestors=ancestorsBuilder.build();
     selections.add(ancestors);
     System.out.println(ancestors.getSize());
-    NameSelectionBuilder nameSelectionBuilder=new NameSelectionBuilder(DATA_SOURCE,"QUEVA");
+    NameSelectionBuilder nameSelectionBuilder=new NameSelectionBuilder(DATA_SOURCE,"SAUVAGE");
     Selection<Person> namedSelection=nameSelectionBuilder.build();
     selections.add(namedSelection);
     CompoundSelection<Person> compoundSelection=new CompoundSelection<Person>("compound",Operator.AND,selections);
     System.out.println(compoundSelection.getSize());
+    for(Person p : compoundSelection.getSelectedObjects())
+    {
+      System.out.println(p.getFullName());
+    }
     
     QuanticDataCollection<Long> birthPlaceStats=PlaceStatistics.birthPlaceStats(compoundSelection);
     showStats("Birth place",birthPlaceStats);

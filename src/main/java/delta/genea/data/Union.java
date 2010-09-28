@@ -8,6 +8,9 @@ import delta.common.framework.objects.data.ObjectSource;
 
 public class Union extends DataObject<Union>
 {
+  /**
+   * Class name.
+   */
   public static final String CLASS_NAME="UNION";
   public static final String UNIONS_RELATION="UNIONS_FOR_PERSON";
   // Sets
@@ -40,6 +43,11 @@ public class Union extends DataObject<Union>
     super();
   }
 
+  /**
+   * Constructor.
+   * @param primaryKey Primary key.
+   * @param source Attached objects source.
+   */
   public Union(long primaryKey, ObjectSource<Union> source)
   {
     super(primaryKey,source);

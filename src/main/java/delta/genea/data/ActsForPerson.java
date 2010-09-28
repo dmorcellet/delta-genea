@@ -51,48 +51,51 @@ public class ActsForPerson
       current=it.next();
       current.getP1();
       current.getP2();
-      if (current.getActType().isBirthAct())
-      {
-        _birthAct=current;
-        it.remove();
-      }
-      else if (current.getActType().isDeathAct())
-      {
-        _deathAct=current;
-        it.remove();
-      }
-      else if (current.getActType()==ActType.UNION)
-      {
-        int index=0;
-        Union currentUnion;
-        for(Iterator<Union> it2=_unions.iterator();it2.hasNext();)
+      ActType type=current.getActType();
+      if (type!=null) {
+        if (type.isBirthAct())
         {
-          currentUnion=it2.next();
-          if ((currentUnion.getManKey()==current.getP1Key())
-              &&(currentUnion.getWomanKey()==current.getP2Key()))
-          {
-            _unionActs.set(index,current);
-            it.remove();
-            break;
-          }
-          index++;
+          _birthAct=current;
+          it.remove();
         }
-      }
-      else if (current.getActType()==ActType.WEDDING_CONTRACT)
-      {
-        int index=0;
-        Union currentUnion;
-        for(Iterator<Union> it2=_unions.iterator();it2.hasNext();)
+        else if (type.isDeathAct())
         {
-          currentUnion=it2.next();
-          if ((currentUnion.getManKey()==current.getP1Key())
-              &&(currentUnion.getWomanKey()==current.getP2Key()))
+          _deathAct=current;
+          it.remove();
+        }
+        else if (current.getActTypeKey()==ActType.UNION)
+        {
+          int index=0;
+          Union currentUnion;
+          for(Iterator<Union> it2=_unions.iterator();it2.hasNext();)
           {
-            _weddingContractActs.set(index,current);
-            it.remove();
-            break;
+            currentUnion=it2.next();
+            if ((currentUnion.getManKey()==current.getP1Key())
+                &&(currentUnion.getWomanKey()==current.getP2Key()))
+            {
+              _unionActs.set(index,current);
+              it.remove();
+              break;
+            }
+            index++;
           }
-          index++;
+        }
+        else if (current.getActTypeKey()==ActType.WEDDING_CONTRACT)
+        {
+          int index=0;
+          Union currentUnion;
+          for(Iterator<Union> it2=_unions.iterator();it2.hasNext();)
+          {
+            currentUnion=it2.next();
+            if ((currentUnion.getManKey()==current.getP1Key())
+                &&(currentUnion.getWomanKey()==current.getP2Key()))
+            {
+              _weddingContractActs.set(index,current);
+              it.remove();
+              break;
+            }
+            index++;
+          }
         }
       }
     }

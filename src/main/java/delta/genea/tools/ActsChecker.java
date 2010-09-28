@@ -32,7 +32,11 @@ public class ActsChecker
 {
   private static final Logger _logger=GeneaLoggers.getGeneaLogger();
   private static final SimpleDateFormat _format=new SimpleDateFormat("dd/MM/yyyy");
-
+  private static final String BIRTH="Naissance";
+  private static final String DEATH="Décès";
+  private static final String UNION="Mariage";
+  private static final String WEDDING_CONTRACT="Contrat de mariage";
+  
   private String _dbName;
   private long _rootPersonKey;
 
@@ -87,8 +91,8 @@ public class ActsChecker
       father=fatherNode.getData();
       fatherActs=new ActsForPerson(dataSource,father);
       fatherActs.build();
-      handleAct(out,sosa,-1,ActType.BIRTH.getLabel(),father,null,fatherActs.getBirthAct(),father.getBirthDate(),father.getBirthPlace());
-      handleAct(out,sosa,-1,ActType.DEATH.getLabel(),father,null,fatherActs.getDeathAct(),father.getDeathDate(),father.getDeathPlace());
+      handleAct(out,sosa,-1,BIRTH,father,null,fatherActs.getBirthAct(),father.getBirthDate(),father.getBirthPlace());
+      handleAct(out,sosa,-1,DEATH,father,null,fatherActs.getDeathAct(),father.getDeathDate(),father.getDeathPlace());
     }
     Person mother=null;
     ActsForPerson motherActs=null;
@@ -97,8 +101,8 @@ public class ActsChecker
       mother=motherNode.getData();
       motherActs=new ActsForPerson(dataSource,mother);
       motherActs.build();
-      handleAct(out,sosa+1,-1,ActType.BIRTH.getLabel(),mother,null,motherActs.getBirthAct(),mother.getBirthDate(),mother.getBirthPlace());
-      handleAct(out,sosa+1,-1,ActType.DEATH.getLabel(),mother,null,motherActs.getDeathAct(),mother.getDeathDate(),mother.getDeathPlace());
+      handleAct(out,sosa+1,-1,BIRTH,mother,null,motherActs.getBirthAct(),mother.getBirthDate(),mother.getBirthPlace());
+      handleAct(out,sosa+1,-1,DEATH,mother,null,motherActs.getDeathAct(),mother.getDeathDate(),mother.getDeathPlace());
     }
     if ((father!=null) && (mother!=null))
     {
@@ -108,13 +112,13 @@ public class ActsChecker
       {
         Act unionAct=fatherActs.getActOfUnionWith(motherKey);
         Long unionDate=union.getDate();
-        handleAct(out,sosa,sosa+1,ActType.UNION.getLabel(),father,mother,unionAct,unionDate,union.getPlace());
+        handleAct(out,sosa,sosa+1,UNION,father,mother,unionAct,unionDate,union.getPlace());
       }
       Act weddingContract=fatherActs.getActOfWeddingContractWith(motherKey);
       if (weddingContract!=null)
       {
         Long wcDate=weddingContract.getDate();
-        handleAct(out,sosa,sosa+1,ActType.WEDDING_CONTRACT.getLabel(),father,mother,weddingContract,wcDate,null);
+        handleAct(out,sosa,sosa+1,WEDDING_CONTRACT,father,mother,weddingContract,wcDate,null);
       }
     }
     if (fatherNode!=null)
@@ -157,6 +161,10 @@ public class ActsChecker
       {
         showSosa(out,sosa1,sosa2);
         out.print(persons+"\t");
+        ActType type=act.getActType();
+        if (type!=null) {
+          what=type.getType();
+        }
         out.print("manque reproduction acte de "+what+"\t");
         if (place!=null) out.print(place.getName());
         out.print("\t");

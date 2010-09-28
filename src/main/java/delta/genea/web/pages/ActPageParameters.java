@@ -9,7 +9,7 @@ import delta.common.framework.web.PageParameters;
 public class ActPageParameters extends PageParameters
 {
   public static final String ACTION_VALUE="ACT";
-  private static final String KEY="KEY";
+  public static final String KEY="KEY";
   private long _key;
 
   /**

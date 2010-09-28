@@ -8,15 +8,31 @@ import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.objects.data.ObjectSource;
 
+/**
+ * Person.
+ * @author DAM
+ */
 public class Person extends DataObject<Person>
 {
-  // Relations
+  /**
+   * Relation that gives the children of a person.
+   */
   public static final String CHILDREN_RELATION="CHILDREN";
+  /**
+   * Relation that gives the god-children of a person.
+   */
   public static final String GOD_CHILDREN_RELATION="GOD_CHILDREN";
+  /**
+   * Relation that gives the registered cousins of a person.
+   */
   public static final String COUSINS_RELATION="COUSINS";
-  // Sets
+  /**
+   * Set of the persons with a given name.
+   */
   public static final String NAME_SET="NAME";
-
+  /**
+   * Class name.
+   */
   public static final String CLASS_NAME="PERSON";
 
   private String _lastName; // Nom
@@ -49,6 +65,11 @@ public class Person extends DataObject<Person>
   @Override
   public String getClassName() { return CLASS_NAME; }
 
+  /**
+   * Constructor.
+   * @param primaryKey Primary key.
+   * @param source Attached objects source.
+   */
   public Person(long primaryKey, ObjectSource<Person> source)
   {
     super(primaryKey,source);
@@ -106,6 +127,10 @@ public class Person extends DataObject<Person>
     return sb.toString();
   }
 
+  /**
+   * Get the sex of this person.
+   * @return the sex of this person.
+   */
   public Sex getSex()
   {
     return _sex;
@@ -130,6 +155,10 @@ public class Person extends DataObject<Person>
     _signature=signature;
   }
 
+  /**
+   * Get the birth date of this person.
+   * @return the birth date of this person.
+   */
   public GeneaDate getBirthGeneaDate()
   {
     return _birthDate;
@@ -157,6 +186,10 @@ public class Person extends DataObject<Person>
     return _birthDate.getInfosDate();
   }
 
+  /**
+   * Get the proxy for the birth place of this person.
+   * @return the proxy for the birth place of this person.
+   */
   public DataProxy<Place> getBirthPlaceProxy()
   {
     return _birthPlace;
@@ -169,7 +202,7 @@ public class Person extends DataObject<Person>
 
   public Place getBirthPlace()
   {
-    if(_birthPlace!=null)
+    if (_birthPlace!=null)
     {
       return _birthPlace.getDataObject();
     }

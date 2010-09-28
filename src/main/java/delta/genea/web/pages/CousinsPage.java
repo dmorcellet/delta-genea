@@ -22,7 +22,7 @@ public class CousinsPage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    long key=ParameterFinder.getLongParameter(_parameters,"KEY",76);
+    long key=ParameterFinder.getLongParameter(_request,"KEY",76);
     _data=new CousinsPageData(key);
   }
 

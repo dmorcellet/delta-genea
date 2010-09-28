@@ -33,9 +33,9 @@ public class UnionsPage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _name=ParameterFinder.getStringParameter(_parameters,NamePageParameters.NAME,"MORCELLET");
-    _key=ParameterFinder.getLongParameter(_parameters,"KEY",76);
-    String sort=ParameterFinder.getStringParameter(_parameters,"SORT","");
+    _name=ParameterFinder.getStringParameter(_request,NamePageParameters.NAME,"MORCELLET");
+    _key=ParameterFinder.getLongParameter(_request,"KEY",76);
+    String sort=ParameterFinder.getStringParameter(_request,"SORT","");
     if (sort.length()>0)
     {
       _sort=DataTableSort.buildSortFromString(sort);

@@ -27,9 +27,9 @@ public class DescendantsPage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _key=ParameterFinder.getLongParameter(_parameters,DescendantsPageParameters.MAIN_PERSON_KEY,76);
-    _depth=ParameterFinder.getIntParameter(_parameters,DescendantsPageParameters.DEPTH,100);
-    _sameName=ParameterFinder.getBooleanParameter(_parameters,DescendantsPageParameters.SAME_NAME,false);
+    _key=ParameterFinder.getLongParameter(_request,DescendantsPageParameters.MAIN_PERSON_KEY,76);
+    _depth=ParameterFinder.getIntParameter(_request,DescendantsPageParameters.DEPTH,100);
+    _sameName=ParameterFinder.getBooleanParameter(_request,DescendantsPageParameters.SAME_NAME,false);
   }
 
   @Override

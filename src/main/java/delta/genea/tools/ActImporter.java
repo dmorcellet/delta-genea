@@ -50,7 +50,7 @@ public class ActImporter
   private void handleFile(File fileName)
   {
     System.out.println("Handling file ["+fileName+"]");
-    ActType actType=ActType.BIRTH;
+    long actType=ActType.BIRTH;
     String name=fileName.getName();
     //String newName="j_";
     String newName="ninie/";
@@ -183,7 +183,7 @@ public class ActImporter
         if (act==null)
         {
           act=new Act(0,_dataSource.getActDataSource());
-          act.setActType(actType);
+          act.setActTypeProxy(new DataProxy<ActType>(actType,_dataSource.getActTypeDataSource()));
           act.setDate(date);
           if (place!=null)
           {
@@ -200,7 +200,7 @@ public class ActImporter
           {
             System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
           }
-          if (actType!=act.getActType())
+          if (actType!=act.getActTypeKey())
           {
             System.err.println("Bad actType : "+actType+"!="+act.getActType());
           }
@@ -225,7 +225,7 @@ public class ActImporter
         if (act==null)
         {
           act=new Act(0,_dataSource.getActDataSource());
-          act.setActType(actType);
+          act.setActTypeProxy(new DataProxy<ActType>(actType,_dataSource.getActTypeDataSource()));
           act.setDate(date);
           if (place!=null)
           {
@@ -241,7 +241,7 @@ public class ActImporter
           {
             System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
           }
-          if (actType!=act.getActType())
+          if (actType!=act.getActTypeKey())
           {
             System.err.println("Bad actType : "+actType+"!="+act.getActType());
           }
@@ -265,7 +265,7 @@ public class ActImporter
           if (act==null)
           {
             act=new Act(0,_dataSource.getActDataSource());
-            act.setActType(actType);
+            act.setActTypeProxy(new DataProxy<ActType>(actType,_dataSource.getActTypeDataSource()));
             act.setDate(date);
             if (place!=null)
             {
@@ -287,7 +287,7 @@ public class ActImporter
             {
               System.err.println("Bad P2 : "+p2Key+"!="+p2.getPrimaryKey());
             }
-            if (actType!=act.getActType())
+            if (actType!=act.getActTypeKey())
             {
               System.err.println("Bad actType : "+actType+"!="+act.getActType());
             }

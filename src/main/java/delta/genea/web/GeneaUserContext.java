@@ -1,9 +1,9 @@
 package delta.genea.web;
 
 import delta.common.framework.web.WebApplication;
-import delta.common.framework.web.WebRequestParameters;
 import delta.common.framework.web.WebUserContext;
 import delta.common.utils.ParameterFinder;
+import delta.common.utils.ParametersNode;
 import delta.genea.data.Person;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.misc.GeneaCfg;
@@ -65,7 +65,7 @@ public class GeneaUserContext extends WebUserContext
    */
   public long getDeCujus()
   {
-    return getLongParameter(DE_CUJUS,-1);
+    return ParameterFinder.getLongParameter(this,DE_CUJUS,-1);
   }
 
   /**
@@ -83,11 +83,11 @@ public class GeneaUserContext extends WebUserContext
    */
   public String getDbName()
   {
-    return getStringParameter(DB_NAME,null);
+    return ParameterFinder.getStringParameter(this,DB_NAME,null);
   }
 
   @Override
-  public void useParameters(WebRequestParameters requestParameters)
+  public void useParameters(ParametersNode requestParameters)
   {
     // De cujus update
     long previousDeCujus=getDeCujus();

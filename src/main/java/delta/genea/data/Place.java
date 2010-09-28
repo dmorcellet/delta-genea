@@ -6,6 +6,9 @@ import delta.common.framework.objects.data.ObjectSource;
 
 public class Place extends DataObject<Place>
 {
+  /**
+   * Class name.
+   */
   public static final String CLASS_NAME="PLACE";
 
   private String _name;
@@ -24,6 +27,11 @@ public class Place extends DataObject<Place>
     super();
   }
 
+  /**
+   * Constructor.
+   * @param primaryKey Primary key.
+   * @param source Attached objects source.
+   */
   public Place(long primaryKey, ObjectSource<Place> source)
   {
     super(primaryKey,source);

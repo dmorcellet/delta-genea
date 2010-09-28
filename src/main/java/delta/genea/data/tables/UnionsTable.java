@@ -2,8 +2,8 @@ package delta.genea.data.tables;
 
 import delta.common.framework.objects.data.DataObjectComparator;
 import delta.common.utils.tables.DataTable;
-import delta.common.utils.tables.DataTableColumn;
 import delta.common.utils.tables.DataTableSort;
+import delta.genea.data.GeneaDate;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.comparators.GeneaDateComparator;
@@ -29,25 +29,13 @@ public class UnionsTable extends DataTable
   private void init()
   {
     // Date
-    addColumn(DATE_COLUMN);
-    DataTableColumn dateColumn=getColumnByName(DATE_COLUMN);
-    GeneaDateComparator dateComparator=new GeneaDateComparator();
-    dateColumn.setComparator(dateComparator);
+    addColumn(DATE_COLUMN,GeneaDate.class,new GeneaDateComparator());
     // Place
-    addColumn(PLACE_COLUMN);
-    DataTableColumn placeColumn=getColumnByName(PLACE_COLUMN);
-    DataObjectComparator<Place> placeComparator=new DataObjectComparator<Place>();
-    placeColumn.setComparator(placeComparator);
+    addColumn(PLACE_COLUMN,Place.class,new DataObjectComparator<Place>());
     // Man
-    addColumn(MAN_COLUMN);
-    DataTableColumn manColumn=getColumnByName(MAN_COLUMN);
-    DataObjectComparator<Person> manComparator=new DataObjectComparator<Person>();
-    manColumn.setComparator(manComparator);
+    addColumn(MAN_COLUMN,Person.class,new DataObjectComparator<Person>());
     // Woman
-    addColumn(WOMAN_COLUMN);
-    DataTableColumn womanColumn=getColumnByName(WOMAN_COLUMN);
-    DataObjectComparator<Person> womanComparator=new DataObjectComparator<Person>();
-    womanColumn.setComparator(womanComparator);
+    addColumn(WOMAN_COLUMN,Person.class,new DataObjectComparator<Person>());
   }
 
   public DataTableSort getDefaultSort()

@@ -1,74 +1,99 @@
 package delta.genea.data;
 
-public final class ActType
+import delta.common.framework.objects.data.DataObject;
+import delta.common.framework.objects.data.ObjectSource;
+
+/**
+ * Type of an act.
+ * @author DAM
+ */
+public class ActType extends DataObject<ActType>
 {
   /**
    * Act type for birth acts.
    */
-  public static final ActType BIRTH=new ActType('N',"Naissance");
+  public static final long BIRTH=3;
   /**
    * Act type for baptem acts.
    */
-  public static final ActType BAPTEM=new ActType('B',"Baptême");
-  public static final ActType DEATH=new ActType('D',"Décès");
-  public static final ActType BURIAL=new ActType('S',"Sépulture");
-  public static final ActType UNION=new ActType('M',"Mariage");
-  public static final ActType CONSANGUINITY_TREE=new ActType('A',"Dispense de consanguinité");
-  public static final ActType SELLING=new ActType('V',"Vente");
-  public static final ActType TRANSACTION=new ActType('T',"Transaction");
-  public static final ActType OTHER=new ActType('?',"Inconnu");
-  public static final ActType WEDDING_CONTRACT=new ActType('C',"Contrat de mariage");
-  public static final ActType LEASE=new ActType('b',"Bail");
-  public static final ActType SHARE=new ActType('P',"Partage");
-  public static final ActType TESTIMONIAL=new ActType('t',"Testament");
-  private static final ActType[] VALUES={BIRTH, BAPTEM, DEATH, BURIAL, UNION, WEDDING_CONTRACT, SELLING, TRANSACTION, LEASE, SHARE, TESTIMONIAL, OTHER};
+  public static final long BAPTEM=1;
+  public static final long DEATH=4;
+  public static final long BURIAL=2;
+  public static final long UNION=5;
+  public static final long CONSANGUINITY_TREE=6;
+  public static final long SELLING=7;
+  public static final long TRANSACTION=8;
+  public static final long OTHER=0;
+  public static final long WEDDING_CONTRACT=12;
+  public static final long LEASE=9;
+  public static final long SHARE=10;
+  public static final long TESTIMONIAL=11;
 
-  private char _value;
-  private String _label;
+  // Relations
+  // ...
+  // Sets
+  // ...
 
-  private ActType(char value, String label)
+  public static final String CLASS_NAME="ACT_TYPE";
+
+  private String _type;
+
+  @Override
+  public String getClassName() { return CLASS_NAME; }
+
+  /**
+   * Constructor.
+   * @param primaryKey Primary key.
+   * @param source Attached objects source.
+   */
+  public ActType(long primaryKey, ObjectSource<ActType> source)
   {
-    _value=value;
-    _label=label;
+    super(primaryKey,source);
+    _type="";
   }
 
-  public static ActType getFromValue(char value)
+  /**
+   * Get the type of the act.
+   * @return the type of the act.
+   */
+  public String getType()
   {
-    ActType ret=OTHER;
-    for(int i=0;i<VALUES.length;i++)
+    return _type;
+  }
+
+  public void setType(String type)
+  {
+    if (type==null)
     {
-      if (VALUES[i]._value==value)
-      {
-        ret=VALUES[i];
-        break;
-      }
+      type="";
     }
-    return ret;
+    _type=type;
   }
 
-  public char getValue()
+  /**
+   * Get a readable label for this object.
+   * @return a readable string.
+   */
+  public String getLabel()
   {
-  	return _value;
+    return _type;
   }
 
   public boolean isBirthAct()
   {
-    return ((this==BIRTH) || (this==BAPTEM));
+    long key=getPrimaryKey();
+    return ((key==BIRTH) || (key==BAPTEM));
   }
 
   public boolean isDeathAct()
   {
-    return ((this==DEATH) || (this==BURIAL));
+    long key=getPrimaryKey();
+    return ((key==DEATH) || (key==BURIAL));
   }
 
   @Override
   public String toString()
   {
-    return _label;
-  }
-
-  public String getLabel()
-  {
-    return _label;
+    return _type;
   }
 }

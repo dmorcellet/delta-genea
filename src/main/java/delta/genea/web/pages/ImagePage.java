@@ -26,8 +26,8 @@ public class ImagePage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _dir=ParameterFinder.getStringParameter(_parameters,"DIR",null);
-    _image=ParameterFinder.getStringParameter(_parameters,"NAME","myImage");
+    _dir=ParameterFinder.getStringParameter(_request,"DIR",null);
+    _image=ParameterFinder.getStringParameter(_request,"NAME","myImage");
   }
 
   @Override

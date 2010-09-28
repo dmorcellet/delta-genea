@@ -9,14 +9,11 @@ import delta.genea.data.GeneaDate;
  * A comparator for <tt>GeneaDate</tt>s.
  * @author DAM
  */
-public class GeneaDateComparator implements Comparator<Object>, Serializable
+public class GeneaDateComparator implements Comparator<GeneaDate>, Serializable
 {
   private static final long serialVersionUID=1L;
 
-  public int compare(Object o1, Object o2)
-  {
-    GeneaDate gd1=(GeneaDate)o1;
-    GeneaDate gd2=(GeneaDate)o2;
+  public int compare(GeneaDate gd1, GeneaDate gd2)  {
     Long d1=gd1.getDate();
     Long d2=gd2.getDate();
     if (d1!=null)

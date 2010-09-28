@@ -26,8 +26,8 @@ public class AncestorsListPage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _key=ParameterFinder.getLongParameter(_parameters,AncestorsListPageParameters.KEY,76);
-    _depth=ParameterFinder.getIntParameter(_parameters,AncestorsListPageParameters.DEPTH,100);
+    _key=ParameterFinder.getLongParameter(_request,AncestorsListPageParameters.KEY,76);
+    _depth=ParameterFinder.getIntParameter(_request,AncestorsListPageParameters.DEPTH,100);
   }
 
   @Override

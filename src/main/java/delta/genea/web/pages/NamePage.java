@@ -29,8 +29,8 @@ public class NamePage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _name=ParameterFinder.getStringParameter(_parameters,NamePageParameters.NAME,"MORCELLET");
-    _noDescendants=ParameterFinder.getBooleanParameter(_parameters,NamePageParameters.NO_DESCENDANTS,true);
+    _name=ParameterFinder.getStringParameter(_request,NamePageParameters.NAME,"MORCELLET");
+    _noDescendants=ParameterFinder.getBooleanParameter(_request,NamePageParameters.NO_DESCENDANTS,true);
   }
 
   @Override

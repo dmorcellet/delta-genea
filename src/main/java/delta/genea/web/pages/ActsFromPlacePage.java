@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import delta.common.framework.objects.data.ObjectSource;
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
 import delta.genea.data.Act;
@@ -21,22 +22,22 @@ public class ActsFromPlacePage extends GeneaWebPage
 {
   // HTML 4.01 strict validated
   private long _key;
-  private Map<ActType,List<Act>> _actsMap;
+  private Map<String,List<Act>> _actsMap;
   private Place _place;
   private int _nbActs;
 
   @Override
   public void parseParameters() throws Exception
   {
-    _key=ParameterFinder.getLongParameter(_parameters,"KEY",76);
+    _key=ParameterFinder.getLongParameter(_request,"KEY",76);
   }
 
   @Override
   public void fetchData() throws Exception
   {
     _place=getDataSource().getPlaceDataSource().load(_key);
-    _actsMap=new HashMap<ActType,List<Act>>();
     if (_place==null) return;
+    _actsMap=new HashMap<String,List<Act>>();
     List<Act> acts=getDataSource().getActDataSource().loadRelation(Act.ACTS_FROM_PLACE,_key);
     if ((acts!=null) && (acts.size()>0))
     {
@@ -51,11 +52,11 @@ public class ActsFromPlacePage extends GeneaWebPage
         type=act.getActType();
         if (type!=null)
         {
-          list=_actsMap.get(type);
+          list=_actsMap.get(type.getType());
           if (list==null)
           {
             list=new ArrayList<Act>();
-            _actsMap.put(type,list);
+            _actsMap.put(type.getType(),list);
           }
           list.add(act);
         }
@@ -83,18 +84,20 @@ public class ActsFromPlacePage extends GeneaWebPage
       generateActList(pw,ActType.WEDDING_CONTRACT,false);
       generateActList(pw,ActType.BURIAL,true);
       generateActList(pw,ActType.DEATH,true);
-      generateActList(pw,ActType.OTHER,true);
       pw.println("</div>");
     }
     WebPageTools.generatePageFooter(pw);
   }
 
-  public void generateActList(PrintWriter pw, ActType type, boolean useSexIcon)
+  private void generateActList(PrintWriter pw, long typeKey, boolean useSexIcon)
   {
-    List<Act> list=_actsMap.get(type);
+    ObjectSource<ActType> source=getDataSource().getActTypeDataSource();
+    ActType type=source.load(typeKey);
+    if (type==null) return;
+    List<Act> list=_actsMap.get(type.getType());
     if ((list==null) || (list.size()==0)) return;
     pw.print("<b>");
-    pw.print(type.getLabel());
+    pw.print(type.getType());
     pw.print(" (");
     pw.print(list.size());
     pw.print(")");

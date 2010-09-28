@@ -53,7 +53,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   {
     try
     {
-      String fields="cle_acte,type_acte,date_acte,cle_lieu,cle_p1,cle_p2,cle_texte,chemin,nb_parties,traite,commentaire";
+      String fields="cle_acte,cle_type_acte,date_acte,cle_lieu,cle_p1,cle_p2,cle_texte,chemin,nb_parties,traite,commentaire";
       // Select
       String sql="SELECT "+fields+" FROM acte WHERE cle_acte = ?";
       _psGetByPrimaryKey=newConnection.prepareStatement(sql);
@@ -69,7 +69,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
             Statement.RETURN_GENERATED_KEYS);
       }
       // Update
-      sql="UPDATE acte SET type_acte=?,date_acte=?,cle_lieu=?,cle_p1=?,cle_p2=?,cle_texte=?,chemin=?,nb_parties=?,traite=?,commentaire=? WHERE cle_acte=?";
+      sql="UPDATE acte SET cle_type_acte=?,date_acte=?,cle_lieu=?,cle_p1=?,cle_p2=?,cle_texte=?,chemin=?,nb_parties=?,traite=?,commentaire=? WHERE cle_acte=?";
       _psUpdate=newConnection.prepareStatement(sql);
       // Select count
       sql="SELECT COUNT(*) FROM acte WHERE cle_acte = ?";
@@ -80,7 +80,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       _psGetOtherFromPerson=newConnection.prepareStatement(sql);
       sql="SELECT cle_personne,presence,signature,lien,ref_lien FROM personne_acte WHERE cle_acte = ?";
       _psGetPersonInAct=newConnection.prepareStatement(sql);
-      sql="SELECT cle_acte FROM acte WHERE cle_lieu = ? order by type_acte, date_acte";
+      sql="SELECT cle_acte FROM acte,type_acte WHERE cle_type_acte=cle and cle_lieu = ? order by type, date_acte";
       _psGetFromPlace=newConnection.prepareStatement(sql);
     }
     catch (SQLException sqlException)
@@ -125,7 +125,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   private void fillAct(Act act, ResultSet rs) throws SQLException
   {
     int n=2;
-    act.setActType(ActType.getFromValue(rs.getString(n).charAt(0)));
+    act.setActTypeProxy(new DataProxy<ActType>(rs.getLong(n),_mainDataSource.getActTypeDataSource()));
     n++;
     act.setDate(rs.getDate(n));
     n++;
@@ -384,7 +384,9 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
         if (key==0) _psInsert.setNull(n,Types.INTEGER);
         else _psInsert.setLong(n,key);
         n++;
-        _psInsert.setString(n,String.valueOf(act.getActType().getValue()));
+        DataProxy<ActType> actType=act.getActTypeProxy();
+        if (actType!=null) _psInsert.setLong(n,actType.getPrimaryKey());
+        else _psInsert.setNull(n,Types.INTEGER);
         n++;
         Long actDate=act.getDate();
         if (actDate!=null) _psInsert.setDate(n,new java.sql.Date(actDate.longValue()));
@@ -450,7 +452,9 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       try
       {
         int n=1;
-        _psUpdate.setString(n,String.valueOf(act.getActType().getValue()));
+        DataProxy<ActType> actType=act.getActTypeProxy();
+        if (actType!=null) _psUpdate.setLong(n,actType.getPrimaryKey());
+        else _psUpdate.setNull(n,Types.INTEGER);
         n++;
         Long actDate=act.getDate();
         if (actDate!=null) _psUpdate.setDate(n,new java.sql.Date(actDate.longValue()));

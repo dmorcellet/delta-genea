@@ -9,7 +9,7 @@ import delta.common.framework.web.PageParameters;
 public class ActsFromPlaceParameters extends PageParameters
 {
   public static final String ACTION_VALUE="ACTS_FROM_PLACE";
-  private static final String KEY="KEY";
+  public static final String KEY="KEY";
   private long _key;
 
   /**

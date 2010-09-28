@@ -32,16 +32,34 @@ public class Act extends DataObject<Act>
    */
   public static final String ACTS_FROM_PLACE="ACTS_FROM_PLACE";
 
-  private ActType _actType;
+  /**
+   * Type of act.
+   */
+  private DataProxy<ActType> _actType;
+  /**
+   * Date of act.
+   */
   private Date _date;
+  /**
+   * Place of act.
+   */
   private DataProxy<Place> _place;
   private DataProxy<Person> _p1;
   private DataProxy<Person> _p2;
+  /**
+   * Base path for act's files.
+   */
   private String _path;
+  /**
+   * Number of files for this act. 
+   */
   private int _nbFiles;
   private boolean _traite;
+  /**
+   * Text (transcription) of this act.
+   */
   private DataProxy<ActText> _text;
-  private String _commentaire;
+  private String _comment;
   private List<PersonInAct> _personsInAct;
 
   @Override
@@ -98,14 +116,33 @@ public class Act extends DataObject<Act>
     }
   }
 
-  public void setActType(ActType actType)
+  public DataProxy<ActType> getActTypeProxy()
+  {
+    return _actType;
+  }
+
+  public void setActTypeProxy(DataProxy<ActType> actType)
   {
     _actType=actType;
   }
 
+  public long getActTypeKey()
+  {
+    long ret=0;
+    if (_actType!=null)
+    {
+      ret=_actType.getPrimaryKey();
+    }
+    return ret;
+  }
+
   public ActType getActType()
   {
-    return _actType;
+    if(_actType!=null)
+    {
+      return _actType.getDataObject();
+    }
+    return null;
   }
 
   public DataProxy<Place> getPlaceProxy()
@@ -198,7 +235,13 @@ public class Act extends DataObject<Act>
   @Override
   public String getLabel()
   {
-    return _actType.getLabel();
+    String ret="???";
+    ActType type=getActType();
+    if (type!=null)
+    {
+      ret=type.getLabel();
+    }
+    return ret;
   }
 
   public String getFullLabel()
@@ -264,12 +307,12 @@ public class Act extends DataObject<Act>
 
   public String getComment()
   {
-    return _commentaire;
+    return _comment;
   }
 
   public void setComment(String comment)
   {
-    _commentaire=comment;
+    _comment=comment;
   }
 
   public DataProxy<ActText> getTextProxy()
@@ -328,6 +371,11 @@ public class Act extends DataObject<Act>
     return imgName;
   }
 
+  /**
+   * Check for the existence of the files of this act.
+   * @return <code>true</code> if all the required files exist,
+   * <code>false</code> otherwise.
+   */
   public boolean checkFiles()
   {
     File rootPath=GeneaCfg.getInstance().getActsRootPath();

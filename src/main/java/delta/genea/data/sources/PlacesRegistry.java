@@ -11,6 +11,10 @@ import delta.common.utils.collections.TreeNode;
 import delta.genea.data.Place;
 import delta.genea.utils.GeneaLoggers;
 
+/**
+ * Registry for places.
+ * @author DAM
+ */
 public final class PlacesRegistry
 {
   private static final Logger _logger=GeneaLoggers.getGeneaLogger();
@@ -19,6 +23,11 @@ public final class PlacesRegistry
   private TreeNode<Place> _placesTree;
   private static HashMap<String,PlacesRegistry> _registries=new HashMap<String,PlacesRegistry>();
 
+  /**
+   * Get the places registry for a given database.
+   * @param dbName Name of the targeted database.
+   * @return A places registry.
+   */
   public static PlacesRegistry getInstance(String dbName)
   {
     synchronized (_registries)
@@ -33,17 +42,30 @@ public final class PlacesRegistry
     }
   }
 
+  /**
+   * Private constructor.
+   * @param dbName Name of the managed database.
+   */
   private PlacesRegistry(String dbName)
   {
     _dbName=dbName;
     _placesTree=load();
   }
 
+  /**
+   * Get the root node of the places tree.
+   * @return the root node of the places tree.
+   */
   public TreeNode<Place> getPlacesTree()
   {
     return _placesTree;
   }
 
+  /**
+   * Load all places in the managed database and put them
+   * in a places tree.
+   * @return the places tree.
+   */
   private TreeNode<Place> load()
   {
     List<Place> places=GeneaDataSource.getInstance(_dbName).getPlaceDataSource().loadAll();

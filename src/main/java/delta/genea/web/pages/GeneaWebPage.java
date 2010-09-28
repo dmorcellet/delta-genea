@@ -17,17 +17,17 @@ public class GeneaWebPage extends WebPage
 
   public long getPersonKey(String variableName)
   {
-    long key=ParameterFinder.getLongParameter(_parameters,variableName,-1);
+    long key=ParameterFinder.getLongParameter(_request,variableName,-1);
     if (key==-1)
     {
-      key=ParameterFinder.getLongParameter(_parameters,GeneaUserContext.DE_CUJUS,0);
+      key=ParameterFinder.getLongParameter(_request,GeneaUserContext.DE_CUJUS,0);
     }
     return key;
   }
 
   public GeneaDataSource getDataSource()
   {
-    String dbName=ParameterFinder.getStringParameter(_parameters,GeneaUserContext.DB_NAME,null);
+    String dbName=ParameterFinder.getStringParameter(_request,GeneaUserContext.DB_NAME,null);
     if (dbName!=null)
     {
       return GeneaDataSource.getInstance(dbName);

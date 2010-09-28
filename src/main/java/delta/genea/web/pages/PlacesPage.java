@@ -22,7 +22,7 @@ public class PlacesPage extends GeneaWebPage
   @Override
   public void fetchData() throws Exception
   {
-    String dbName=ParameterFinder.getStringParameter(_parameters,GeneaUserContext.DB_NAME,null);
+    String dbName=ParameterFinder.getStringParameter(_request,GeneaUserContext.DB_NAME,null);
     _places=PlacesRegistry.getInstance(dbName).getPlacesTree();
   }
 

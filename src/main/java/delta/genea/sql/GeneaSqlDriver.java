@@ -26,6 +26,7 @@ public class GeneaSqlDriver
   private ActSqlDriver _actDriver;
   private PictureSqlDriver _pictureDriver;
   private TextSqlDriver _textDriver;
+  private ActTypeSqlDriver _actTypeDriver;
 
   /**
    * Constructor.
@@ -73,6 +74,8 @@ public class GeneaSqlDriver
     _pictureDriver.setConnection(_dbConnection,_databaseType);
     _textDriver=new TextSqlDriver(dataSource);
     _textDriver.setConnection(_dbConnection,_databaseType);
+    _actTypeDriver=new ActTypeSqlDriver(dataSource);
+    _actTypeDriver.setConnection(_dbConnection,_databaseType);
   }
 
   /**
@@ -127,6 +130,15 @@ public class GeneaSqlDriver
   public TextSqlDriver getTextDriver()
   {
     return _textDriver;
+  }
+
+  /**
+   * Get the SQL driver for act types.
+   * @return the SQL driver for act types.
+   */
+  public ActTypeSqlDriver getActTypesDriver()
+  {
+    return _actTypeDriver;
   }
 
   /**

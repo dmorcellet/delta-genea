@@ -25,7 +25,7 @@ public class PicturePage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _key=ParameterFinder.getLongParameter(_parameters,"KEY",76);
+    _key=ParameterFinder.getLongParameter(_request,"KEY",76);
   }
 
   @Override
