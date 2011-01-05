@@ -81,6 +81,7 @@ public class PersonPage extends GeneaWebPage
     {
       AncestorsPageParameters ancestorsPage=new AncestorsPageParameters(main
           .getPrimaryKey(),100);
+      ancestorsPage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
       pw.println("<b>");
       pw.print("<a href=\"");
       pw.print(ancestorsPage.build());
@@ -99,6 +100,7 @@ public class PersonPage extends GeneaWebPage
     // Links to descendants trees
     {
       DescendantsPageParameters descendantsPage=new DescendantsPageParameters();
+      descendantsPage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
       descendantsPage.setKey(main.getPrimaryKey());
       pw.println("<b>");
       pw.print("<a href=\"");
@@ -117,6 +119,7 @@ public class PersonPage extends GeneaWebPage
     }
     // Patronyme
     NamePageParameters namePage=new NamePageParameters(main.getLastName());
+    namePage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
     pw.println(" <b>");
     pw.print("<a href=\"");
     pw.print(namePage.build());
@@ -126,6 +129,7 @@ public class PersonPage extends GeneaWebPage
     // Cousins
     CousinsPageParameters cousinsPage=new CousinsPageParameters(main
         .getPrimaryKey());
+    cousinsPage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
     pw.println(" <b>");
     pw.print("<a href=\"");
     pw.print(cousinsPage.build());

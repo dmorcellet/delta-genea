@@ -19,6 +19,7 @@ import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.data.trees.AncestorsTree;
 import delta.genea.data.trees.DescendantsTree;
+import delta.genea.misc.GeneaCfg;
 import delta.genea.time.GregorianDate;
 
 public class DumpAncestorsTree
@@ -31,7 +32,8 @@ public class DumpAncestorsTree
   {
     try
     {
-      GeneaDataSource dataSource=GeneaDataSource.getInstance();
+      String dbName=GeneaCfg.getInstance().getDbName();
+      GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
 
       ObjectSource<Person> ds=dataSource.getPersonDataSource();
       DataProxy<Person> pp=new DataProxy<Person>(id,ds);
@@ -49,7 +51,7 @@ public class DumpAncestorsTree
         tree.build(false);
         dumpDescendantsTree(tree);
       }
-      //dataSource.close();
+      dataSource.close();
     }
     catch (Exception e)
     {
@@ -201,7 +203,7 @@ public class DumpAncestorsTree
         }
       }
     }
-    // Descedants tree
+    // Descendants tree
     {
       String keysStr=cfg.getStringValue("GENEA","DESCENDANTS_TREES","1");
       String[] keys=StringSplitter.split(keysStr,',');

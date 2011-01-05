@@ -81,6 +81,7 @@ public class PersonHtmlFormatter extends TextFormatter
     if (_asLink)
     {
       PersonPageParameters ppp=new PersonPageParameters(person.getPrimaryKey());
+      ppp.setParameter(GeneaUserContext.DB_NAME,_context.getDbName());
       sb.append("<A HREF=\"");
       sb.append(ppp.build());
       sb.append("\">");

@@ -96,7 +96,6 @@ public class TestPageGeneration extends TestCase
   @Override
   protected void tearDown() throws Exception
   {
-    // ToDo Auto-generated method stub
     super.tearDown();
   }
 }

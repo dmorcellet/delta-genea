@@ -15,6 +15,7 @@ import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.PlaceLevel;
 import delta.genea.data.Union;
+import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.utils.GeneaLoggers;
 
 public class ToGEDCOM
@@ -475,7 +476,7 @@ public class ToGEDCOM
     }
   }
 
-  public void go(File fileName, List<Person> persons, List<Union> unions)
+  private void go(File fileName, List<Person> persons, List<Union> unions)
   {
     List<List<Union>> families;
     List<Union> parentsFamily;
@@ -495,6 +496,25 @@ public class ToGEDCOM
     catch(Exception e)
     {
       _logger.error("",e);
+    }
+  }
+
+  public void go(File gedcomFile, String dbName) 
+  {
+    try
+    {
+      GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
+
+      List<Person> persons=dataSource.getPersonDataSource().loadAll();
+      List<Union> unions=dataSource.getUnionDataSource().loadAll();
+      System.out.println("Loaded "+persons.size()+" persons.");
+      System.out.println("Loaded "+unions.size()+" unions.");
+      go(gedcomFile,persons,unions);
+      dataSource.close();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
     }
   }
 }

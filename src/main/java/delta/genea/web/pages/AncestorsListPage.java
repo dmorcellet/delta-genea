@@ -66,6 +66,7 @@ public class AncestorsListPage extends GeneaWebPage
     pw.print(nbAncestors);
     pw.print(" ancêtres)");
     AncestorsPageParameters ancestorsPage=new AncestorsPageParameters(_root.getPrimaryKey(),_depth);
+    ancestorsPage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
     pw.print(" <a href=\"");
     pw.print(ancestorsPage.build());
     pw.println("\">Ascendance en arbre</a>");

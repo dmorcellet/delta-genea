@@ -69,14 +69,17 @@ public class Main
             String dirName=TextTools.findBetween(href,"\">","/");
             dirItems.add(dirName);
           }
-          else if (line.startsWith("<IMG SRC=\"/icons/image2.gif\""))
+          else //if (line.startsWith("<IMG SRC=\"/icons/image2.gif\""))
           {
-            String href=TextTools.findBetween(line,"<A HREF=\"","</A>");
-            String fileName=TextTools.findAfter(href,"\">");
+            String href=TextTools.findBetween(line,"<A HREF=","</A>");
+            String fileUrl=TextTools.findBetween(href,"\"","\"");
+            String fileName=fileUrl;
+            fileName=fileUrl.replace("%20"," ");
+            fileName=fileName.replace("%c3%a7","ç");
             File newFile=new File(out,fileName);
-            String fileUrl=url+fileName.replace(" ","%20");
             if (!newFile.canRead())
             {
+              fileUrl=url+fileUrl;
               System.out.println(fileUrl+" -> "+newFile);
               _d.downloadPage(fileUrl,newFile);
             }

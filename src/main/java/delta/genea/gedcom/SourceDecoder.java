@@ -2,8 +2,18 @@ package delta.genea.gedcom;
 
 import delta.genea.misc.GenealogySoftware;
 
+/**
+ * GEDCOM source line decoder.
+ * @author DAM
+ */
 public class SourceDecoder
 {
+  /**
+   * Find out the name of the software that produced a GEDCOM file
+   * by looking at its SOURce line.
+   * @param sourceLine Source line.
+   * @return A genealogy software identifier.
+   */
   public static int getSourceSoftware(String sourceLine)
   {
     if (sourceLine==null) return GenealogySoftware.UNKNOWN;

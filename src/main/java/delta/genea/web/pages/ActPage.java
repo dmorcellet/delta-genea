@@ -241,6 +241,7 @@ public class ActPage extends GeneaWebPage
       {
         imageName=_act.getActFilename(i);
         imagePage=new ImagePageParameters(GeneaConstants.ACTS_DIR,imageName);
+        imagePage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
         pw.print("<img src=\"");
         pw.print(imagePage.build());
         pw.print("\"");

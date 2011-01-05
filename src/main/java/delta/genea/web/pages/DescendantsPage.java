@@ -67,6 +67,7 @@ public class DescendantsPage extends GeneaWebPage
     pw.print(")");
 
     DescendantsPageParameters params=new DescendantsPageParameters(_key,_depth,!_sameName);
+    params.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
     pw.print(" <a href=\"");
     pw.print(params.build());
     pw.print("\">");

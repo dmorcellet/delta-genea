@@ -129,6 +129,7 @@ public class NamePage extends GeneaWebPage
     pw.print(')');
     NamePageParameters params=new NamePageParameters(_name);
     params.setNoDescendants(!_noDescendants);
+    params.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
     pw.print(" <a href=\"");
     pw.print(params.build());
     pw.print("\">");

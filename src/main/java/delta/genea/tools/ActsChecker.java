@@ -11,6 +11,7 @@ import delta.common.framework.objects.data.ObjectSource;
 import delta.common.utils.NumericTools;
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.genea.data.Act;
+import delta.genea.data.ActText;
 import delta.genea.data.ActType;
 import delta.genea.data.ActsForPerson;
 import delta.genea.data.Person;
@@ -159,20 +160,24 @@ public class ActsChecker
     {
       if (act.getNbFiles()==0)
       {
-        showSosa(out,sosa1,sosa2);
-        out.print(persons+"\t");
-        ActType type=act.getActType();
-        if (type!=null) {
-          what=type.getType();
+        ActText text=act.getText();
+        if (text==null)
+        {
+          showSosa(out,sosa1,sosa2);
+          out.print(persons+"\t");
+          ActType type=act.getActType();
+          if (type!=null) {
+            what=type.getType();
+          }
+          out.print("manque reproduction acte de "+what+"\t");
+          if (place!=null) out.print(place.getName());
+          out.print("\t");
+          if (place!=null) out.print(place.getParentPlace().getName());
+          out.print("\t");
+          out.println(_format.format(new Date(date.longValue())));
         }
-        out.print("manque reproduction acte de "+what+"\t");
-        if (place!=null) out.print(place.getName());
-        out.print("\t");
-        if (place!=null) out.print(place.getParentPlace().getName());
-        out.print("\t");
-        out.println(_format.format(new Date(date.longValue())));
       }
-      if (!act.checkFiles())
+      else if (!act.checkFiles())
       {
         showSosa(out,sosa1,sosa2);
         out.print(persons+"\t");

@@ -72,6 +72,7 @@ public class CousinsPage extends GeneaWebPage
         p=it.next();
         pTools.generatePersonName(p);
         params=new CommonAncestorsPageParameters(root.getPrimaryKey(),p.getPrimaryKey());
+        params.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
         pw.print(" ");
         pw.print("<a href=\"");
         pw.print(params.build());

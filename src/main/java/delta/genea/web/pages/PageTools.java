@@ -30,6 +30,7 @@ public class PageTools extends WebPageTools
     {
       _pw.print("<A HREF=\"");
       ActPageParameters actPage=new ActPageParameters(act.getPrimaryKey());
+      actPage.setParameter(GeneaUserContext.DB_NAME,_context.getDbName());
       _pw.print(actPage.build());
       _pw.print("\">");
       _pw.print(label);
@@ -78,6 +79,7 @@ public class PageTools extends WebPageTools
     {
       _pw.print("<A HREF=\"");
       PicturePageParameters picturePage=new PicturePageParameters(picture.getPrimaryKey());
+      picturePage.setParameter(GeneaUserContext.DB_NAME,_context.getDbName());
       _pw.print(picturePage.build());
       _pw.print("\">");
       _pw.print(picture.getTitle());

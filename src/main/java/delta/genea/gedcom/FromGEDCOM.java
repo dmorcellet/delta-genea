@@ -39,9 +39,7 @@ public class FromGEDCOM
   public static void main(String[] args)
   {
     GeneaApplication.getInstance();
-    File file=new File("/home/dm/Ninie.GED");
-    new FromGEDCOM(file);
-    //new FromGEDCOM("/tmp/dada.ged");
+    new FromGEDCOM(new File("/home/dm/downloads/BOUQUETDIDIER.ged"),"dbouquet");
   }
 
   private File _fileName;
@@ -57,11 +55,11 @@ public class FromGEDCOM
   private int _index;
   private int _maxIndex;
 
-  public FromGEDCOM(File fileName)
+  public FromGEDCOM(File fileName, String dbName)
   {
     long time=System.currentTimeMillis();
     _fileName=fileName;
-    _dataSource=GeneaDataSource.getInstance("genea_ninie");
+    _dataSource=GeneaDataSource.getInstance(dbName);
     _placeDataSource=_dataSource.getPlaceDataSource();
     _personDataSource=_dataSource.getPersonDataSource();
     _unionDataSource=_dataSource.getUnionDataSource();
@@ -85,8 +83,8 @@ public class FromGEDCOM
 
   public void parseFileLines()
   {
-    TextFileReader fp=new TextFileReader(_fileName,new AnselCharset());
-    //TextFileReader fp=new TextFileReader(_fileName,"ISO8859-1");
+    //TextFileReader fp=new TextFileReader(_fileName,new AnselCharset());
+    TextFileReader fp=new TextFileReader(_fileName,"ISO8859-1");
     if (!fp.start()) return;
 
     String line;
@@ -104,7 +102,7 @@ public class FromGEDCOM
     String line;
     while (_index<_maxIndex)
     {
-      line=_lines.get(_index);
+      line=_lines.get(_index).trim();
       if ((line.startsWith("0 "))&&(line.endsWith("INDI")))
       {
         try
@@ -590,6 +588,14 @@ public class FromGEDCOM
 
   private void writeDB()
   {
+    _dataSource.setForeignKeyChecks(false);
+    // Places
+    ObjectSource<Place> pSource=_dataSource.getPlaceDataSource();
+    int nbPlaces=_places.size();
+    for(int i=0;i<nbPlaces;i++)
+    {
+      pSource.create(_places.get(i));
+    }
     // Persons
     ObjectSource<Person> dSource=_dataSource.getPersonDataSource();
     int nbPersons=_persons.size();
@@ -604,13 +610,7 @@ public class FromGEDCOM
     {
       uSource.create(_unions.get(i));
     }
-    // Places
-    ObjectSource<Place> pSource=_dataSource.getPlaceDataSource();
-    int nbPlaces=_places.size();
-    for(int i=0;i<nbPlaces;i++)
-    {
-      pSource.create(_places.get(i));
-    }
+    _dataSource.setForeignKeyChecks(true);
   }
   
   private FrenchRevolutionMonth getMonth(String month)

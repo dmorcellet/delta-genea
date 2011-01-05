@@ -3,6 +3,7 @@ package delta.genea.sql;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
@@ -42,6 +43,40 @@ public class GeneaSqlDriver
     catch (Exception e)
     {
       _logger.error("",e);
+    }
+  }
+
+  /**
+   * Set the flag that drives foreign key checks.
+   * @param doCheck <code>true</code> to perform checks, <code>false</code> otherwise.
+   */
+  public void setForeignKeyChecks(boolean doCheck)
+  {
+    Statement s=null;
+    try
+    {
+      s=_dbConnection.createStatement();
+      String sql="SET FOREIGN_KEY_CHECKS="+(doCheck?"1":"0");
+      s.execute(sql);
+    }
+    catch(Exception e)
+    {
+      _logger.error("",e);
+    }
+    finally
+    {
+      if (s!=null)
+      {
+        try
+        {
+          s.close();
+          s=null;
+        }
+        catch(Exception e)
+        {
+          _logger.error("",e);
+        }
+      }
     }
   }
 

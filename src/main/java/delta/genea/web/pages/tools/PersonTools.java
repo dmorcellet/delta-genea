@@ -80,6 +80,7 @@ public class PersonTools
       if (_asLink)
       {
         PersonPageParameters ppp=new PersonPageParameters(person.getPrimaryKey());
+        ppp.setParameter(GeneaUserContext.DB_NAME,_context.getDbName());
         pw.print("<A HREF=\"");
         pw.print(ppp.build());
         pw.print("\">");

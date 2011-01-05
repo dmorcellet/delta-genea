@@ -78,6 +78,15 @@ public class GeneaDataSource
   }
 
   /**
+   * Set the flag that drives foreign key checks.
+   * @param doCheck <code>true</code> to perform checks, <code>false</code> otherwise.
+   */
+  public void setForeignKeyChecks(boolean doCheck)
+  {
+    _driver.setForeignKeyChecks(doCheck);
+  }
+
+  /**
    * Build the drivers for all the object classes.
    */
   private void buildDrivers()

@@ -49,6 +49,7 @@ public class PlacesPage extends GeneaWebPage
 
   private void generateTree(TreeNode<Place> node, PrintWriter pw)
   {
+    GeneaUserContext context=(GeneaUserContext)getUserContext();
     Place p=node.getData();
     pw.println("<ul>");
     pw.print("<li>");
@@ -56,6 +57,7 @@ public class PlacesPage extends GeneaWebPage
     if (p.getLevel()==PlaceLevel.TOWN)
     {
       ActsFromPlaceParameters params=new ActsFromPlaceParameters(p.getPrimaryKey());
+      params.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
       pw.print("<a href=\"");
       pw.print(params.build());
       pw.print("\">");

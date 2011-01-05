@@ -3,6 +3,10 @@ package delta.genea.time;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
+/**
+ * Test for the French revolution calendar.
+ * @author DAM
+ */
 public class TestFrenchRevolutionCalendar extends TestCase
 {
   /**
@@ -13,18 +17,33 @@ public class TestFrenchRevolutionCalendar extends TestCase
     super("French revolution calendar test");
   }
 
+  /**
+   * Convert a french revolution date into a gregorian date and compare it to
+   * the given expected result.
+   * @param dR French revolution date to convert.
+   * @param dG Expected result.
+   */
   private void checkToGregorian(FrenchRevolutionDate dR, GregorianDate dG)
   {
     GregorianDate d=FrenchRevolutionCalendar.convert(dR);
     Assert.assertEquals(dG,d);
   }
 
+  /**
+   * Convert a gregorian date into a french revolution date and compare it to
+   * the given expected result.
+   * @param dG Gregorian date to convert.
+   * @param dR Expected result.
+   */
   private void checkToFrenchRevolution(GregorianDate dG, FrenchRevolutionDate dR)
   {
     FrenchRevolutionDate d=FrenchRevolutionCalendar.convert(dG);
     Assert.assertEquals(dR,d);
   }
 
+  /**
+   * Test a bunch of conversions.
+   */
   public void testConversions()
   {
     FrenchRevolutionDate[] rDates={

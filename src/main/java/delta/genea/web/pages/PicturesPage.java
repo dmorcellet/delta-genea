@@ -48,6 +48,7 @@ public class PicturesPage extends GeneaWebPage
       for(Picture picture : _pictures)
       {
         PicturePageParameters params=new PicturePageParameters(picture.getPrimaryKey());
+        params.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
         pw.print("<li>");
         pw.print("<a href=\"");
         pw.print(params.build());

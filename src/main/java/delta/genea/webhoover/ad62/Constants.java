@@ -9,9 +9,11 @@ public class Constants
 {
   public static final String PLACE_NAME="PROVIN";
   //public static final File ROOT_DIR=new File("/home/dm/data/genealogie/archives en ligne/ad62/Recensements/Billy Berclau/1831");
-  public static final File ROOT_DIR=new File("/home/dm/data/genealogie/archives en ligne/ad62/Repertoire Militaire/Bethune 1907 1001-1500");
-  public static final String ID="620075448";
-  public static final int NB_PAGES=603;
+  //public static final File ROOT_DIR=new File("/home/dm/data/genealogie/archives en ligne/ad62/Repertoire Militaire/Bethune 1907 1001-1500");
+  //public static final File ROOT_DIR=new File("/home/dm/data/genealogie/archives en ligne/ad62/Repertoire Militaire/Bethune 1905 1001-1500");
+  public static final File ROOT_DIR=new File("/home/dm/data/genealogie/archives en ligne/ad62/Repertoire Militaire/Bethune 1908 500-1000");
+  public static final String ID="620075538";
+  public static final int NB_PAGES=764;
   static final String ROOT_SITE="http://www.archinoe.net";
 
   public static final String SITE_ROOT="http://www.archinoe.net/cg62/registre.php#";

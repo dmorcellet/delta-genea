@@ -13,6 +13,10 @@ import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.data.trees.AncestorsTree;
 import delta.genea.data.trees.AncestorsTreesRegistry;
 
+/**
+ * Gathers data needed for the 'person' page.
+ * @author DAM
+ */
 public class PersonPageData
 {
   private long _key;
@@ -31,6 +35,11 @@ public class PersonPageData
   private AncestorsTree _tree;
   private List<Picture> _pictures;
 
+  /**
+   * Constructor.
+   * @param key Main person key.
+   * @param deCujusKey Key for the 'de cujus' person.
+   */
   public PersonPageData(long key, long deCujusKey)
   {
     _key=key;

@@ -17,6 +17,10 @@ import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.misc.GenealogySoftware;
 import delta.genea.utils.GeneaLoggers;
 
+/**
+ * Manages the places found in a GEDCOM file.
+ * @author DAM
+ */
 public class PlaceManager
 {
   private static final Logger _logger=GeneaLoggers.getGeneaLogger();
@@ -30,19 +34,42 @@ public class PlaceManager
   private Map<String,Place> _deptPlaces;
   private Map<String,Place> _countryPlaces;
 
+  /**
+   * Identifier for an unused field.
+   */
   public static final int UNUSED=0;
+  /**
+   * Identifier for the 'town' field of a place record.
+   */
   public static final int TOWN_NAME=1;
+  /**
+   * Identifier for the 'postal code' field of a place record.
+   */
   public static final int POSTAL_CODE=2;
+  /**
+   * Identifier for the 'department name' field of a place record.
+   */
   public static final int DEPT_NAME=3;
+  /**
+   * Identifier for the 'department code' field of a place record.
+   */
   public static final int DEPT_CODE=4;
+  /**
+   * Identifier for the 'region name' field of a place record.
+   */
   public static final int REGION_NAME=5;
+  /**
+   * Identifier for the 'country name' field of a place record.
+   */
   public static final int COUNTRY_NAME=6;
-  public static final int NB_FIELD_MEANINGS=6;
-  public static final int FIRST_MEANING=1;
-  public static final int LAST_MEANING=6;
+  /**
+   * Number of fields in a place record.
+   */
+  private static final int NB_FIELD_MEANINGS=6;
 
   /**
    * Constructor.
+   * @param dataSource Data source.
    * @param nbFields Number of fields.
    */
   public PlaceManager(GeneaDataSource dataSource, int nbFields)
@@ -65,7 +92,7 @@ public class PlaceManager
   public void indicateFieldMeaning(int fieldIndex, int meaning)
   {
     if ((fieldIndex>0) && (fieldIndex<=_nbFields)
-        && (meaning<=LAST_MEANING) && (meaning!=UNUSED))
+        && (meaning<=NB_FIELD_MEANINGS) && (meaning!=UNUSED))
     {
       _meanings[fieldIndex-1]=meaning;
       _fieldIndices[meaning-1]=fieldIndex;
@@ -200,6 +227,13 @@ public class PlaceManager
     places.addAll(_townPlaces.values());
   }
 
+  /**
+   * Build a places manager and configure it for a given
+   * genealogy software.
+   * @param dataSource Data source.
+   * @param softwareType Genealogy software to use.
+   * @return A places manager.
+   */
   public static PlaceManager buildFor(GeneaDataSource dataSource, int softwareType)
   {
     PlaceManager pm=null;
