@@ -3,15 +3,20 @@ package delta.genea.web.pages;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import delta.common.framework.web.WebPageTools;
+import delta.common.utils.NumericTools;
 import delta.genea.data.Act;
 import delta.genea.data.ActText;
 import delta.genea.data.Person;
 import delta.genea.data.PersonInAct;
 import delta.genea.data.Sex;
 import delta.genea.misc.GeneaConstants;
+import delta.genea.utils.GeneaLoggers;
 import delta.genea.web.GeneaUserContext;
 import delta.genea.web.formatters.PersonHtmlFormatter;
+import delta.genea.web.pages.tools.PersonTools;
 
 /**
  * Builder for the 'act' HTML page.
@@ -19,6 +24,14 @@ import delta.genea.web.formatters.PersonHtmlFormatter;
  */
 public class ActPage extends GeneaWebPage
 {
+  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final String LINK_SEED="<a href=\"";
+  private static final String LINK_SEED_END="\">";
+  private static final String LINK_END="</a>";
+  private static final String PERSON_LINK="person:";
+  private static final String ID_ATTR="id=";
+  private static final String DB_NAME_ATTR="dbName=";
+
   // HTML 4.01 strict validated
   private long _key;
   private Act _act;
@@ -253,16 +266,99 @@ public class ActPage extends GeneaWebPage
 
     // Handle act text
     ActText text=_act.getText();
+    generateActText(pw,text);
+
+    WebPageTools.generatePageFooter(pw);
+  }
+
+  private void generateActText(PrintWriter pw, ActText text)
+  {
     if (text!=null)
     {
       String textStr=text.getText();
       textStr=textStr.replace("\r\n","\n");
       textStr=textStr.replace("\n","<br>\n");
       pw.println("<div>");
-      pw.println(textStr);
+      int textIndex=0;
+      int length=textStr.length();
+      while (textIndex<length)
+      {
+        boolean foundLink=false;
+        String link=null;
+        String linkContents=null;
+        int linkStartIndex=textStr.indexOf(LINK_SEED,textIndex);
+        if (linkStartIndex!=-1)
+        {
+          pw.print(textStr.substring(textIndex,linkStartIndex));
+          int linkStartEndIndex=textStr.indexOf(LINK_SEED_END,linkStartIndex+LINK_SEED.length());
+          if (linkStartEndIndex!=-1)
+          {
+            int linkTerminationIndex=textStr.indexOf(LINK_END,linkStartEndIndex+LINK_SEED_END.length());
+            if (linkTerminationIndex!=-1)
+            {
+              link=textStr.substring(linkStartIndex+LINK_SEED.length(),linkStartEndIndex);
+              linkContents=textStr.substring(linkStartEndIndex+LINK_SEED_END.length(),linkTerminationIndex);
+              foundLink=true;
+              textIndex=linkTerminationIndex+LINK_END.length();
+            }
+          }
+        }
+        if (foundLink)
+        {
+          handleLink(pw,link,linkContents);
+        }
+        else
+        {
+          pw.println(textStr.substring(textIndex));
+          textIndex=length;
+        }
+      }
       pw.println("</div>");
     }
+  }
 
-    WebPageTools.generatePageFooter(pw);
+  private void handleLink(PrintWriter pw, String linkDef, String linkContents)
+  {
+    // person : <a href="person:id=1234,dbName=genea">Nom personne</a>
+    if (linkDef.startsWith(PERSON_LINK))
+    {
+      linkDef=linkDef.substring(PERSON_LINK.length());
+      String[] attributes=linkDef.split(",");
+      long key=-1;
+      String dbName=null;
+      if (attributes!=null)
+      {
+        for(int i=0;i<attributes.length;i++)
+        {
+          if (attributes[i].startsWith(ID_ATTR)) key=NumericTools.parseLong(attributes[i].substring(ID_ATTR.length()),key);
+          else if (attributes[i].startsWith(DB_NAME_ATTR)) dbName=attributes[i].substring(DB_NAME_ATTR.length());
+          else
+          {
+            _logger.warn("Unmanaged attribute: ["+attributes[i]+"]");
+          }
+        }
+      }
+      boolean ok=false;
+      if (key!=-1)
+      {
+        Person p=getDataSource().getPersonDataSource().load(key);
+        if (p!=null)
+        {
+          GeneaUserContext context=(GeneaUserContext)getUserContext();
+          PersonTools pTools=new PersonTools(context,pw);
+          pTools.setUseIsAncestorIcon(true);
+          pTools.setUseSexIcon(false);
+          pTools.setUseNoDescendants(false);
+          pTools.setAsLink(true);
+          pTools.generatePersonName(p,linkContents,dbName);
+          ok=true;
+        }
+      }
+      if (!ok)
+      {
+        pw.print(linkContents);
+      }
+
+    }
   }
 }

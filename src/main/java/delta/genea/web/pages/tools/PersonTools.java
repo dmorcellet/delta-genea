@@ -20,6 +20,7 @@ public class PersonTools
   private boolean _useNoDescendants;
   private boolean _asLink;
   private boolean _useIsAncestorIcon;
+  private boolean _showDates;
 
   public PersonTools(GeneaUserContext context, PrintWriter pw)
   {
@@ -28,16 +29,23 @@ public class PersonTools
     _pw=pw;
     _useSexIcon=false;
     _useNoDescendants=false;
-    _useIsAncestorIcon=true;
     _asLink=true;
+    _useIsAncestorIcon=true;
+    _showDates=true;
   }
 
   public void setUseSexIcon(boolean value) { _useSexIcon=value; }
   public void setUseNoDescendants(boolean value) { _useNoDescendants=value; }
   public void setAsLink(boolean value) { _asLink=value; }
   public void setUseIsAncestorIcon(boolean value) { _useIsAncestorIcon=value; }
+  public void setShowDates(boolean value) { _showDates=value; }
 
   public void generatePersonName(Person person)
+  {
+    generatePersonName(person,null,null);
+  }
+
+  public void generatePersonName(Person person, String alternativeText, String dbName)
   {
     PrintWriter pw=_pw;
     if (person!=null)
@@ -80,23 +88,35 @@ public class PersonTools
       if (_asLink)
       {
         PersonPageParameters ppp=new PersonPageParameters(person.getPrimaryKey());
-        ppp.setParameter(GeneaUserContext.DB_NAME,_context.getDbName());
+        String dbNameToUse=(dbName==null)?_context.getDbName():dbName;
+        ppp.setParameter(GeneaUserContext.DB_NAME,dbNameToUse);
         pw.print("<A HREF=\"");
         pw.print(ppp.build());
         pw.print("\">");
       }
-      pw.print(person.getFirstname());
-      pw.print(' ');
-      pw.print(person.getLastName());
+      if (alternativeText!=null)
+      {
+        pw.print(alternativeText);
+      }
+      else
+      {
+        pw.print(person.getFirstname());
+        pw.print(' ');
+        pw.print(person.getLastName());
+      }
       if (_asLink)
       {
         pw.print("</A>");
       }
-      pw.print("</B> (");
-      pw.print(person.getBirthGeneaDate().getYearString());
-      pw.print(" - ");
-      pw.print(person.getDeathGeneaDate().getYearString());
-      pw.print(")");
+      pw.print("</B>");
+      if (_showDates)
+      {
+        pw.print(" (");
+        pw.print(person.getBirthGeneaDate().getYearString());
+        pw.print(" - ");
+        pw.print(person.getDeathGeneaDate().getYearString());
+        pw.print(")");
+      }
     }
     else
     {
