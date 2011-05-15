@@ -3,6 +3,7 @@ package delta.genea.webhoover.ad01;
 import java.io.File;
 import java.util.List;
 
+import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.Downloader;
 
 public class MainDownloadActs

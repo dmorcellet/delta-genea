@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import delta.genea.webhoover.ActsPackage;
+
 public class MainDownloadActs
 {
   private static Set<File> _scheduledDirs=new HashSet<File>();

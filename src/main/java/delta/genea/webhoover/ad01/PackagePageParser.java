@@ -6,6 +6,7 @@ import java.util.List;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileReader;
+import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.Downloader;
 import delta.genea.webhoover.ImageMontageMaker;
 

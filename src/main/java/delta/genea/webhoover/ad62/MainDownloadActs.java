@@ -11,6 +11,7 @@ import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.StringSplitter;
 import delta.genea.utils.GeneaLoggers;
 import delta.genea.webhoover.ADSession;
+import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.Downloader;
 import delta.genea.webhoover.ImageMontageMaker;
 import delta.genea.webhoover.TextTools;
