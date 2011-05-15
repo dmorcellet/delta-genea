@@ -1,4 +1,4 @@
-package delta.genea.webhoover.ad59;
+package delta.genea.webhoover;
 
 import java.io.File;
 
@@ -6,16 +6,22 @@ import delta.common.utils.files.FilesDeleter;
 import delta.genea.webhoover.Downloader;
 
 /**
+ * Base class for webhoover sessions.
+ * It manages:
+ * <ul>
+ * <li>a directory for temporary files.
+ * <li>a downloader
+ * </ul>
  * @author DAM
  */
-public class AD59Session
+public class ADSession
 {
   private static int _counter=0;
   private static final File ROOT_DIR=new File("/tmp");
   private Downloader _downloader;
   private File _tmpDir;
 
-  public AD59Session()
+  public ADSession()
   {
     // Nothing to do !!
   }
@@ -33,6 +39,7 @@ public class AD59Session
     int counter=getCounterValue();
     _tmpDir=new File(ROOT_DIR,String.valueOf(counter));
     _tmpDir.mkdirs();
+    additionalInitializations();
   }
 
   public void stop()
@@ -51,5 +58,10 @@ public class AD59Session
   public File getTmpDir()
   {
     return _tmpDir;
+  }
+
+  protected void additionalInitializations()
+  {
+    // Nothing to do!
   }
 }

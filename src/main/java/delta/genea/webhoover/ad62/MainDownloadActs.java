@@ -10,6 +10,7 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.StringSplitter;
 import delta.genea.utils.GeneaLoggers;
+import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.Downloader;
 import delta.genea.webhoover.ImageMontageMaker;
 import delta.genea.webhoover.TextTools;
@@ -37,7 +38,7 @@ public class MainDownloadActs
     {
       public void run()
       {
-        AD62Session localSession=new AD62Session();
+        ADSession localSession=new ADSession();
         localSession.start();
         //getPages(localSession,actsPackage);
         localSession.stop();
@@ -57,7 +58,7 @@ public class MainDownloadActs
 
   private void doIt()
   {
-    AD62Session session=new AD62Session();
+    ADSession session=new ADSession();
     session.start();
     List<String> places=getPlaces(session);
     /*
@@ -67,7 +68,7 @@ public class MainDownloadActs
     session.stop();
   }
 
-  private File downloadTile(AD62Session session, int pageNumber, int hIndex, int vIndex, int x, int y, int width, int height)
+  private File downloadTile(ADSession session, int pageNumber, int hIndex, int vIndex, int x, int y, int width, int height)
   {
     String urlTile=Constants.ROOT_SITE+"/cg62/visualiseur/visu_affiche_util.php?o=TILE&param=visu_0&p="+pageNumber+"&x="+x+"&y="+y+"&l="+width+"&h="+height+"&ol="+width+"&oh="+height+"&r=0&n=0&b=0&c=0";
 
@@ -84,7 +85,7 @@ public class MainDownloadActs
     return tileFile;
   }
 
-  private void downloadPage(AD62Session session, File out, int pageNumber, int width, int height, int tileSize)
+  private void downloadPage(ADSession session, File out, int pageNumber, int width, int height, int tileSize)
   {
     //System.out.println("Handling "+_actsPackage._placeName+" / "+_actsPackage._period+" - page "+pageNumber);
     System.out.println("Handling page "+pageNumber);
@@ -127,7 +128,7 @@ public class MainDownloadActs
     }
   }
 
-  private List<String> getPlaces(AD62Session session)
+  private List<String> getPlaces(ADSession session)
   {
     List<String> placeNames=new ArrayList<String>();
     Downloader downloader=session.getDownloader();

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
 import delta.genea.utils.GeneaLoggers;
+import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.Downloader;
 import delta.genea.webhoover.ImageMontageMaker;
 import delta.genea.webhoover.TextTools;
@@ -35,7 +36,7 @@ public class MainDownloadActs
     {
       public void run()
       {
-        AD59Session localSession=new AD59Session();
+        ADSession localSession=new ADSession();
         localSession.start();
         getPages(localSession,actsPackage);
         localSession.stop();
@@ -55,7 +56,7 @@ public class MainDownloadActs
 
   private void doIt()
   {
-    AD59Session session=new AD59Session();
+    ADSession session=new ADSession();
     session.start();
     List<String> places=getPlaces(session);
     System.out.println(places);
@@ -63,7 +64,7 @@ public class MainDownloadActs
     session.stop();
   }
 
-  private void handlePlace(AD59Session session, String placeName)
+  private void handlePlace(ADSession session, String placeName)
   {
     List<String> periods=getPeriods(session,placeName);
     System.out.println(periods);
@@ -76,7 +77,7 @@ public class MainDownloadActs
     }
   }
 
-  private void handlePeriod(AD59Session session, String placeName, int from, int to)
+  private void handlePeriod(ADSession session, String placeName, int from, int to)
   {
     List<ActsPackage> actsPackages=getPackages(session,placeName,from,to);
     for(ActsPackage actsPackage : actsPackages)
@@ -85,7 +86,7 @@ public class MainDownloadActs
     }
   }
 
-  private List<String> getPlaces(AD59Session session)
+  private List<String> getPlaces(ADSession session)
   {
     List<String> placeNames=new ArrayList<String>();
     Downloader downloader=session.getDownloader();
@@ -117,7 +118,7 @@ public class MainDownloadActs
     return placeNames;
   }
 
-  private List<String> getPeriods(AD59Session session, String placeName)
+  private List<String> getPeriods(ADSession session, String placeName)
   {
     List<String> periods=new ArrayList<String>();
     Downloader downloader=session.getDownloader();
@@ -149,7 +150,7 @@ public class MainDownloadActs
     return periods;
   }
 
-  private List<ActsPackage> getPackages(AD59Session session, String placeName, int from, int to)
+  private List<ActsPackage> getPackages(ADSession session, String placeName, int from, int to)
   {
     List<ActsPackage> packages=new ArrayList<ActsPackage>();
     Downloader downloader=session.getDownloader();
@@ -184,7 +185,7 @@ public class MainDownloadActs
     return packages;
   }
 
-  private void getPages(AD59Session session, ActsPackage actsPackage)
+  private void getPages(ADSession session, ActsPackage actsPackage)
   {
     System.out.println("Handling "+actsPackage+" with session "+session.getTmpDir());
     int nbPages=getPage(session,actsPackage,1);
@@ -194,7 +195,7 @@ public class MainDownloadActs
     }
   }
 
-  private int getPage(AD59Session session, ActsPackage actsPackage, int pageNumber)
+  private int getPage(ADSession session, ActsPackage actsPackage, int pageNumber)
   {
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
