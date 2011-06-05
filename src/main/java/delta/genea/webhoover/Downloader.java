@@ -3,11 +3,14 @@ package delta.genea.webhoover;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.files.FileCopy;
@@ -29,6 +32,11 @@ public class Downloader
     _files=0;
     _bytes=0;
     _cookies=new HashMap<String,String>();
+  }
+
+  public HttpClient getHttpClient()
+  {
+    return _client;
   }
 
   public boolean downloadPage(String url, File to)
@@ -64,7 +72,44 @@ public class Downloader
     return ret;
   }
 
-  private void catchCookies(GetMethod method)
+  public boolean downloadPageAsPost(String url, File to, Map<String,String> parameters)
+  {
+    if (_logger.isInfoEnabled())
+    {
+      _logger.info("Downloading URL ["+url+"] to file ["+to+"]");
+    }
+    boolean ret=false;
+    PostMethod post=new PostMethod(url);
+    for(Map.Entry<String,String> parameter : parameters.entrySet())
+    {
+      post.setParameter(parameter.getKey(),parameter.getValue());
+    }
+    try
+    {
+      //get.setFollowRedirects(true);
+      int iGetResultCode=_client.executeMethod(post);
+      if (_logger.isInfoEnabled())
+      {
+        _logger.info("Status code : "+iGetResultCode);
+      }
+      InputStream is=post.getResponseBodyAsStream();
+      ret=FileCopy.copy(is,to);
+      _bytes+=to.length();
+      _files++;
+      catchCookies(post);
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    finally
+    {
+      post.releaseConnection();
+    }
+    return ret;
+  }
+
+  private void catchCookies(HttpMethodBase method)
   {
     _cookies.clear();
     Header[] headers=method.getRequestHeaders();

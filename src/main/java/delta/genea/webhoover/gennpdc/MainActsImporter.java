@@ -11,6 +11,8 @@ import delta.genea.data.Sex;
 import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.gedcom.PlaceManager;
+import delta.genea.webhoover.expoactes.BirthAct;
+import delta.genea.webhoover.expoactes.BirthActsIO;
 
 /**
  * @author DAM
@@ -125,7 +127,7 @@ public class MainActsImporter
   {
     _dataSource=GeneaDataSource.getInstance("genea_tmp");
     _data=new RawDataManager(_dataSource);
-    List<BirthAct> acts=BirthActsIO.readActs(Constants.ACTS_FILE);
+    List<BirthAct> acts=BirthActsIO.readActs(Main.ACTS_FILE);
     if ((acts!=null) && (acts.size()>0))
     {
       for(BirthAct act : acts)

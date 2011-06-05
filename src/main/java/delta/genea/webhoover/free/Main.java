@@ -8,7 +8,7 @@ import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.EncodingNames;
 import delta.genea.webhoover.Downloader;
 import delta.genea.webhoover.TextTools;
-import delta.genea.webhoover.gennpdc.TmpFilesManager;
+import delta.genea.webhoover.utils.TmpFilesManager;
 
 /**
  * @author DAM

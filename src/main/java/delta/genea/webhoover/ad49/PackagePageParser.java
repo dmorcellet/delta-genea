@@ -167,7 +167,7 @@ public class PackagePageParser
     _nbPages=nbPages;
 	}
 
-  public void downloadPages(String name, int minIndex, int maxIndex)
+  public void downloadPages(final String name, int minIndex, int maxIndex)
   {
     Downloader downloader=_session.getDownloader();
     String phpSID=_session.getPHPSessionID();
@@ -175,38 +175,44 @@ public class PackagePageParser
     if (minIndex<=0)
     {
       minIndex=1;
-      System.out.println("Corrected min page index : "+minIndex);
+      System.out.println(name+": "+"Bad min page index : 1");
+      return;
     }
     if (minIndex>_nbPages)
     {
       minIndex=_nbPages;
-      System.out.println("Corrected min page index : "+_nbPages);
+      System.out.println(name+": "+"Bad min page index : ("+minIndex+">"+_nbPages+")");
+      return;
     }
     if (maxIndex>_nbPages)
     {
       maxIndex=_nbPages;
-      System.out.println("Corrected max page index : "+_nbPages);
+      System.out.println(name+": "+"Bad max page index : ("+maxIndex+">"+_nbPages+")");
+      return;
     }
     if (maxIndex<minIndex)
     {
       maxIndex=minIndex;
-      System.out.println("Corrected max page index : "+minIndex);
+      System.out.println(name+": "+"Bad max page index : ("+maxIndex+"<"+minIndex+")");
+      return;
     }
     for(int page=minIndex;page<=maxIndex;page++)
     {
       File out=null;
       if (name!=null)
       {
+        String newName=name;
         if (page>minIndex)
         {
-          name=name.replace(".jpg","-"+String.valueOf(page-minIndex+1)+".jpg");
+          newName=name.replace(".jpg","-"+String.valueOf(page-minIndex+1)+".jpg");
         }
-        out=new File(Constants.ROOT_ACTS_DIR,name);
+        out=new File(Constants.ROOT_ACTS_DIR,newName);
       }
       else
       {
         out=getImageFile(_rootActsPackageDir,page);
       }
+      out.getParentFile().mkdirs();
       if (!out.exists())
       {
         String urlAffiche=Constants.ROOT_SITE+"/cg49work/visu_affiche_util.php?PHPSID="+phpSID+"&param=visu&uid="+System.currentTimeMillis()+"&o=IMG&p="+page;
@@ -221,7 +227,8 @@ public class PackagePageParser
         int height=NumericTools.parseInt(infos[4],-1);
         int tile=2280;
         downloadPage(out,page,width,height,tile);
-        downloader.status();
+        //System.out.println(out);
+        //downloader.status();
       }
     }
   }

@@ -26,15 +26,33 @@ public class SpecFileParser
     return s;
   }
   
-  private String getName(String type, String sosa, String sosa2)
+  private String getName(String type, String sosaOld, String sosa, String sosa2)
   {
     String baseName="a";
     if ("Naissance".equals(type)) baseName="an";
     else if ("Décès".equals(type)) baseName="ad";
     else if ("Mariage".equals(type)) baseName="am";
+    else if ("Publication".equals(type)) baseName="ap";
+    else {
+      System.out.println("Type acte inconnu ["+type+"]");
+      return null;
+    }
     String number=sosa;
+    if ((sosa==null) || (sosa.length()==0))
+    {
+      if ((sosaOld==null) || (sosaOld.length()==0))
+      {
+        System.out.println("Sosa invalide !");
+      }
+      number=sosaOld;
+    }
     if (sosa2.length()>0)
     {
+      if ("0".equals(sosa2))
+      {
+        System.out.println("Bad sosa2");
+        return null;
+      }
       number=number+"-"+sosa2;
     }
     String name=baseName+number+".jpg";
@@ -47,11 +65,16 @@ public class SpecFileParser
     List<String> lines=TextTools.splitAsLines(f);
     lines.remove(0);
     String[] items;
-    String placeIdStr,packageIndexStr,pageStr,sosaStr,sosa2Str,type;
+    String placeIdStr,packageIndexStr,pageStr,sosaOld,sosaStr,sosa2Str,type;
     int placeId,packageIndex,minPageIndex,maxPageIndex;
     for(String line : lines)
     {
       items=StringSplitter.split(line,'\t');
+      if ((items==null) || (items.length<11)) {
+        System.out.println("Bad line ["+line+"]");
+      }
+      sosaOld=items[0];
+      sosaOld=normalizeString(sosaOld);
       sosaStr=items[1];
       sosaStr=normalizeString(sosaStr);
       sosa2Str=items[2];
@@ -84,12 +107,19 @@ public class SpecFileParser
         p._packageIndex=packageIndex;
         p._minPageIndex=minPageIndex;
         p._maxPageIndex=maxPageIndex;
-        p._name=getName(type,sosaStr,sosa2Str);
-        ret.add(p);
+        p._name=getName(type,sosaOld,sosaStr,sosa2Str);
+        if (p._name!=null)
+        {
+          ret.add(p);
+        }
+        else
+        {
+          System.out.println("Bad line ["+line+"]");
+        }
       }
       else
       {
-        System.out.println("Error with line ["+line+"]");
+        //System.out.println("Error with line ["+line+"]");
       }
     }
     return ret;

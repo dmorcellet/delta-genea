@@ -11,6 +11,7 @@ import delta.genea.webhoover.ad49.PlacePageParser;
 public class MainDownloadActsSelective
 {
   private static final File IN_FILE=new File("/home/dm/tmp/liste.csv");
+  private static final File IN_FILE2=new File("/home/dm/tmp/liste2.csv");
 
   /**
    * @param args
@@ -21,6 +22,14 @@ public class MainDownloadActsSelective
     session.start();
     SpecFileParser p=new SpecFileParser();
     List<PageDescription> pages=p.parse(IN_FILE);
+    parsePages(session,pages);
+    List<PageDescription> pages2=p.parse(IN_FILE2);
+    parsePages(session,pages2);
+    session.stop();
+  }
+
+  private static void parsePages(AD49Session session, List<PageDescription> pages)
+  {
     for(PageDescription page : pages)
     {
       try
@@ -41,7 +50,7 @@ public class MainDownloadActsSelective
         {
           PackagePageParser packageParser=new PackagePageParser(session,actsPackage);
           packageParser.parse();
-          //packageParser.downloadPages(page._name,page._minPageIndex,page._maxPageIndex);
+          packageParser.downloadPages(page._name,page._minPageIndex,page._maxPageIndex);
         }
       }
       catch(Exception e)
@@ -49,6 +58,5 @@ public class MainDownloadActsSelective
         e.printStackTrace();
       }
     }
-    session.stop();
   }
 }

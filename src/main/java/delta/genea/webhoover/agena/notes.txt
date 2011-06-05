@@ -1,0 +1,16 @@
+http://www.agena49.org/espaceadherent/index.php/
+
+/espaceadherent/tab_naiss.php?args=Alleuds%28Les%29+%5BMaine-et-Loire%5D
+
+GET /espaceadherent/login.php?cas=2&uri=%2Fespaceadherent%2Ftab_naiss.php%3Fargs%3DAlleuds%2528Les%2529%2B%255BMaine-et-Loire%255D
+
+
+POST /espaceadherent/tab_naiss.php?args=Alleuds%28Les%29+%5BMaine-et-Loire%5D HTTP/1.1
+
+login	AGA1766MORSte
+passwd	
+codedpass	40af47d6b115e0b8b9494fa0ced4b51004def483
+iscoded	Y
+
+
+http://www.agena49.org/espaceadherent/index.php
