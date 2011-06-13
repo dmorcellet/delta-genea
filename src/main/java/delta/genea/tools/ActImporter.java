@@ -53,7 +53,8 @@ public class ActImporter
     long actType=ActType.BIRTH;
     String name=fileName.getName();
     //String newName="j_";
-    String newName="ninie/";
+    //String newName="ninie/";
+    String newName="";
     if (name.endsWith(".jpg"))
     {
       name=name.substring(0,name.length()-4);
@@ -182,7 +183,7 @@ public class ActImporter
         act=acts.getBirthAct();
         if (act==null)
         {
-          act=new Act(0,_dataSource.getActDataSource());
+          act=new Act(null,_dataSource.getActDataSource());
           act.setActTypeProxy(new DataProxy<ActType>(actType,_dataSource.getActTypeDataSource()));
           act.setDate(date);
           if (place!=null)
@@ -224,7 +225,7 @@ public class ActImporter
         act=acts.getDeathAct();
         if (act==null)
         {
-          act=new Act(0,_dataSource.getActDataSource());
+          act=new Act(null,_dataSource.getActDataSource());
           act.setActTypeProxy(new DataProxy<ActType>(actType,_dataSource.getActTypeDataSource()));
           act.setDate(date);
           if (place!=null)
@@ -264,7 +265,7 @@ public class ActImporter
           act=acts.getActOfUnionWith(p2.getPrimaryKey());
           if (act==null)
           {
-            act=new Act(0,_dataSource.getActDataSource());
+            act=new Act(null,_dataSource.getActDataSource());
             act.setActTypeProxy(new DataProxy<ActType>(actType,_dataSource.getActTypeDataSource()));
             act.setDate(date);
             if (place!=null)
@@ -322,7 +323,7 @@ public class ActImporter
 
   public void doIt()
   {
-    _root=new File("/home/dm/data/genealogie/actes/ninie");
+    _root=new File("/home/dm/tmp/actes/ninie");
     init(3);
     File[] files=_root.listFiles();
     for(int i=0;i<files.length;i++)
@@ -336,7 +337,7 @@ public class ActImporter
     for(Iterator<Act> it=_map.values().iterator();it.hasNext();)
     {
       act=it.next();
-      if (act.getPrimaryKey()==0)
+      if (act.getPrimaryKey()==null)
       {
         dsActs.create(act);
       }

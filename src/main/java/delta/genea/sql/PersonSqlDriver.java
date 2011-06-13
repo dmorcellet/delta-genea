@@ -122,8 +122,12 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   }
 
   @Override
-  public Person getByPrimaryKey(long primaryKey)
+  public Person getByPrimaryKey(Long primaryKey)
   {
+    if (primaryKey==null)
+    {
+      return null;
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
@@ -131,7 +135,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
-        _psGetByPrimaryKey.setLong(1,primaryKey);
+        _psGetByPrimaryKey.setLong(1,primaryKey.longValue());
         //System.out.println("LOAD person "+primaryKey);
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
@@ -158,7 +162,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   }
 
   @Override
-  public Person getPartialByPrimaryKey(long primaryKey)
+  public Person getPartialByPrimaryKey(Long primaryKey)
   {
     Connection connection=getConnection();
     synchronized (connection)
@@ -167,7 +171,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
-        _psPartialGetByPrimaryKey.setLong(1,primaryKey);
+        _psPartialGetByPrimaryKey.setLong(1,primaryKey.longValue());
         //System.out.println("LOAD PARTIAL person "+primaryKey);
         rs=_psPartialGetByPrimaryKey.executeQuery();
         if (rs.next())
@@ -201,18 +205,28 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     person.setSignature(rs.getString(n));
     n++;
     person.setBirthDate(rs.getDate(n++),rs.getString(n++));
-    person.setBirthPlaceProxy(new DataProxy<Place>(rs.getLong(n),
-        _mainDataSource.getPlaceDataSource()));
+    long birthPlaceKey=rs.getLong(n);
+    DataProxy<Place> birthPlaceProxy=null;
+    if (!rs.wasNull())
+    {
+      birthPlaceProxy=_mainDataSource.getPlaceDataSource().buildProxy(birthPlaceKey);
+    }
+    person.setBirthPlaceProxy(birthPlaceProxy);
     n++;
     person.setDeathDate(rs.getDate(n++),rs.getString(n++));
-    person.setDeathPlaceProxy(new DataProxy<Place>(rs.getLong(n),
-        _mainDataSource.getPlaceDataSource()));
+    long deathPlaceKey=rs.getLong(n);
+    DataProxy<Place> deathPlaceProxy=null;
+    if (!rs.wasNull())
+    {
+      deathPlaceProxy=_mainDataSource.getPlaceDataSource().buildProxy(deathPlaceKey);
+    }
+    person.setDeathPlaceProxy(deathPlaceProxy);
     n++;
     long fatherKey=rs.getLong(n);
     DataProxy<Person> fatherProxy=null;
     if (!rs.wasNull())
     {
-      fatherProxy=new DataProxy<Person>(fatherKey,person.getSource());
+      fatherProxy=person.getSource().buildProxy(fatherKey);
     }
     person.setFatherProxy(fatherProxy);
     n++;
@@ -220,7 +234,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     DataProxy<Person> motherProxy=null;
     if (!rs.wasNull())
     {
-      motherProxy=new DataProxy<Person>(motherKey,person.getSource());
+      motherProxy=person.getSource().buildProxy(motherKey);
     }
     person.setMotherProxy(motherProxy);
     n++;
@@ -228,7 +242,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     DataProxy<Person> godFatherProxy=null;
     if (!rs.wasNull())
     {
-      godFatherProxy=new DataProxy<Person>(godFatherKey,person.getSource());
+      godFatherProxy=person.getSource().buildProxy(godFatherKey);
     }
     person.setGodFatherProxy(godFatherProxy);
     n++;
@@ -236,7 +250,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     DataProxy<Person> godMotherProxy=null;
     if (!rs.wasNull())
     {
-      godMotherProxy=new DataProxy<Person>(godMotherKey,person.getSource());
+      godMotherProxy=person.getSource().buildProxy(godMotherKey);
     }
     person.setGodMotherProxy(godMotherProxy);
     n++;
@@ -262,41 +276,46 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     n++;
   }
 
-  private List<OccupationForPerson> loadOccupations(long primaryKey)
+  private List<OccupationForPerson> loadOccupations(Long primaryKey)
   {
+    if (primaryKey==null)
+    {
+      return null;
+    }
+    List<OccupationForPerson> ret=null;
     Connection connection=getConnection();
     synchronized (connection)
     {
-      List<OccupationForPerson> ret=null;
-      OccupationForPerson tmp=null;
       ResultSet rs=null;
       try
       {
-        _psGetOccupations.setLong(1,primaryKey);
-        //System.out.println("LOAD occupations FOR "+primaryKey);
+        _psGetOccupations.setLong(1,primaryKey.longValue());
         rs=_psGetOccupations.executeQuery();
         while (rs.next())
         {
-          tmp=new OccupationForPerson();
+          OccupationForPerson occupation=new OccupationForPerson();
           int n=1;
-          tmp.setPersonProxy(new DataProxy<Person>(rs.getLong(n),
-              _mainDataSource.getPersonDataSource()));
-          n++;
-          tmp.setYear(rs.getInt(n));
-          n++;
-          tmp.setOccupation(rs.getString(n));
-          n++;
-          long place=rs.getLong(n);
+          long personKey=rs.getLong(n);
           if (!rs.wasNull())
           {
-            tmp.setPlaceProxy(new DataProxy<Place>(place,_mainDataSource.getPlaceDataSource()));
+            occupation.setPersonProxy(_mainDataSource.getPersonDataSource().buildProxy(personKey));
+          }
+          n++;
+          occupation.setYear(rs.getInt(n));
+          n++;
+          occupation.setOccupation(rs.getString(n));
+          n++;
+          long placeKey=rs.getLong(n);
+          if (!rs.wasNull())
+          {
+            occupation.setPlaceProxy(_mainDataSource.getPlaceDataSource().buildProxy(placeKey));
           }
           n++;
           if (ret==null)
           {
             ret=new ArrayList<OccupationForPerson>();
           }
-          ret.add(tmp);
+          ret.add(occupation);
         }
       }
       catch (SQLException sqlException)
@@ -312,41 +331,46 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     }
   }
 
-  private List<HomeForPerson> loadHomes(long primaryKey)
+  private List<HomeForPerson> loadHomes(Long primaryKey)
   {
+    if (primaryKey==null)
+    {
+      return null;
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
       List<HomeForPerson> ret=null;
-      HomeForPerson tmp=null;
       ResultSet rs=null;
       try
       {
-        _psGetHomes.setLong(1,primaryKey);
-        //System.out.println("LOAD homes FOR "+primaryKey);
+        _psGetHomes.setLong(1,primaryKey.longValue());
         rs=_psGetHomes.executeQuery();
         while (rs.next())
         {
-          tmp=new HomeForPerson();
+          HomeForPerson home=new HomeForPerson();
           int n=1;
-          tmp.setPersonProxy(new DataProxy<Person>(rs.getLong(n),
-              _mainDataSource.getPersonDataSource()));
-          n++;
-          tmp.setYear(rs.getInt(n));
-          n++;
-          tmp.setPlaceDetails(rs.getString(n));
-          n++;
-          long place=rs.getLong(n);
+          long personKey=rs.getLong(n);
           if (!rs.wasNull())
           {
-            tmp.setPlaceProxy(new DataProxy<Place>(place,_mainDataSource.getPlaceDataSource()));
+            home.setPersonProxy(_mainDataSource.getPersonDataSource().buildProxy(personKey));
+          }
+          n++;
+          home.setYear(rs.getInt(n));
+          n++;
+          home.setPlaceDetails(rs.getString(n));
+          n++;
+          long placeKey=rs.getLong(n);
+          if (!rs.wasNull())
+          {
+            home.setPlaceProxy(_mainDataSource.getPlaceDataSource().buildProxy(placeKey));
           }
           n++;
           if (ret==null)
           {
             ret=new ArrayList<HomeForPerson>();
           }
-          ret.add(tmp);
+          ret.add(home);
         }
       }
       catch (SQLException sqlException)
@@ -373,11 +397,11 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
-        //System.out.println("GET ALL persons");
         rs=_psGetAll.executeQuery();
         while (rs.next())
         {
-          long primaryKey=rs.getLong(1);
+          long personKey=rs.getLong(1);
+          Long primaryKey=Long.valueOf(personKey);
           person=new Person(primaryKey,_mainDataSource.getPersonDataSource());
           fillPerson(person,rs);
           List<OccupationForPerson> occupations=loadOccupations(primaryKey);
@@ -587,20 +611,24 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   }
 
   @Override
-  public List<Long> getRelatedObjectIDs(String relationName, long primaryKey)
+  public List<Long> getRelatedObjectIDs(String relationName, Long primaryKey)
   {
-    List<Long> ret=new ArrayList<Long>();
+    if (primaryKey==null)
+    {
+      return null;
+    }
+    List<Long> ret=null;
     if (relationName.equals(Person.CHILDREN_RELATION))
     {
-      ret=getChildren(primaryKey);
+      ret=getChildren(primaryKey.longValue());
     }
     else if (relationName.equals(Person.GOD_CHILDREN_RELATION))
     {
-      ret=getGodChildren(primaryKey);
+      ret=getGodChildren(primaryKey.longValue());
     }
     else if (relationName.equals(Person.COUSINS_RELATION))
     {
-      ret=getCousins(primaryKey);
+      ret=getCousins(primaryKey.longValue());
     }
     return ret;
   }
@@ -620,20 +648,24 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   @Override
   public void create(Person person)
   {
+    if (person==null)
+    {
+      throw new IllegalArgumentException("person==null");
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
       try
       {
         int n=1;
-        long key=person.getPrimaryKey();
-        if (key==0)
+        Long key=person.getPrimaryKey();
+        if (key==null)
         {
           _psInsert.setNull(n,Types.INTEGER);
         }
         else
         {
-          _psInsert.setLong(n,key);
+          _psInsert.setLong(n,key.longValue());
         }
         n++;
         _psInsert.setString(n,person.getLastName());
@@ -657,9 +689,9 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         _psInsert.setString(n,person.getBirthInfos());
         n++;
         DataProxy<Place> birthPlace=person.getBirthPlaceProxy();
-        if (birthPlace!=null)
+        if ((birthPlace!=null) && (birthPlace.getPrimaryKey()!=null))
         {
-          _psInsert.setLong(n,birthPlace.getPrimaryKey());
+          _psInsert.setLong(n,birthPlace.getPrimaryKey().longValue());
         }
         else
         {
@@ -679,9 +711,9 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         _psInsert.setString(n,person.getDeathInfos());
         n++;
         DataProxy<Place> deathPlace=person.getDeathPlaceProxy();
-        if (deathPlace!=null)
+        if ((deathPlace!=null) && (deathPlace.getPrimaryKey()!=null))
         {
-          _psInsert.setLong(n,deathPlace.getPrimaryKey());
+          _psInsert.setLong(n,deathPlace.getPrimaryKey().longValue());
         }
         else
         {
@@ -689,9 +721,9 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         }
         n++;
         DataProxy<Person> fatherProxy=person.getFatherProxy();
-        if (fatherProxy!=null)
+        if ((fatherProxy!=null) && (fatherProxy.getPrimaryKey()!=null))
         {
-          _psInsert.setLong(n,fatherProxy.getPrimaryKey());
+          _psInsert.setLong(n,fatherProxy.getPrimaryKey().longValue());
         }
         else
         {
@@ -699,9 +731,9 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         }
         n++;
         DataProxy<Person> motherProxy=person.getMotherProxy();
-        if (motherProxy!=null)
+        if ((motherProxy!=null) && (motherProxy.getPrimaryKey()!=null))
         {
-          _psInsert.setLong(n,motherProxy.getPrimaryKey());
+          _psInsert.setLong(n,motherProxy.getPrimaryKey().longValue());
         }
         else
         {
@@ -709,9 +741,9 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         }
         n++;
         DataProxy<Person> godFatherProxy=person.getGodFatherProxy();
-        if (godFatherProxy!=null)
+        if ((godFatherProxy!=null) && (godFatherProxy.getPrimaryKey()!=null))
         {
-          _psInsert.setLong(n,godFatherProxy.getPrimaryKey());
+          _psInsert.setLong(n,godFatherProxy.getPrimaryKey().longValue());
         }
         else
         {
@@ -719,9 +751,9 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         }
         n++;
         DataProxy<Person> godMotherProxy=person.getGodMotherProxy();
-        if (godMotherProxy!=null)
+        if ((godMotherProxy!=null) && (godMotherProxy.getPrimaryKey()!=null))
         {
-          _psInsert.setLong(n,godMotherProxy.getPrimaryKey());
+          _psInsert.setLong(n,godMotherProxy.getPrimaryKey().longValue());
         }
         else
         {
@@ -733,21 +765,21 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         _psInsert.setBoolean(n,person.getNoDescendants());
         n++;
         _psInsert.executeUpdate();
-        if (usesHSQLDB())
+        if (key==null)
         {
-          if (key==0)
+          if (usesHSQLDB())
           {
-            long primaryKey=JDBCTools.getPrimaryKey(connection,1);
+            Long primaryKey=JDBCTools.getPrimaryKey(connection,1);
             person.setPrimaryKey(primaryKey);
           }
-        }
-        else
-        {
-          ResultSet rs=_psInsert.getGeneratedKeys();
-          if (rs.next())
+          else
           {
-            long primaryKey=rs.getLong(1);
-            person.setPrimaryKey(primaryKey);
+            ResultSet rs=_psInsert.getGeneratedKeys();
+            if (rs.next())
+            {
+              long primaryKey=rs.getLong(1);
+              person.setPrimaryKey((primaryKey!=0)?Long.valueOf(primaryKey):null);
+            }
           }
         }
         List<OccupationForPerson> occupations=person.getOccupations();
@@ -788,25 +820,32 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
    */
   public void createOccupation(Person person, OccupationForPerson occupation)
   {
+    if (person==null)
+    {
+      throw new IllegalArgumentException("person==null");
+    }
+    Long key=person.getPrimaryKey();
+    if (key==null)
+    {
+      throw new IllegalArgumentException("key==null");
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
       try
       {
         int n=1;
-        long key=person.getPrimaryKey();
-        occupation.setPersonProxy(new DataProxy<Person>(key,_mainDataSource
-            .getPersonDataSource()));
-        _psInsertOccupation.setLong(n,key);
+        occupation.setPersonProxy(_mainDataSource.getPersonDataSource().buildProxy(key));
+        _psInsertOccupation.setLong(n,key.longValue());
         n++;
         _psInsertOccupation.setInt(n,occupation.getYear());
         n++;
         _psInsertOccupation.setString(n,occupation.getOccupation());
         n++;
-        DataProxy<Place> place=occupation.getPlaceProxy();
-        if (place!=null)
+        DataProxy<Place> placeProxy=occupation.getPlaceProxy();
+        if ((placeProxy!=null) && (placeProxy.getPrimaryKey()!=null))
         {
-          _psInsertOccupation.setLong(n,place.getPrimaryKey());
+          _psInsertOccupation.setLong(n,placeProxy.getPrimaryKey().longValue());
         }
         else
         {
@@ -830,25 +869,32 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
    */
   public void createHome(Person person, HomeForPerson home)
   {
+    if (person==null)
+    {
+      throw new IllegalArgumentException("person==null");
+    }
+    Long key=person.getPrimaryKey();
+    if (key==null)
+    {
+      throw new IllegalArgumentException("key==null");
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
       try
       {
         int n=1;
-        long key=person.getPrimaryKey();
-        home.setPersonProxy(new DataProxy<Person>(key,_mainDataSource
-            .getPersonDataSource()));
-        _psInsertHome.setLong(n,key);
+        home.setPersonProxy(_mainDataSource.getPersonDataSource().buildProxy(key));
+        _psInsertHome.setLong(n,key.longValue());
         n++;
         _psInsertHome.setInt(n,home.getYear());
         n++;
         _psInsertHome.setString(n,home.getPlaceDetails());
         n++;
-        DataProxy<Place> place=home.getPlaceProxy();
-        if (place!=null)
+        DataProxy<Place> placeProxy=home.getPlaceProxy();
+        if ((placeProxy!=null) && (placeProxy.getPrimaryKey()!=null))
         {
-          _psInsertHome.setLong(n,place.getPrimaryKey());
+          _psInsertHome.setLong(n,placeProxy.getPrimaryKey().longValue());
         }
         else
         {

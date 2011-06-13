@@ -1,7 +1,6 @@
 package delta.genea.web.pages;
 
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.Set;
 
 import delta.common.framework.web.WebPageTools;
@@ -20,11 +19,11 @@ import delta.genea.web.pages.tools.PersonTools;
 public class CommonAncestorsPage extends GeneaWebPage
 {
   // HTML 4.01 strict validated
-  private long _key1;
-  private long _key2;
+  private Long _key1;
+  private Long _key2;
   private Person _p1;
   private Person _p2;
-  private CommonAncestorsComputer _computer;
+  private Set<Couple> _couples;
 
   @Override
   public void parseParameters() throws Exception
@@ -42,7 +41,7 @@ public class CommonAncestorsPage extends GeneaWebPage
     _p2=getDataSource().getPersonDataSource().load(_key2);
     AncestorsTree tree2=new AncestorsTree(_p2,1000);
     tree2.build();
-    _computer=new CommonAncestorsComputer(tree1,tree2);
+    _couples=new CommonAncestorsComputer().compute(tree1,tree2);
   }
 
   @Override
@@ -74,15 +73,12 @@ public class CommonAncestorsPage extends GeneaWebPage
     WebPageTools.generateHorizontalRuler(pw);
 
     pw.println("<div>");
-    Set<Couple> couples=_computer.compute();
-    if ((couples!=null) && (couples.size()>0))
+    if ((_couples!=null) && (_couples.size()>0))
     {
-      Couple c;
       Person man,woman;
       pw.println("<ul>");
-      for(Iterator<Couple> it=couples.iterator();it.hasNext();)
+      for(Couple c : _couples)
       {
-        c=it.next();
         man=c.getMan();
         woman=c.getWoman();
         pw.println("<li>");

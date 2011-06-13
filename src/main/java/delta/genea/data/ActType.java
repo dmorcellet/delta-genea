@@ -12,22 +12,22 @@ public class ActType extends DataObject<ActType>
   /**
    * Act type for birth acts.
    */
-  public static final long BIRTH=3;
+  public static final Long BIRTH=Long.valueOf(3);
   /**
    * Act type for baptem acts.
    */
-  public static final long BAPTEM=1;
-  public static final long DEATH=4;
-  public static final long BURIAL=2;
-  public static final long UNION=5;
-  public static final long CONSANGUINITY_TREE=6;
-  public static final long SELLING=7;
-  public static final long TRANSACTION=8;
-  public static final long OTHER=0;
-  public static final long WEDDING_CONTRACT=12;
-  public static final long LEASE=9;
-  public static final long SHARE=10;
-  public static final long TESTIMONIAL=11;
+  public static final Long BAPTEM=Long.valueOf(1);
+  public static final Long DEATH=Long.valueOf(4);
+  public static final Long BURIAL=Long.valueOf(2);
+  public static final Long UNION=Long.valueOf(5);
+  public static final Long CONSANGUINITY_TREE=Long.valueOf(6);
+  public static final Long SELLING=Long.valueOf(7);
+  public static final Long TRANSACTION=Long.valueOf(8);
+  public static final Long OTHER=Long.valueOf(0);
+  public static final Long WEDDING_CONTRACT=Long.valueOf(12);
+  public static final Long LEASE=Long.valueOf(9);
+  public static final Long SHARE=Long.valueOf(10);
+  public static final Long TESTIMONIAL=Long.valueOf(11);
 
   // Relations
   // ...
@@ -46,7 +46,7 @@ public class ActType extends DataObject<ActType>
    * @param primaryKey Primary key.
    * @param source Attached objects source.
    */
-  public ActType(long primaryKey, ObjectSource<ActType> source)
+  public ActType(Long primaryKey, ObjectSource<ActType> source)
   {
     super(primaryKey,source);
     _type="";
@@ -81,13 +81,13 @@ public class ActType extends DataObject<ActType>
 
   public boolean isBirthAct()
   {
-    long key=getPrimaryKey();
+    Long key=getPrimaryKey();
     return ((key==BIRTH) || (key==BAPTEM));
   }
 
   public boolean isDeathAct()
   {
-    long key=getPrimaryKey();
+    Long key=getPrimaryKey();
     return ((key==DEATH) || (key==BURIAL));
   }
 

@@ -66,8 +66,12 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
   }
 
   @Override
-  public Place getByPrimaryKey(long primaryKey)
+  public Place getByPrimaryKey(Long primaryKey)
   {
+    if (primaryKey==null)
+    {
+      return null;
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
@@ -75,7 +79,7 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
       ResultSet rs=null;
       try
       {
-        _psGetByPrimaryKey.setLong(1,primaryKey);
+        _psGetByPrimaryKey.setLong(1,primaryKey.longValue());
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
@@ -110,7 +114,7 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
         rs=_psGetAll.executeQuery();
         while (rs.next())
         {
-          place=new Place(rs.getLong(1),_mainDataSource.getPlaceDataSource());
+          place=new Place(Long.valueOf(rs.getLong(1)),_mainDataSource.getPlaceDataSource());
           fillPlace(place,rs);
           list.add(place);
         }
@@ -139,8 +143,10 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
     n++;
     long parentPlaceKey=rs.getLong(n);
     DataProxy<Place> parentPlaceProxy=null;
-    if (!rs.wasNull()) parentPlaceProxy=new DataProxy<Place>(parentPlaceKey,
-        place.getSource());
+    if (!rs.wasNull())
+    {
+      parentPlaceProxy=place.getSource().buildProxy(parentPlaceKey);
+    }
     place.setParentPlaceProxy(parentPlaceProxy);
     n++;
   }
@@ -154,9 +160,15 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
       try
       {
         int n=1;
-        long key=place.getPrimaryKey();
-        if (key==0) _psInsert.setNull(n,Types.INTEGER);
-        else _psInsert.setLong(n,key);
+        Long key=place.getPrimaryKey();
+        if (key==null)
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
+        else
+        {
+          _psInsert.setLong(n,key.longValue());
+        }
         n++;
         _psInsert.setString(n,place.getName());
         n++;
@@ -165,29 +177,35 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
         _psInsert.setInt(n,place.getLevel().getValue());
         n++;
         DataProxy<Place> parent=place.getParentPlaceProxy();
-        if (parent!=null) _psInsert.setLong(n,parent.getPrimaryKey());
-        else _psInsert.setNull(n,Types.INTEGER);
-        n++;
-        _psInsert.executeUpdate();
-        if (usesHSQLDB())
+        if ((parent!=null) && (parent.getPrimaryKey()!=null))
         {
-          if (key==0)
-          {
-            long primaryKey=JDBCTools.getPrimaryKey(connection,1);
-            place.setPrimaryKey(primaryKey);
-          }
+          _psInsert.setLong(n,parent.getPrimaryKey().longValue());
         }
         else
         {
-          ResultSet rs=_psInsert.getGeneratedKeys();
-          if (rs.next())
+          _psInsert.setNull(n,Types.INTEGER);
+        }
+        n++;
+        _psInsert.executeUpdate();
+        if (key==null)
+        {
+          if (usesHSQLDB())
           {
-            long primaryKey=rs.getLong(1);
+            Long primaryKey=JDBCTools.getPrimaryKey(connection,1);
             place.setPrimaryKey(primaryKey);
           }
           else
           {
-            _logger.error("No generated key for Place create");
+            ResultSet rs=_psInsert.getGeneratedKeys();
+            if (rs.next())
+            {
+              long primaryKey=rs.getLong(1);
+              place.setPrimaryKey(Long.valueOf(primaryKey));
+            }
+            else
+            {
+              _logger.error("No generated key for Place create");
+            }
           }
         }
       }

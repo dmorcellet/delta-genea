@@ -22,7 +22,15 @@ public class GeneaDateFormatter extends TextFormatter
     _useRevolutionaryCalendar=true;
   }
 
-  public void setUseRevolutionaryCalendar(boolean value) { _useRevolutionaryCalendar=value; }
+  /**
+   * Indicates if this formatter shall use the French revolution calendar date
+   * in addition to the standard date.
+   * @param value <code>true</code> to enable additional display, <code>false</code> otherwise.
+   */
+  public void setUseRevolutionaryCalendar(boolean value)
+  {
+    _useRevolutionaryCalendar=value;
+  }
 
   /**
    * Format the specified object into the given <tt>StringBuilder</tt>.

@@ -68,8 +68,12 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
   }
 
   @Override
-  public ActType getByPrimaryKey(long primaryKey)
+  public ActType getByPrimaryKey(Long primaryKey)
   {
+    if (primaryKey==null)
+    {
+      return null;
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
@@ -77,7 +81,7 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
       ResultSet rs=null;
       try
       {
-        _psGetByPrimaryKey.setLong(1,primaryKey);
+        _psGetByPrimaryKey.setLong(1,primaryKey.longValue());
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {

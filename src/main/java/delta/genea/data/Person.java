@@ -70,7 +70,7 @@ public class Person extends DataObject<Person>
    * @param primaryKey Primary key.
    * @param source Attached objects source.
    */
-  public Person(long primaryKey, ObjectSource<Person> source)
+  public Person(Long primaryKey, ObjectSource<Person> source)
   {
     super(primaryKey,source);
     _sex=Sex.MALE;
@@ -275,9 +275,9 @@ public class Person extends DataObject<Person>
     _father=father;
   }
 
-  public long getFatherKey()
+  public Long getFatherKey()
   {
-    long ret=0;
+    Long ret=null;
     if (_father!=null)
     {
       ret=_father.getPrimaryKey();
@@ -304,9 +304,9 @@ public class Person extends DataObject<Person>
     _mother=mother;
   }
 
-  public long getMotherKey()
+  public Long getMotherKey()
   {
-    long ret=0;
+    Long ret=null;
     if (_mother!=null)
     {
       ret=_mother.getPrimaryKey();

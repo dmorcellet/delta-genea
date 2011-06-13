@@ -28,7 +28,7 @@ public class MainStatistics
   public static void main(String args[])
   {
     ArrayList<Selection<Person>> selections=new ArrayList<Selection<Person>>();
-    AncestorsSelectionBuilder ancestorsBuilder=new AncestorsSelectionBuilder(DATA_SOURCE,76);
+    AncestorsSelectionBuilder ancestorsBuilder=new AncestorsSelectionBuilder(DATA_SOURCE,Long.valueOf(76));
     Selection<Person> ancestors=ancestorsBuilder.build();
     selections.add(ancestors);
     System.out.println(ancestors.getSize());
@@ -59,10 +59,10 @@ public class MainStatistics
     Place place;
     for(Long key : keys)
     {
-      placeName="";
+      placeName="???";
       if (key!=null)
       {
-        place=placesSource.load(key.longValue());
+        place=placesSource.load(key);
         if (place!=null)
         {
           placeName=place.getFullName();

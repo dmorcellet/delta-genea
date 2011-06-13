@@ -48,7 +48,7 @@ public class Union extends DataObject<Union>
    * @param primaryKey Primary key.
    * @param source Attached objects source.
    */
-  public Union(long primaryKey, ObjectSource<Union> source)
+  public Union(Long primaryKey, ObjectSource<Union> source)
   {
     super(primaryKey,source);
   }
@@ -134,9 +134,9 @@ public class Union extends DataObject<Union>
     _man=man;
   }
 
-  public long getManKey()
+  public Long getManKey()
   {
-    long ret=0;
+    Long ret=null;
     if (_man!=null)
     {
       ret=_man.getPrimaryKey();
@@ -163,9 +163,9 @@ public class Union extends DataObject<Union>
     _woman=woman;
   }
 
-  public long getWomanKey()
+  public Long getWomanKey()
   {
-    long ret=0;
+    Long ret=null;
     if (_woman!=null)
     {
       ret=_woman.getPrimaryKey();

@@ -26,7 +26,7 @@ public class ActText extends DataObject<ActText>
    * @param primaryKey Primary key.
    * @param source Attached objects source.
    */
-  public ActText(long primaryKey, ObjectSource<ActText> source)
+  public ActText(Long primaryKey, ObjectSource<ActText> source)
   {
     super(primaryKey,source);
     _text="";

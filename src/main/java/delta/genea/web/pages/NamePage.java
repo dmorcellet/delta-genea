@@ -60,7 +60,7 @@ public class NamePage extends GeneaWebPage
       if ((_noDescendants) || (!p.getNoDescendants()))
       {
         node=ret.addChild(p);
-        map.put(Long.valueOf(p.getPrimaryKey()),node);
+        map.put(p.getPrimaryKey(),node);
         list.add(node);
       }
     }
@@ -77,7 +77,7 @@ public class NamePage extends GeneaWebPage
       boolean fatherFound=false;
       if (father!=null)
       {
-        TreeNode<Person> found=map.get(Long.valueOf(father.getPrimaryKey()));
+        TreeNode<Person> found=map.get(father.getPrimaryKey());
         if (found!=null)
         {
           node.changeSuperNode(found);
@@ -90,7 +90,7 @@ public class NamePage extends GeneaWebPage
         mother=p.getMother();
         if (mother!=null)
         {
-          TreeNode<Person> found=map.get(Long.valueOf(mother.getPrimaryKey()));
+          TreeNode<Person> found=map.get(mother.getPrimaryKey());
           if (found!=null)
           {
             node.changeSuperNode(found);

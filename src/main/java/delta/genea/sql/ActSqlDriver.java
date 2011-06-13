@@ -90,8 +90,12 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   }
 
   @Override
-  public Act getByPrimaryKey(long primaryKey)
+  public Act getByPrimaryKey(Long primaryKey)
   {
+    if (primaryKey==null)
+    {
+      return null;
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
@@ -246,7 +250,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
    * @param primaryKey Identifier of the targeted person.
    * @return A list of act identifiers.
    */
-  public List<Long> getMainFromPerson(long primaryKey)
+  public List<Long> getMainFromPerson(Long primaryKey)
   {
     Connection connection=getConnection();
     synchronized (connection)
@@ -256,8 +260,8 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       ResultSet rs=null;
       try
       {
-        _psGetMainFromPerson.setLong(1,primaryKey);
-        _psGetMainFromPerson.setLong(2,primaryKey);
+        _psGetMainFromPerson.setLong(1,primaryKey.longValue());
+        _psGetMainFromPerson.setLong(2,primaryKey.longValue());
         rs=_psGetMainFromPerson.executeQuery();
         while (rs.next())
         {
@@ -284,8 +288,12 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
    * @param primaryKey Identifier of the targeted person.
    * @return A list of act identifiers.
    */
-  public List<Long> getOtherFromPerson(long primaryKey)
+  public List<Long> getOtherFromPerson(Long primaryKey)
   {
+    if (primaryKey==null)
+    {
+      return null;
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
@@ -294,7 +302,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       ResultSet rs=null;
       try
       {
-        _psGetOtherFromPerson.setLong(1,primaryKey);
+        _psGetOtherFromPerson.setLong(1,primaryKey.longValue());
         rs=_psGetOtherFromPerson.executeQuery();
         while (rs.next())
         {
@@ -321,8 +329,12 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
    * @param primaryKey Identifier of the targeted place.
    * @return A list of act identifiers.
    */
-  public List<Long> getActsFromPlace(long primaryKey)
+  public List<Long> getActsFromPlace(Long primaryKey)
   {
+    if (primaryKey==null)
+    {
+      return null;
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
@@ -331,7 +343,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       ResultSet rs=null;
       try
       {
-        _psGetFromPlace.setLong(1,primaryKey);
+        _psGetFromPlace.setLong(1,primaryKey.longValue());
         rs=_psGetFromPlace.executeQuery();
         while (rs.next())
         {
@@ -353,7 +365,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   }
 
   @Override
-  public List<Long> getRelatedObjectIDs(String relationName, long primaryKey)
+  public List<Long> getRelatedObjectIDs(String relationName, Long primaryKey)
   {
     List<Long> ret=null;
     if (relationName.equals(Act.MAIN_ACTS_RELATION))
@@ -380,33 +392,69 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       try
       {
         int n=1;
-        long key=act.getPrimaryKey();
-        if (key==0) _psInsert.setNull(n,Types.INTEGER);
-        else _psInsert.setLong(n,key);
+        Long key=act.getPrimaryKey();
+        if (key==null)
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
+        else
+        {
+          _psInsert.setLong(n,key.longValue());
+        }
         n++;
         DataProxy<ActType> actType=act.getActTypeProxy();
-        if (actType!=null) _psInsert.setLong(n,actType.getPrimaryKey());
-        else _psInsert.setNull(n,Types.INTEGER);
+        if ((actType!=null) && (actType.getPrimaryKey()!=null))
+        {
+          _psInsert.setLong(n,actType.getPrimaryKey().longValue());
+        }
+        else
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
         n++;
         Long actDate=act.getDate();
         if (actDate!=null) _psInsert.setDate(n,new java.sql.Date(actDate.longValue()));
         else _psInsert.setNull(n,Types.DATE);
         n++;
         DataProxy<Place> place=act.getPlaceProxy();
-        if (place!=null) _psInsert.setLong(n,place.getPrimaryKey());
-        else _psInsert.setNull(n,Types.INTEGER);
+        if ((place!=null) && (place.getPrimaryKey()!=null))
+        {
+          _psInsert.setLong(n,place.getPrimaryKey().longValue());
+        }
+        else
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
         n++;
         DataProxy<Person> p1Proxy=act.getP1Proxy();
-        if (p1Proxy!=null) _psInsert.setLong(n,p1Proxy.getPrimaryKey());
-        else _psInsert.setNull(n,Types.INTEGER);
+        if ((p1Proxy!=null) && (p1Proxy.getPrimaryKey()!=null))
+        {
+          _psInsert.setLong(n,p1Proxy.getPrimaryKey().longValue());
+        }
+        else
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
         n++;
         DataProxy<Person> p2Proxy=act.getP2Proxy();
-        if (p2Proxy!=null) _psInsert.setLong(n,p2Proxy.getPrimaryKey());
-        else _psInsert.setNull(n,Types.INTEGER);
+        if ((p2Proxy!=null) && (p2Proxy.getPrimaryKey()!=null))
+        {
+          _psInsert.setLong(n,p2Proxy.getPrimaryKey().longValue());
+        }
+        else
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
         n++;
         DataProxy<ActText> textProxy=act.getTextProxy();
-        if (textProxy!=null) _psInsert.setLong(n,textProxy.getPrimaryKey());
-        else _psInsert.setNull(n,Types.INTEGER);
+        if ((textProxy!=null) && (textProxy.getPrimaryKey()!=null))
+        {
+          _psInsert.setLong(n,textProxy.getPrimaryKey().longValue());
+        }
+        else
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
         n++;
         _psInsert.setString(n,act.getPath());
         n++;
@@ -417,21 +465,21 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
         _psInsert.setString(n,act.getComment());
         n++;
         _psInsert.executeUpdate();
-        if (usesHSQLDB())
+        if (key==null)
         {
-          if (key==0)
+          if (usesHSQLDB())
           {
-            long primaryKey=JDBCTools.getPrimaryKey(connection,1);
+            Long primaryKey=JDBCTools.getPrimaryKey(connection,1);
             act.setPrimaryKey(primaryKey);
           }
-        }
-        else
-        {
-          ResultSet rs=_psInsert.getGeneratedKeys();
-          if (rs.next())
+          else
           {
-            long primaryKey=rs.getLong(1);
-            act.setPrimaryKey(primaryKey);
+            ResultSet rs=_psInsert.getGeneratedKeys();
+            if (rs.next())
+            {
+              long primaryKey=rs.getLong(1);
+              act.setPrimaryKey(Long.valueOf(primaryKey));
+            }
           }
         }
       }
@@ -446,6 +494,15 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   @Override
   public void update(Act act)
   {
+    if (act==null)
+    {
+      throw new IllegalArgumentException("act==null");
+    }
+    Long key=act.getPrimaryKey();
+    if (key==null)
+    {
+      throw new IllegalArgumentException("key==null");
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
@@ -453,28 +510,58 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       {
         int n=1;
         DataProxy<ActType> actType=act.getActTypeProxy();
-        if (actType!=null) _psUpdate.setLong(n,actType.getPrimaryKey());
-        else _psUpdate.setNull(n,Types.INTEGER);
+        if ((actType!=null) && (actType.getPrimaryKey()!=null))
+        {
+          _psUpdate.setLong(n,actType.getPrimaryKey().longValue());
+        }
+        else
+        {
+          _psUpdate.setNull(n,Types.INTEGER);
+        }
         n++;
         Long actDate=act.getDate();
         if (actDate!=null) _psUpdate.setDate(n,new java.sql.Date(actDate.longValue()));
         else _psUpdate.setNull(n,Types.DATE);
         n++;
         DataProxy<Place> place=act.getPlaceProxy();
-        if (place!=null) _psUpdate.setLong(n,place.getPrimaryKey());
-        else _psUpdate.setNull(n,Types.INTEGER);
+        if ((place!=null) && (place.getPrimaryKey()!=null))
+        {
+          _psUpdate.setLong(n,place.getPrimaryKey().longValue());
+        }
+        else
+        {
+          _psUpdate.setNull(n,Types.INTEGER);
+        }
         n++;
         DataProxy<Person> p1Proxy=act.getP1Proxy();
-        if (p1Proxy!=null) _psUpdate.setLong(n,p1Proxy.getPrimaryKey());
-        else _psUpdate.setNull(n,Types.INTEGER);
+        if ((p1Proxy!=null) && (p1Proxy.getPrimaryKey()!=null))
+        {
+          _psUpdate.setLong(n,p1Proxy.getPrimaryKey().longValue());
+        }
+        else
+        {
+          _psUpdate.setNull(n,Types.INTEGER);
+        }
         n++;
         DataProxy<Person> p2Proxy=act.getP2Proxy();
-        if (p2Proxy!=null) _psUpdate.setLong(n,p2Proxy.getPrimaryKey());
-        else _psUpdate.setNull(n,Types.INTEGER);
+        if ((p2Proxy!=null) && (p2Proxy.getPrimaryKey()!=null))
+        {
+          _psUpdate.setLong(n,p2Proxy.getPrimaryKey().longValue());
+        }
+        else
+        {
+          _psUpdate.setNull(n,Types.INTEGER);
+        }
         n++;
         DataProxy<ActText> textProxy=act.getTextProxy();
-        if (textProxy!=null) _psUpdate.setLong(n,textProxy.getPrimaryKey());
-        else _psUpdate.setNull(n,Types.INTEGER);
+        if ((textProxy!=null) && (textProxy.getPrimaryKey()!=null))
+        {
+          _psUpdate.setLong(n,textProxy.getPrimaryKey().longValue());
+        }
+        else
+        {
+          _psUpdate.setNull(n,Types.INTEGER);
+        }
         n++;
         _psUpdate.setString(n,act.getPath());
         n++;
@@ -484,8 +571,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
         n++;
         _psUpdate.setString(n,act.getComment());
         n++;
-        long key=act.getPrimaryKey();
-        _psUpdate.setLong(n,key);
+        _psUpdate.setLong(n,key.longValue());
         n++;
         _psUpdate.executeUpdate();
       }

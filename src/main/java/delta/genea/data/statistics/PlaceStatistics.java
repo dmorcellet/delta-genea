@@ -28,8 +28,8 @@ public class PlaceStatistics
       proxy=person.getBirthPlaceProxy();
       if (proxy!=null)
       {
-        long key=proxy.getPrimaryKey();
-        stats.addSample(Long.valueOf(key));
+        Long key=proxy.getPrimaryKey();
+        stats.addSample(key);
       }
       else
       {
@@ -54,8 +54,8 @@ public class PlaceStatistics
       proxy=person.getDeathPlaceProxy();
       if (proxy!=null)
       {
-        long key=proxy.getPrimaryKey();
-        stats.addSample(Long.valueOf(key));
+        Long key=proxy.getPrimaryKey();
+        stats.addSample(key);
       }
       else
       {

@@ -68,8 +68,12 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
   }
 
   @Override
-  public ActText getByPrimaryKey(long primaryKey)
+  public ActText getByPrimaryKey(Long primaryKey)
   {
+    if (primaryKey==null)
+    {
+      return null;
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
@@ -77,7 +81,7 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
       ResultSet rs=null;
       try
       {
-        _psGetByPrimaryKey.setLong(1,primaryKey);
+        _psGetByPrimaryKey.setLong(1,primaryKey.longValue());
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
@@ -146,34 +150,44 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
   @Override
   public void create(ActText text)
   {
+    if (text==null)
+    {
+      throw new IllegalArgumentException("text==null");
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
       try
       {
         int n=1;
-        long key=text.getPrimaryKey();
-        if (key==0) _psInsert.setNull(n,Types.INTEGER);
-        else _psInsert.setLong(n,key);
+        Long key=text.getPrimaryKey();
+        if (key==null)
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
+        else
+        {
+          _psInsert.setLong(n,key.longValue());
+        }
         n++;
         _psInsert.setString(n,text.getText());
         n++;
         _psInsert.executeUpdate();
-        if (usesHSQLDB())
+        if (key==null)
         {
-          if (key==0)
+          if (usesHSQLDB())
           {
-            long primaryKey=JDBCTools.getPrimaryKey(connection,1);
+            Long primaryKey=JDBCTools.getPrimaryKey(connection,1);
             text.setPrimaryKey(primaryKey);
           }
-        }
-        else
-        {
-          ResultSet rs=_psInsert.getGeneratedKeys();
-          if (rs.next())
+          else
           {
-            long primaryKey=rs.getLong(1);
-            text.setPrimaryKey(primaryKey);
+            ResultSet rs=_psInsert.getGeneratedKeys();
+            if (rs.next())
+            {
+              long primaryKey=rs.getLong(1);
+              text.setPrimaryKey(Long.valueOf(primaryKey));
+            }
           }
         }
       }
@@ -188,6 +202,15 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
   @Override
   public void update(ActText text)
   {
+    if (text==null)
+    {
+      throw new IllegalArgumentException("text==null");
+    }
+    Long key=text.getPrimaryKey();
+    if (key==null)
+    {
+      throw new IllegalArgumentException("key==null");
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
@@ -196,8 +219,7 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
         int n=1;
         _psUpdate.setString(n,text.getText());
         n++;
-        long key=text.getPrimaryKey();
-        _psUpdate.setLong(n,key);
+        _psUpdate.setLong(n,key.longValue());
         n++;
         _psUpdate.executeUpdate();
       }

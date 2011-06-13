@@ -21,9 +21,7 @@ public class MainTestCommonAncestorsComputer
       Person p2=dataSource.getPersonDataSource().load(key2);
       AncestorsTree tree2=new AncestorsTree(p2,1000);
       tree2.build();
-
-      CommonAncestorsComputer computer=new CommonAncestorsComputer(tree1,tree2);
-      Set<Couple> set=computer.compute();
+      Set<Couple> set=new CommonAncestorsComputer().compute(tree1,tree2);
       System.out.println("Set : "+set);
       dataSource.close();
     }

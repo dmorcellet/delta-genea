@@ -13,7 +13,7 @@ import delta.common.framework.objects.data.DataObject;
  * @param <T> Type of objects in this selection.
  * @author DAM
  */
-public class CompoundSelection<T extends DataObject> implements Selection<T>
+public class CompoundSelection<T extends DataObject<T>> implements Selection<T>
 {
   /**
    * Composition operator.
@@ -77,7 +77,7 @@ public class CompoundSelection<T extends DataObject> implements Selection<T>
    * @return <code>true</code> if the targeted object is in this selection,
    * <code>false</code> otherwise.
    */
-  public boolean hasObject(long key)
+  public boolean hasObject(Long key)
   {
     return _result.hasObject(key);
   }
@@ -146,7 +146,7 @@ public class CompoundSelection<T extends DataObject> implements Selection<T>
    * @param <T> Type of objects in the managed selections.
    * @author DAM
    */
-  public static class SelectionSizeComparator<T extends DataObject> implements Comparator<Selection<T>>
+  public static class SelectionSizeComparator<T extends DataObject<T>> implements Comparator<Selection<T>>
   {
     /**
      * Comparison method.

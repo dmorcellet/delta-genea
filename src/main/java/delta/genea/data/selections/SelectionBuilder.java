@@ -7,7 +7,7 @@ import delta.common.framework.objects.data.DataObject;
  * @author DAM
  * @param <T> Type of objects in this selection.
  */
-public interface SelectionBuilder<T extends DataObject>
+public interface SelectionBuilder<T extends DataObject<T>>
 {
   /**
    * Build a selection.

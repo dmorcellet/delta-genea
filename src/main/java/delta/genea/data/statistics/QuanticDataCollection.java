@@ -15,7 +15,7 @@ import delta.common.utils.misc.IntegerHolder;
  * @author DAM
  * @param <T> Type of quantic keys.
  */
-public class QuanticDataCollection<T extends Comparable> implements DataCollection<T>
+public class QuanticDataCollection<T extends Comparable<T>> implements DataCollection<T>
 {
   private HashMap<T,IntegerHolder> _counters;
   

@@ -29,7 +29,15 @@ public class ActsForPerson
 
   public boolean build()
   {
-    long key=_rootPerson.getPrimaryKey();
+    if (_rootPerson==null)
+    {
+      return false;
+    }
+    Long key=_rootPerson.getPrimaryKey();
+    if (key==null)
+    {
+      return false;
+    }
     ObjectSource<Act> actsSource=_dataSource.getActDataSource();
     ObjectSource<Union> unionsSource=_dataSource.getUnionDataSource();
 
@@ -189,7 +197,8 @@ public class ActsForPerson
       union=it.next();
       if (union!=null)
       {
-        if ((union.getManKey()==otherKey) || (union.getWomanKey()==otherKey))
+        if (((union.getManKey()!=null) && (union.getManKey().longValue()==otherKey)) ||
+        	((union.getWomanKey()!=null) && (union.getWomanKey().longValue()==otherKey)))
         {
           return union;
         }

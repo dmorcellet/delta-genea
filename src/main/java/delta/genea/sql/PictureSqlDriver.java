@@ -83,8 +83,12 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
   }
 
   @Override
-  public Picture getByPrimaryKey(long primaryKey)
+  public Picture getByPrimaryKey(Long primaryKey)
   {
+    if (primaryKey==null)
+    {
+      return null;
+    }
     Connection connection=getConnection();
     synchronized (connection)
     {
@@ -92,13 +96,13 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
       ResultSet rs=null;
       try
       {
-        _psGetByPrimaryKey.setLong(1,primaryKey);
+        _psGetByPrimaryKey.setLong(1,primaryKey.longValue());
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
           ret=new Picture(primaryKey,_mainDataSource.getPictureDataSource());
           fillPicture(ret,rs);
-          List<PersonInPicture> persons=loadPersonsInPicture(primaryKey);
+          List<PersonInPicture> persons=loadPersonsInPicture(primaryKey.longValue());
           ret.setPersonsInPicture(persons);
         }
       }
@@ -142,8 +146,13 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
         {
           tmp=new PersonInPicture();
           int n=1;
-          tmp.setPersonProxy(new DataProxy<Person>(rs.getLong(n),
-              _mainDataSource.getPersonDataSource()));
+          long personKey=rs.getLong(n);
+          DataProxy<Person> personProxy=null;
+          if (!rs.wasNull())
+          {
+            personProxy=_mainDataSource.getPersonDataSource().buildProxy(personKey);
+          }
+          tmp.setPersonProxy(personProxy);
           n++;
           if (ret==null)
           {
@@ -176,12 +185,11 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
       ResultSet rs=null;
       try
       {
-        //System.out.println("GET ALL pictures");
         rs=_psGetAll.executeQuery();
         while (rs.next())
         {
           long primaryKey=rs.getLong(1);
-          picture=new Picture(primaryKey,_mainDataSource.getPictureDataSource());
+          picture=new Picture(Long.valueOf(primaryKey),_mainDataSource.getPictureDataSource());
           fillPicture(picture,rs);
           List<PersonInPicture> persons=loadPersonsInPicture(primaryKey);
           picture.setPersonsInPicture(persons);
@@ -278,12 +286,15 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
   }
 
   @Override
-  public List<Long> getRelatedObjectIDs(String relationName, long primaryKey)
+  public List<Long> getRelatedObjectIDs(String relationName, Long primaryKey)
   {
     List<Long> ret=null;
     if (relationName.equals(Picture.PICTURES_FOR_PERSON_RELATION))
     {
-      ret=getPicturesForPerson(primaryKey);
+      if (primaryKey!=null)
+      {
+        ret=getPicturesForPerson(primaryKey.longValue());
+      }
     }
     return ret;
   }
@@ -297,9 +308,15 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
       try
       {
         int n=1;
-        long key=picture.getPrimaryKey();
-        if (key==0) _psInsert.setNull(n,Types.INTEGER);
-        else _psInsert.setLong(n,key);
+        Long key=picture.getPrimaryKey();
+        if (key==null)
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
+        else
+        {
+          _psInsert.setLong(n,key.longValue());
+        }
         n++;
         _psInsert.setString(n,picture.getTitle());
         n++;
@@ -308,21 +325,21 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
         _psInsert.setString(n,picture.getComment());
         n++;
         _psInsert.executeUpdate();
-        if (usesHSQLDB())
+        if (key==null)
         {
-          if (key==0)
+          if (usesHSQLDB())
           {
-            long primaryKey=JDBCTools.getPrimaryKey(connection,1);
+            Long primaryKey=JDBCTools.getPrimaryKey(connection,1);
             picture.setPrimaryKey(primaryKey);
           }
-        }
-        else
-        {
-          ResultSet rs=_psInsert.getGeneratedKeys();
-          if (rs.next())
+          else
           {
-            long primaryKey=rs.getLong(1);
-            picture.setPrimaryKey(primaryKey);
+            ResultSet rs=_psInsert.getGeneratedKeys();
+            if (rs.next())
+            {
+              long primaryKey=rs.getLong(1);
+              picture.setPrimaryKey(Long.valueOf(primaryKey));
+            }
           }
         }
       }
@@ -349,8 +366,15 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
         n++;
         _psUpdate.setString(n,picture.getComment());
         n++;
-        long key=picture.getPrimaryKey();
-        _psUpdate.setLong(n,key);
+        Long key=picture.getPrimaryKey();
+        if (key!=null)
+        {
+          _psUpdate.setLong(n,key.longValue());
+        }
+        else
+        {
+          _psUpdate.setNull(n,Types.INTEGER);
+        }
         n++;
         _psUpdate.executeUpdate();
       }

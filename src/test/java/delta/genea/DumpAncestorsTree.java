@@ -19,7 +19,7 @@ import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.data.trees.AncestorsTree;
 import delta.genea.data.trees.DescendantsTree;
-import delta.genea.misc.GeneaCfg;
+import delta.genea.misc.DatabaseConfiguration;
 import delta.genea.time.GregorianDate;
 
 public class DumpAncestorsTree
@@ -32,7 +32,7 @@ public class DumpAncestorsTree
   {
     try
     {
-      String dbName=GeneaCfg.getInstance().getDbName();
+      String dbName=DatabaseConfiguration.getInstance().getDefaultDbName();
       GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
 
       ObjectSource<Person> ds=dataSource.getPersonDataSource();

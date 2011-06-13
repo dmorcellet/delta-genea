@@ -89,7 +89,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
   }
 
   @Override
-  public Union getByPrimaryKey(long primaryKey)
+  public Union getByPrimaryKey(Long primaryKey)
   {
     Connection connection=getConnection();
     synchronized (connection)
@@ -98,7 +98,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
       ResultSet rs=null;
       try
       {
-        _psGetByPrimaryKey.setLong(1,primaryKey);
+        _psGetByPrimaryKey.setLong(1,primaryKey.longValue());
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
@@ -126,7 +126,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     DataProxy<Person> manProxy=null;
     if (!rs.wasNull())
     {
-      manProxy=new DataProxy<Person>(manKey,_mainDataSource.getPersonDataSource());
+      manProxy=new DataProxy<Person>(Long.valueOf(manKey),_mainDataSource.getPersonDataSource());
     }
     union.setManProxy(manProxy);
     n++;
@@ -134,16 +134,18 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     DataProxy<Person> womanProxy=null;
     if (!rs.wasNull())
     {
-      womanProxy=new DataProxy<Person>(womanKey,_mainDataSource.getPersonDataSource());
+      womanProxy=new DataProxy<Person>(Long.valueOf(womanKey),_mainDataSource.getPersonDataSource());
     }
     union.setWomanProxy(womanProxy);
     n++;
     union.setDate(rs.getDate(n++),rs.getString(n++));
-    union.setPlaceProxy(new DataProxy<Place>(rs.getLong(n),_mainDataSource
-        .getPlaceDataSource()));
+    long placeKey=rs.getLong(n);
+    DataProxy<Place> placeProxy=rs.wasNull()?null:_mainDataSource.getPlaceDataSource().buildProxy(placeKey);
+    union.setPlaceProxy(placeProxy);
     n++;
-    union.setWeddingContractProxy(new DataProxy<Act>(rs.getLong(n),
-        _mainDataSource.getActDataSource()));
+    long contractKey=rs.getLong(n);
+    DataProxy<Act> contractProxy=rs.wasNull()?null:_mainDataSource.getActDataSource().buildProxy(contractKey);
+    union.setWeddingContractProxy(contractProxy);
     n++;
     union.setComments(rs.getString(n));
     n++;
@@ -163,7 +165,9 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
         rs=_psGetAll.executeQuery();
         while (rs.next())
         {
-          union=new Union(rs.getLong(1),_mainDataSource.getUnionDataSource());
+          long key=rs.getLong(1);
+          Long primaryKey=(rs.wasNull()?null:Long.valueOf(key));
+          union=new Union(primaryKey,_mainDataSource.getUnionDataSource());
           fillUnion(union,rs);
           ret.add(union);
         }
@@ -187,7 +191,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
    * @param primaryKey Identifier of the targeted person.
    * @return A list of union identifiers.
    */
-  public List<Long> getFromPerson(long primaryKey)
+  public List<Long> getFromPerson(Long primaryKey)
   {
     Connection connection=getConnection();
     synchronized (connection)
@@ -204,14 +208,14 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     }
   }
 
-  private List<Long> getFromManOrWoman(PreparedStatement ps, long primaryKey)
+  private List<Long> getFromManOrWoman(PreparedStatement ps, Long primaryKey)
   {
     ArrayList<Long> ret=new ArrayList<Long>();
     Long union=null;
     ResultSet rs=null;
     try
     {
-      ps.setLong(1,primaryKey);
+      ps.setLong(1,primaryKey.longValue());
       rs=ps.executeQuery();
       while (rs.next())
       {
@@ -232,7 +236,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
   }
 
   @Override
-  public List<Long> getRelatedObjectIDs(String relationName, long primaryKey)
+  public List<Long> getRelatedObjectIDs(String relationName, Long primaryKey)
   {
     List<Long> ret=new ArrayList<Long>();
     if (relationName.equals(Union.UNIONS_RELATION))
@@ -317,20 +321,20 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
       try
       {
         int n=1;
-        long key=union.getPrimaryKey();
-        if (key==0)
+        Long key=union.getPrimaryKey();
+        if (key==null)
         {
           _psInsert.setNull(n,Types.INTEGER);
         }
         else
         {
-          _psInsert.setLong(n,key);
+          _psInsert.setLong(n,key.longValue());
         }
         n++;
         DataProxy<Person> manPerson=union.getManProxy();
         if (manPerson!=null)
         {
-          _psInsert.setLong(n,manPerson.getPrimaryKey());
+          _psInsert.setLong(n,manPerson.getPrimaryKey().longValue());
         }
         else
         {
@@ -340,7 +344,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
         DataProxy<Person> womanPerson=union.getWomanProxy();
         if (womanPerson!=null)
         {
-          _psInsert.setLong(n,womanPerson.getPrimaryKey());
+          _psInsert.setLong(n,womanPerson.getPrimaryKey().longValue());
         }
         else
         {
@@ -359,20 +363,22 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
         n++;
         _psInsert.setString(n,union.getInfos());
         n++;
-        DataProxy<Place> place=union.getPlaceProxy();
-        if (place!=null)
+        DataProxy<Place> placeProxy=union.getPlaceProxy();
+        if ((placeProxy!=null) && (placeProxy.getPrimaryKey()!=null))
         {
-          _psInsert.setLong(n,place.getPrimaryKey());
+          long placeKey=placeProxy.getPrimaryKey().longValue();
+          _psInsert.setLong(n,placeKey);
         }
         else
         {
           _psInsert.setNull(n,Types.INTEGER);
         }
         n++;
-        DataProxy<Act> weddingContract=union.getWeddingContractProxy();
-        if (weddingContract!=null)
+        DataProxy<Act> weddingContractProxy=union.getWeddingContractProxy();
+        if ((weddingContractProxy!=null) && (weddingContractProxy.getPrimaryKey()!=null))
         {
-          _psInsert.setLong(n,weddingContract.getPrimaryKey());
+          long weddingContractKey=weddingContractProxy.getPrimaryKey().longValue();
+          _psInsert.setLong(n,weddingContractKey);
         }
         else
         {
@@ -382,21 +388,21 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
         _psInsert.setString(n,union.getComments());
         n++;
         _psInsert.executeUpdate();
-        if (usesHSQLDB())
+        if (key==null)
         {
-          if (key==0)
+          if (usesHSQLDB())
           {
-            long primaryKey=JDBCTools.getPrimaryKey(connection,1);
+            Long primaryKey=JDBCTools.getPrimaryKey(connection,1);
             union.setPrimaryKey(primaryKey);
           }
-        }
-        else
-        {
-          ResultSet rs=_psInsert.getGeneratedKeys();
-          if (rs.next())
+          else
           {
-            long primaryKey=rs.getLong(1);
-            union.setPrimaryKey(primaryKey);
+            ResultSet rs=_psInsert.getGeneratedKeys();
+            if (rs.next())
+            {
+              long primaryKey=rs.getLong(1);
+              union.setPrimaryKey(Long.valueOf(primaryKey));
+            }
           }
         }
       }

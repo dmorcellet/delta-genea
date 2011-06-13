@@ -39,7 +39,8 @@ public class FromGEDCOM
   public static void main(String[] args)
   {
     GeneaApplication.getInstance();
-    new FromGEDCOM(new File("/home/dm/downloads/BOUQUETDIDIER.ged"),"dbouquet");
+    //new FromGEDCOM(new File("/home/dm/downloads/BOUQUETDIDIER.ged"),"dbouquet");
+    new FromGEDCOM(new File("/home/dm/tmp/Ninie.GED"),"genea_ninie");
   }
 
   private File _fileName;
@@ -83,8 +84,8 @@ public class FromGEDCOM
 
   public void parseFileLines()
   {
-    //TextFileReader fp=new TextFileReader(_fileName,new AnselCharset());
-    TextFileReader fp=new TextFileReader(_fileName,"ISO8859-1");
+    TextFileReader fp=new TextFileReader(_fileName,new AnselCharset());
+    //TextFileReader fp=new TextFileReader(_fileName,"ISO8859-1");
     if (!fp.start()) return;
 
     String line;
@@ -154,7 +155,7 @@ public class FromGEDCOM
 
   private void handlePerson()
   {
-    Person p=new Person(0,_personDataSource);
+    Person p=new Person(null,_personDataSource);
     {
       String keyString=_lines.get(_index);
       int atIndex=keyString.indexOf("@");
@@ -293,7 +294,7 @@ public class FromGEDCOM
 
   private void handleFamily()
   {
-    Union u=new Union(0,_unionDataSource);
+    Union u=new Union(null,_unionDataSource);
     {
       String keyString=_lines.get(_index);
       int atIndex=keyString.indexOf("@");
@@ -402,7 +403,7 @@ public class FromGEDCOM
     _unions.add(u);
   }
 
-  private long decodePersonID(String id)
+  private Long decodePersonID(String id)
   {
     StringBuilder sb=new StringBuilder();
     int n=id.length();
@@ -412,7 +413,7 @@ public class FromGEDCOM
       if ((c[i]>='0')&&(c[i]<='9')) sb.append(c[i]);
     }
     long ret=NumericTools.parseLong(sb.toString(),0);
-    return ret;
+    return (ret==0)?null:Long.valueOf(ret);
   }
 
   private GeneaDate decodeDate(String dateString)
@@ -449,14 +450,12 @@ public class FromGEDCOM
         stringToUse=dateString.substring(3);
         dateInfos="av";
       }
-      /*
       else if (dateString.startsWith(FRENCH_REVOLUTION_DATE_SEED))
       {
         dateType=0;
         stringToUse=dateString.substring(FRENCH_REVOLUTION_DATE_SEED.length()).trim();
         isFrenchRevolutionDate=true;
       }
-      */
       else
       {
         stringToUse=dateString;
@@ -534,7 +533,7 @@ public class FromGEDCOM
             if (dateType==0)
             {
               Calendar c=Calendar.getInstance();
-              c.set(year,month,day);
+              c.set(year,month-1,day);
               date=c.getTime();
             }
             else

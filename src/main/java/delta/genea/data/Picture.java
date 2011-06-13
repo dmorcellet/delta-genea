@@ -32,7 +32,7 @@ public class Picture extends DataObject<Picture>
    * @param primaryKey Primary key.
    * @param source Attached objects source.
    */
-  public Picture(long primaryKey, ObjectSource<Picture> source)
+  public Picture(Long primaryKey, ObjectSource<Picture> source)
   {
     super(primaryKey,source);
     _title="";

@@ -33,7 +33,7 @@ public class AncestorsTreesRegistry
    * @param key Root person key.
    * @return A tree or <code>null</code>.
    */
-  public AncestorsTree getTree(long key)
+  public AncestorsTree getTree(Long key)
   {
     return getTree(key,true,false);
   }
@@ -45,13 +45,12 @@ public class AncestorsTreesRegistry
    * @param tolerantMode Tree building mode.
    * @return A tree or <code>null</code>.
    */
-  public AncestorsTree getTree(long key, boolean builtItIfNeeded, boolean tolerantMode)
+  public AncestorsTree getTree(Long key, boolean builtItIfNeeded, boolean tolerantMode)
   {
     AncestorsTree ret=null;
-    if (key!=0)
+    if (key!=null)
     {
-      Long tmp=Long.valueOf(key);
-      ret=_knownTrees.get(tmp);
+      ret=_knownTrees.get(key);
       if ((ret==null) && (builtItIfNeeded))
       {
         Person root=_dataSource.getPersonDataSource().load(key);
@@ -62,7 +61,7 @@ public class AncestorsTreesRegistry
           if (ok)
           {
             ret=at;
-            _knownTrees.put(tmp,ret);
+            _knownTrees.put(key,ret);
           }
         }
       }

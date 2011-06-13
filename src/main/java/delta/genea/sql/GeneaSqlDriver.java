@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.framework.objects.sql.DatabaseType;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.misc.GeneaCfg;
+import delta.genea.misc.DatabaseConfiguration;
 import delta.genea.utils.GeneaLoggers;
 
 /**
@@ -82,14 +82,13 @@ public class GeneaSqlDriver
 
   private void buildConnection(GeneaDataSource dataSource) throws Exception
   {
-    GeneaCfg cfg=GeneaCfg.getInstance();
+    DatabaseConfiguration cfg=DatabaseConfiguration.getInstance();
     String dbType=cfg.getDBType();
     _databaseType=DatabaseType.getDBTypeByName(dbType);
     String driver=cfg.getJdbcDriver();
     Class.forName(driver);
-    String url=cfg.getJdbcUrl();
     String dbName=dataSource.getDbName();
-    url=url.replace("$DB_NAME",dbName);
+    String url=cfg.getJdbcUrl(dbName);
     String user=cfg.getJdbcUser();
     String password=cfg.getJdbcPassword();
     _dbConnection=DriverManager.getConnection(url,user,password);

@@ -10,7 +10,7 @@ import delta.common.framework.objects.data.DataObject;
  * @param <T> Type of objects in this selection.
  * @author DAM
  */
-public class BasicSelection<T extends DataObject> implements Selection<T>
+public class BasicSelection<T extends DataObject<T>> implements Selection<T>
 {
   private String _name;
   private Set<T> _selectedObjects;
@@ -53,9 +53,9 @@ public class BasicSelection<T extends DataObject> implements Selection<T>
    * @return <code>true</code> if the targeted object is in this selection,
    * <code>false</code> otherwise.
    */
-  public boolean hasObject(long key)
+  public boolean hasObject(Long key)
   {
-    return _keys.contains(Long.valueOf(key));
+    return _keys.contains(key);
   }
 
   /**
@@ -75,11 +75,11 @@ public class BasicSelection<T extends DataObject> implements Selection<T>
   {
     if (object!=null)
     {
-      long key=object.getPrimaryKey();
+      Long key=object.getPrimaryKey();
       if (!hasObject(key))
       {
         _selectedObjects.add(object);
-        _keys.add(Long.valueOf(key));
+        _keys.add(key);
       }
     }
   }
@@ -92,9 +92,9 @@ public class BasicSelection<T extends DataObject> implements Selection<T>
   {
     if (object!=null)
     {
-      long key=object.getPrimaryKey();
       _selectedObjects.remove(object);
-      _keys.remove(Long.valueOf(key));
+      Long key=object.getPrimaryKey();
+      _keys.remove(key);
     }
   }
 }

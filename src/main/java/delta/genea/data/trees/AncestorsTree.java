@@ -3,7 +3,9 @@ package delta.genea.data.trees;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.genea.data.Couple;
@@ -15,7 +17,11 @@ import delta.genea.data.Person;
  */
 public class AncestorsTree
 {
+  /**
+   * Default value for the maximum depth.
+   */
   public static final int MAX_DEPTH=100;
+
   private static final String SPECIAL_KEY="0";
   private Person _rootPerson;
   private BinaryTreeNode<Person> _tree;
@@ -100,6 +106,11 @@ public class AncestorsTree
     return ret;
   }
 
+  /**
+   * Get the person identified in this tree by the given SOSA number.
+   * @param sosa A SOSA number.
+   * @return A person or <code>null</code> if not found.
+   */
   public Person getSosa(long sosa)
   {
     Person ret=null;
@@ -111,11 +122,21 @@ public class AncestorsTree
     return ret;
   }
 
+  /**
+   * Get the number of ancestors in this tree.
+   * @return A number of ancestors.
+   */
   public long getNumberOfAncestors()
   {
     return _tree.getNumberOfDescendants();
   }
 
+  /**
+   * Get the list of SOSA numbers for a given person
+   * in this tree.
+   * @param personKey Identifier of the targeted person.
+   * @return A possibly empty list of SOSA numbers.
+   */
   public List<Long> getSosas(long personKey)
   {
     List<Long> ret=new ArrayList<Long>();
@@ -126,21 +147,25 @@ public class AncestorsTree
   private void getSosasForPerson(long sosa, long personKey, BinaryTreeNode<Person> node, List<Long> result)
   {
     Person p=node.getData();
-    if (p.getPrimaryKey()==personKey)
+    if (p!=null)
     {
-      result.add(Long.valueOf(sosa));
-    }
-    else
-    {
-      BinaryTreeNode<Person> next=node.getLeftNode();
-      if (next!=null)
+      Long primaryKey=p.getPrimaryKey();
+      if (p.getPrimaryKey()==personKey)
       {
-        getSosasForPerson(2*sosa,personKey,next,result);
+        result.add(Long.valueOf(sosa));
       }
-      next=node.getRightNode();
-      if (next!=null)
+      else
       {
-        getSosasForPerson(2*sosa+1,personKey,next,result);
+        BinaryTreeNode<Person> father=node.getLeftNode();
+        if (father!=null)
+        {
+          getSosasForPerson(2*sosa,personKey,father,result);
+        }
+        BinaryTreeNode<Person> mother=node.getRightNode();
+        if (mother!=null)
+        {
+          getSosasForPerson(2*sosa+1,personKey,mother,result);
+        }
       }
     }
   }
@@ -332,6 +357,11 @@ public class AncestorsTree
     return ret;
   }
 
+  /**
+   * Dump the contents of this tree to the given
+   * print stream.
+   * @param out Output print stream.
+   */
   public void dump(PrintStream out)
   {
     if(out==null)
@@ -358,32 +388,34 @@ public class AncestorsTree
     }
   }
 
-  public HashMap<Couple,List<Long>> buildCoupleToSOSAMap(AncestorsTree tree)
+  /**
+   * Get the set of all the couples found in this tree.
+   * @return A set of couples.
+   */
+  public Set<Couple> getCouplesSet()
   {
-    HashMap<Couple,List<Long>> ret=new HashMap<Couple,List<Long>>();
-    buildKeyToSosaMap(tree.getRootNode(),1,ret);
+    HashSet<Couple> ret=new HashSet<Couple>();
+    fillCouplesSet(getRootNode(),ret);
     return ret;
   }
 
-  private void buildKeyToSosaMap(BinaryTreeNode<Person> node, long sosa,
-      HashMap<Couple,List<Long>> ret)
+  private void fillCouplesSet(BinaryTreeNode<Person> node, Set<Couple> ret)
+  {
+    Person father=node.getLeftData();
+    Person mother=node.getRightData();
+
+    if ((father!=null) || (mother!=null))
     {
-      Person father=node.getLeftData();
-      Person mother=node.getRightData();
-
-      if ((father==null)&&(mother==null)) return;
-
       Couple c=new Couple(father,mother);
-      List<Long> list=ret.get(c);
-      if(list==null)
-      {
-        list=new ArrayList<Long>();
-        ret.put(c, list);
-      }
-      list.add(Long.valueOf(sosa));
+      ret.add(c);
       if (father!=null)
-        buildKeyToSosaMap(node.getLeftNode(),sosa*2,ret);
+      {
+        fillCouplesSet(node.getLeftNode(),ret);
+      }
       if (mother!=null)
-        buildKeyToSosaMap(node.getRightNode(),1+sosa*2,ret);
+      {
+        fillCouplesSet(node.getRightNode(),ret);
+      }
     }
+  }
 }

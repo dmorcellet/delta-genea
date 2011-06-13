@@ -6,7 +6,7 @@ import delta.common.utils.ParameterFinder;
 import delta.common.utils.ParametersNode;
 import delta.genea.data.Person;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.misc.GeneaCfg;
+import delta.genea.misc.DatabaseConfiguration;
 import delta.genea.web.pages.PersonPageParameters;
 
 /**
@@ -36,7 +36,7 @@ public class GeneaUserContext extends WebUserContext
   {
     super(app);
     putLongParameter(PersonPageParameters.PERSON_KEY,DEFAULT_KEY);
-    String dbName=GeneaCfg.getInstance().getDbName();
+    String dbName=DatabaseConfiguration.getInstance().getDefaultDbName();
     setDbName(dbName);
     setDeCujus(DEFAULT_KEY);
   }

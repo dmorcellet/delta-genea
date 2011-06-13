@@ -13,14 +13,14 @@ import delta.genea.data.trees.AncestorsTreesRegistry;
 public class AncestorsSelectionBuilder implements SelectionBuilder<Person>
 {
   private String _dbName;
-  private long _personKey;
+  private Long _personKey;
 
   /**
    * Constructor.
    * @param dbName Source database.
    * @param personKey Root person key.
    */
-  public AncestorsSelectionBuilder(String dbName, long personKey)
+  public AncestorsSelectionBuilder(String dbName, Long personKey)
   {
     _dbName=dbName;
     _personKey=personKey;

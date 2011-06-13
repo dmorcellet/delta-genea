@@ -9,13 +9,29 @@ import delta.genea.data.Place;
 import delta.genea.data.comparators.GeneaDateComparator;
 
 /**
+ * Table of unions.
  * @author DAM
  */
 public class UnionsTable extends DataTable
 {
+  /**
+   * 'date' column identifier.
+   */
   public static final String DATE_COLUMN="DATE";
+
+  /**
+   * 'place' column identifier.
+   */
   public static final String PLACE_COLUMN="LIEU";
+
+  /**
+   * 'man' column identifier.
+   */
   public static final String MAN_COLUMN="HOMME";
+
+  /**
+   * 'woman' column identifier.
+   */
   public static final String WOMAN_COLUMN="FEMME";
 
   /**
@@ -38,6 +54,10 @@ public class UnionsTable extends DataTable
     addColumn(WOMAN_COLUMN,Person.class,new DataObjectComparator<Person>());
   }
 
+  /**
+   * Get the default sort for this table.
+   * @return a data table sort.
+   */
   public DataTableSort getDefaultSort()
   {
     DataTableSort sort=new DataTableSort();

@@ -9,7 +9,7 @@ import delta.common.framework.objects.data.DataObject;
  * @param <T> Type of objects in this selection.
  * @author DAM
  */
-public interface Selection<T extends DataObject>
+public interface Selection<T extends DataObject<T>>
 {
   /**
    * Get the name of this selection.
@@ -30,7 +30,7 @@ public interface Selection<T extends DataObject>
    * @return <code>true</code> if the targeted object is in this selection,
    * <code>false</code> otherwise.
    */
-  boolean hasObject(long key);
+  boolean hasObject(Long key);
 
   /**
    * Get the size of this selection.

@@ -19,8 +19,8 @@ import delta.genea.data.trees.AncestorsTreesRegistry;
  */
 public class PersonPageData
 {
-  private long _key;
-  private long _deCujusKey;
+  private Long _key;
+  private Long _deCujusKey;
 
   private GeneaDataSource _dataSource;
   private Person _main;
@@ -40,7 +40,7 @@ public class PersonPageData
    * @param key Main person key.
    * @param deCujusKey Key for the 'de cujus' person.
    */
-  public PersonPageData(long key, long deCujusKey)
+  public PersonPageData(Long key, Long deCujusKey)
   {
     _key=key;
     _deCujusKey=deCujusKey;

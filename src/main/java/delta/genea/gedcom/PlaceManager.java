@@ -29,7 +29,7 @@ public class PlaceManager
   private int _nbFields;
   private int[] _meanings;
   private int[] _fieldIndices;
-  private int _placeKey;
+  private Long _placeKey;
   private Map<String,Place> _townPlaces;
   private Map<String,Place> _deptPlaces;
   private Map<String,Place> _countryPlaces;
@@ -81,7 +81,7 @@ public class PlaceManager
     _townPlaces=new HashMap<String,Place>();
     _deptPlaces=new HashMap<String,Place>();
     _countryPlaces=new HashMap<String,Place>();
-    _placeKey=1;
+    _placeKey=Long.valueOf(1);
   }
 
   /**

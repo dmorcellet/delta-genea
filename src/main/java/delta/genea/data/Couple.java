@@ -16,9 +16,9 @@ public class Couple
     return _man;
   }
 
-  public long getManPrimaryKey()
+  public Long getManPrimaryKey()
   {
-    long pk=0;
+    Long pk=null;
     if (_man!=null)
     {
       pk=_man.getPrimaryKey();
@@ -31,9 +31,9 @@ public class Couple
     return _woman;
   }
 
-  public long getWomanPrimaryKey()
+  public Long getWomanPrimaryKey()
   {
-    long pk=0;
+    Long pk=null;
     if (_woman!=null)
     {
       pk=_woman.getPrimaryKey();
@@ -91,17 +91,17 @@ public class Couple
   @Override
   public int hashCode()
   {
-    long manKey=0;
+    Long manKey=null;
     if (_man!=null)
     {
       manKey=_man.getPrimaryKey();
     }
-    long womanKey=0;
+    Long womanKey=null;
     if (_woman!=null)
     {
       womanKey=_woman.getPrimaryKey();
     }
-    long value=manKey+womanKey;
+    long value=((manKey!=null)?manKey.longValue():0)+((womanKey!=null)?womanKey.longValue():0);
     return (int)(value^(value>>>32));
   }
 

@@ -247,7 +247,7 @@ public class ToGEDCOM
       }
       else
       {
-        ret.add(new Union(0,null));
+        ret.add(new Union(null,null));
       }
     }
     return ret;
@@ -389,7 +389,7 @@ public class ToGEDCOM
             for(Iterator<Union> itU=familiesForPerson.iterator();itU.hasNext();)
             {
               u=itU.next();
-              familyLine="1 FAMS @"+Long.toString(u.getPrimaryKey())+"@";
+              familyLine="1 FAMS @"+u.getPrimaryKey()+"@";
               writer.writeNextLine(familyLine);
             }
           }
@@ -397,7 +397,7 @@ public class ToGEDCOM
           Union parentsFamily=parents.get(index);
           if (parentsFamily!=null)
           {
-            String familyLine="1 FAMC @"+Long.toString(parentsFamily.getPrimaryKey())+"@";
+            String familyLine="1 FAMC @"+parentsFamily.getPrimaryKey()+"@";
             writer.writeNextLine(familyLine);
           }
         }
@@ -417,13 +417,13 @@ public class ToGEDCOM
         u=it.next();
         try
         {
-          String id="0 @"+Long.toString(u.getPrimaryKey())+"@ FAM";
+          String id="0 @"+u.getPrimaryKey()+"@ FAM";
           writer.writeNextLine(id);
           manKey=u.getManKey();
           womanKey=u.getWomanKey();
           if (manKey!=0)
           {
-            String manLine="1 HUSB @"+Long.toString(manKey)+"@";
+            String manLine="1 HUSB @"+manKey+"@";
             writer.writeNextLine(manLine);
           }
           if (womanKey!=0)

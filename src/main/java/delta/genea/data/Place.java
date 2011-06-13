@@ -32,7 +32,7 @@ public class Place extends DataObject<Place>
    * @param primaryKey Primary key.
    * @param source Attached objects source.
    */
-  public Place(long primaryKey, ObjectSource<Place> source)
+  public Place(Long primaryKey, ObjectSource<Place> source)
   {
     super(primaryKey,source);
   }

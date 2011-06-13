@@ -44,7 +44,13 @@ public class Act extends DataObject<Act>
    * Place of act.
    */
   private DataProxy<Place> _place;
+  /**
+   * Main person #1.
+   */
   private DataProxy<Person> _p1;
+  /**
+   * Main person #2.
+   */
   private DataProxy<Person> _p2;
   /**
    * Base path for act's files.
@@ -73,7 +79,7 @@ public class Act extends DataObject<Act>
    * @param primaryKey Primary key.
    * @param source Attached objects source.
    */
-  public Act(long primaryKey, ObjectSource<Act> source)
+  public Act(Long primaryKey, ObjectSource<Act> source)
   {
     super(primaryKey,source);
     _traite=false;
@@ -92,6 +98,10 @@ public class Act extends DataObject<Act>
     return Long.valueOf(_date.getTime());
   }
 
+  /**
+   * Set the date of this act.
+   * @param date A date as a long (milliseconds since Epoch), or <code>null</code>.
+   */
   public void setDate(Long date)
   {
     if (date!=null)
@@ -104,6 +114,10 @@ public class Act extends DataObject<Act>
     }
   }
 
+  /**
+   * Set the date of this act.
+   * @param date A date or <code>null</code>.
+   */
   public void setDate(Date date)
   {
     if (date!=null)
@@ -126,9 +140,9 @@ public class Act extends DataObject<Act>
     _actType=actType;
   }
 
-  public long getActTypeKey()
+  public Long getActTypeKey()
   {
-    long ret=0;
+    Long ret=null;
     if (_actType!=null)
     {
       ret=_actType.getPrimaryKey();
@@ -155,9 +169,9 @@ public class Act extends DataObject<Act>
     _place=place;
   }
 
-  public long getPlaceKey()
+  public Long getPlaceKey()
   {
-    long ret=0;
+    Long ret=null;
     if (_place!=null)
     {
       ret=_place.getPrimaryKey();
@@ -184,9 +198,9 @@ public class Act extends DataObject<Act>
     _p1=p1;
   }
 
-  public long getP1Key()
+  public Long getP1Key()
   {
-    long ret=0;
+    Long ret=null;
     if (_p1!=null)
     {
       ret=_p1.getPrimaryKey();
@@ -213,9 +227,9 @@ public class Act extends DataObject<Act>
     _p2=p2;
   }
 
-  public long getP2Key()
+  public Long getP2Key()
   {
-    long ret=0;
+    Long ret=null;
     if (_p2!=null)
     {
       ret=_p2.getPrimaryKey();

@@ -95,7 +95,7 @@ public final class PlacesRegistry
         currentNode=tree.addChild(place);
         if (place.getLevel().getValue()>minLevel)
         {
-          map.put(Long.valueOf(place.getPrimaryKey()),currentNode);
+          map.put(place.getPrimaryKey(),currentNode);
         }
         nodes.add(currentNode);
 
@@ -110,7 +110,7 @@ public final class PlacesRegistry
         if (proxy!=null)
         {
           currentNode=nodes.get(i);
-          parentNode=map.get(Long.valueOf(proxy.getPrimaryKey()));
+          parentNode=map.get(proxy.getPrimaryKey());
           if (parentNode!=null)
           {
             currentNode.changeSuperNode(parentNode);
