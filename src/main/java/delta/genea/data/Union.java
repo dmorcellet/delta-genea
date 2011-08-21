@@ -191,4 +191,14 @@ public class Union extends DataObject<Union>
   {
     _comments=comments;
   }
+
+  @Override
+  public String toString()
+  {
+    Person man=getMan();
+    String manName=(man!=null)?man.toString():"???";
+    Person woman=getWoman();
+    String womanName=(woman!=null)?woman.toString():"???";
+    return manName+"/"+womanName;
+  }
 }

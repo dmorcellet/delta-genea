@@ -40,7 +40,8 @@ public class FromGEDCOM
   {
     GeneaApplication.getInstance();
     //new FromGEDCOM(new File("/home/dm/downloads/BOUQUETDIDIER.ged"),"dbouquet");
-    new FromGEDCOM(new File("/home/dm/tmp/Ninie.GED"),"genea_ninie");
+    //new FromGEDCOM(new File("/home/dm/tmp/Ninie.GED"),"genea_ninie");
+    new FromGEDCOM(new File("/home/dm/tmp/michel.ged"),"genea_michel");
   }
 
   private File _fileName;
@@ -143,7 +144,9 @@ public class FromGEDCOM
   private void retrievePlaces()
   {
     _places.clear();
-    _placeManager.getPlaces(_places);
+    if (_placeManager!=null) {
+      _placeManager.getPlaces(_places);
+    }
   }
 
   private void handleSource()

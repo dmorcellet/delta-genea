@@ -39,7 +39,7 @@ public class ActsChecker
   private static final String WEDDING_CONTRACT="Contrat de mariage";
   
   private String _dbName;
-  private long _rootPersonKey;
+  private Long _rootPersonKey;
 
   /**
    * Constructor.
@@ -49,7 +49,7 @@ public class ActsChecker
   public ActsChecker(String dbName, long rootPersonKey)
   {
     _dbName=dbName;
-    _rootPersonKey=rootPersonKey;
+    _rootPersonKey=Long.valueOf(rootPersonKey);
   }
 
   /**
@@ -107,7 +107,7 @@ public class ActsChecker
     }
     if ((father!=null) && (mother!=null))
     {
-      long motherKey=mother.getPrimaryKey();
+      Long motherKey=mother.getPrimaryKey();
       Union union=fatherActs.getUnionWith(motherKey);
       if (union!=null)
       {
@@ -115,7 +115,7 @@ public class ActsChecker
         Long unionDate=union.getDate();
         handleAct(out,sosa,sosa+1,UNION,father,mother,unionAct,unionDate,union.getPlace());
       }
-      Act weddingContract=fatherActs.getActOfWeddingContractWith(motherKey);
+      Act weddingContract=fatherActs.getActOfWeddingContractWith(motherKey.longValue());
       if (weddingContract!=null)
       {
         Long wcDate=weddingContract.getDate();

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.ObjectSource;
 import delta.genea.data.sources.GeneaDataSource;
 
@@ -78,8 +79,8 @@ public class ActsForPerson
           for(Iterator<Union> it2=_unions.iterator();it2.hasNext();)
           {
             currentUnion=it2.next();
-            if ((currentUnion.getManKey()==current.getP1Key())
-                &&(currentUnion.getWomanKey()==current.getP2Key()))
+            if ((DataObject.keysAreEqual(currentUnion.getManKey(),current.getP1Key())) ||
+                (DataObject.keysAreEqual(currentUnion.getWomanKey(),current.getP2Key())))
             {
               _unionActs.set(index,current);
               it.remove();
@@ -95,8 +96,8 @@ public class ActsForPerson
           for(Iterator<Union> it2=_unions.iterator();it2.hasNext();)
           {
             currentUnion=it2.next();
-            if ((currentUnion.getManKey()==current.getP1Key())
-                &&(currentUnion.getWomanKey()==current.getP2Key()))
+            if ((DataObject.keysAreEqual(currentUnion.getManKey(),current.getP1Key())) ||
+                (DataObject.keysAreEqual(currentUnion.getWomanKey(),current.getP2Key())))
             {
               _weddingContractActs.set(index,current);
               it.remove();
@@ -141,9 +142,9 @@ public class ActsForPerson
     return _otherActs;
   }
 
-  public Act getActOfUnionWith(long otherKey)
+  public Act getActOfUnionWith(Long otherKey)
   {
-    if (otherKey==0)
+    if (otherKey==null)
     {
       return null;
     }
@@ -153,9 +154,21 @@ public class ActsForPerson
       act=it.next();
       if (act!=null)
       {
-        if ((act.getP1Key()==otherKey) || (act.getP2Key()==otherKey))
+        if (act.getP1Key()!=null)
         {
-          return act;
+          long key=act.getP1Key().longValue();
+          if (key==otherKey.longValue())
+          {
+            return act;
+          }
+        }
+        if (act.getP2Key()!=null)
+        {
+          long key=act.getP2Key().longValue();
+          if (key==otherKey.longValue())
+          {
+            return act;
+          }
         }
       }
     }
@@ -185,9 +198,9 @@ public class ActsForPerson
     return null;
   }
 
-  public Union getUnionWith(long otherKey)
+  public Union getUnionWith(Long otherKey)
   {
-    if (otherKey==0)
+    if (otherKey==null)
     {
       return null;
     }
@@ -197,8 +210,8 @@ public class ActsForPerson
       union=it.next();
       if (union!=null)
       {
-        if (((union.getManKey()!=null) && (union.getManKey().longValue()==otherKey)) ||
-        	((union.getWomanKey()!=null) && (union.getWomanKey().longValue()==otherKey)))
+        if (((union.getManKey()!=null) && (union.getManKey().longValue()==otherKey.longValue())) ||
+        	((union.getWomanKey()!=null) && (union.getWomanKey().longValue()==otherKey.longValue())))
         {
           return union;
         }

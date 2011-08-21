@@ -3,11 +3,11 @@ package delta.genea.gedcom;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import delta.common.framework.objects.data.DataObject;
 import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.StringSplitter;
 import delta.genea.data.OccupationForPerson;
@@ -211,23 +211,20 @@ public class ToGEDCOM
     List<Union> ret=new ArrayList<Union>();
     long unionKey=5000;
 
-    Person p;
-    Union u;
-    long fatherKey;
-    long motherKey;
-    for(Iterator<Person> it=persons.iterator();it.hasNext();)
+    Long fatherKey;
+    Long motherKey;
+    for(Person p : persons)
     {
-      p=it.next();
       fatherKey=p.getFatherKey();
       motherKey=p.getMotherKey();
-      if ((fatherKey!=0) || (motherKey!=0))
+      if ((DataObject.isNotNull(fatherKey)) || (DataObject.isNotNull(motherKey)))
       {
         boolean found=false;
 
-        for(Iterator<Union> itU=unions.iterator();itU.hasNext();)
+        for(Union u : unions)
         {
-          u=itU.next();
-          if ((u.getManKey()==fatherKey) && (u.getWomanKey()==motherKey))
+          if ((DataObject.keysAreEqual(u.getManKey(),fatherKey)) ||
+              (DataObject.keysAreEqual(u.getWomanKey(),motherKey)))
           {
             ret.add(u);
             found=true;
@@ -237,7 +234,7 @@ public class ToGEDCOM
 
         if (!found)
         {
-          Union newUnion=new Union(unionKey,null);
+          Union newUnion=new Union(Long.valueOf(unionKey),null);
           unionKey++;
           newUnion.setManProxy(p.getFatherProxy());
           newUnion.setWomanProxy(p.getMotherProxy());
@@ -258,17 +255,13 @@ public class ToGEDCOM
     List<List<Union>> ret=new ArrayList<List<Union>>();
 
     List<Union> families=null;
-    Person p;
-    Union u;
-    for(Iterator<Person> it=persons.iterator();it.hasNext();)
+    for(Person p : persons)
     {
-      p=it.next();
       families=null;
 
-      for(Iterator<Union> itU=unions.iterator();itU.hasNext();)
+      for(Union u : unions)
       {
-        u=itU.next();
-        if (u.getManKey()==p.getPrimaryKey())
+        if (DataObject.keysAreEqual(u.getManKey(),p.getPrimaryKey()))
         {
           if (families==null)
           {
@@ -287,17 +280,13 @@ public class ToGEDCOM
     List<List<Person>> ret=new ArrayList<List<Person>>();
 
     List<Person> children=null;
-    Person p;
-    Union u;
-    for(Iterator<Union> it=unions.iterator();it.hasNext();)
+    for(Union u : unions)
     {
       children=null;
-      u=it.next();
-      for(Iterator<Person> itP=persons.iterator();itP.hasNext();)
+      for(Person p : persons)
       {
-        p=itP.next();
-        if ((p.getFatherKey()==u.getManKey())
-             && (p.getMotherKey()==u.getWomanKey()))
+        if ((DataObject.keysAreEqual(p.getFatherKey(),u.getManKey())) &&
+            (DataObject.keysAreEqual(p.getMotherKey(),u.getWomanKey())))
         {
           if (children==null)
           {
@@ -339,13 +328,11 @@ public class ToGEDCOM
       writer.writeNextLine("1 SOUR GENEA");
 
       int index=0;
-      Person p;
-      for(Iterator<Person> it=persons.iterator();it.hasNext();)
+      for(Person p : persons)
       {
-        p=it.next();
         try
         {
-          String id="0 @"+Long.toString(p.getPrimaryKey());
+          String id="0 @"+p.getPrimaryKey();
           writer.writeNextLine(id+"@ INDI");
           String name="1 NAME "+p.getFirstname()+'/'+p.getLastName()+"/";
           writer.writeNextLine(name);
@@ -384,11 +371,9 @@ public class ToGEDCOM
           List<Union> familiesForPerson=families.get(index);
           if (familiesForPerson!=null)
           {
-            Union u;
             String familyLine;
-            for(Iterator<Union> itU=familiesForPerson.iterator();itU.hasNext();)
+            for(Union u : familiesForPerson)
             {
-              u=itU.next();
               familyLine="1 FAMS @"+u.getPrimaryKey()+"@";
               writer.writeNextLine(familyLine);
             }
@@ -409,39 +394,35 @@ public class ToGEDCOM
       }
 
       int indexUnions=0;
-      Union u;
-      long manKey=0;
-      long womanKey=0;
-      for(Iterator<Union> it=unions.iterator();it.hasNext();)
+      Long manKey;
+      Long womanKey;
+      for(Union u : unions)
       {
-        u=it.next();
         try
         {
           String id="0 @"+u.getPrimaryKey()+"@ FAM";
           writer.writeNextLine(id);
           manKey=u.getManKey();
           womanKey=u.getWomanKey();
-          if (manKey!=0)
+          if (DataObject.isNotNull(manKey))
           {
             String manLine="1 HUSB @"+manKey+"@";
             writer.writeNextLine(manLine);
           }
-          if (womanKey!=0)
+          if (DataObject.isNotNull(womanKey))
           {
-            String womanLine="1 WIFE @"+Long.toString(womanKey)+"@";
+            String womanLine="1 WIFE @"+womanKey+"@";
             writer.writeNextLine(womanLine);
           }
 
           // Children
           List<Person> childs=childrens.get(indexUnions);
-          Person child;
           if (childs!=null)
           {
             String childLine;
-            for(Iterator<Person> itC=childs.iterator();itC.hasNext();)
+            for(Person child : childs)
             {
-              child=itC.next();
-              childLine="1 CHIL @"+Long.toString(child.getPrimaryKey())+"@";
+              childLine="1 CHIL @"+child.getPrimaryKey()+"@";
               writer.writeNextLine(childLine);
             }
             String nbChildsLine="1 NCHI "+Integer.toString(childs.size());
