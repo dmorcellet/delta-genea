@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import delta.common.utils.NumericTools;
-import delta.common.utils.files.TextFileReader;
+import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.ImageMontageMaker;
@@ -57,7 +57,7 @@ public class PackagePageParser
 			url=url+"?INB="+(nb+1);
 		}
 		_downloader.downloadPage(url, page);
-		List<String> lines=TextFileReader.readAsLines(page);
+		List<String> lines=TextUtils.readAsLines(page);
 		String line;
 		int index;
 		String imageName="";

@@ -5,9 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import delta.common.utils.NumericTools;
-import delta.common.utils.files.TextFileReader;
 import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.StringSplitter;
+import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.ImageMontageMaker;
@@ -36,7 +36,7 @@ public class PackagePageParser
     File tileFileCacheFile=new File(tmpDir,"tileFileName.txt");
     File tileFile=new File(tmpDir,"tile"+hIndex+"_"+vIndex+".jpg");
     downloader.downloadPage(urlTile,tileFileCacheFile);
-    List<String> lines=TextFileReader.readAsLines(tileFileCacheFile);
+    List<String> lines=TextUtils.readAsLines(tileFileCacheFile);
     String cacheFileUrl=lines.get(0);
     String tileUrl=Constants.ROOT_SITE+cacheFileUrl;
     downloader.downloadPage(tileUrl, tileFile);
@@ -143,7 +143,7 @@ public class PackagePageParser
     // Calcule le nombre de pages
     int nbPages=0;
     {
-      List<String> lines=TextFileReader.readAsLines(tmpFile);
+      List<String> lines=TextUtils.readAsLines(tmpFile);
       String line;
       int index;
       String start="if (pageLoad>";
@@ -218,7 +218,7 @@ public class PackagePageParser
         String urlAffiche=Constants.ROOT_SITE+"/cg49work/visu_affiche_util.php?PHPSID="+phpSID+"&param=visu&uid="+System.currentTimeMillis()+"&o=IMG&p="+page;
         File infoFile=new File(tmpDir,"visu_affiche_util.php.html");
         downloader.downloadPage(urlAffiche, infoFile);
-        List<String> lines=TextFileReader.readAsLines(infoFile);
+        List<String> lines=TextUtils.readAsLines(infoFile);
         infoFile.delete();
         String infosStr=lines.get(0);
         String[] infos=StringSplitter.split(infosStr,'\t');

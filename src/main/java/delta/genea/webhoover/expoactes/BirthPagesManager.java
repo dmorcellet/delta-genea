@@ -8,9 +8,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import delta.common.utils.NumericTools;
-import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextTools;
+import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.utils.TmpFilesManager;
 
@@ -53,7 +53,7 @@ public class BirthPagesManager
     Downloader downloader=_session.getDownloader();
     downloader.downloadPage(url,tmpFile);
     String siteRoot=_session.getSiteRoot();
-    List<String> lines=TextFileReader.readAsLines(tmpFile,EncodingNames.ISO8859_1);
+    List<String> lines=TextUtils.readAsLines(tmpFile,EncodingNames.ISO8859_1);
     boolean foundBirthRefs=false;
     for(String line : lines)
     {

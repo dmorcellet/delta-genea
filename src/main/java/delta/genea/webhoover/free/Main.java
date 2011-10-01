@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextTools;
+import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.utils.TmpFilesManager;
 
@@ -38,7 +38,7 @@ public class Main
     out.mkdirs();
     File tmpFile=_tmp.newTmpFile("main.html");
     _d.downloadPage(url,tmpFile);
-    List<String> lines=TextFileReader.readAsLines(tmpFile,EncodingNames.ISO8859_1);
+    List<String> lines=TextUtils.readAsLines(tmpFile,EncodingNames.ISO8859_1);
 
 /* Looks like:
 <IMG SRC="/icons/back.gif" ALT="[DIR]"> <A HREF="/Numerisation/">Parent Directory</A>        12-Mar-2010 18:07      -  

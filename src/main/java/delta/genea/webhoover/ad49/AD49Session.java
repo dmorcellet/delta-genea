@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
-import delta.common.utils.files.TextFileReader;
+import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
 
@@ -43,7 +43,7 @@ public class AD49Session extends ADSession
     downloader.downloadPage(REGISTRY_PAGE, registryPageFile);
     // Parse registry page to get PHP session ID
     {
-      List<String> lines=TextFileReader.readAsLines(registryPageFile);
+      List<String> lines=TextUtils.readAsLines(registryPageFile);
       String line;
       int index;
       for(Iterator<String> it=lines.iterator();it.hasNext();)

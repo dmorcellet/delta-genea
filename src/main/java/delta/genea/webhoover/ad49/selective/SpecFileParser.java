@@ -62,7 +62,7 @@ public class SpecFileParser
   public List<PageDescription> parse(File f)
   {
     List<PageDescription> ret=new ArrayList<PageDescription>();
-    List<String> lines=TextUtils.splitAsLines(f);
+    List<String> lines=TextUtils.readAsLines(f);
     lines.remove(0);
     String[] items;
     String placeIdStr,packageIndexStr,pageStr,sosaOld,sosaStr,sosa2Str,type;

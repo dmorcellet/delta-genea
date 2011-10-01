@@ -96,7 +96,7 @@ public class MainDownloadActs
     File tmpFile=new File(tmpDir,"TD_placesIndex.html");
     String url=Constants.getTDIndexURL(null);
     downloader.downloadPage(url, tmpFile);
-    List<String> lines=TextUtils.splitAsLines(tmpFile);
+    List<String> lines=TextUtils.readAsLines(tmpFile);
     String line=lines.get(0);
     List<String> places=TextTools.findAllBetween(line,"<option value='","</option>");
     String separator="'>";
@@ -128,7 +128,7 @@ public class MainDownloadActs
     File tmpFile=new File(tmpDir,"TD_periods.html");
     String url=Constants.getTDIndexURL(placeName);
     downloader.downloadPage(url, tmpFile);
-    List<String> lines=TextUtils.splitAsLines(tmpFile);
+    List<String> lines=TextUtils.readAsLines(tmpFile);
     String line=lines.get(0);
     List<String> periodOptions=TextTools.findAllBetween(line,"<option value='","</option>");
     String separator="'>";
@@ -160,7 +160,7 @@ public class MainDownloadActs
     File tmpFile=new File(tmpDir,"TD_packages.html");
     String url=Constants.getURL(placeName,from,to);
     downloader.downloadPage(url, tmpFile);
-    List<String> lines=TextUtils.splitAsLines(tmpFile);
+    List<String> lines=TextUtils.readAsLines(tmpFile);
     int index=0;
     String line,actTypeLine;
     int nbLines=lines.size();
@@ -215,7 +215,7 @@ public class MainDownloadActs
     File tmpFile=new File(tmpDir,seed+".html");
     String url=Constants.getPageURL(packageId,pageNumber);
     downloader.downloadPage(url, tmpFile);
-    List<String> lines=TextUtils.splitAsLines(tmpFile);
+    List<String> lines=TextUtils.readAsLines(tmpFile);
     tmpFile.delete();
     String naonedViewerLine=TextTools.findLine(lines,"v1 = new NAONED_VIEWER(");
     String fileName=TextTools.findBetween(naonedViewerLine,"new NAONED_VIEWER('","',main_w,main_h");
@@ -225,7 +225,7 @@ public class MainDownloadActs
     File sizeFile=new File(tmpFile.getParentFile(),seed+"_size.txt");
     String sizeUrl=Constants.getSizeURL(fileName);
     downloader.downloadPage(sizeUrl, sizeFile);
-    String sizeLine=TextUtils.splitAsLines(sizeFile).get(0);
+    String sizeLine=TextUtils.readAsLines(sizeFile).get(0);
     String widthStr=TextTools.findBetween(sizeLine,"main_w=",";");
     int width=NumericTools.parseInt(widthStr,0);
     String heightStr=TextTools.findBetween(sizeLine,"main_h=",";");

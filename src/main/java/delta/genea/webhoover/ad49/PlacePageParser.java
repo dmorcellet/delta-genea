@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import delta.common.utils.files.TextFileReader;
+import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.HtmlTools;
@@ -43,7 +43,7 @@ public class PlacePageParser
     downloader.downloadPage(url, placePageFile);
     List<ActsPackage> result=new ArrayList<ActsPackage>();
 	  String tableContents="";
-    List<String> lines=TextFileReader.readAsLines(placePageFile);
+    List<String> lines=TextUtils.readAsLines(placePageFile);
     String line,tmp;
     int index;
     for(Iterator<String> it=lines.iterator();it.hasNext();)

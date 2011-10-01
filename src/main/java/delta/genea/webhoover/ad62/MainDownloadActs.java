@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
-import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
@@ -78,7 +77,7 @@ public class MainDownloadActs
     File tileFileCacheFile=new File(tmpDir,"tileFileName.txt");
     File tileFile=new File(tmpDir,"tile"+hIndex+"_"+vIndex+".jpg");
     downloader.downloadPage(urlTile,tileFileCacheFile);
-    List<String> lines=TextFileReader.readAsLines(tileFileCacheFile);
+    List<String> lines=TextUtils.readAsLines(tileFileCacheFile);
     String cacheFileUrl=lines.get(0);
     String tileUrl=Constants.ROOT_SITE+cacheFileUrl;
     downloader.downloadPage(tileUrl, tileFile);
@@ -158,7 +157,7 @@ public class MainDownloadActs
 
       File tmpFile4=new File(tmpDir,"cache.txt");
       downloader.downloadPage(url, tmpFile4);
-      List<String> lines=TextUtils.splitAsLines(tmpFile4);
+      List<String> lines=TextUtils.readAsLines(tmpFile4);
       String line=lines.get(0);
       String[] items=StringSplitter.split(line,'\t');
       int width=NumericTools.parseInt(items[3],0);

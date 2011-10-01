@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import delta.common.utils.files.TextFileReader;
+import delta.common.utils.text.TextUtils;
 import delta.genea.webhoover.ActsPackage;
 
 public class PlacePageParser
@@ -18,7 +18,7 @@ public class PlacePageParser
 	public List<ActsPackage> parseFile(File file)
 	{
 		List<ActsPackage> ret=new ArrayList<ActsPackage>();
-		List<String> lines=TextFileReader.readAsLines(file);
+		List<String> lines=TextUtils.readAsLines(file);
 		String line;
 		ActsPackage actsPackage;
 		for(Iterator<String> it=lines.iterator();it.hasNext();)

@@ -5,9 +5,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextTools;
+import delta.common.utils.text.TextUtils;
 
 /**
  * @author DAM
@@ -25,7 +25,7 @@ public class BirthActPageParser
   {
     //System.out.println(f);
     BirthAct act=null;
-    List<String> lines=TextFileReader.readAsLines(f,EncodingNames.ISO8859_1);
+    List<String> lines=TextUtils.readAsLines(f,EncodingNames.ISO8859_1);
     for(String line : lines)
     {
       if (line.contains("Acte de naissance/bap"))
