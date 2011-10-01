@@ -3,7 +3,7 @@ package delta.genea.webhoover;
 import java.io.File;
 
 import delta.common.utils.files.FilesDeleter;
-import delta.genea.webhoover.Downloader;
+import delta.downloads.Downloader;
 
 /**
  * Base class for webhoover sessions.

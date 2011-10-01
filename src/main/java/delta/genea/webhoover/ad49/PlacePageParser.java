@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import delta.common.utils.files.TextFileReader;
+import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
-import delta.genea.webhoover.Downloader;
 import delta.genea.webhoover.HtmlTools;
 
 public class PlacePageParser

@@ -2,7 +2,7 @@ package delta.genea.webhoover.expoactes;
 
 import java.io.File;
 
-import delta.genea.webhoover.Downloader;
+import delta.downloads.Downloader;
 import delta.genea.webhoover.utils.TmpFilesManager;
 
 /**

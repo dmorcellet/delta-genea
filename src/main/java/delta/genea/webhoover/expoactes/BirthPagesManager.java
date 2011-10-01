@@ -11,7 +11,7 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextTools;
-import delta.genea.webhoover.Downloader;
+import delta.downloads.Downloader;
 import delta.genea.webhoover.utils.TmpFilesManager;
 
 /**

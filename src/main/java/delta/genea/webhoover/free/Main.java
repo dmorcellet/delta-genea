@@ -7,7 +7,7 @@ import java.util.List;
 import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextTools;
-import delta.genea.webhoover.Downloader;
+import delta.downloads.Downloader;
 import delta.genea.webhoover.utils.TmpFilesManager;
 
 /**

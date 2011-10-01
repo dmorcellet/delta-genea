@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import delta.common.utils.files.TextFileReader;
+import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
-import delta.genea.webhoover.Downloader;
 
 /**
  * @author DAM

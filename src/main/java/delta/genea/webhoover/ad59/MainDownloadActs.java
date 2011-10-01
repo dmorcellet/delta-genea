@@ -9,10 +9,10 @@ import org.apache.log4j.Logger;
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
+import delta.downloads.Downloader;
 import delta.genea.utils.GeneaLoggers;
 import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.ActsPackage;
-import delta.genea.webhoover.Downloader;
 import delta.genea.webhoover.ImageMontageMaker;
 
 /**

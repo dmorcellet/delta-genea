@@ -3,8 +3,7 @@ package delta.genea.webhoover.agena;
 import java.io.File;
 import java.util.HashMap;
 
-import delta.common.utils.environment.FileSystem;
-import delta.genea.webhoover.Downloader;
+import delta.downloads.Downloader;
 import delta.genea.webhoover.expoactes.ExpoActeSession;
 import delta.genea.webhoover.utils.TmpFilesManager;
 
