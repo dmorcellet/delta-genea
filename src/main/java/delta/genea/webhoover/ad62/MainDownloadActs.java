@@ -9,12 +9,12 @@ import org.apache.log4j.Logger;
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.StringSplitter;
+import delta.common.utils.text.TextUtils;
 import delta.genea.utils.GeneaLoggers;
 import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.Downloader;
 import delta.genea.webhoover.ImageMontageMaker;
-import delta.genea.webhoover.TextTools;
 
 /**
  * @author DAM
@@ -158,7 +158,7 @@ public class MainDownloadActs
 
       File tmpFile4=new File(tmpDir,"cache.txt");
       downloader.downloadPage(url, tmpFile4);
-      List<String> lines=TextTools.splitAsLines(tmpFile4);
+      List<String> lines=TextUtils.splitAsLines(tmpFile4);
       String line=lines.get(0);
       String[] items=StringSplitter.split(line,'\t');
       int width=NumericTools.parseInt(items[3],0);

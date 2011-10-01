@@ -1,16 +1,21 @@
 package delta.genea.webhoover;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import delta.common.utils.files.TextFileReader;
-
 /**
+ * A collection of tool methods related to text management.
  * @author DAM
  */
 public class TextTools
 {
+  /**
+   * On a given line, find all string items surrounded by <code>before</code> and </code>after</code>.
+   * @param line Line to parse.
+   * @param before String to find before items.
+   * @param after String to find after items.
+   * @return A possibly empty list of string items.
+   */
   public static List<String> findAllBetween(String line, String before, String after)
   {
     List<String> ret=new ArrayList<String>();
@@ -40,6 +45,12 @@ public class TextTools
     return ret;
   }
 
+  /**
+   * In a list of lines, find the first line that contains the given <code>pattern</code>.
+   * @param lines Lines to search.
+   * @param pattern Pattern to search.
+   * @return A line or <code>null</code< if none found.
+   */
   public static String findLine(List<String> lines, String pattern)
   {
     for(String line : lines)
@@ -52,6 +63,13 @@ public class TextTools
     return null;
   }
 
+  /**
+   * On a given line, find the first string item surrounded by <code>before</code> and </code>after</code>.
+   * @param line Line to parse.
+   * @param before String to find before item.
+   * @param after String to find after item.
+   * @return A string item or <code>null</code> if none found.
+   */
   public static String findBetween(String line, String before, String after)
   {
     String ret=null;
@@ -67,6 +85,12 @@ public class TextTools
     return ret;
   }
 
+  /**
+   * In a given line, get the string item after the <code>before</code> string key.
+   * @param line Line to parse.
+   * @param before A string key.
+   * @return A string item or <code>null</code> if <code>line</code> does not contain <code>before</code>.
+   */
   public static String findAfter(String line, String before)
   {
     String ret=null;
@@ -74,24 +98,6 @@ public class TextTools
     if (index!=-1)
     {
       ret=line.substring(index+before.length());
-    }
-    return ret;
-  }
-
-  public static List<String> splitAsLines(File page)
-  {
-    List<String> ret=new ArrayList<String>();
-    TextFileReader reader=new TextFileReader(page);
-    if (reader.start())
-    {
-      String line;
-      while(true)
-      {
-        line=reader.getNextLine();
-        if (line==null) break;
-        ret.add(line);
-      }
-      reader.terminate();
     }
     return ret;
   }
