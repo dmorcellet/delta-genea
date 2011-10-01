@@ -7,7 +7,7 @@ import java.util.List;
 
 import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.EncodingNames;
-import delta.genea.webhoover.TextTools;
+import delta.common.utils.text.TextTools;
 
 /**
  * @author DAM
