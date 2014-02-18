@@ -44,7 +44,7 @@ public class ADSession
 
   public void stop()
   {
-    _downloader.stop();
+    _downloader.dispose();
     _downloader=null;
     FilesDeleter deleter=new FilesDeleter(_tmpDir,null,true);
     deleter.doIt();

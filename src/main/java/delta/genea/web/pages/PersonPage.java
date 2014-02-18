@@ -33,7 +33,7 @@ public class PersonPage extends GeneaWebPage
         PersonPageParameters.PERSON_KEY,76);
     long deCujus=ParameterFinder.getLongParameter(_request,
         GeneaUserContext.DE_CUJUS,key);
-    _data=new PersonPageData(Long.valueOf(key),deCujus);
+    _data=new PersonPageData(Long.valueOf(key),Long.valueOf(deCujus));
   }
 
   @Override
@@ -292,14 +292,12 @@ public class PersonPage extends GeneaWebPage
         }
         pw.println("<b>Mariages :</b>");
         pw.println("<ul>");
-        Union u;
         Person other;
         Act unionAct;
         int i=0;
-        for(Iterator<Union> it=unions.iterator();it.hasNext();)
+        for(Union u : unions)
         {
-          u=it.next();
-          if (main.getPrimaryKey()==u.getManKey())
+          if (main.getPrimaryKey().equals(u.getManKey()))
           {
             other=u.getWoman();
           }

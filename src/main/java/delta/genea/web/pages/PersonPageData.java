@@ -65,10 +65,8 @@ public class PersonPageData
 
     if ((_unions!=null)&&(_unions.size()>0))
     {
-      Union u;
-      for(Iterator<Union> it=_unions.iterator();it.hasNext();)
+      for(Union u : _unions)
       {
-        u=it.next();
         u.getMan();
         u.getWoman();
         u.getPlace();
