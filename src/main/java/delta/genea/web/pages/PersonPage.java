@@ -1,6 +1,7 @@
 package delta.genea.web.pages;
 
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.Sex;
 import delta.genea.data.Union;
+import delta.genea.data.comparators.PersonComparator;
+import delta.genea.data.comparators.PersonComparator.COMPARISON_CRITERIA;
 import delta.genea.web.GeneaUserContext;
 import delta.genea.web.pages.tools.PersonTools;
 
@@ -46,11 +49,19 @@ public class PersonPage extends GeneaWebPage
   public void generate(PrintWriter pw)
   {
     GeneaUserContext context=(GeneaUserContext)getUserContext();
+    // Person tools for related persons
     PersonTools pTools=new PersonTools(context,pw);
     pTools.setUseIsAncestorIcon(true);
     pTools.setUseSexIcon(false);
     pTools.setUseNoDescendants(true);
     pTools.setAsLink(true);
+    // Person tools for main
+    PersonTools pToolsMain=new PersonTools(context,pw);
+    pToolsMain.setUseIsAncestorIcon(false);
+    pToolsMain.setUseSexIcon(true);
+    pToolsMain.setUseNoDescendants(true);
+    pToolsMain.setAsLink(false);
+
     PageTools tools=new PageTools(context,pw);
     Person main=_data.getMain();
     if (main==null) return;
@@ -66,7 +77,7 @@ public class PersonPage extends GeneaWebPage
       pw.print(sosas);
       pw.print(") ");
     }
-    pw.print(main.getFullName());
+    pToolsMain.generatePersonName(main);
     pw.print("</b>");
     String signature=main.getSignature();
     if ((signature!=null)&&(signature.length()>0))
@@ -338,20 +349,18 @@ public class PersonPage extends GeneaWebPage
     // Children
     {
       List<Person> children=_data.getChildren();
-
       if ((children!=null)&&(children.size()>0))
       {
+        Collections.sort(children,new PersonComparator(COMPARISON_CRITERIA.BIRTH_DATE));
         if (!previousWasAList)
         {
           pw.println("<br>");
         }
         pw.println("<b>Enfants :</b>");
         pw.println("<ul>");
-        Person child;
         pTools.setUseSexIcon(true);
-        for(Iterator<Person> it=children.iterator();it.hasNext();)
+        for(Person child : children)
         {
-          child=it.next();
           pw.print("<li>");
           pTools.generatePersonName(child);
           pw.println("</li>");

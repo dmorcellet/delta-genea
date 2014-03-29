@@ -4,12 +4,15 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
+import javax.swing.RowFilter.ComparisonType;
 
 import delta.common.framework.objects.data.ObjectSource;
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
 import delta.common.utils.collections.TreeNode;
 import delta.genea.data.Person;
+import delta.genea.data.comparators.PersonComparator;
+import delta.genea.data.comparators.PersonComparator.COMPARISON_CRITERIA;
 import delta.genea.web.GeneaUserContext;
 import delta.genea.web.pages.tools.PersonTools;
 
@@ -52,28 +55,24 @@ public class NamePage extends GeneaWebPage
 
     TreeMap<Long,TreeNode<Person>> map=new TreeMap<Long,TreeNode<Person>>();
     List<TreeNode<Person>> list=new ArrayList<TreeNode<Person>>();
-    Person p;
-    TreeNode<Person> node;
     for(int i=0;i<nb;i++)
     {
-      p=persons.get(i);
+      Person p=persons.get(i);
       if ((_noDescendants) || (!p.getNoDescendants()))
       {
-        node=ret.addChild(p);
+        TreeNode<Person> node=ret.addChild(p);
         map.put(p.getPrimaryKey(),node);
         list.add(node);
       }
     }
     nb=list.size();
-    Person father;
-    Person mother;
     for(int i=0;i<nb;i++)
     {
-      node=list.get(i);
-      p=node.getData();
+      TreeNode<Person> node=list.get(i);
+      Person p=node.getData();
 
       // Find father
-      father=p.getFather();
+      Person father=p.getFather();
       boolean fatherFound=false;
       if (father!=null)
       {
@@ -87,7 +86,7 @@ public class NamePage extends GeneaWebPage
       if (!fatherFound)
       {
         // If father not found, find mother
-        mother=p.getMother();
+        Person mother=p.getMother();
         if (mother!=null)
         {
           TreeNode<Person> found=map.get(mother.getPrimaryKey());
@@ -98,6 +97,7 @@ public class NamePage extends GeneaWebPage
         }
       }
     }
+    ret.sortChildren(new PersonComparator(COMPARISON_CRITERIA.BIRTH_DATE),true);
     return ret;
   }
 
