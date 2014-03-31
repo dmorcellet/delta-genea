@@ -44,10 +44,19 @@ public class ActsForPerson
 
     // Load unions
     _unions=unionsSource.loadRelation(Union.UNIONS_RELATION,key);
+    if ((_unions!=null)&&(_unions.size()>0))
+    {
+      for(Union u : _unions)
+      {
+        u.getMan();
+        u.getWoman();
+        u.getPlace();
+        u.getWeddingContract();
+      }
+    }
     List<Act> acts=actsSource.loadRelation(Act.MAIN_ACTS_RELATION,key);
     _otherActs=actsSource.loadRelation(Act.OTHER_ACTS_RELATION,key);
 
-    Act current;
     _unionActs=new ArrayList<Act>();
     _weddingContractActs=new ArrayList<Act>();
     for(int i=0;i<_unions.size();i++)
@@ -57,7 +66,7 @@ public class ActsForPerson
     }
     for(Iterator<Act> it=acts.iterator();it.hasNext();)
     {
-      current=it.next();
+      Act current=it.next();
       current.getP1();
       current.getP2();
       ActType type=current.getActType();
@@ -75,11 +84,9 @@ public class ActsForPerson
         else if (current.getActTypeKey()==ActType.UNION)
         {
           int index=0;
-          Union currentUnion;
-          for(Iterator<Union> it2=_unions.iterator();it2.hasNext();)
+          for(Union currentUnion : _unions)
           {
-            currentUnion=it2.next();
-            if ((DataObject.keysAreEqual(currentUnion.getManKey(),current.getP1Key())) ||
+            if ((DataObject.keysAreEqual(currentUnion.getManKey(),current.getP1Key())) &&
                 (DataObject.keysAreEqual(currentUnion.getWomanKey(),current.getP2Key())))
             {
               _unionActs.set(index,current);
@@ -92,11 +99,9 @@ public class ActsForPerson
         else if (current.getActTypeKey()==ActType.WEDDING_CONTRACT)
         {
           int index=0;
-          Union currentUnion;
-          for(Iterator<Union> it2=_unions.iterator();it2.hasNext();)
+          for(Union currentUnion : _unions)
           {
-            currentUnion=it2.next();
-            if ((DataObject.keysAreEqual(currentUnion.getManKey(),current.getP1Key())) ||
+            if ((DataObject.keysAreEqual(currentUnion.getManKey(),current.getP1Key())) &&
                 (DataObject.keysAreEqual(currentUnion.getWomanKey(),current.getP2Key())))
             {
               _weddingContractActs.set(index,current);

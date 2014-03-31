@@ -1,14 +1,12 @@
 package delta.genea.web.pages;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import delta.genea.data.Act;
 import delta.genea.data.ActsForPerson;
 import delta.genea.data.Person;
 import delta.genea.data.Picture;
-import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.data.trees.AncestorsTree;
 import delta.genea.data.trees.AncestorsTreesRegistry;
@@ -28,7 +26,6 @@ public class PersonPageData
   private Person _mother;
   private Person _godFather;
   private Person _godMother;
-  private List<Union> _unions;
   private List<Person> _children;
   private List<Person> _godChildren;
   private ActsForPerson _acts;
@@ -60,31 +57,13 @@ public class PersonPageData
     _main.getBirthPlace();
     _main.getDeathPlace();
 
-    _unions=source.getUnionDataSource()
-        .loadRelation(Union.UNIONS_RELATION,_key);
-
-    if ((_unions!=null)&&(_unions.size()>0))
-    {
-      for(Union u : _unions)
-      {
-        u.getMan();
-        u.getWoman();
-        u.getPlace();
-        u.getWeddingContract();
-      }
-    }
-
-    _children=source.getPersonDataSource().loadRelation(
-        Person.CHILDREN_RELATION,_key);
-    _godChildren=source.getPersonDataSource().loadRelation(
-        Person.GOD_CHILDREN_RELATION,_key);
+    _children=source.getPersonDataSource().loadRelation(Person.CHILDREN_RELATION,_key);
+    _godChildren=source.getPersonDataSource().loadRelation(Person.GOD_CHILDREN_RELATION,_key);
     _acts=new ActsForPerson(_dataSource,_main);
     _acts.build();
     List<Act> acts=_acts.getAllActs();
-    Act current;
-    for(Iterator<Act> it=acts.iterator();it.hasNext();)
+    for(Act current : acts)
     {
-      current=it.next();
       if (current!=null)
       {
         current.getP1();
@@ -152,11 +131,6 @@ public class PersonPageData
   public List<Person> getGodChildren()
   {
     return _godChildren;
-  }
-
-  public List<Union> getUnions()
-  {
-    return _unions;
   }
 
   public ActsForPerson getActs()

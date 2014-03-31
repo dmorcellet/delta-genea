@@ -292,7 +292,7 @@ public class PersonPage extends GeneaWebPage
 
     // Unions
     {
-      List<Union> unions=_data.getUnions();
+      List<Union> unions=_data.getActs().getUnions();
       List<Act> unionActs=_data.getActs().getUnionActs();
 
       if ((unions!=null)&&(unions.size()>0))
@@ -303,11 +303,10 @@ public class PersonPage extends GeneaWebPage
         }
         pw.println("<b>Mariages :</b>");
         pw.println("<ul>");
-        Person other;
-        Act unionAct;
         int i=0;
         for(Union u : unions)
         {
+          Person other;
           if (main.getPrimaryKey().equals(u.getManKey()))
           {
             other=u.getWoman();
@@ -318,7 +317,7 @@ public class PersonPage extends GeneaWebPage
           }
           pw.print("<li>");
           String uDate=PageTools.generateDate(u.getDate(),u.getInfos());
-          unionAct=unionActs.get(i);
+          Act unionAct=unionActs.get(i);
           if (unionAct!=null)
           {
             tools.generateActLink(unionAct,uDate);
