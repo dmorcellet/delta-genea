@@ -1,9 +1,13 @@
 package delta.genea.data.trees;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import delta.common.utils.collections.BinaryTreeNode;
 import delta.genea.data.Couple;
+import delta.genea.data.Person;
 
 /**
  * Computes commons ancestors between ancestors trees.
@@ -20,12 +24,33 @@ public class CommonAncestorsComputer
   public Set<Couple> compute(AncestorsTree t1, AncestorsTree t2)
   {
     Set<Couple> ret=new HashSet<Couple>();
-    // get the couples of the first tree
-    Set<Couple> c1=t1.getCouplesSet();
-    // get the couples of the first tree
-    Set<Couple> c2=t2.getCouplesSet();
-    // retain all couples of c1 that are also in c2
-    c1.retainAll(c2);
+    // Build Couples->sosa map for first tree
+    Map<Couple,List<Long>> mapCouplesT1=t1.buildCoupleToSOSAMap();
+    // Find common couples
+    findCommons(t2.getRootNode(),ret,mapCouplesT1);
     return ret;
+  }
+
+  private void findCommons(BinaryTreeNode<Person> node, Set<Couple> ret, Map<Couple,List<Long>> mapCouplesT1)
+  {
+    Person father=node.getLeftData();
+    Person mother=node.getRightData();
+
+    if ((father==null)&&(mother==null)) return;
+
+    Couple c=new Couple(father,mother);
+    List<Long> list=mapCouplesT1.get(c);
+
+    if (list!=null)
+    {
+      ret.add(c);
+    }
+    else
+    {
+      if (father!=null)
+        findCommons(node.getLeftNode(),ret,mapCouplesT1);
+      if (mother!=null)
+        findCommons(node.getRightNode(),ret,mapCouplesT1);
+    }
   }
 }

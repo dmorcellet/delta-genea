@@ -1,5 +1,7 @@
 package delta.genea.data;
 
+import delta.common.framework.objects.data.DataObject;
+
 public class Couple
 {
   private Person _man;
@@ -62,7 +64,7 @@ public class Couple
       {
         return false;
       }
-      if (_man.getPrimaryKey()!=c._man.getPrimaryKey())
+      if (!DataObject.keysAreEqual(_man.getPrimaryKey(),c._man.getPrimaryKey()))
       {
         return false;
       }
@@ -80,7 +82,7 @@ public class Couple
       {
         return false;
       }
-      if (_woman.getPrimaryKey()!=c._woman.getPrimaryKey())
+      if (!DataObject.keysAreEqual(_woman.getPrimaryKey(),c._woman.getPrimaryKey()))
       {
         return false;
       }

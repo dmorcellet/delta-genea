@@ -3,9 +3,7 @@ package delta.genea.data.trees;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.genea.data.Couple;
@@ -389,33 +387,38 @@ public class AncestorsTree
   }
 
   /**
-   * Get the set of all the couples found in this tree.
+   * Get the map of couples to sosa numbers of child.
    * @return A set of couples.
    */
-  public Set<Couple> getCouplesSet()
+  public HashMap<Couple,List<Long>> buildCoupleToSOSAMap()
   {
-    HashSet<Couple> ret=new HashSet<Couple>();
-    fillCouplesSet(getRootNode(),ret);
+    HashMap<Couple,List<Long>> ret=new HashMap<Couple,List<Long>>();
+    buildKeyToSosaMap(getRootNode(),1,ret);
     return ret;
   }
 
-  private void fillCouplesSet(BinaryTreeNode<Person> node, Set<Couple> ret)
+  private void buildKeyToSosaMap(BinaryTreeNode<Person> node, long sosa, HashMap<Couple,List<Long>> ret)
   {
     Person father=node.getLeftData();
     Person mother=node.getRightData();
 
-    if ((father!=null) || (mother!=null))
+    if ((father==null)&&(mother==null)) return;
+
+    Couple c=new Couple(father,mother);
+    List<Long> list=ret.get(c);
+    if(list==null)
     {
-      Couple c=new Couple(father,mother);
-      ret.add(c);
-      if (father!=null)
-      {
-        fillCouplesSet(node.getLeftNode(),ret);
-      }
-      if (mother!=null)
-      {
-        fillCouplesSet(node.getRightNode(),ret);
-      }
+      list=new ArrayList<Long>();
+      ret.put(c, list);
+    }
+    list.add(Long.valueOf(sosa));
+    if (father!=null)
+    {
+      buildKeyToSosaMap(node.getLeftNode(),sosa*2,ret);
+    }
+    if (mother!=null)
+    {
+      buildKeyToSosaMap(node.getRightNode(),1+sosa*2,ret);
     }
   }
 }
