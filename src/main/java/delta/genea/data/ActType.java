@@ -17,16 +17,49 @@ public class ActType extends DataObject<ActType>
    * Act type for baptem acts.
    */
   public static final Long BAPTEM=Long.valueOf(1);
+  /**
+   * Act type for death acts.
+   */
   public static final Long DEATH=Long.valueOf(4);
+  /**
+   * Act type for burial acts.
+   */
   public static final Long BURIAL=Long.valueOf(2);
+  /**
+   * Act type for union acts.
+   */
   public static final Long UNION=Long.valueOf(5);
+  /**
+   * Act type for consainguinity tree acts.
+   */
   public static final Long CONSANGUINITY_TREE=Long.valueOf(6);
+  /**
+   * Act type for selling acts.
+   */
   public static final Long SELLING=Long.valueOf(7);
+  /**
+   * Act type for transaction acts.
+   */
   public static final Long TRANSACTION=Long.valueOf(8);
+  /**
+   * Act type for other acts.
+   */
   public static final Long OTHER=Long.valueOf(0);
+  /**
+   * Act type for wedding contracts.
+   */
   public static final Long WEDDING_CONTRACT=Long.valueOf(12);
+  /**
+   * Act type for lease acts.
+   */
   public static final Long LEASE=Long.valueOf(9);
+  /**
+   * Act type for death acts.
+   */
   public static final Long SHARE=Long.valueOf(10);
+  /**
+   * Act type for testimonial acts.
+   */
   public static final Long TESTIMONIAL=Long.valueOf(11);
 
   // Relations
