@@ -32,7 +32,7 @@ public class MainDownloadActs
 
   private static boolean _useThreads=true;
 
-  private void getPages(final ActsPackage actsPackage)
+  private void getPages(final ActsPackage actsPackage,final boolean td)
   {
     Runnable r=new Runnable()
     {
@@ -40,7 +40,7 @@ public class MainDownloadActs
       {
         ADSession localSession=new ADSession();
         localSession.start();
-        getPages(localSession,actsPackage);
+        getPages(localSession,actsPackage,td);
         localSession.stop();
       }
     };
@@ -62,11 +62,11 @@ public class MainDownloadActs
     session.start();
     List<String> places=getPlaces(session);
     System.out.println(places);
-    handlePlace(session,Constants.PLACE_NAME);
+    handlePlace(session,Constants.PLACE_NAME,true);
     session.stop();
   }
 
-  private void handlePlace(ADSession session, String placeName)
+  private void handlePlace(ADSession session, String placeName, boolean td)
   {
     List<String> periods=getPeriods(session,placeName);
     System.out.println(periods);
@@ -75,16 +75,16 @@ public class MainDownloadActs
       int index=period.indexOf('-');
       int from=NumericTools.parseInt(period.substring(0,index).trim(),-1);
       int to=NumericTools.parseInt(period.substring(index+1).trim(),-1);
-      handlePeriod(session,placeName,from,to);
+      handlePeriod(session,placeName,from,to,td);
     }
   }
 
-  private void handlePeriod(ADSession session, String placeName, int from, int to)
+  private void handlePeriod(ADSession session, String placeName, int from, int to, boolean td)
   {
     List<ActsPackage> actsPackages=getPackages(session,placeName,from,to);
     for(ActsPackage actsPackage : actsPackages)
     {
-      getPages(actsPackage);
+      getPages(actsPackage,td);
     }
   }
 
@@ -94,7 +94,7 @@ public class MainDownloadActs
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
     File tmpFile=new File(tmpDir,"TD_placesIndex.html");
-    String url=Constants.getTDIndexURL(null);
+    String url=Constants.getIndexURL(null,Constants.TD);
     downloader.downloadPage(url, tmpFile);
     List<String> lines=TextUtils.readAsLines(tmpFile);
     String line=lines.get(0);
@@ -102,7 +102,7 @@ public class MainDownloadActs
     String separator="'>";
     String placeName1,placeName2;
     int index;
-    for(String place :places)
+    for(String place : places)
     {
       index=place.indexOf(separator);
       placeName1=place.substring(0,index);
@@ -126,7 +126,7 @@ public class MainDownloadActs
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
     File tmpFile=new File(tmpDir,"TD_periods.html");
-    String url=Constants.getTDIndexURL(placeName);
+    String url=Constants.getIndexURL(placeName,Constants.TD);
     downloader.downloadPage(url, tmpFile);
     List<String> lines=TextUtils.readAsLines(tmpFile);
     String line=lines.get(0);
@@ -158,7 +158,7 @@ public class MainDownloadActs
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
     File tmpFile=new File(tmpDir,"TD_packages.html");
-    String url=Constants.getURL(placeName,from,to);
+    String url=Constants.getURL(placeName,from,to,Constants.TD);
     downloader.downloadPage(url, tmpFile);
     List<String> lines=TextUtils.readAsLines(tmpFile);
     int index=0;
@@ -187,17 +187,34 @@ public class MainDownloadActs
     return packages;
   }
 
-  private void getPages(ADSession session, ActsPackage actsPackage)
+  private void doItSalome()
+  {
+    ADSession session=new ADSession();
+    session.start();
+    List<String> places=getPlaces(session);
+    System.out.println(places);
+    ActsPackage p=new ActsPackage();
+    p._id="292115";
+    p._placeName="Salomé";
+    p._period="1737-1760";
+    p._actType="BMS";
+    //handlePlace(session,Constants.PLACE_NAME);
+    getPages(session,p,false);
+    session.stop();
+    //292115
+  }
+
+  private void getPages(ADSession session, ActsPackage actsPackage, boolean td)
   {
     System.out.println("Handling "+actsPackage+" with session "+session.getTmpDir());
-    int nbPages=getPage(session,actsPackage,1);
+    int nbPages=getPage(session,actsPackage,1,td);
     for(int i=2;i<=nbPages;i++)
     {
-      getPage(session,actsPackage,i);
+      getPage(session,actsPackage,i,td);
     }
   }
 
-  private int getPage(ADSession session, ActsPackage actsPackage, int pageNumber)
+  private int getPage(ADSession session, ActsPackage actsPackage, int pageNumber, boolean td)
   {
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
@@ -213,7 +230,7 @@ public class MainDownloadActs
     String packageId=actsPackage._id;
     String seed="TD_package"+packageId+"_page"+pageNumber;
     File tmpFile=new File(tmpDir,seed+".html");
-    String url=Constants.getPageURL(packageId,pageNumber);
+    String url=Constants.getPageURL(packageId,pageNumber,td);
     downloader.downloadPage(url, tmpFile);
     List<String> lines=TextUtils.readAsLines(tmpFile);
     tmpFile.delete();
