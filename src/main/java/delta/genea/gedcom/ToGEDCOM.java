@@ -343,16 +343,6 @@ public class ToGEDCOM
           String sex="1 SEX "+p.getSex().getValue();
           writer.writeNextLine(sex);
 
-          // Birth date
-          String birthDate=encodeDate(p.getBirthInfos(),p.getBirthDate());
-          String birthPlace=encodePlace(p.getBirthPlace());
-          writeDateAndPlace(writer,"BIRT",birthDate,birthPlace);
-
-          // Birth date
-          String deathDate=encodeDate(p.getDeathInfos(),p.getDeathDate());
-          String deathPlace=encodePlace(p.getDeathPlace());
-          writeDateAndPlace(writer,"DEAT",deathDate,deathPlace);
-
           // Professions
           List<OccupationForPerson> occupations=p.getOccupations();
           if ((occupations!=null) && (occupations.size()>0))
@@ -367,6 +357,16 @@ public class ToGEDCOM
             writer.writeNextLine(sb.toString());
           }
 
+          // Birth date
+          String birthDate=encodeDate(p.getBirthInfos(),p.getBirthDate());
+          String birthPlace=encodePlace(p.getBirthPlace());
+          writeDateAndPlace(writer,"BIRT",birthDate,birthPlace);
+
+          // Death date
+          String deathDate=encodeDate(p.getDeathInfos(),p.getDeathDate());
+          String deathPlace=encodePlace(p.getDeathPlace());
+          writeDateAndPlace(writer,"DEAT",deathDate,deathPlace);
+
           // Families
           List<Union> familiesForPerson=families.get(index);
           if (familiesForPerson!=null)
@@ -380,15 +380,16 @@ public class ToGEDCOM
           }
           // FAMC
           Union parentsFamily=parents.get(index);
-          if (parentsFamily!=null)
+          Long pk=(parentsFamily!=null)?parentsFamily.getPrimaryKey():null;
+          if (pk!=null)
           {
-            String familyLine="1 FAMC @"+parentsFamily.getPrimaryKey()+"@";
+            String familyLine="1 FAMC @"+pk.longValue()+"@";
             writer.writeNextLine(familyLine);
           }
         }
         catch(Exception e)
         {
-          _logger.error("Pb avec personne : "+p.getFullName(),e);
+          _logger.error("Pb avec personne : "+p.getPrimaryKey()+": "+p.getFullName(),e);
         }
         index++;
       }
