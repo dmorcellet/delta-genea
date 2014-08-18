@@ -153,7 +153,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
     n++;
   }
 
-  private List<PersonInAct> loadPersonsInAct(long primaryKey)
+  private List<PersonInAct> loadPersonsInAct(Long primaryKey)
   {
     Connection connection=getConnection();
     synchronized (connection)
@@ -163,7 +163,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       ResultSet rs=null;
       try
       {
-        _psGetPersonInAct.setLong(1,primaryKey);
+        _psGetPersonInAct.setLong(1,primaryKey.longValue());
         rs=_psGetPersonInAct.executeQuery();
         while (rs.next())
         {

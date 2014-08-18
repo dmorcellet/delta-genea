@@ -912,7 +912,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   }
 
   @Override
-  public void delete(long primaryKey)
+  public void delete(Long primaryKey)
   {
     Connection connection=getConnection();
     synchronized (connection)
