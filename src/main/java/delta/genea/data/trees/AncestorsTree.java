@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import delta.common.framework.objects.data.DataObject;
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.genea.data.Couple;
 import delta.genea.data.Person;
@@ -28,7 +29,7 @@ public class AncestorsTree
   /**
    * Constructor.
    * @param rootPerson Root persone.
-   * @param depth Depth of tree (0 means no ancestors,1 means parents only,...).
+   * @param depth Depth of tree (0 means no ancestors, 1 means parents only,...).
    */
   public AncestorsTree(Person rootPerson, int depth)
   {
@@ -135,20 +136,20 @@ public class AncestorsTree
    * @param personKey Identifier of the targeted person.
    * @return A possibly empty list of SOSA numbers.
    */
-  public List<Long> getSosas(long personKey)
+  public List<Long> getSosas(Long personKey)
   {
     List<Long> ret=new ArrayList<Long>();
     getSosasForPerson(1,personKey,_tree,ret);
     return ret;
   }
 
-  private void getSosasForPerson(long sosa, long personKey, BinaryTreeNode<Person> node, List<Long> result)
+  private void getSosasForPerson(long sosa, Long personKey, BinaryTreeNode<Person> node, List<Long> result)
   {
     Person p=node.getData();
     if (p!=null)
     {
       Long primaryKey=p.getPrimaryKey();
-      if (p.getPrimaryKey()==personKey)
+      if (DataObject.keysAreEqual(primaryKey,personKey))
       {
         result.add(Long.valueOf(sosa));
       }
@@ -203,6 +204,12 @@ public class AncestorsTree
     return node;
   }
 
+  /**
+   * Get the implexes from this tree.
+   * @return A map of implexes, indexed by an implex string identifier.
+   * Such an identifier is made of the concatenation of the identifying keys
+   * of the persons in the implex (e.g manKey/womanKey).
+   */
   public HashMap<String, Implex> getImplexes()
   {
     HashMap<String, Implex> implexes=new HashMap<String, Implex>();
@@ -259,10 +266,14 @@ public class AncestorsTree
 
     String fatherKey=SPECIAL_KEY;
     if (father!=null)
+    {
       fatherKey=String.valueOf(father.getPrimaryKey());
+    }
     String motherKey=SPECIAL_KEY;
     if (mother!=null)
+    {
       motherKey=String.valueOf(mother.getPrimaryKey());
+    }
 
     String globalKey=fatherKey+"/"+motherKey;
 

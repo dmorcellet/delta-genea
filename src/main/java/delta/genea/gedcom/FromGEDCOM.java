@@ -30,17 +30,23 @@ import delta.genea.time.FrenchRevolutionMonth;
 import delta.genea.time.GregorianDate;
 import delta.genea.utils.GeneaLoggers;
 
+/**
+ * Imports a GEDCOM file to a genea database.
+ * @author DAM
+ */
 public class FromGEDCOM
 {
   private static final Logger _logger=GeneaLoggers.getGeneaLogger();
   private static final String FRENCH_REVOLUTION_DATE_SEED="@#DFRENCH R@";
-  private static final String JULIAN_DATE_SEED="@#DJULIAN@";
+  //private static final String JULIAN_DATE_SEED="@#DJULIAN@";
 
+  /**
+   * Main method for the GEDCOM import tool.
+   * @param args Not used.
+   */
   public static void main(String[] args)
   {
     GeneaApplication.getInstance();
-    //new FromGEDCOM(new File("/home/dm/downloads/BOUQUETDIDIER.ged"),"dbouquet");
-    //new FromGEDCOM(new File("/home/dm/tmp/Ninie.GED"),"genea_ninie");
     new FromGEDCOM(new File("/home/dm/tmp/michel.ged"),"genea_michel");
   }
 
@@ -57,6 +63,11 @@ public class FromGEDCOM
   private int _index;
   private int _maxIndex;
 
+  /**
+   * Constructor.
+   * @param fileName File to import.
+   * @param dbName Name of the database to populate.
+   */
   public FromGEDCOM(File fileName, String dbName)
   {
     long time=System.currentTimeMillis();
@@ -83,7 +94,7 @@ public class FromGEDCOM
     _placeManager=null;
   }
 
-  public void parseFileLines()
+  private void parseFileLines()
   {
     TextFileReader fp=new TextFileReader(_fileName,new AnselCharset());
     //TextFileReader fp=new TextFileReader(_fileName,"ISO8859-1");
@@ -99,7 +110,7 @@ public class FromGEDCOM
     _maxIndex=_lines.size();
   }
 
-  public void go()
+  private void go()
   {
     String line;
     while (_index<_maxIndex)
@@ -166,7 +177,8 @@ public class FromGEDCOM
       atIndex=keyString.indexOf("@");
       if (atIndex!=-1) keyString=keyString.substring(0,atIndex);
       keyString=keyString.replace("I","");
-      long key=Long.parseLong(keyString);
+      Long key=NumericTools.parseLong(keyString);
+      // TODO handle null
       p.setPrimaryKey(key);
     }
 
@@ -233,7 +245,7 @@ public class FromGEDCOM
               else if (line.startsWith("2 PLAC "))
               {
                 String tmp=line.substring(7).trim();
-                long key=_placeManager.decodePlaceName(tmp);
+                Long key=_placeManager.decodePlaceName(tmp);
                 DataProxy<Place> birthPlaceProxy=new DataProxy<Place>(key,_placeDataSource);
                 p.setBirthPlaceProxy(birthPlaceProxy);
               }
@@ -268,7 +280,7 @@ public class FromGEDCOM
               else if (line.startsWith("2 PLAC "))
               {
                 String tmp=line.substring(7).trim();
-                long key=_placeManager.decodePlaceName(tmp);
+                Long key=_placeManager.decodePlaceName(tmp);
                 p.setDeathPlaceProxy(new DataProxy<Place>(key,_placeDataSource));
               }
             }
@@ -306,12 +318,12 @@ public class FromGEDCOM
       if (atIndex!=-1) keyString=keyString.substring(0,atIndex);
       keyString=keyString.replace("U","");
       keyString=keyString.replace("F","");
-      long key=Long.parseLong(keyString);
+      Long key=Long.valueOf(keyString);
       u.setPrimaryKey(key);
     }
 
-    long manKey=0;
-    long womanKey=0;
+    Long manKey=null;
+    Long womanKey=null;
     while (true)
     {
       String line;
@@ -362,7 +374,7 @@ public class FromGEDCOM
               else if (line.startsWith("2 PLAC "))
               {
                 String tmp=line.substring(7).trim();
-                long key=_placeManager.decodePlaceName(tmp);
+                Long key=_placeManager.decodePlaceName(tmp);
                 u.setPlaceProxy(new DataProxy<Place>(key,_placeDataSource));
               }
             }
@@ -375,7 +387,7 @@ public class FromGEDCOM
         {
           line=line.trim();
           String key=line.substring(8); /* "1 CHIL @" */
-          long childKey=decodePersonID(key);
+          Long childKey=decodePersonID(key);
 
           int nbPersons=_persons.size();
           Person tmp;
@@ -384,11 +396,11 @@ public class FromGEDCOM
             tmp=_persons.get(i);
             if (tmp.getPrimaryKey()==childKey)
             {
-              if (manKey>0)
+              if (manKey!=null)
               {
                 tmp.setFatherProxy(new DataProxy<Person>(manKey,_personDataSource));
               }
-              if (womanKey>0)
+              if (womanKey!=null)
               {
                 tmp.setMotherProxy(new DataProxy<Person>(womanKey,_personDataSource));
               }

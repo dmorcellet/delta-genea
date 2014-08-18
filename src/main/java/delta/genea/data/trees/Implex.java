@@ -18,9 +18,9 @@ public class Implex
 
   /**
    * Constructor.
-   * @param rootPerson 
-   * @param maleAncestor
-   * @param femaleAncestor
+   * @param rootPerson The root person used to compute this implex.
+   * @param maleAncestor The male ancestor of this implex (may be <code>null</code>).
+   * @param femaleAncestor The female ancestor of this implex (may be <code>null</code>).
    */
   public Implex(Person rootPerson, Person maleAncestor, Person femaleAncestor)
   {
@@ -30,16 +30,28 @@ public class Implex
     _femaleAncestor=femaleAncestor;
   }
 
+  /**
+   * Get the root person for this implex.
+   * @return a person.
+   */
   public Person getRootPerson()
   {
     return _rootPerson;
   }
 
+  /**
+   * Get the male ancestor for this implex.
+   * @return a person or <code>null</code>.
+   */
   public Person getMaleAncestor()
   {
     return _maleAncestor;
   }
 
+  /**
+   * Get the female ancestor for this implex.
+   * @return a person or <code>null</code>.
+   */
   public Person getFemaleAncestor()
   {
     return _femaleAncestor;

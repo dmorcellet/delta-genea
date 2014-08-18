@@ -29,7 +29,7 @@ public class PlaceManager
   private int _nbFields;
   private int[] _meanings;
   private int[] _fieldIndices;
-  private Long _placeKey;
+  private long _placeKey;
   private Map<String,Place> _townPlaces;
   private Map<String,Place> _deptPlaces;
   private Map<String,Place> _countryPlaces;
@@ -81,7 +81,7 @@ public class PlaceManager
     _townPlaces=new HashMap<String,Place>();
     _deptPlaces=new HashMap<String,Place>();
     _countryPlaces=new HashMap<String,Place>();
-    _placeKey=Long.valueOf(1);
+    _placeKey=1;
   }
 
   /**
@@ -122,13 +122,18 @@ public class PlaceManager
     return 0;
   }
 
-  public long decodePlaceName(String name)
+  /**
+   * Decode a place statement.
+   * @param name Place definition.
+   * @return A place key or <code>null</code> if decoding failed.
+   */
+  public Long decodePlaceName(String name)
   {
     String[] parts=StringSplitter.split(name,',');
     if (parts.length!=_nbFields)
     {
       _logger.error("Bad number of fields : "+parts.length+" instead of "+_nbFields);
-      return -1;
+      return null;
     }
 
     //2 PLAC Lesquin,59,Nord,,France,
@@ -156,7 +161,7 @@ public class PlaceManager
     Place countryPlace=_countryPlaces.get(country);
     if (countryPlace==null)
     {
-      countryPlace=new Place(_placeKey,placeDataSource);
+      countryPlace=new Place(Long.valueOf(_placeKey),placeDataSource);
       countryPlace.setLevel(PlaceLevel.COUNTRY);
       countryPlace.setName(country);
       _countryPlaces.put(country,countryPlace);
@@ -186,7 +191,7 @@ public class PlaceManager
       deptPlace=_deptPlaces.get(deptKey);
       if (deptPlace==null)
       {
-        deptPlace=new Place(_placeKey,placeDataSource);
+        deptPlace=new Place(Long.valueOf(_placeKey),placeDataSource);
         deptPlace.setLevel(PlaceLevel.DEPARTMENT);
         deptPlace.setName(deptName);
         deptPlace.setShortName(deptCode);
@@ -203,16 +208,12 @@ public class PlaceManager
     Place place=_townPlaces.get(name);
     if (place==null)
     {
-      place=new Place(_placeKey,placeDataSource);
+      place=new Place(Long.valueOf(_placeKey),placeDataSource);
       place.setLevel(PlaceLevel.TOWN);
       place.setName(name);
       if (parent!=null)
       {
         place.setParentPlaceProxy(new DataProxy<Place>(parent.getPrimaryKey(),placeDataSource));
-      }
-      else
-      {
-        place.setParentPlaceProxy(null);
       }
       _townPlaces.put(name,place);
       _placeKey++;
@@ -220,6 +221,10 @@ public class PlaceManager
     return place;
   }
 
+  /**
+   * Get all the known places.
+   * @param places Storage for these places.
+   */
   public void getPlaces(List<Place> places)
   {
     places.addAll(_countryPlaces.values());

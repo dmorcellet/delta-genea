@@ -5,6 +5,10 @@ import java.util.List;
 import delta.common.utils.collections.TreeNode;
 import delta.genea.data.Person;
 
+/**
+ * Tree of descendants.
+ * @author DAM
+ */
 public class DescendantsTree
 {
   private Person _rootPerson;
@@ -13,6 +17,13 @@ public class DescendantsTree
   private boolean _sameName;
   private String _mainName;
 
+  /**
+   * Constructor.
+   * @param rootPerson Root person.
+   * @param depth Depth of tree (0 means no children, 1 means children at depth 1, ...).
+   * @param sameName Indicates if it shall use only descendants with the same name
+   * as the root person.
+   */
   public DescendantsTree(Person rootPerson, int depth, boolean sameName)
   {
     _rootPerson=rootPerson;
@@ -22,11 +33,22 @@ public class DescendantsTree
     _mainName=rootPerson.getLastName();
   }
 
+  /**
+   * Get the root node.
+   * @return the root node.
+   */
   public TreeNode<Person> getRootNode()
   {
     return _tree;
   }
 
+  /**
+   * Build this tree.
+   * @param usePartials Indicates if it shall use partials instead of
+   * fully loaded persons.
+   * @return <code>true</code> if this tree was successfully built, <code>false</code>
+   * otherwise.
+   */
   public boolean build(boolean usePartials)
   {
     return build(_rootPerson, _tree, _depth, usePartials);
@@ -60,6 +82,10 @@ public class DescendantsTree
     return ret;
   }
 
+  /**
+   * Get the number of descendants in this tree.
+   * @return A number of descendants (not including the root person).
+   */
   public long getNumberOfDescendants()
   {
     return _tree.getNumberOfDescendants();

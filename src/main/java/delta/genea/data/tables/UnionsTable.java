@@ -61,10 +61,10 @@ public class UnionsTable extends DataTable
   public DataTableSort getDefaultSort()
   {
     DataTableSort sort=new DataTableSort();
-    sort.addSort(DATE_COLUMN,Boolean.TRUE);
-    sort.addSort(PLACE_COLUMN,Boolean.TRUE);
-    sort.addSort(MAN_COLUMN,Boolean.TRUE);
-    sort.addSort(WOMAN_COLUMN,Boolean.TRUE);
+    sort.addSort(DATE_COLUMN,true);
+    sort.addSort(PLACE_COLUMN,true);
+    sort.addSort(MAN_COLUMN,true);
+    sort.addSort(WOMAN_COLUMN,true);
     return sort;
   }
 }

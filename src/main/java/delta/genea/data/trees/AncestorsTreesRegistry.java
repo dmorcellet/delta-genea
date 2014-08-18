@@ -19,8 +19,7 @@ public class AncestorsTreesRegistry
 
   /**
    * Private constructor.
-   * The sole constructor of this class is private to
-   * ensure that this class has at most a single instance.
+   * @param dataSource Managed data source.
    */
   public AncestorsTreesRegistry(GeneaDataSource dataSource)
   {

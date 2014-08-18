@@ -18,6 +18,10 @@ import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.utils.GeneaLoggers;
 
+/**
+ * Write a GEDCOM file from database data.
+ * @author DAM
+ */
 public class ToGEDCOM
 {
   private static final Logger _logger=GeneaLoggers.getGeneaLogger();
@@ -26,6 +30,9 @@ public class ToGEDCOM
   private String[] _months={"JAN","FEB","MAR","APR",
       "MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"};
 
+  /**
+   * Constructor.
+   */
   public ToGEDCOM()
   {
     _calendar=Calendar.getInstance();
@@ -481,6 +488,11 @@ public class ToGEDCOM
     }
   }
 
+  /**
+   * Do the job.
+   * @param gedcomFile File to write.
+   * @param dbName Name of the database to use.
+   */
   public void go(File gedcomFile, String dbName) 
   {
     try
