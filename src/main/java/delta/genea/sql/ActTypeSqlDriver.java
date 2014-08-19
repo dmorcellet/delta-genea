@@ -86,7 +86,7 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
         if (rs.next())
         {
           ret=new ActType(primaryKey,_mainDataSource.getActTypeDataSource());
-          fillActText(ret,rs);
+          fillActType(ret,rs);
         }
       }
       catch (SQLException sqlException)
@@ -102,7 +102,7 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
     }
   }
 
-  private void fillActText(ActType text, ResultSet rs) throws SQLException
+  private void fillActType(ActType text, ResultSet rs) throws SQLException
   {
     int n=2;
     text.setType(rs.getString(n));
@@ -157,18 +157,24 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
       try
       {
         int n=1;
-        long key=text.getPrimaryKey();
-        if (key==0) _psInsert.setNull(n,Types.INTEGER);
-        else _psInsert.setLong(n,key);
+        Long key=text.getPrimaryKey();
+        if (key==null)
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
+        else
+        {
+          _psInsert.setLong(n,key.longValue());
+        }
         n++;
         _psInsert.setString(n,text.getType());
         n++;
         _psInsert.executeUpdate();
         if (usesHSQLDB())
         {
-          if (key==0)
+          if (key==null)
           {
-            long primaryKey=JDBCTools.getPrimaryKey(connection,1);
+            Long primaryKey=JDBCTools.getPrimaryKey(connection,1);
             text.setPrimaryKey(primaryKey);
           }
         }
@@ -178,7 +184,7 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
           if (rs.next())
           {
             long primaryKey=rs.getLong(1);
-            text.setPrimaryKey(primaryKey);
+            text.setPrimaryKey(Long.valueOf(primaryKey));
           }
         }
       }
@@ -201,8 +207,8 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
         int n=1;
         _psUpdate.setString(n,text.getType());
         n++;
-        long key=text.getPrimaryKey();
-        _psUpdate.setLong(n,key);
+        Long key=text.getPrimaryKey();
+        _psUpdate.setLong(n,key.longValue());
         n++;
         _psUpdate.executeUpdate();
       }
