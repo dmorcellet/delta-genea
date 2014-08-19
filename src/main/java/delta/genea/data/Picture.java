@@ -8,6 +8,10 @@ import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.ObjectSource;
 import delta.genea.misc.GeneaCfg;
 
+/**
+ * Picture.
+ * @author DAM
+ */
 public class Picture extends DataObject<Picture>
 {
   /**

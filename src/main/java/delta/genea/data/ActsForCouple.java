@@ -3,6 +3,7 @@ package delta.genea.data;
 import delta.genea.data.sources.GeneaDataSource;
 
 /**
+ * Gathers all acts for a couple. 
  * @author DAM
  */
 public class ActsForCouple
@@ -14,6 +15,12 @@ public class ActsForCouple
   private ActsForPerson _actsForWoman;
   private Act _union;
 
+  /**
+   * Constructor.
+   * @param dataSource Associated data source.
+   * @param man Man.
+   * @param woman Woman.
+   */
   public ActsForCouple(GeneaDataSource dataSource, Person man, Person woman)
   {
     _dataSource=dataSource;

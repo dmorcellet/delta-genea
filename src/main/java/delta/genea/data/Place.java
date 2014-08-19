@@ -4,6 +4,10 @@ import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.objects.data.ObjectSource;
 
+/**
+ * Place.
+ * @author DAM
+ */
 public class Place extends DataObject<Place>
 {
   /**
@@ -22,6 +26,9 @@ public class Place extends DataObject<Place>
     return CLASS_NAME;
   }
 
+  /**
+   * Constructor.
+   */
   public Place()
   {
     super();

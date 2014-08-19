@@ -67,6 +67,9 @@ public class ActType extends DataObject<ActType>
   // Sets
   // ...
 
+  /**
+   * Class name.
+   */
   public static final String CLASS_NAME="ACT_TYPE";
 
   private String _type;
@@ -94,6 +97,10 @@ public class ActType extends DataObject<ActType>
     return _type;
   }
 
+  /**
+   * Set act type.
+   * @param type Type to set.
+   */
   public void setType(String type)
   {
     if (type==null)

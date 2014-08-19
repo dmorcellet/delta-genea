@@ -14,6 +14,9 @@ public class ActText extends DataObject<ActText>
   // Sets
   // ...
 
+  /**
+   * Class name.
+   */
   public static final String CLASS_NAME="ACT_TEXT";
 
   private String _text;
@@ -41,6 +44,10 @@ public class ActText extends DataObject<ActText>
     return _text;
   }
 
+  /**
+   * Set the text.
+   * @param text Text to set.
+   */
   public void setText(String text)
   {
     if (text==null)

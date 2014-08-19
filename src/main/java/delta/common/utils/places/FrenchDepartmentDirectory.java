@@ -2,12 +2,21 @@ package delta.common.utils.places;
 
 import java.util.HashMap;
 
+/**
+ * Directory for the french departments.
+ * @author Damien
+ */
 public class FrenchDepartmentDirectory
 {
   private HashMap<String,FrenchDepartment> _codeMap;
   private HashMap<String,FrenchDepartment> _nameMap;
 
   private static FrenchDepartmentDirectory _instance=null;
+
+  /**
+   * Get the sole instance of this class.
+   * @return the sole instance of this class.
+   */
   public static FrenchDepartmentDirectory getInstance()
   {
     synchronized (FrenchDepartmentDirectory.class)
@@ -25,11 +34,21 @@ public class FrenchDepartmentDirectory
     buildDirectory();
   }
 
+  /**
+   * Get a department using its code (short label). 
+   * @param code Code to search.
+   * @return A department or <code>null</code> if not found.
+   */
   public FrenchDepartment getByCode(String code)
   {
     return _codeMap.get(code);
   }
 
+  /**
+   * Get a department using its name (long label). 
+   * @param name Name to search.
+   * @return A department or <code>null</code> if not found.
+   */
   public FrenchDepartment getByName(String name)
   {
     return _nameMap.get(name);

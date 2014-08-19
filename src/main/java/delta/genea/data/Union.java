@@ -6,14 +6,24 @@ import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.objects.data.ObjectSource;
 
+/**
+ * Union.
+ * @author DAM
+ */
 public class Union extends DataObject<Union>
 {
   /**
    * Class name.
    */
   public static final String CLASS_NAME="UNION";
+  /**
+   * Relation 'unions' (unions of a person).
+   */
   public static final String UNIONS_RELATION="UNIONS_FOR_PERSON";
   // Sets
+  /**
+   * Set of the unions that involve a person with the given name, at the given place.
+   */
   public static final String NAME_AND_PLACE_SET="NAME_AND_PLACE";
 
   // Date
@@ -38,6 +48,9 @@ public class Union extends DataObject<Union>
     return CLASS_NAME;
   }
 
+  /**
+   * Constructor.
+   */
   public Union()
   {
     super();
