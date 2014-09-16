@@ -6,7 +6,6 @@ import java.util.List;
 
 import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
 import delta.genea.misc.GeneaCfg;
 
 /**
@@ -79,9 +78,10 @@ public class Act extends DataObject<Act>
    * @param primaryKey Primary key.
    * @param source Attached objects source.
    */
-  public Act(Long primaryKey, ObjectSource<Act> source)
+  public Act(Long primaryKey)
   {
-    super(primaryKey,source);
+    super();
+    setPrimaryKey(primaryKey);
     _traite=false;
   }
 

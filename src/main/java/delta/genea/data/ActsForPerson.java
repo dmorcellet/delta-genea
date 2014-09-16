@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import delta.common.framework.objects.data.DataObject;
-import delta.common.framework.objects.data.ObjectSource;
 import delta.genea.data.sources.GeneaDataSource;
 
 /**
@@ -39,11 +38,9 @@ public class ActsForPerson
     {
       return false;
     }
-    ObjectSource<Act> actsSource=_dataSource.getActDataSource();
-    ObjectSource<Union> unionsSource=_dataSource.getUnionDataSource();
 
     // Load unions
-    _unions=unionsSource.loadRelation(Union.UNIONS_RELATION,key);
+    _unions=_dataSource.loadRelation(Union.class,Union.UNIONS_RELATION,key);
     if ((_unions!=null)&&(_unions.size()>0))
     {
       for(Union u : _unions)
@@ -54,8 +51,8 @@ public class ActsForPerson
         u.getWeddingContract();
       }
     }
-    List<Act> acts=actsSource.loadRelation(Act.MAIN_ACTS_RELATION,key);
-    _otherActs=actsSource.loadRelation(Act.OTHER_ACTS_RELATION,key);
+    List<Act> acts=_dataSource.loadRelation(Act.class,Act.MAIN_ACTS_RELATION,key);
+    _otherActs=_dataSource.loadRelation(Act.class,Act.OTHER_ACTS_RELATION,key);
 
     _unionActs=new ArrayList<Act>();
     _weddingContractActs=new ArrayList<Act>();

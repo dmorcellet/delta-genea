@@ -38,7 +38,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
   private PreparedStatement _psGetPersonsInPicture;
   private GeneaDataSource _mainDataSource;
 
-  PictureSqlDriver(GeneaDataSource mainDataSource)
+  public PictureSqlDriver(GeneaDataSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }
@@ -100,7 +100,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
-          ret=new Picture(primaryKey,_mainDataSource.getPictureDataSource());
+          ret=new Picture(primaryKey);
           fillPicture(ret,rs);
           List<PersonInPicture> persons=loadPersonsInPicture(primaryKey.longValue());
           ret.setPersonsInPicture(persons);
@@ -150,7 +150,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
           DataProxy<Person> personProxy=null;
           if (!rs.wasNull())
           {
-            personProxy=_mainDataSource.getPersonDataSource().buildProxy(personKey);
+            personProxy=_mainDataSource.buildProxy(Person.class,Long.valueOf(personKey));
           }
           tmp.setPersonProxy(personProxy);
           n++;
@@ -189,7 +189,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
         while (rs.next())
         {
           long primaryKey=rs.getLong(1);
-          picture=new Picture(Long.valueOf(primaryKey),_mainDataSource.getPictureDataSource());
+          picture=new Picture(Long.valueOf(primaryKey));
           fillPicture(picture,rs);
           List<PersonInPicture> persons=loadPersonsInPicture(primaryKey);
           picture.setPersonsInPicture(persons);

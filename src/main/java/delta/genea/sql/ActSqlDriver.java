@@ -12,7 +12,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
+import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.framework.objects.sql.ObjectSqlDriver;
 import delta.common.utils.jdbc.CleanupManager;
 import delta.common.utils.jdbc.JDBCTools;
@@ -22,7 +22,6 @@ import delta.genea.data.ActType;
 import delta.genea.data.Person;
 import delta.genea.data.PersonInAct;
 import delta.genea.data.Place;
-import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.utils.GeneaLoggers;
 
 /**
@@ -41,9 +40,9 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   private PreparedStatement _psGetOtherFromPerson;
   private PreparedStatement _psGetPersonInAct;
   private PreparedStatement _psGetFromPlace;
-  private GeneaDataSource _mainDataSource;
+  private ObjectsSource _mainDataSource;
 
-  ActSqlDriver(GeneaDataSource mainDataSource)
+  public ActSqlDriver(ObjectsSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }
@@ -107,7 +106,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
-          ret=new Act(primaryKey,_mainDataSource.getActDataSource());
+          ret=new Act(primaryKey);
           fillAct(ret,rs);
           List<PersonInAct> persons=loadPersonsInAct(primaryKey);
           ret.setPersonsInAct(persons);
@@ -129,19 +128,17 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   private void fillAct(Act act, ResultSet rs) throws SQLException
   {
     int n=2;
-    act.setActTypeProxy(new DataProxy<ActType>(rs.getLong(n),_mainDataSource.getActTypeDataSource()));
+    act.setActTypeProxy(_mainDataSource.buildProxy(ActType.class,rs.getLong(n)));
     n++;
     act.setDate(rs.getDate(n));
     n++;
-    act.setPlaceProxy(new DataProxy<Place>(rs.getLong(n),_mainDataSource.getPlaceDataSource()));
+    act.setPlaceProxy(_mainDataSource.buildProxy(Place.class,rs.getLong(n)));
     n++;
-    ObjectSource<Person> personDS=_mainDataSource.getPersonDataSource();
-    act.setP1Proxy(new DataProxy<Person>(rs.getLong(n),personDS));
+    act.setP1Proxy(_mainDataSource.buildProxy(Person.class,rs.getLong(n)));
     n++;
-    act.setP2Proxy(new DataProxy<Person>(rs.getLong(n),personDS));
+    act.setP2Proxy(_mainDataSource.buildProxy(Person.class,rs.getLong(n)));
     n++;
-    ObjectSource<ActText> textDS=_mainDataSource.getTextDataSource();
-    act.setTextProxy(new DataProxy<ActText>(rs.getLong(n),textDS));
+    act.setTextProxy(_mainDataSource.buildProxy(ActText.class,rs.getLong(n)));
     n++;
     act.setPath(rs.getString(n));
     n++;
@@ -169,8 +166,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
         {
           tmp=new PersonInAct();
           int n=1;
-          tmp.setPersonProxy(new DataProxy<Person>(rs.getLong(n),
-              _mainDataSource.getPersonDataSource()));
+          tmp.setPersonProxy(_mainDataSource.buildProxy(Person.class,rs.getLong(n)));
           n++;
           tmp.setPresence(rs.getString(n));
           n++;
@@ -181,7 +177,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
           long refLink=rs.getLong(n);
           if (!rs.wasNull())
           {
-            tmp.setLinkRefProxy(new DataProxy<Person>(refLink,_mainDataSource.getPersonDataSource()));
+            tmp.setLinkRefProxy(_mainDataSource.buildProxy(Person.class,refLink));
           }
 
           n++;

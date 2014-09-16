@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
-import delta.common.framework.objects.data.ObjectSource;
+import delta.common.framework.objects.sql.DatabaseConfiguration;
+import delta.common.framework.objects.sql.SqlObjectsSource;
 import delta.genea.data.Act;
 import delta.genea.data.ActText;
 import delta.genea.data.ActType;
@@ -13,29 +14,26 @@ import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
 import delta.genea.data.trees.AncestorsTreesRegistry;
-import delta.genea.sql.GeneaSqlDriver;
+import delta.genea.sql.ActSqlDriver;
+import delta.genea.sql.ActTypeSqlDriver;
+import delta.genea.sql.PersonSqlDriver;
+import delta.genea.sql.PictureSqlDriver;
+import delta.genea.sql.PlaceSqlDriver;
+import delta.genea.sql.TextSqlDriver;
+import delta.genea.sql.UnionSqlDriver;
 import delta.genea.utils.GeneaLoggers;
 
 /**
  * Data source for the genea objects of a single database.
  * @author DAM
  */
-public class GeneaDataSource
+public class GeneaDataSource extends SqlObjectsSource
 {
   private static final Logger _logger=GeneaLoggers.getGeneaLogger();
 
   private static HashMap<String,GeneaDataSource> _sources=new HashMap<String,GeneaDataSource>();
 
-  private String _dbName;
   private AncestorsTreesRegistry _ancestorsTreesRegistry;
-  private ObjectSource<Person> _personDataSource;
-  private ObjectSource<Union> _unionDataSource;
-  private ObjectSource<Place> _placeDataSource;
-  private ObjectSource<Act> _actDataSource;
-  private ObjectSource<Picture> _pictureDataSource;
-  private ObjectSource<ActText> _textDataSource;
-  private ObjectSource<ActType> _actTypeDataSource;
-  private GeneaSqlDriver _driver;
 
   /**
    * Get the data source that manages the genea objects
@@ -63,27 +61,23 @@ public class GeneaDataSource
    */
   private GeneaDataSource(String dbName)
   {
-    _dbName=dbName;
+    super(dbName);
     _ancestorsTreesRegistry=new AncestorsTreesRegistry(this);
     buildDrivers();
+    try
+    {
+      start();
+    }
+    catch(Exception e)
+    {
+      _logger.error("Cannot start genea data source!",e);
+    }
   }
 
-  /**
-   * Get the name of the managed database.
-   * @return the name of the managed database.
-   */
-  public String getDbName()
+  @Override
+  protected DatabaseConfiguration buildDatabaseConfiguration(String dbName)
   {
-    return _dbName;
-  }
-
-  /**
-   * Set the flag that drives foreign key checks.
-   * @param doCheck <code>true</code> to perform checks, <code>false</code> otherwise.
-   */
-  public void setForeignKeyChecks(boolean doCheck)
-  {
-    _driver.setForeignKeyChecks(doCheck);
+    return new DatabaseConfiguration("delta/genea/misc/database.properties");
   }
 
   /**
@@ -93,82 +87,18 @@ public class GeneaDataSource
   {
     try
     {
-      _driver=new GeneaSqlDriver(this);
-      _personDataSource=new ObjectSource<Person>(_driver.getPersonDriver());
-      _unionDataSource=new ObjectSource<Union>(_driver.getUnionDriver());
-      _placeDataSource=new ObjectSource<Place>(_driver.getPlaceDriver());
-      _actDataSource=new ObjectSource<Act>(_driver.getActDriver());
-      _pictureDataSource=new ObjectSource<Picture>(_driver.getPictureDriver());
-      _textDataSource=new ObjectSource<ActText>(_driver.getTextDriver());
-      _actTypeDataSource=new ObjectSource<ActType>(_driver.getActTypesDriver());
+      addClass(Person.class,new PersonSqlDriver(this));
+      addClass(Union.class,new UnionSqlDriver(this));
+      addClass(Place.class,new PlaceSqlDriver(this));
+      addClass(Act.class,new ActSqlDriver(this));
+      addClass(Picture.class,new PictureSqlDriver(this));
+      addClass(ActText.class,new TextSqlDriver(this));
+      addClass(ActType.class,new ActTypeSqlDriver(this));
     }
     catch(Exception e)
     {
       _logger.error("",e);
     }
-  }
-
-  /**
-   * Get the objects source for persons.
-   * @return the objects source for persons.
-   */
-  public ObjectSource<Person> getPersonDataSource()
-  {
-    return _personDataSource;
-  }
-
-  /**
-   * Get the objects source for unions.
-   * @return the objects source for unions.
-   */
-  public ObjectSource<Union> getUnionDataSource()
-  {
-    return _unionDataSource;
-  }
-
-  /**
-   * Get the objects source for places.
-   * @return the objects source for places.
-   */
-  public ObjectSource<Place> getPlaceDataSource()
-  {
-    return _placeDataSource;
-  }
-
-  /**
-   * Get the objects source for acts.
-   * @return the objects source for acts.
-   */
-  public ObjectSource<Act> getActDataSource()
-  {
-    return _actDataSource;
-  }
-
-  /**
-   * Get the objects source for pictures.
-   * @return the objects source for pictures.
-   */
-  public ObjectSource<Picture> getPictureDataSource()
-  {
-    return _pictureDataSource;
-  }
-
-  /**
-   * Get the objects source for texts.
-   * @return the objects source for texts.
-   */
-  public ObjectSource<ActText> getTextDataSource()
-  {
-    return _textDataSource;
-  }
-
-  /**
-   * Get the objects source for act types.
-   * @return the objects source for act types.
-   */
-  public ObjectSource<ActType> getActTypeDataSource()
-  {
-    return _actTypeDataSource;
   }
 
   /**
@@ -178,17 +108,6 @@ public class GeneaDataSource
   public AncestorsTreesRegistry getAncestorsTreesRegistry()
   {
     return _ancestorsTreesRegistry;
-  }
-
-  /**
-   * Close this data source.
-   */
-  public void close()
-  {
-    if (_driver!=null)
-    {
-      _driver.close();
-    }
   }
 
   /**

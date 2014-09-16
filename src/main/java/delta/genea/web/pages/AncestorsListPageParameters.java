@@ -11,7 +11,7 @@ public class AncestorsListPageParameters extends PageParameters
   public static final String ACTION_VALUE="ANCESTORS_LIST";
   static final String KEY="KEY";
   static final String DEPTH="DEPTH";
-  private long _key;
+  private Long _key;
   private int _depth;
 
   /**
@@ -19,7 +19,7 @@ public class AncestorsListPageParameters extends PageParameters
    * @param key Root person key.
    * @param depth Number of generations.
    */
-  public AncestorsListPageParameters(long key, int depth)
+  public AncestorsListPageParameters(Long key, int depth)
   {
     super("genea");
     setKey(key);
@@ -37,13 +37,13 @@ public class AncestorsListPageParameters extends PageParameters
     return _depth;
   }
 
-  public final void setKey(long key)
+  public final void setKey(Long key)
   {
     _key=key;
-    _parameters.put(KEY,Long.valueOf(key));
+    _parameters.put(KEY,key);
   }
 
-  public long getMainPersonKey()
+  public Long getMainPersonKey()
   {
     return _key;
   }

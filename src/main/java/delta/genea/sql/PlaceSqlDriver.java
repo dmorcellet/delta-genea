@@ -33,7 +33,7 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
   private PreparedStatement _psInsert;
   private GeneaDataSource _mainDataSource;
 
-  PlaceSqlDriver(GeneaDataSource mainDataSource)
+  public PlaceSqlDriver(GeneaDataSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }
@@ -83,7 +83,7 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
-          ret=new Place(primaryKey,_mainDataSource.getPlaceDataSource());
+          ret=new Place(primaryKey);
           fillPlace(ret,rs);
         }
       }
@@ -114,7 +114,7 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
         rs=_psGetAll.executeQuery();
         while (rs.next())
         {
-          place=new Place(Long.valueOf(rs.getLong(1)),_mainDataSource.getPlaceDataSource());
+          place=new Place(Long.valueOf(rs.getLong(1)));
           fillPlace(place,rs);
           list.add(place);
         }
@@ -145,7 +145,7 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
     DataProxy<Place> parentPlaceProxy=null;
     if (!rs.wasNull())
     {
-      parentPlaceProxy=place.getSource().buildProxy(parentPlaceKey);
+      parentPlaceProxy=_mainDataSource.buildProxy(Place.class,Long.valueOf(parentPlaceKey));
     }
     place.setParentPlaceProxy(parentPlaceProxy);
     n++;

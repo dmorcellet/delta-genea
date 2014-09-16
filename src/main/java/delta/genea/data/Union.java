@@ -4,7 +4,6 @@ import java.util.Date;
 
 import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
 
 /**
  * Union.
@@ -59,11 +58,11 @@ public class Union extends DataObject<Union>
   /**
    * Constructor.
    * @param primaryKey Primary key.
-   * @param source Attached objects source.
    */
-  public Union(Long primaryKey, ObjectSource<Union> source)
+  public Union(Long primaryKey)
   {
-    super(primaryKey,source);
+    super();
+    setPrimaryKey(primaryKey);
   }
 
   public Long getDate()

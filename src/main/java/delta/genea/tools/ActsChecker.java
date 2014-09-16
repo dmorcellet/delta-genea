@@ -7,7 +7,6 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
 import delta.common.utils.NumericTools;
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.genea.data.Act;
@@ -62,14 +61,13 @@ public class ActsChecker
       _logger.info("Acts checker::handling ID="+_rootPersonKey);
       GeneaDataSource dataSource=GeneaDataSource.getInstance(_dbName);
 
-      ObjectSource<Person> ds=dataSource.getPersonDataSource();
-      DataProxy<Person> pp=new DataProxy<Person>(_rootPersonKey,ds);
+      DataProxy<Person> pp=dataSource.buildProxy(Person.class,_rootPersonKey);
       Person moi=pp.getDataObject();
       AncestorsTree tree=new AncestorsTree(moi,1000);
       tree.build();
       browseAncestorsTree(tree);
       dataSource.close();
-      _logger.info("Requests : "+ObjectSource._nbGetRequests);
+      _logger.info("Requests : "+dataSource.getNbGetRequests());
     }
     catch (Exception e)
     {

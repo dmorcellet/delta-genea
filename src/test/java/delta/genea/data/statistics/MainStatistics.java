@@ -3,14 +3,13 @@ package delta.genea.data.statistics;
 import java.util.ArrayList;
 import java.util.List;
 
-import delta.common.framework.objects.data.ObjectSource;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.selections.AncestorsSelectionBuilder;
 import delta.genea.data.selections.CompoundSelection;
+import delta.genea.data.selections.CompoundSelection.Operator;
 import delta.genea.data.selections.NameSelectionBuilder;
 import delta.genea.data.selections.Selection;
-import delta.genea.data.selections.CompoundSelection.Operator;
 import delta.genea.data.sources.GeneaDataSource;
 
 /**
@@ -53,7 +52,6 @@ public class MainStatistics
     // Show stats
     System.out.println(name);
     GeneaDataSource source=GeneaDataSource.getInstance(DATA_SOURCE);
-    ObjectSource<Place> placesSource=source.getPlaceDataSource();
     List<Long> keys=stats.getOrderedKeys();
     String placeName;
     Place place;
@@ -62,7 +60,7 @@ public class MainStatistics
       placeName="???";
       if (key!=null)
       {
-        place=placesSource.load(key);
+        place=source.load(Place.class,key);
         if (place!=null)
         {
           placeName=place.getFullName();

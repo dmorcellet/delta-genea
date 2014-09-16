@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
 import delta.common.utils.NumericTools;
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.common.utils.collections.TreeNode;
@@ -24,30 +23,27 @@ import delta.genea.time.GregorianDate;
 
 public class DumpAncestorsTree
 {
-  private static ObjectSource<Union> _dsUnions;
   private static final int ANCESTORS_TREE=0;
   private static final int DESCENDANTS_TREE=1;
 
-  public static void handle(long id, int type)
+  public void handle(Long id, int type)
   {
     try
     {
       String dbName=DatabaseConfiguration.getInstance().getDefaultDbName();
       GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
 
-      ObjectSource<Person> ds=dataSource.getPersonDataSource();
-      DataProxy<Person> pp=new DataProxy<Person>(id,ds);
-      _dsUnions=dataSource.getUnionDataSource();
-      Person moi=pp.getDataObject();
+      DataProxy<Person> pp=dataSource.buildProxy(Person.class,id);
       if (type==ANCESTORS_TREE)
       {
+        Person moi=pp.getDataObject();
         AncestorsTree tree=new AncestorsTree(moi,1000);
         tree.build();
         dumpAncestorsTree(tree);
       }
       else if ((type==DESCENDANTS_TREE))
       {
-        DescendantsTree tree=new DescendantsTree(moi,1000,false);
+        DescendantsTree tree=new DescendantsTree(pp,1000,false);
         tree.build(false);
         dumpDescendantsTree(tree);
       }
@@ -59,12 +55,12 @@ public class DumpAncestorsTree
     }
   }
 
-  private static void dumpAncestorsTree(AncestorsTree tree)
+  private void dumpAncestorsTree(AncestorsTree tree)
   {
     dumpAncestorsTree(System.out,tree.getRootNode(),1,0);
   }
 
-  private static void dumpAncestorsTree(PrintStream out, BinaryTreeNode<Person> node, long sosa, int step)
+  private void dumpAncestorsTree(PrintStream out, BinaryTreeNode<Person> node, long sosa, int step)
   {
     Person p=node.getData();
     dumpPerson(out,p,Long.toString(sosa),step);
@@ -80,13 +76,13 @@ public class DumpAncestorsTree
     }
   }
 
-  private static void dumpDescendantsTree(DescendantsTree tree)
+  private void dumpDescendantsTree(DescendantsTree tree)
   {
     String name="1";
     dumpDescendantsTree(System.out,tree.getRootNode(),name,0);
   }
 
-  private static void dumpDescendantsTree(PrintStream out, TreeNode<Person> node, String name, int step)
+  private void dumpDescendantsTree(PrintStream out, TreeNode<Person> node, String name, int step)
   {
     Person p=node.getData();
     dumpPerson(out,p,name,step);
@@ -99,7 +95,7 @@ public class DumpAncestorsTree
     }
   }
 
-  private static void dumpPerson(PrintStream out, Person p, String id, int step)
+  private void dumpPerson(PrintStream out, Person p, String id, int step)
   {
     for(int i=0;i<step;i++) out.print(' ');
     out.print(id);
@@ -145,7 +141,8 @@ public class DumpAncestorsTree
     if (outBirth || outDeath) out.println("");
 
     // Unions
-    List<Union> unions=_dsUnions.loadRelation(Union.UNIONS_RELATION,p.getPrimaryKey());
+    GeneaDataSource ds=GeneaDataSource.getInstance("genea");
+    List<Union> unions=ds.loadRelation(Union.class,Union.UNIONS_RELATION,p.getPrimaryKey());
     Union union;
     Long unionDate;
     String unionInfos;
@@ -183,7 +180,7 @@ public class DumpAncestorsTree
     }
   }
 
-  public static void main(String[] args)
+  private void doIt()
   {
     Configuration cfg=Configurations.getConfiguration();
     // Ancestors tree
@@ -192,11 +189,11 @@ public class DumpAncestorsTree
       String[] keys=StringSplitter.split(keysStr,',');
       if (keys!=null)
       {
-        int key;
+        Long key;
         for(int i=0;i<keys.length;i++)
         {
-          key=NumericTools.parseInt(keys[i],-1);
-          if (key!=-1)
+          key=NumericTools.parseLong(keys[i]);
+          if (key!=null)
           {
             handle(key,ANCESTORS_TREE);
           }
@@ -209,16 +206,21 @@ public class DumpAncestorsTree
       String[] keys=StringSplitter.split(keysStr,',');
       if (keys!=null)
       {
-        int key;
+        Long key;
         for(int i=0;i<keys.length;i++)
         {
-          key=NumericTools.parseInt(keys[i],-1);
-          if (key!=-1)
+          key=NumericTools.parseLong(keys[i]);
+          if (key!=null)
           {
             handle(key,DESCENDANTS_TREE);
           }
         }
       }
     }
+  }
+
+  public static void main(String[] args)
+  {
+    new DumpAncestorsTree().doIt();
   }
 }

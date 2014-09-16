@@ -52,7 +52,7 @@ public class AncestorsTreesRegistry
       ret=_knownTrees.get(key);
       if ((ret==null) && (builtItIfNeeded))
       {
-        Person root=_dataSource.getPersonDataSource().load(key);
+        Person root=_dataSource.load(Person.class,key);
         if (root!=null)
         {
           AncestorsTree at=new AncestorsTree(root,AncestorsTree.MAX_DEPTH);

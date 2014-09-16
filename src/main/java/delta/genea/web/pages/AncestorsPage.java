@@ -19,21 +19,21 @@ public class AncestorsPage extends GeneaWebPage
   // HTML 4.01 strict validated
   private AncestorsTree _data;
   private Person _root;
-  private long _key;
+  private Long _key;
   private int _depth;
   private PersonHtmlFormatter _pTools;
 
   @Override
   public void parseParameters() throws Exception
   {
-    _key=ParameterFinder.getLongParameter(_request,"KEY",76);
+    _key=ParameterFinder.getLongParameter(_request,"KEY",Long.valueOf(76));
     _depth=ParameterFinder.getIntParameter(_request,"DEPTH",100);
   }
 
   @Override
   public void fetchData() throws Exception
   {
-    _root=getDataSource().getPersonDataSource().load(_key);
+    _root=getDataSource().load(Person.class,_key);
     _data=new AncestorsTree(_root,_depth);
     _data.build();
   }

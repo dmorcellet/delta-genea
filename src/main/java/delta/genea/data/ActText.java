@@ -1,7 +1,6 @@
 package delta.genea.data;
 
 import delta.common.framework.objects.data.DataObject;
-import delta.common.framework.objects.data.ObjectSource;
 
 /**
  * Text (transcription) of an act.
@@ -27,11 +26,11 @@ public class ActText extends DataObject<ActText>
   /**
    * Constructor.
    * @param primaryKey Primary key.
-   * @param source Attached objects source.
    */
-  public ActText(Long primaryKey, ObjectSource<ActText> source)
+  public ActText(Long primaryKey)
   {
-    super(primaryKey,source);
+    super();
+    setPrimaryKey(primaryKey);
     _text="";
   }
 

@@ -20,20 +20,20 @@ public class AncestorsListPage extends GeneaWebPage
   // HTML 4.01 strict validated
   private AncestorsList _data;
   private Person _root;
-  private long _key;
+  private Long _key;
   private int _depth;
 
   @Override
   public void parseParameters() throws Exception
   {
-    _key=ParameterFinder.getLongParameter(_request,AncestorsListPageParameters.KEY,76);
+    _key=ParameterFinder.getLongParameter(_request,AncestorsListPageParameters.KEY,Long.valueOf(76));
     _depth=ParameterFinder.getIntParameter(_request,AncestorsListPageParameters.DEPTH,100);
   }
 
   @Override
   public void fetchData() throws Exception
   {
-    _root=getDataSource().getPersonDataSource().load(_key);
+    _root=getDataSource().load(Person.class,_key);
     AncestorsTree tree=new AncestorsTree(_root,_depth);
     tree.build();
     _data=new AncestorsList(tree);

@@ -46,7 +46,7 @@ public class PersonPageData
   public boolean load(GeneaDataSource source)
   {
     _dataSource=source;
-    _main=source.getPersonDataSource().load(_key);
+    _main=source.load(Person.class,_key);
     if (_main==null) return false;
 
     _father=_main.getFather();
@@ -57,8 +57,8 @@ public class PersonPageData
     _main.getBirthPlace();
     _main.getDeathPlace();
 
-    _children=source.getPersonDataSource().loadRelation(Person.CHILDREN_RELATION,_key);
-    _godChildren=source.getPersonDataSource().loadRelation(Person.GOD_CHILDREN_RELATION,_key);
+    _children=source.loadRelation(Person.class,Person.CHILDREN_RELATION,_key);
+    _godChildren=source.loadRelation(Person.class,Person.GOD_CHILDREN_RELATION,_key);
     _acts=new ActsForPerson(_dataSource,_main);
     _acts.build();
     List<Act> acts=_acts.getAllActs();
@@ -73,7 +73,7 @@ public class PersonPageData
     AncestorsTreesRegistry registry=_dataSource.getAncestorsTreesRegistry();
     _tree=registry.getTree(_deCujusKey);
     // Pictures
-    _pictures=source.getPictureDataSource().loadRelation(Picture.PICTURES_FOR_PERSON_RELATION,_key);
+    _pictures=source.loadRelation(Picture.class,Picture.PICTURES_FOR_PERSON_RELATION,_key);
 
     return true;
   }

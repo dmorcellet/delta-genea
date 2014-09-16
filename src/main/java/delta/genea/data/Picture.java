@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import delta.common.framework.objects.data.DataObject;
-import delta.common.framework.objects.data.ObjectSource;
 import delta.genea.misc.GeneaCfg;
 
 /**
@@ -34,11 +33,11 @@ public class Picture extends DataObject<Picture>
   /**
    * Constructor.
    * @param primaryKey Primary key.
-   * @param source Attached objects source.
    */
-  public Picture(Long primaryKey, ObjectSource<Picture> source)
+  public Picture(Long primaryKey)
   {
-    super(primaryKey,source);
+    super();
+    setPrimaryKey(primaryKey);
     _title="";
     _path="";
     _commentaire="";

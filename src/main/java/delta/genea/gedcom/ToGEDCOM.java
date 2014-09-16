@@ -241,7 +241,7 @@ public class ToGEDCOM
 
         if (!found)
         {
-          Union newUnion=new Union(Long.valueOf(unionKey),null);
+          Union newUnion=new Union(Long.valueOf(unionKey));
           unionKey++;
           newUnion.setManProxy(p.getFatherProxy());
           newUnion.setWomanProxy(p.getMotherProxy());
@@ -251,7 +251,7 @@ public class ToGEDCOM
       }
       else
       {
-        ret.add(new Union(null,null));
+        ret.add(new Union(null));
       }
     }
     return ret;
@@ -498,9 +498,9 @@ public class ToGEDCOM
     try
     {
       GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
-
-      List<Person> persons=dataSource.getPersonDataSource().loadAll();
-      List<Union> unions=dataSource.getUnionDataSource().loadAll();
+      
+      List<Person> persons=dataSource.getManager(Person.class).loadAll();
+      List<Union> unions=dataSource.getManager(Union.class).loadAll();
       System.out.println("Loaded "+persons.size()+" persons.");
       System.out.println("Loaded "+unions.size()+" unions.");
       go(gedcomFile,persons,unions);

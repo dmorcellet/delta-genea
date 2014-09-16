@@ -42,7 +42,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
 
   private GeneaDataSource _mainDataSource;
 
-  UnionSqlDriver(GeneaDataSource mainDataSource)
+  public UnionSqlDriver(GeneaDataSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }
@@ -102,7 +102,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
-          ret=new Union(primaryKey,_mainDataSource.getUnionDataSource());
+          ret=new Union(primaryKey);
           fillUnion(ret,rs);
         }
       }
@@ -126,7 +126,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     DataProxy<Person> manProxy=null;
     if (!rs.wasNull())
     {
-      manProxy=new DataProxy<Person>(Long.valueOf(manKey),_mainDataSource.getPersonDataSource());
+      manProxy=_mainDataSource.buildProxy(Person.class,Long.valueOf(manKey));
     }
     union.setManProxy(manProxy);
     n++;
@@ -134,17 +134,17 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     DataProxy<Person> womanProxy=null;
     if (!rs.wasNull())
     {
-      womanProxy=new DataProxy<Person>(Long.valueOf(womanKey),_mainDataSource.getPersonDataSource());
+      womanProxy=_mainDataSource.buildProxy(Person.class,Long.valueOf(womanKey));
     }
     union.setWomanProxy(womanProxy);
     n++;
     union.setDate(rs.getDate(n++),rs.getString(n++));
     long placeKey=rs.getLong(n);
-    DataProxy<Place> placeProxy=rs.wasNull()?null:_mainDataSource.getPlaceDataSource().buildProxy(placeKey);
+    DataProxy<Place> placeProxy=rs.wasNull()?null:_mainDataSource.buildProxy(Place.class,Long.valueOf(placeKey));
     union.setPlaceProxy(placeProxy);
     n++;
     long contractKey=rs.getLong(n);
-    DataProxy<Act> contractProxy=rs.wasNull()?null:_mainDataSource.getActDataSource().buildProxy(contractKey);
+    DataProxy<Act> contractProxy=rs.wasNull()?null:_mainDataSource.buildProxy(Act.class,Long.valueOf(contractKey));
     union.setWeddingContractProxy(contractProxy);
     n++;
     union.setComments(rs.getString(n));
@@ -167,7 +167,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
         {
           long key=rs.getLong(1);
           Long primaryKey=(rs.wasNull()?null:Long.valueOf(key));
-          union=new Union(primaryKey,_mainDataSource.getUnionDataSource());
+          union=new Union(primaryKey);
           fillUnion(union,rs);
           ret.add(union);
         }

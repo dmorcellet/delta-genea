@@ -15,12 +15,12 @@ public class GeneaWebPage extends WebPage
     // Nothing to do !!
   }
 
-  public long getPersonKey(String variableName)
+  public Long getPersonKey(String variableName)
   {
-    long key=ParameterFinder.getLongParameter(_request,variableName,-1);
-    if (key==-1)
+    Long key=ParameterFinder.getLongParameter(_request,variableName,null);
+    if (key==null)
     {
-      key=ParameterFinder.getLongParameter(_request,GeneaUserContext.DE_CUJUS,0);
+      key=ParameterFinder.getLongParameter(_request,GeneaUserContext.DE_CUJUS,Long.valueOf(0));
     }
     return key;
   }

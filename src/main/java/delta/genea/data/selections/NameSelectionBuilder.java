@@ -2,7 +2,6 @@ package delta.genea.data.selections;
 
 import java.util.List;
 
-import delta.common.framework.objects.data.ObjectSource;
 import delta.genea.data.Person;
 import delta.genea.data.sources.GeneaDataSource;
 
@@ -29,8 +28,7 @@ public class NameSelectionBuilder implements SelectionBuilder<Person>
   public Selection<Person> build()
   {
     GeneaDataSource dataSource=GeneaDataSource.getInstance(_dbName);
-    ObjectSource<Person> personsSource=dataSource.getPersonDataSource();
-    List<Person> list=personsSource.loadObjectSet(Person.NAME_SET,new Object[]{_name});
+    List<Person> list=dataSource.loadObjectSet(Person.class,Person.NAME_SET,new Object[]{_name});
     String selectionName="Personne dont le patronyme est "+_name;
     BasicSelection<Person> ret=new BasicSelection<Person>(selectionName);
     for(Person p : list)

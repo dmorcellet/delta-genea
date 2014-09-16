@@ -11,7 +11,7 @@ import delta.genea.data.sources.GeneaDataSource;
  */
 public class CousinsPageData
 {
-  private long _key;
+  private Long _key;
   private Person _main;
   private List<Person> _cousins;
 
@@ -19,7 +19,7 @@ public class CousinsPageData
    * Constructor.
    * @param key Main person key.
    */
-  public CousinsPageData(long key)
+  public CousinsPageData(Long key)
   {
     _key=key;
   }
@@ -50,13 +50,13 @@ public class CousinsPageData
    */
   public boolean load(GeneaDataSource source)
   {
-    _main=source.getPersonDataSource().load(_key);
+    _main=source.load(Person.class,_key);
     if (_main==null)
     {
       return false;
     }
 
-    _cousins=source.getPersonDataSource().loadRelation(Person.COUSINS_RELATION, _key);
+    _cousins=source.loadRelation(Person.class, Person.COUSINS_RELATION, _key);
     return true;
   }
 }

@@ -30,7 +30,7 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
   private PreparedStatement _psCount;
   private GeneaDataSource _mainDataSource;
 
-  ActTypeSqlDriver(GeneaDataSource mainDataSource)
+  public ActTypeSqlDriver(GeneaDataSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }
@@ -85,7 +85,7 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
-          ret=new ActType(primaryKey,_mainDataSource.getActTypeDataSource());
+          ret=new ActType(primaryKey);
           fillActType(ret,rs);
         }
       }

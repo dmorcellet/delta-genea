@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileReader;
 import delta.common.utils.misc.LatineNumbers;
@@ -56,9 +55,6 @@ public class FromGEDCOM
   private List<Place> _places;
   private PlaceManager _placeManager;
   private GeneaDataSource _dataSource;
-  private ObjectSource<Place> _placeDataSource;
-  private ObjectSource<Person> _personDataSource;
-  private ObjectSource<Union> _unionDataSource;
   private ArrayList<String> _lines;
   private int _index;
   private int _maxIndex;
@@ -73,9 +69,6 @@ public class FromGEDCOM
     long time=System.currentTimeMillis();
     _fileName=fileName;
     _dataSource=GeneaDataSource.getInstance(dbName);
-    _placeDataSource=_dataSource.getPlaceDataSource();
-    _personDataSource=_dataSource.getPersonDataSource();
-    _unionDataSource=_dataSource.getUnionDataSource();
     reset();
     parseFileLines();
     go();
@@ -169,7 +162,7 @@ public class FromGEDCOM
 
   private void handlePerson()
   {
-    Person p=new Person(null,_personDataSource);
+    Person p=new Person(null);
     {
       String keyString=_lines.get(_index);
       int atIndex=keyString.indexOf("@");
@@ -246,7 +239,7 @@ public class FromGEDCOM
               {
                 String tmp=line.substring(7).trim();
                 Long key=_placeManager.decodePlaceName(tmp);
-                DataProxy<Place> birthPlaceProxy=new DataProxy<Place>(key,_placeDataSource);
+                DataProxy<Place> birthPlaceProxy=_dataSource.buildProxy(Place.class,key);
                 p.setBirthPlaceProxy(birthPlaceProxy);
               }
             }
@@ -281,7 +274,7 @@ public class FromGEDCOM
               {
                 String tmp=line.substring(7).trim();
                 Long key=_placeManager.decodePlaceName(tmp);
-                p.setDeathPlaceProxy(new DataProxy<Place>(key,_placeDataSource));
+                p.setDeathPlaceProxy(_dataSource.buildProxy(Place.class,key));
               }
             }
             else
@@ -309,7 +302,7 @@ public class FromGEDCOM
 
   private void handleFamily()
   {
-    Union u=new Union(null,_unionDataSource);
+    Union u=new Union(null);
     {
       String keyString=_lines.get(_index);
       int atIndex=keyString.indexOf("@");
@@ -338,7 +331,7 @@ public class FromGEDCOM
           line=line.trim();
           String key=line.substring(8); /* "1 HUSB @" */
           manKey=decodePersonID(key);
-          u.setManProxy(new DataProxy<Person>(manKey,_personDataSource));
+          u.setManProxy(_dataSource.buildProxy(Person.class,manKey));
         }
         // END OF HUSB
         else if (line.startsWith("1 WIFE "))
@@ -346,7 +339,7 @@ public class FromGEDCOM
           line=line.trim();
           String key=line.substring(8); /* "1 WIFE @" */
           womanKey=decodePersonID(key);
-          u.setWomanProxy(new DataProxy<Person>(womanKey,_personDataSource));
+          u.setWomanProxy(_dataSource.buildProxy(Person.class,womanKey));
         }
         // END OF WIFE
         else if (line.startsWith("1 MARR"))
@@ -375,7 +368,7 @@ public class FromGEDCOM
               {
                 String tmp=line.substring(7).trim();
                 Long key=_placeManager.decodePlaceName(tmp);
-                u.setPlaceProxy(new DataProxy<Place>(key,_placeDataSource));
+                u.setPlaceProxy(_dataSource.buildProxy(Place.class,key));
               }
             }
             else
@@ -398,11 +391,11 @@ public class FromGEDCOM
             {
               if (manKey!=null)
               {
-                tmp.setFatherProxy(new DataProxy<Person>(manKey,_personDataSource));
+                tmp.setFatherProxy(_dataSource.buildProxy(Person.class,manKey));
               }
               if (womanKey!=null)
               {
-                tmp.setMotherProxy(new DataProxy<Person>(womanKey,_personDataSource));
+                tmp.setMotherProxy(_dataSource.buildProxy(Person.class,womanKey));
               }
               break;
             }
@@ -604,25 +597,22 @@ public class FromGEDCOM
   {
     _dataSource.setForeignKeyChecks(false);
     // Places
-    ObjectSource<Place> pSource=_dataSource.getPlaceDataSource();
     int nbPlaces=_places.size();
     for(int i=0;i<nbPlaces;i++)
     {
-      pSource.create(_places.get(i));
+      _dataSource.create(Place.class,_places.get(i));
     }
     // Persons
-    ObjectSource<Person> dSource=_dataSource.getPersonDataSource();
     int nbPersons=_persons.size();
     for(int i=0;i<nbPersons;i++)
     {
-      dSource.create(_persons.get(i));
+      _dataSource.create(Person.class,_persons.get(i));
     }
     // Unions
-    ObjectSource<Union> uSource=_dataSource.getUnionDataSource();
     int nbUnions=_unions.size();
     for(int i=0;i<nbUnions;i++)
     {
-      uSource.create(_unions.get(i));
+      _dataSource.create(Union.class,_unions.get(i));
     }
     _dataSource.setForeignKeyChecks(true);
   }

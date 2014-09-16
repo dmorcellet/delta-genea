@@ -10,15 +10,15 @@ import delta.genea.data.trees.CommonAncestorsComputer;
 
 public class MainTestCommonAncestorsComputer
 {
-  public static void handle(String dbName, long key1, long key2)
+  public static void handle(String dbName, Long key1, Long key2)
   {
     try
     {
       GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
-      Person p1=dataSource.getPersonDataSource().load(key1);
+      Person p1=dataSource.load(Person.class,key1);
       AncestorsTree tree1=new AncestorsTree(p1,1000);
       tree1.build();
-      Person p2=dataSource.getPersonDataSource().load(key2);
+      Person p2=dataSource.load(Person.class,key2);
       AncestorsTree tree2=new AncestorsTree(p2,1000);
       tree2.build();
       Set<Couple> set=new CommonAncestorsComputer().compute(tree1,tree2);
@@ -32,6 +32,6 @@ public class MainTestCommonAncestorsComputer
   }
   public static void main(String[] args)
   {
-    handle("genea",10481,668);
+    handle("genea",Long.valueOf(10481),Long.valueOf(668));
   }
 }

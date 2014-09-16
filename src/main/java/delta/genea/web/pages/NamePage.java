@@ -4,9 +4,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
-import javax.swing.RowFilter.ComparisonType;
 
-import delta.common.framework.objects.data.ObjectSource;
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
 import delta.common.utils.collections.TreeNode;
@@ -40,8 +38,7 @@ public class NamePage extends GeneaWebPage
   public void fetchData() throws Exception
   {
     // Load data
-    ObjectSource<Person> pSource=getDataSource().getPersonDataSource();
-    List<Person> list=pSource.loadObjectSet(Person.NAME_SET,new Object[]{_name});
+    List<Person> list=getDataSource().loadObjectSet(Person.class,Person.NAME_SET,_name);
     // Build tree
     _data=buildTree(list);
   }

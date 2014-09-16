@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 
-import delta.common.framework.objects.data.ObjectSource;
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
 import delta.common.utils.tables.DataTableRow;
@@ -25,7 +24,7 @@ public class UnionsPage extends GeneaWebPage
 {
   // HTML 4.01 strict validated
   private String _name;
-  private long _key;
+  private Long _key;
   private Place _place;
   private UnionsTable _unions;
   private DataTableSort _sort;
@@ -34,7 +33,7 @@ public class UnionsPage extends GeneaWebPage
   public void parseParameters() throws Exception
   {
     _name=ParameterFinder.getStringParameter(_request,NamePageParameters.NAME,"MORCELLET");
-    _key=ParameterFinder.getLongParameter(_request,"KEY",76);
+    _key=ParameterFinder.getLongParameter(_request,"KEY",Long.valueOf(76));
     String sort=ParameterFinder.getStringParameter(_request,"SORT","");
     if (sort.length()>0)
     {
@@ -46,12 +45,9 @@ public class UnionsPage extends GeneaWebPage
   public void fetchData() throws Exception
   {
     // Load data
-    ObjectSource<Place> pSource=getDataSource().getPlaceDataSource();
-    _place=pSource.load(_key);
-    ObjectSource<Union> uSource=getDataSource().getUnionDataSource();
-    Object[] params=new Object[]{_name,Long.valueOf(_key)};
+    _place=getDataSource().load(Place.class,_key);
 
-    List<Union> unions=uSource.loadObjectSet(Union.NAME_AND_PLACE_SET,params);
+    List<Union> unions=getDataSource().loadObjectSet(Union.class,Union.NAME_AND_PLACE_SET,_name,_key);
     _unions=new UnionsTable();
     Union u;
     DataTableRow row;

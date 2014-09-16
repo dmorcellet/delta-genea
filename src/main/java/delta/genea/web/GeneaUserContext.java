@@ -1,5 +1,6 @@
 package delta.genea.web;
 
+import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.web.WebApplication;
 import delta.common.framework.web.WebUserContext;
 import delta.common.utils.ParameterFinder;
@@ -38,23 +39,23 @@ public class GeneaUserContext extends WebUserContext
     putLongParameter(PersonPageParameters.PERSON_KEY,DEFAULT_KEY);
     String dbName=DatabaseConfiguration.getInstance().getDefaultDbName();
     setDbName(dbName);
-    setDeCujus(DEFAULT_KEY);
+    setDeCujus(Long.valueOf(DEFAULT_KEY));
   }
 
   /**
    * Set the value of the de-cujus parameter.
    * @param key Person key.
    */
-  public final void setDeCujus(long key)
+  public final void setDeCujus(Long key)
   {
-    long previous=getDeCujus();
-    if (previous!=key)
+    Long previous=getDeCujus();
+    if (!DataObject.keysAreEqual(previous,key))
     {
       String dbName=getDbName();
-      Person p=GeneaDataSource.getInstance(dbName).getPersonDataSource().load(key);
+      Person p=GeneaDataSource.getInstance(dbName).load(Person.class,key);
       if (p!=null)
       {
-        putLongParameter(DE_CUJUS,key);
+        putLongParameter(DE_CUJUS,key.longValue());
       }
     }
   }
@@ -63,9 +64,9 @@ public class GeneaUserContext extends WebUserContext
    * Get the key of the current de-cujus.
    * @return the key of the current de-cujus.
    */
-  public long getDeCujus()
+  public Long getDeCujus()
   {
-    return ParameterFinder.getLongParameter(this,DE_CUJUS,-1);
+    return ParameterFinder.getLongParameter(this,DE_CUJUS,null);
   }
 
   /**
@@ -90,9 +91,9 @@ public class GeneaUserContext extends WebUserContext
   public void useParameters(ParametersNode requestParameters)
   {
     // De cujus update
-    long previousDeCujus=getDeCujus();
-    long newDeCujus=ParameterFinder.getLongParameter(requestParameters,DE_CUJUS,previousDeCujus,false);
-    if (newDeCujus!=previousDeCujus)
+    Long previousDeCujus=getDeCujus();
+    Long newDeCujus=ParameterFinder.getLongParameter(requestParameters,DE_CUJUS,previousDeCujus,false);
+    if (!DataObject.keysAreEqual(newDeCujus,previousDeCujus))
     {
       setDeCujus(newDeCujus);
     }

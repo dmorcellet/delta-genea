@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import delta.common.framework.objects.data.ObjectSource;
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
 import delta.genea.data.Act;
@@ -21,7 +20,7 @@ import delta.genea.web.GeneaUserContext;
 public class ActsFromPlacePage extends GeneaWebPage
 {
   // HTML 4.01 strict validated
-  private long _key;
+  private Long _key;
   private Map<String,List<Act>> _actsMap;
   private Place _place;
   private int _nbActs;
@@ -29,16 +28,16 @@ public class ActsFromPlacePage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _key=ParameterFinder.getLongParameter(_request,"KEY",76);
+    _key=ParameterFinder.getLongParameter(_request,"KEY",Long.valueOf(76));
   }
 
   @Override
   public void fetchData() throws Exception
   {
-    _place=getDataSource().getPlaceDataSource().load(_key);
+    _place=getDataSource().load(Place.class,_key);
     if (_place==null) return;
     _actsMap=new HashMap<String,List<Act>>();
-    List<Act> acts=getDataSource().getActDataSource().loadRelation(Act.ACTS_FROM_PLACE,_key);
+    List<Act> acts=getDataSource().loadRelation(Act.class,Act.ACTS_FROM_PLACE,_key);
     if ((acts!=null) && (acts.size()>0))
     {
       _nbActs=acts.size();
@@ -89,10 +88,9 @@ public class ActsFromPlacePage extends GeneaWebPage
     WebPageTools.generatePageFooter(pw);
   }
 
-  private void generateActList(PrintWriter pw, long typeKey, boolean useSexIcon)
+  private void generateActList(PrintWriter pw, Long typeKey, boolean useSexIcon)
   {
-    ObjectSource<ActType> source=getDataSource().getActTypeDataSource();
-    ActType type=source.load(typeKey);
+    ActType type=getDataSource().load(ActType.class,typeKey);
     if (type==null) return;
     List<Act> list=_actsMap.get(type.getType());
     if ((list==null) || (list.size()==0)) return;

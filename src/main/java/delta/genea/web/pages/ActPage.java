@@ -33,7 +33,7 @@ public class ActPage extends GeneaWebPage
   private static final String DB_NAME_ATTR="dbName=";
 
   // HTML 4.01 strict validated
-  private long _key;
+  private Long _key;
   private Act _act;
 
   @Override
@@ -45,7 +45,7 @@ public class ActPage extends GeneaWebPage
   @Override
   public void fetchData() throws Exception
   {
-    _act=getDataSource().getActDataSource().load(_key);
+    _act=getDataSource().load(Act.class,_key);
     if (_act==null) return;
     _act.getP1();
     _act.getP2();
@@ -341,7 +341,7 @@ public class ActPage extends GeneaWebPage
       boolean ok=false;
       if (key!=-1)
       {
-        Person p=getDataSource().getPersonDataSource().load(key);
+        Person p=getDataSource().load(Person.class,Long.valueOf(key));
         if (p!=null)
         {
           GeneaUserContext context=(GeneaUserContext)getUserContext();

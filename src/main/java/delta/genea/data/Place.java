@@ -2,7 +2,6 @@ package delta.genea.data;
 
 import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
 
 /**
  * Place.
@@ -37,11 +36,11 @@ public class Place extends DataObject<Place>
   /**
    * Constructor.
    * @param primaryKey Primary key.
-   * @param source Attached objects source.
    */
-  public Place(Long primaryKey, ObjectSource<Place> source)
+  public Place(Long primaryKey)
   {
-    super(primaryKey,source);
+    super();
+    setPrimaryKey(primaryKey);
   }
 
   public String getName()

@@ -22,7 +22,7 @@ public class PicturesPage extends GeneaWebPage
   @Override
   public void fetchData() throws Exception
   {
-    _pictures=getDataSource().getPictureDataSource().loadAll();
+    _pictures=getDataSource().loadAll(Picture.class);
   }
 
   @Override

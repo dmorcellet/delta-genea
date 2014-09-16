@@ -8,27 +8,33 @@ import delta.common.framework.web.PageParameters;
  */
 public class ActsFromPlaceParameters extends PageParameters
 {
+  /**
+   * Value of action parameter. 
+   */
   public static final String ACTION_VALUE="ACTS_FROM_PLACE";
+  /**
+   * Place key parameter name.
+   */
   public static final String KEY="KEY";
-  private long _key;
+  private Long _key;
 
   /**
    * Constructor.
    * @param key Place key.
    */
-  public ActsFromPlaceParameters(long key)
+  public ActsFromPlaceParameters(Long key)
   {
     super("genea");
     setKey(key);
   }
 
-  public final void setKey(long key)
+  public final void setKey(Long key)
   {
     _key=key;
-    _parameters.put(KEY,Long.valueOf(key));
+    _parameters.put(KEY,key);
   }
 
-  public long getKey()
+  public Long getKey()
   {
     return _key;
   }

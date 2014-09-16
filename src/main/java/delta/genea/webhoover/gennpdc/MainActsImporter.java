@@ -3,8 +3,7 @@ package delta.genea.webhoover.gennpdc;
 import java.util.ArrayList;
 import java.util.List;
 
-import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
+import delta.common.framework.objects.data.ObjectsManager;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.Sex;
@@ -73,7 +72,7 @@ public class MainActsImporter
       lastName=fullName.trim();
       firstName="";
     }
-    Person p=new Person(_counter,_dataSource.getPersonDataSource());
+    Person p=new Person(Long.valueOf(_counter));
     p.setLastName(lastName);
     p.setFirstname(firstName);
     _counter++;
@@ -95,15 +94,15 @@ public class MainActsImporter
   private void importBirthAct(BirthAct act)
   {
     PlaceManager p=_data.getPlacesManager();
-    long placeKey=p.decodePlaceName(act._place);
-    Person person=new Person(_counter,_dataSource.getPersonDataSource());
+    Long placeKey=p.decodePlaceName(act._place);
+    Person person=new Person(Long.valueOf(_counter));
     _counter++;
     person.setFirstname(act._firstName);
     person.setLastName(act._lastName);
     if (act._date!=null)
     {
       person.setBirthDate(act._date,null);
-      person.setBirthPlaceProxy(new DataProxy<Place>(placeKey,_dataSource.getPlaceDataSource()));
+      person.setBirthPlaceProxy(_dataSource.buildProxy(Place.class,placeKey));
     }
     Person[] parents=findCouple(act._father,act._mother,true);
     if (parents!=null)
@@ -111,12 +110,12 @@ public class MainActsImporter
       Person father=parents[0];
       if (father!=null)
       {
-        person.setFatherProxy(new DataProxy<Person>(father.getPrimaryKey(),father.getSource()));
+        person.setFatherProxy(_dataSource.buildProxy(Person.class,father.getPrimaryKey()));
       }
       Person mother=parents[1];
       if (mother!=null)
       {
-        person.setMotherProxy(new DataProxy<Person>(mother.getPrimaryKey(),mother.getSource()));
+        person.setMotherProxy(_dataSource.buildProxy(Person.class,mother.getPrimaryKey()));
       }
     }
     
@@ -142,7 +141,7 @@ public class MainActsImporter
   private void writeDB()
   {
     // Persons
-    ObjectSource<Person> dSource=_dataSource.getPersonDataSource();
+    ObjectsManager<Person> dSource=_dataSource.getManager(Person.class);
     List<Person> persons=_data.getPersons();
     int nbPersons=persons.size();
     for(int i=0;i<nbPersons;i++)
@@ -151,7 +150,7 @@ public class MainActsImporter
     }
     // Unions
     List<Union> unions=_data.getUnions();
-    ObjectSource<Union> uSource=_dataSource.getUnionDataSource();
+    ObjectsManager<Union> uSource=_dataSource.getManager(Union.class);
     int nbUnions=unions.size();
     for(int i=0;i<nbUnions;i++)
     {
@@ -159,7 +158,7 @@ public class MainActsImporter
     }
     // Places
     List<Place> places=_data.getPlaces();
-    ObjectSource<Place> pSource=_dataSource.getPlaceDataSource();
+    ObjectsManager<Place> pSource=_dataSource.getManager(Place.class);
     int nbPlaces=places.size();
     for(int i=0;i<nbPlaces;i++)
     {

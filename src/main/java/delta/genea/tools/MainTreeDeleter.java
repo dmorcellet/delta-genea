@@ -1,7 +1,6 @@
 package delta.genea.tools;
 
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.common.utils.collections.TreeNode;
 import delta.genea.data.Person;
@@ -14,58 +13,60 @@ public class MainTreeDeleter
 {
   private static int nb=0;
 
-  private void removeAscendantsTree(ObjectSource<Person> personsOS, AncestorsTree tree)
+  private GeneaDataSource _source;
+
+  private void removeAscendantsTree(AncestorsTree tree)
   {
-    removeAscendantsTree(personsOS,tree.getRootNode());
+    removeAscendantsTree(tree.getRootNode());
   }
 
-  private void removeAscendantsTree(ObjectSource<Person> personsOS, BinaryTreeNode<Person> node)
+  private void removeAscendantsTree(BinaryTreeNode<Person> node)
   {
     Person p=node.getData();
     if (p!=null)
     {
-      long pk=p.getPrimaryKey();
-      Person p2=personsOS.load(pk);
+      Long pk=p.getPrimaryKey();
+      Person p2=_source.load(Person.class,pk);
       if (p2==null)
       {
         nb++;
       }
       else
       {
-        personsOS.delete(pk);
+        _source.delete(Person.class,pk);
       }
     }
     BinaryTreeNode<Person> father=node.getLeftNode();
     if (father!=null)
     {
-      removeAscendantsTree(personsOS,father);
+      removeAscendantsTree(father);
     }
     BinaryTreeNode<Person> mother=node.getRightNode();
     if (mother!=null)
     {
-      removeAscendantsTree(personsOS,mother);
+      removeAscendantsTree(mother);
     }
   }
 
-  private void removeDescendantsTree(ObjectSource<Person> personsOS, DescendantsTree tree)
+  private void removeDescendantsTree(DescendantsTree tree)
   {
-    removeDescendantsTree(personsOS,tree.getRootNode());
+    removeDescendantsTree(tree.getRootNode());
   }
 
-  private void removeDescendantsTree(ObjectSource<Person> personsOS, TreeNode<Person> node)
+  private void removeDescendantsTree(TreeNode<Person> node)
   {
     Person p=node.getData();
     if (p!=null)
     {
-      long pk=p.getPrimaryKey();
-      Person p2=personsOS.load(pk);
+      Long pk=p.getPrimaryKey();
+      Person p2=_source.load(Person.class,pk);
       if (p2==null)
       {
         nb++;
       }
       else
       {
-        personsOS.delete(pk);
+        _source.delete(Person.class,pk);
       }
     }
     int nbChildren=node.getNumberOfChildren();
@@ -74,28 +75,26 @@ public class MainTreeDeleter
       TreeNode<Person> child=node.getChild(i);
       if (child!=null)
       {
-        removeDescendantsTree(personsOS,child);
+        removeDescendantsTree(child);
       }
     }
   }
 
-  public void go()
+  private void go()
   {
     try
     {
-      GeneaDataSource dataSource=GeneaDataSource.getInstance("genea");
-      //GeneaDataSource dataSource=GeneaDataSource.getInstance("genea_michel");
-      ObjectSource<Person> personsOS=dataSource.getPersonDataSource();
+      _source=GeneaDataSource.getInstance("genea");
       // Remove ascendants
       {
-        AncestorsTreesRegistry trees=dataSource.getAncestorsTreesRegistry();
+        AncestorsTreesRegistry trees=_source.getAncestorsTreesRegistry();
         long[] keys={};
         for(int i=0;i<keys.length;i++)
         {
-          AncestorsTree tree=trees.getTree(keys[i],true,true);
+          AncestorsTree tree=trees.getTree(Long.valueOf(keys[i]),true,true);
           if (tree!=null)
           {
-            removeAscendantsTree(personsOS,tree);
+            removeAscendantsTree(tree);
           }
         }
       }
@@ -104,21 +103,17 @@ public class MainTreeDeleter
         long[] keys={59,60,66};
         for(int i=0;i<keys.length;i++)
         {
-          DataProxy<Person> pp=new DataProxy<Person>(keys[i],personsOS);
-          Person p=pp.getDataObject();
-          if (p!=null)
+          DataProxy<Person> pp=_source.buildProxy(Person.class,Long.valueOf(keys[i]));
+          DescendantsTree tree=new DescendantsTree(pp,1000,false);
+          tree.build(false);
+          if (tree!=null)
           {
-            DescendantsTree tree=new DescendantsTree(p,1000,false);
-            tree.build(false);
-            if (tree!=null)
-            {
-              removeDescendantsTree(personsOS,tree);
-            }
+            removeDescendantsTree(tree);
           }
         }
       }
       
-      dataSource.close();
+      _source.close();
       System.out.println(nb+" personnes non détruites (car doublons suite à implexe(s)) !");
     }
     catch (Exception e)
@@ -127,6 +122,10 @@ public class MainTreeDeleter
     }
   }
 
+  /**
+   * Main method of this tool.
+   * @param args Not used.
+   */
   public static void main(String[] args)
   {
     new MainTreeDeleter().go();

@@ -68,7 +68,7 @@ public final class PlacesRegistry
    */
   private TreeNode<Place> load()
   {
-    List<Place> places=GeneaDataSource.getInstance(_dbName).getPlaceDataSource().loadAll();
+    List<Place> places=GeneaDataSource.getInstance(_dbName).loadAll(Place.class);
     int minLevel=100;
     int maxLevel=-1;
     int nb=places.size();

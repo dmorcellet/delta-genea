@@ -1,7 +1,6 @@
 package delta.genea.data;
 
 import delta.common.framework.objects.data.DataObject;
-import delta.common.framework.objects.data.ObjectSource;
 
 /**
  * Type of an act.
@@ -80,11 +79,11 @@ public class ActType extends DataObject<ActType>
   /**
    * Constructor.
    * @param primaryKey Primary key.
-   * @param source Attached objects source.
    */
-  public ActType(Long primaryKey, ObjectSource<ActType> source)
+  public ActType(Long primaryKey)
   {
-    super(primaryKey,source);
+    super();
+    setPrimaryKey(primaryKey);
     _type="";
   }
 

@@ -28,17 +28,17 @@ public class CommonAncestorsPage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _key1=ParameterFinder.getLongParameter(_request,"KEY1",76);
-    _key2=ParameterFinder.getLongParameter(_request,"KEY2",76);
+    _key1=ParameterFinder.getLongParameter(_request,"KEY1",Long.valueOf(76));
+    _key2=ParameterFinder.getLongParameter(_request,"KEY2",Long.valueOf(76));
   }
 
   @Override
   public void fetchData() throws Exception
   {
-    _p1=getDataSource().getPersonDataSource().load(_key1);
+    _p1=getDataSource().load(Person.class,_key1);
     AncestorsTree tree1=new AncestorsTree(_p1,1000);
     tree1.build();
-    _p2=getDataSource().getPersonDataSource().load(_key2);
+    _p2=getDataSource().load(Person.class,_key2);
     AncestorsTree tree2=new AncestorsTree(_p2,1000);
     tree2.build();
     _couples=new CommonAncestorsComputer().compute(tree1,tree2);

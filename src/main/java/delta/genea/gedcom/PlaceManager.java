@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
 import delta.common.utils.places.FrenchDepartment;
 import delta.common.utils.places.FrenchDepartmentDirectory;
 import delta.common.utils.text.StringSplitter;
@@ -156,12 +154,11 @@ public class PlaceManager
 
   private Place getPlace(String name,String deptName,String deptCode,String country)
   {
-    ObjectSource<Place> placeDataSource=_dataSource.getPlaceDataSource();
     if ((country==null) || (country.length()==0)) country="FRANCE";
     Place countryPlace=_countryPlaces.get(country);
     if (countryPlace==null)
     {
-      countryPlace=new Place(Long.valueOf(_placeKey),placeDataSource);
+      countryPlace=new Place(Long.valueOf(_placeKey));
       countryPlace.setLevel(PlaceLevel.COUNTRY);
       countryPlace.setName(country);
       _countryPlaces.put(country,countryPlace);
@@ -191,11 +188,11 @@ public class PlaceManager
       deptPlace=_deptPlaces.get(deptKey);
       if (deptPlace==null)
       {
-        deptPlace=new Place(Long.valueOf(_placeKey),placeDataSource);
+        deptPlace=new Place(Long.valueOf(_placeKey));
         deptPlace.setLevel(PlaceLevel.DEPARTMENT);
         deptPlace.setName(deptName);
         deptPlace.setShortName(deptCode);
-        deptPlace.setParentPlaceProxy(new DataProxy<Place>(countryPlace.getPrimaryKey(),placeDataSource));
+        deptPlace.setParentPlaceProxy(_dataSource.buildProxy(Place.class,countryPlace.getPrimaryKey()));
         _deptPlaces.put(deptKey,deptPlace);
         _placeKey++;
       }
@@ -208,12 +205,12 @@ public class PlaceManager
     Place place=_townPlaces.get(name);
     if (place==null)
     {
-      place=new Place(Long.valueOf(_placeKey),placeDataSource);
+      place=new Place(Long.valueOf(_placeKey));
       place.setLevel(PlaceLevel.TOWN);
       place.setName(name);
       if (parent!=null)
       {
-        place.setParentPlaceProxy(new DataProxy<Place>(parent.getPrimaryKey(),placeDataSource));
+        place.setParentPlaceProxy(_dataSource.buildProxy(Place.class,parent.getPrimaryKey()));
       }
       _townPlaces.put(name,place);
       _placeKey++;

@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import delta.common.framework.objects.data.ObjectSource;
+import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
 import delta.genea.data.Person;
@@ -22,7 +22,7 @@ public class DatesToSearchPage extends GeneaWebPage
 {
   // HTML 4.01 strict validated
   private Person _root;
-  private long _key;
+  private Long _key;
   private int _depth;
   private Object[][] _data;
   private int _nbPersons;
@@ -30,14 +30,14 @@ public class DatesToSearchPage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _key=ParameterFinder.getLongParameter(_request,"KEY",76);
+    _key=ParameterFinder.getLongParameter(_request,"KEY",Long.valueOf(76));
     _depth=ParameterFinder.getIntParameter(_request,"DEPTH",100);
   }
 
   @Override
   public void fetchData() throws Exception
   {
-    _root=getDataSource().getPersonDataSource().load(_key);
+    _root=getDataSource().load(Person.class,_key);
     AncestorsTree tree=new AncestorsTree(_root,_depth);
     tree.build();
     AncestorsList data=new AncestorsList(tree);
@@ -46,7 +46,6 @@ public class DatesToSearchPage extends GeneaWebPage
 
   private void buildAncestorsList(AncestorsList aList)
   {
-    ObjectSource<Union> uSource=getDataSource().getUnionDataSource();
     List<Union> unions=null;
     int nb=aList.getNbPersons();
     _nbPersons=nb;
@@ -56,7 +55,7 @@ public class DatesToSearchPage extends GeneaWebPage
     List<Long> sosas;
     Long sosa;
     Person person;
-    long previousKey=-1;
+    Long previousKey=null;
     int index=0;
     String tmp;
     SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
@@ -72,15 +71,15 @@ public class DatesToSearchPage extends GeneaWebPage
         data[index][0]=sosa;
         data[index][1]=person;
         data[index][2]=person.getBirthGeneaDate().format(sdf);
-        if ((sosa.longValue()%2==1) && (previousKey!=-1))
+        if ((sosa.longValue()%2==1) && (previousKey!=null))
         {
-          unions=uSource.loadRelation(Union.UNIONS_RELATION,person.getPrimaryKey());
+          unions=getDataSource().loadRelation(Union.class,Union.UNIONS_RELATION,person.getPrimaryKey());
           int nbUnions=unions.size();
           Union u;
           for(int k=0;k<nbUnions;k++)
           {
             u=unions.get(k);
-            if (u.getManKey()==previousKey)
+            if (DataObject.keysAreEqual(u.getManKey(),previousKey))
             {
               tmp=u.getGeneaDate().format(sdf);
               data[index][3]=tmp;

@@ -2,6 +2,7 @@ package delta.genea.web.pages;
 
 import java.io.PrintWriter;
 
+import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
 import delta.common.utils.collections.TreeNode;
@@ -18,8 +19,7 @@ public class DescendantsPage extends GeneaWebPage
 {
   // HTML 4.01 strict validated
   private DescendantsTree _data;
-  private Person _root;
-  private long _key;
+  private Long _key;
   private int _depth;
   private boolean _sameName;
   private PersonTools _pTools;
@@ -27,7 +27,7 @@ public class DescendantsPage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _key=ParameterFinder.getLongParameter(_request,DescendantsPageParameters.MAIN_PERSON_KEY,76);
+    _key=ParameterFinder.getLongParameter(_request,DescendantsPageParameters.MAIN_PERSON_KEY,Long.valueOf(76));
     _depth=ParameterFinder.getIntParameter(_request,DescendantsPageParameters.DEPTH,100);
     _sameName=ParameterFinder.getBooleanParameter(_request,DescendantsPageParameters.SAME_NAME,false);
   }
@@ -35,8 +35,8 @@ public class DescendantsPage extends GeneaWebPage
   @Override
   public void fetchData() throws Exception
   {
-    _root=getDataSource().getPersonDataSource().load(_key);
-    _data=new DescendantsTree(_root,_depth,_sameName);
+    DataProxy<Person> proxy=getDataSource().buildProxy(Person.class,_key);
+    _data=new DescendantsTree(proxy,_depth,_sameName);
     _data.build(false);
   }
 
@@ -50,18 +50,19 @@ public class DescendantsPage extends GeneaWebPage
     _pTools.setUseNoDescendants(true);
     _pTools.setAsLink(true);
 
+    Person root=_data.getRootNode().getData();
     long nbDescendants=_data.getNumberOfDescendants();
     StringBuffer sb=new StringBuffer();
     sb.append("Arbre descendant de ");
-    sb.append(_root.getLastName());
+    sb.append(root.getLastName());
     sb.append(' ');
-    sb.append(_root.getFirstname());
+    sb.append(root.getFirstname());
 
     String title=sb.toString();
     WebPageTools.generatePageHeader(title,pw);
     WebPageTools.generateHorizontalRuler(pw);
     pw.println("<div>");
-    _pTools.generatePersonName(_root);
+    _pTools.generatePersonName(root);
     pw.print(" (");
     pw.print(nbDescendants);
     pw.print(")");

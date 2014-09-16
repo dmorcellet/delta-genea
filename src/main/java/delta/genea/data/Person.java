@@ -6,7 +6,6 @@ import java.util.List;
 
 import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
 
 /**
  * Person.
@@ -70,9 +69,10 @@ public class Person extends DataObject<Person>
    * @param primaryKey Primary key.
    * @param source Attached objects source.
    */
-  public Person(Long primaryKey, ObjectSource<Person> source)
+  public Person(Long primaryKey)
   {
-    super(primaryKey,source);
+    super();
+    setPrimaryKey(primaryKey);
     _sex=Sex.MALE;
     _noDescendants=false;
     _lastName="";

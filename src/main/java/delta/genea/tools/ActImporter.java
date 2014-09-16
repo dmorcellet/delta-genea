@@ -2,10 +2,9 @@ package delta.genea.tools;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 
+import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.framework.objects.data.ObjectSource;
 import delta.genea.data.Act;
 import delta.genea.data.ActType;
 import delta.genea.data.ActsForPerson;
@@ -29,14 +28,13 @@ public class ActImporter
 
   private static final GregorianDate CHANGE_DATE=FrenchRevolutionCalendar.FIRST_DAY;
 
-  public void init(long id)
+  public void init(Long id)
   {
     _map=new HashMap<String,Act>();
     try
     {
       _dataSource=GeneaDataSource.getInstance("genea_ninie");
-      ObjectSource<Person> ds=_dataSource.getPersonDataSource();
-      DataProxy<Person> pp=new DataProxy<Person>(id,ds);
+      DataProxy<Person> pp=_dataSource.buildProxy(Person.class,id);
       Person moi=pp.getDataObject();
       _tree=new AncestorsTree(moi,1000);
       _tree.build();
@@ -50,7 +48,7 @@ public class ActImporter
   private void handleFile(File fileName)
   {
     System.out.println("Handling file ["+fileName+"]");
-    long actType=ActType.BIRTH;
+    Long actType=ActType.BIRTH;
     String name=fileName.getName();
     //String newName="j_";
     //String newName="ninie/";
@@ -183,25 +181,24 @@ public class ActImporter
         act=acts.getBirthAct();
         if (act==null)
         {
-          act=new Act(null,_dataSource.getActDataSource());
-          act.setActTypeProxy(new DataProxy<ActType>(actType,_dataSource.getActTypeDataSource()));
+          act=new Act(null);
+          act.setActTypeProxy(_dataSource.buildProxy(ActType.class,actType));
           act.setDate(date);
           if (place!=null)
           {
-            act.setPlaceProxy(new DataProxy<Place>(place.getPrimaryKey(),_dataSource.getPlaceDataSource()));
+            act.setPlaceProxy(_dataSource.buildProxy(Place.class,place.getPrimaryKey()));
           }
           act.setNbFiles(pageIndex);
           act.setTraite(false);
-          act.setP1Proxy(new DataProxy<Person>(p1.getPrimaryKey(),_dataSource.getPersonDataSource()));
+          act.setP1Proxy(_dataSource.buildProxy(Person.class,p1.getPrimaryKey()));
         }
         else
         {
-          long p1Key=act.getP1Key();
-          if (p1Key!=p1.getPrimaryKey())
+          if (!DataObject.keysAreEqual(act.getP1Key(),p1.getPrimaryKey()))
           {
-            System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
+            System.err.println("Bad P1 : "+act.getP1Key()+"!="+p1.getPrimaryKey());
           }
-          if (actType!=act.getActTypeKey())
+          if (actType!=act.getActTypeKey().longValue())
           {
             System.err.println("Bad actType : "+actType+"!="+act.getActType());
           }
@@ -225,20 +222,20 @@ public class ActImporter
         act=acts.getDeathAct();
         if (act==null)
         {
-          act=new Act(null,_dataSource.getActDataSource());
-          act.setActTypeProxy(new DataProxy<ActType>(actType,_dataSource.getActTypeDataSource()));
+          act=new Act(null);
+          act.setActTypeProxy(_dataSource.buildProxy(ActType.class,actType));
           act.setDate(date);
           if (place!=null)
           {
-            act.setPlaceProxy(new DataProxy<Place>(place.getPrimaryKey(),_dataSource.getPlaceDataSource()));
+            act.setPlaceProxy(_dataSource.buildProxy(Place.class,place.getPrimaryKey()));
           }
           act.setNbFiles(pageIndex);
-          act.setP1Proxy(new DataProxy<Person>(p1.getPrimaryKey(),_dataSource.getPersonDataSource()));
+          act.setP1Proxy(_dataSource.buildProxy(Person.class,p1.getPrimaryKey()));
         }
         else
         {
-          long p1Key=act.getP1Key();
-          if (p1Key!=p1.getPrimaryKey())
+          Long p1Key=act.getP1Key();
+          if (!DataObject.keysAreEqual(p1Key,p1.getPrimaryKey()))
           {
             System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
           }
@@ -265,26 +262,26 @@ public class ActImporter
           act=acts.getActOfUnionWith(p2.getPrimaryKey());
           if (act==null)
           {
-            act=new Act(null,_dataSource.getActDataSource());
-            act.setActTypeProxy(new DataProxy<ActType>(actType,_dataSource.getActTypeDataSource()));
+            act=new Act(null);
+            act.setActTypeProxy(_dataSource.buildProxy(ActType.class,actType));
             act.setDate(date);
             if (place!=null)
             {
-              act.setPlaceProxy(new DataProxy<Place>(place.getPrimaryKey(),_dataSource.getPlaceDataSource()));
+              act.setPlaceProxy(_dataSource.buildProxy(Place.class,place.getPrimaryKey()));
             }
             act.setNbFiles(pageIndex);
-            act.setP1Proxy(new DataProxy<Person>(p1.getPrimaryKey(),_dataSource.getPersonDataSource()));
-            act.setP2Proxy(new DataProxy<Person>(p2.getPrimaryKey(),_dataSource.getPersonDataSource()));
+            act.setP1Proxy(_dataSource.buildProxy(Person.class,p1.getPrimaryKey()));
+            act.setP2Proxy(_dataSource.buildProxy(Person.class,p2.getPrimaryKey()));
           }
           else
           {
-            long p1Key=act.getP1Key();
-            if (p1Key!=p1.getPrimaryKey())
+            Long p1Key=act.getP1Key();
+            if (DataObject.keysAreEqual(p1Key,p1.getPrimaryKey()))
             {
               System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
             }
-            long p2Key=act.getP2Key();
-            if (p2Key!=p2.getPrimaryKey())
+            Long p2Key=act.getP2Key();
+            if (DataObject.keysAreEqual(p2Key,p2.getPrimaryKey()))
             {
               System.err.println("Bad P2 : "+p2Key+"!="+p2.getPrimaryKey());
             }
@@ -324,7 +321,7 @@ public class ActImporter
   public void doIt()
   {
     _root=new File("/home/dm/tmp/actes/ninie");
-    init(3);
+    init(Long.valueOf(3));
     File[] files=_root.listFiles();
     for(int i=0;i<files.length;i++)
     {
@@ -332,18 +329,15 @@ public class ActImporter
     }
     //System.out.println(_map.size());
 
-    Act act;
-    ObjectSource<Act> dsActs=_dataSource.getActDataSource();
-    for(Iterator<Act> it=_map.values().iterator();it.hasNext();)
+    for(Act act : _map.values())
     {
-      act=it.next();
       if (act.getPrimaryKey()==null)
       {
-        dsActs.create(act);
+        _dataSource.create(Act.class,act);
       }
       else
       {
-        dsActs.update(act);
+        _dataSource.update(Act.class,act);
       }
     }
   }

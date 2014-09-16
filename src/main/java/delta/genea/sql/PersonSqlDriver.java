@@ -64,7 +64,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     "DELETE FROM personne WHERE cle = ?",
   };
 
-  PersonSqlDriver(GeneaDataSource mainDataSource)
+  public PersonSqlDriver(GeneaDataSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }
@@ -140,7 +140,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
-          ret=new Person(primaryKey,_mainDataSource.getPersonDataSource());
+          ret=new Person(primaryKey);
           fillPerson(ret,rs);
           List<OccupationForPerson> occupations=loadOccupations(primaryKey);
           ret.setOccupations(occupations);
@@ -176,7 +176,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         rs=_psPartialGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
-          ret=new Person(primaryKey,_mainDataSource.getPersonDataSource());
+          ret=new Person(primaryKey);
           fillPartialPerson(ret,rs);
         }
       }
@@ -209,7 +209,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     DataProxy<Place> birthPlaceProxy=null;
     if (!rs.wasNull())
     {
-      birthPlaceProxy=_mainDataSource.getPlaceDataSource().buildProxy(birthPlaceKey);
+      birthPlaceProxy=_mainDataSource.buildProxy(Place.class,birthPlaceKey);
     }
     person.setBirthPlaceProxy(birthPlaceProxy);
     n++;
@@ -218,7 +218,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     DataProxy<Place> deathPlaceProxy=null;
     if (!rs.wasNull())
     {
-      deathPlaceProxy=_mainDataSource.getPlaceDataSource().buildProxy(deathPlaceKey);
+      deathPlaceProxy=_mainDataSource.buildProxy(Place.class,deathPlaceKey);
     }
     person.setDeathPlaceProxy(deathPlaceProxy);
     n++;
@@ -226,7 +226,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     DataProxy<Person> fatherProxy=null;
     if (!rs.wasNull())
     {
-      fatherProxy=person.getSource().buildProxy(fatherKey);
+      fatherProxy=getObjectSource().buildProxy(Person.class,fatherKey);
     }
     person.setFatherProxy(fatherProxy);
     n++;
@@ -234,7 +234,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     DataProxy<Person> motherProxy=null;
     if (!rs.wasNull())
     {
-      motherProxy=person.getSource().buildProxy(motherKey);
+      motherProxy=getObjectSource().buildProxy(Person.class,motherKey);
     }
     person.setMotherProxy(motherProxy);
     n++;
@@ -242,7 +242,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     DataProxy<Person> godFatherProxy=null;
     if (!rs.wasNull())
     {
-      godFatherProxy=person.getSource().buildProxy(godFatherKey);
+      godFatherProxy=getObjectSource().buildProxy(Person.class,godFatherKey);
     }
     person.setGodFatherProxy(godFatherProxy);
     n++;
@@ -250,7 +250,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     DataProxy<Person> godMotherProxy=null;
     if (!rs.wasNull())
     {
-      godMotherProxy=person.getSource().buildProxy(godMotherKey);
+      godMotherProxy=getObjectSource().buildProxy(Person.class,godMotherKey);
     }
     person.setGodMotherProxy(godMotherProxy);
     n++;
@@ -298,7 +298,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           long personKey=rs.getLong(n);
           if (!rs.wasNull())
           {
-            occupation.setPersonProxy(_mainDataSource.getPersonDataSource().buildProxy(personKey));
+            occupation.setPersonProxy(_mainDataSource.buildProxy(Person.class,personKey));
           }
           n++;
           occupation.setYear(rs.getInt(n));
@@ -308,7 +308,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           long placeKey=rs.getLong(n);
           if (!rs.wasNull())
           {
-            occupation.setPlaceProxy(_mainDataSource.getPlaceDataSource().buildProxy(placeKey));
+            occupation.setPlaceProxy(_mainDataSource.buildProxy(Place.class,placeKey));
           }
           n++;
           if (ret==null)
@@ -353,7 +353,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           long personKey=rs.getLong(n);
           if (!rs.wasNull())
           {
-            home.setPersonProxy(_mainDataSource.getPersonDataSource().buildProxy(personKey));
+            home.setPersonProxy(_mainDataSource.buildProxy(Person.class,personKey));
           }
           n++;
           home.setYear(rs.getInt(n));
@@ -363,7 +363,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           long placeKey=rs.getLong(n);
           if (!rs.wasNull())
           {
-            home.setPlaceProxy(_mainDataSource.getPlaceDataSource().buildProxy(placeKey));
+            home.setPlaceProxy(_mainDataSource.buildProxy(Place.class,placeKey));
           }
           n++;
           if (ret==null)
@@ -402,7 +402,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         {
           long personKey=rs.getLong(1);
           Long primaryKey=Long.valueOf(personKey);
-          person=new Person(primaryKey,_mainDataSource.getPersonDataSource());
+          person=new Person(primaryKey);
           fillPerson(person,rs);
           List<OccupationForPerson> occupations=loadOccupations(primaryKey);
           person.setOccupations(occupations);
@@ -835,7 +835,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       try
       {
         int n=1;
-        occupation.setPersonProxy(_mainDataSource.getPersonDataSource().buildProxy(key));
+        occupation.setPersonProxy(_mainDataSource.buildProxy(Person.class,key));
         _psInsertOccupation.setLong(n,key.longValue());
         n++;
         _psInsertOccupation.setInt(n,occupation.getYear());
@@ -884,7 +884,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       try
       {
         int n=1;
-        home.setPersonProxy(_mainDataSource.getPersonDataSource().buildProxy(key));
+        home.setPersonProxy(_mainDataSource.buildProxy(Person.class,key));
         _psInsertHome.setLong(n,key.longValue());
         n++;
         _psInsertHome.setInt(n,home.getYear());

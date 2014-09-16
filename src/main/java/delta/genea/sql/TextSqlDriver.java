@@ -30,7 +30,7 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
   private PreparedStatement _psCount;
   private GeneaDataSource _mainDataSource;
 
-  TextSqlDriver(GeneaDataSource mainDataSource)
+  public TextSqlDriver(GeneaDataSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }
@@ -85,7 +85,7 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
-          ret=new ActText(primaryKey,_mainDataSource.getTextDataSource());
+          ret=new ActText(primaryKey);
           fillActText(ret,rs);
         }
       }

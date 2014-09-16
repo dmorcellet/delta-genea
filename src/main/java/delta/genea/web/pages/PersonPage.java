@@ -32,11 +32,9 @@ public class PersonPage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    long key=ParameterFinder.getLongParameter(_request,
-        PersonPageParameters.PERSON_KEY,76);
-    long deCujus=ParameterFinder.getLongParameter(_request,
-        GeneaUserContext.DE_CUJUS,key);
-    _data=new PersonPageData(Long.valueOf(key),Long.valueOf(deCujus));
+    Long key=ParameterFinder.getLongParameter(_request,PersonPageParameters.PERSON_KEY,Long.valueOf(76));
+    Long deCujus=ParameterFinder.getLongParameter(_request,GeneaUserContext.DE_CUJUS,key);
+    _data=new PersonPageData(key,deCujus);
   }
 
   @Override

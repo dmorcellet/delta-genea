@@ -19,19 +19,19 @@ import delta.genea.web.formatters.PersonHtmlFormatter;
 public class PicturePage extends GeneaWebPage
 {
   // HTML 4.01 strict validated
-  private long _key;
+  private Long _key;
   private Picture _picture;
 
   @Override
   public void parseParameters() throws Exception
   {
-    _key=ParameterFinder.getLongParameter(_request,"KEY",76);
+    _key=ParameterFinder.getLongParameter(_request,"KEY",Long.valueOf(76));
   }
 
   @Override
   public void fetchData() throws Exception
   {
-    _picture=getDataSource().getPictureDataSource().load(_key);
+    _picture=getDataSource().load(Picture.class,_key);
     if (_picture==null) return;
     List<PersonInPicture> persons=_picture.getPersonsInPicture();
     if ((persons!=null)&&(persons.size()>0))
