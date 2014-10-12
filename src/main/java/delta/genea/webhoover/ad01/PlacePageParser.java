@@ -46,6 +46,21 @@ public class PlacePageParser
 		int index=placeName.indexOf(END_OF_SPAN);
 		placeName=placeName.substring(0,index);
 		System.out.println("Place name : "+placeName);
+		// Autres?
+/*
+		String actType=lines.get(2);
+		actType=removeUntil(actType,">");
+		index=actType.indexOf(END_OF_TD);
+		actType=actType.substring(0,index);
+		System.out.println("Act type : "+actType);
+		String period=lines.get(3);
+		period=removeUntil(period,">");
+		index=period.indexOf(END_OF_TD);
+		period=period.substring(0,index);
+		System.out.println("Period : "+period);
+		String link=lines.get(4);
+*/
+		// Recensement
 		String actType="R";
 		String period=lines.get(2);
 		period=removeUntil(period,">");

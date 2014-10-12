@@ -1,6 +1,7 @@
 package delta.genea.webhoover.ad01;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
 
 import delta.downloads.Downloader;
@@ -13,6 +14,7 @@ public class MainDownloadActs
 	 */
 	public static void main(String[] args)
 	{
+		HashSet<String> dirNames=new HashSet<String>();
 		Downloader downloader=new Downloader();
 		File mainPage=Constants.MAIN_PAGE_FILE;
 		File parent=mainPage.getParentFile();
@@ -38,11 +40,16 @@ public class MainDownloadActs
 			if (doIt)
 			{
 				PackagePageParser parser=new PackagePageParser(downloader,a);
-
+				String dirName=parser.getDirName();
+				if (dirNames.contains(dirName))
+				{
+					System.err.println("Erreur : "+dirName+" en doublon !!");
+				}
+				dirNames.add(dirName);
 				parser.parse();
 			}
 		}
-		//mainPage.delete();
+		mainPage.delete();
 
 	}
 }

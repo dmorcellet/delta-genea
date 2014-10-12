@@ -71,5 +71,8 @@ public class MainCheckActsDir
 	public static void main(String[] args)
 	{
 		doIt(Constants.ROOT_DIR);
+		doIt(new File("D:\\ArchivesDeLAin\\stGermain"));
+		doIt(new File("D:\\ArchivesDeLAin\\stBois"));
+		doIt(new File("D:\\ArchivesDeLAin\\colomieu"));
 	}
 }
