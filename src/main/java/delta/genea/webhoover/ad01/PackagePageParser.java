@@ -29,7 +29,7 @@ public class PackagePageParser
 		_actsPackage=actsPackage;
 	}
 
-	public void parse()
+	public void parse() throws Exception
 	{
 		parsePage(0);
 		for(int i=1;i<_nbPages;i++)
@@ -52,7 +52,7 @@ public class PackagePageParser
 		}
 		return ret;
 	}
-	private void parsePage(int nb)
+	private void parsePage(int nb) throws Exception
 	{
 		File out=getImageFileName(nb);
 		File bigOut=getBigImageFileName(nb);
@@ -70,7 +70,7 @@ public class PackagePageParser
 			url=url.substring(0,url.indexOf('?'));
 			url=url+"?INB="+(nb+1);
 		}
-		_downloader.downloadPage(url, page);
+		_downloader.downloadToFile(url, page);
 		List<String> lines=TextUtils.readAsLines(page);
 		String line;
 		int index;
@@ -123,7 +123,7 @@ public class PackagePageParser
 		return ret;
 	}
 
-	private void downloadImage(int nb,String imageName)
+	private void downloadImage(int nb,String imageName) throws Exception
 	{
 		String url=Constants.VISU_PAGE+"IMAGE="+imageName+"&SI=img0";
 		File out=getImageFileName(nb);
@@ -131,7 +131,7 @@ public class PackagePageParser
 		parent.mkdirs();
 		if (!out.exists())
 		{
-		  _downloader.downloadPage(url, out);
+		  _downloader.downloadToFile(url, out);
 		}
 	}
 
@@ -155,7 +155,7 @@ public class PackagePageParser
 		return out;
 	}
 
-	private void downloadBigImage(int nb,String imageName, int nbH, int nbV)
+	private void downloadBigImage(int nb,String imageName, int nbH, int nbV) throws Exception
 	{
 		File out=getBigImageFileName(nb);
 		File parent=out.getParentFile();
@@ -177,7 +177,7 @@ public class PackagePageParser
 				String name=hStr+"_"+vStr+"_"+out.getName().replace("png","jpg");
 				String url=Constants.VISU_PAGE+"IMAGE="+imageName+"&SI=1/img_"+hStr+"_"+vStr;
 				File image=new File(parent,name);
-				_downloader.downloadPage(url, image);
+				_downloader.downloadToFile(url, image);
 				files[hIndex][vIndex]=image;
 			}
 		}

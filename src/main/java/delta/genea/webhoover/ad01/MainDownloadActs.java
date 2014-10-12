@@ -12,7 +12,7 @@ public class MainDownloadActs
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
 		HashSet<String> dirNames=new HashSet<String>();
 		Downloader downloader=new Downloader();
@@ -20,7 +20,7 @@ public class MainDownloadActs
 		File parent=mainPage.getParentFile();
 		parent.mkdirs();
 		System.out.println("Main page : "+Constants.MAIN_PAGE);
-		downloader.downloadPage(Constants.MAIN_PAGE, Constants.MAIN_PAGE_FILE);
+		downloader.downloadToFile(Constants.MAIN_PAGE, Constants.MAIN_PAGE_FILE);
 		List<ActsPackage> actsPackages=new PlacePageParser().parseFile(Constants.MAIN_PAGE_FILE);
     ActsPackage p=new ActsPackage();
     p._link=Constants.ROOT_SITE+"/visu2/visu.html?NumLot=2&COD=MATMORCELLETAlexis,%20Fran%C3%A7ois5251905";

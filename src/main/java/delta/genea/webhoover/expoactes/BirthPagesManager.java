@@ -35,7 +35,7 @@ public class BirthPagesManager
     _parser=new BirthActPageParser();
   }
 
-  public List<BirthAct> downloadBirthActs(String placeName)
+  public List<BirthAct> downloadBirthActs(String placeName) throws Exception
   {
     String siteRoot=_session.getSiteRoot();
     String url=siteRoot+PARTIAL_BIRTH_ACTS_FOR_PLACE_URL+placeName;
@@ -46,12 +46,12 @@ public class BirthPagesManager
     return ret;
   }
   
-  private void handleBirthPage(String url, boolean lookForMultiplePages)
+  private void handleBirthPage(String url, boolean lookForMultiplePages) throws Exception
   {
     TmpFilesManager tmpFilesManager=_session.getTmpFilesManager();
     File tmpFile=tmpFilesManager.newTmpFile("birthIndexPage.html");
     Downloader downloader=_session.getDownloader();
-    downloader.downloadPage(url,tmpFile);
+    downloader.downloadToFile(url,tmpFile);
     String siteRoot=_session.getSiteRoot();
     List<String> lines=TextUtils.readAsLines(tmpFile,EncodingNames.ISO8859_1);
     boolean foundBirthRefs=false;
@@ -107,7 +107,7 @@ public class BirthPagesManager
     }
   }
 
-  private void handleActPage(int xid, int xct)
+  private void handleActPage(int xid, int xct) throws Exception
   {
     // Download
     TmpFilesManager tmpFilesManager=_session.getTmpFilesManager();
@@ -116,7 +116,7 @@ public class BirthPagesManager
     String siteRoot=_session.getSiteRoot();
     String url=siteRoot+PARTIAL_BIRTH_URL+xid+"&xct="+xct;
     Downloader downloader=_session.getDownloader();
-    downloader.downloadPage(url,f);
+    downloader.downloadToFile(url,f);
     _session.incrementActsCounter();
     // Parsing
     try

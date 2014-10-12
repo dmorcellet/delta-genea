@@ -26,7 +26,7 @@ public class PackagePageParser
 		_rootActsPackageDir=_actsPackage.getDirFile(Constants.ROOT_DIR);
 	}
 
-  private File downloadTile(int pageNumber, int hIndex, int vIndex, int x, int y, int width, int height)
+  private File downloadTile(int pageNumber, int hIndex, int vIndex, int x, int y, int width, int height) throws Exception
   {
     String phpSID=_session.getPHPSessionID();
     String urlTile=Constants.ROOT_SITE+"/cg49work/visu_affiche_util.php?o=TILE&param=visu&p="+pageNumber+"&x="+x+"&y="+y+"&l="+width+"&h="+height+"&ol="+width+"&oh="+height+"&r=0&n=0&b=0&c=0&PHPSID="+phpSID;
@@ -35,11 +35,11 @@ public class PackagePageParser
     File tmpDir=_session.getTmpDir();
     File tileFileCacheFile=new File(tmpDir,"tileFileName.txt");
     File tileFile=new File(tmpDir,"tile"+hIndex+"_"+vIndex+".jpg");
-    downloader.downloadPage(urlTile,tileFileCacheFile);
+    downloader.downloadToFile(urlTile,tileFileCacheFile);
     List<String> lines=TextUtils.readAsLines(tileFileCacheFile);
     String cacheFileUrl=lines.get(0);
     String tileUrl=Constants.ROOT_SITE+cacheFileUrl;
-    downloader.downloadPage(tileUrl, tileFile);
+    downloader.downloadToFile(tileUrl, tileFile);
     tileFileCacheFile.delete();
     return tileFile;
   }
@@ -54,7 +54,7 @@ public class PackagePageParser
     return out;
   }
 
-  private void downloadPage(File out, int pageNumber, int width, int height, int tileSize)
+  private void downloadPage(File out, int pageNumber, int width, int height, int tileSize) throws Exception
   {
     out.getParentFile().mkdirs();
     System.out.println("Handling "+_actsPackage._placeName+" / "+_actsPackage._period+" - page "+pageNumber);
@@ -124,7 +124,7 @@ public class PackagePageParser
     return _rootActsPackageDir;
   }
 
-  public void parse()
+  public void parse() throws Exception
 	{
     _rootActsPackageDir.mkdirs();
     buildInfoFile(new File(_rootActsPackageDir,"infos.txt"));
@@ -134,11 +134,11 @@ public class PackagePageParser
     File tmpDir=_session.getTmpDir();
     String urlRegistrePrepare=Constants.ROOT_SITE+"/cg49work/registre_prepare.php?id="+id+"&PHPSID="+phpSID+"&hauteur=1024&largeur=1280&code=Mozilla&nom=Netscape&version=5.0%20(X11;%20fr)&langue=fr&platform=Linux%20x86_64";
     File tmpFile=new File(tmpDir,"registre_prepare.php.html");
-    downloader.downloadPage(urlRegistrePrepare, tmpFile);
+    downloader.downloadToFile(urlRegistrePrepare, tmpFile);
     tmpFile.delete();
     String urlVisu=Constants.ROOT_SITE+"/cg49work/visu_affiche.php?PHPSID="+phpSID+"&param=visu&page=1";
     tmpFile=new File(tmpDir,"visu_affiche.php.html");
-    downloader.downloadPage(urlVisu, tmpFile);
+    downloader.downloadToFile(urlVisu, tmpFile);
 
     // Calcule le nombre de pages
     int nbPages=0;
@@ -167,7 +167,7 @@ public class PackagePageParser
     _nbPages=nbPages;
 	}
 
-  public void downloadPages(final String name, int minIndex, int maxIndex)
+  public void downloadPages(final String name, int minIndex, int maxIndex) throws Exception
   {
     Downloader downloader=_session.getDownloader();
     String phpSID=_session.getPHPSessionID();
@@ -217,7 +217,7 @@ public class PackagePageParser
       {
         String urlAffiche=Constants.ROOT_SITE+"/cg49work/visu_affiche_util.php?PHPSID="+phpSID+"&param=visu&uid="+System.currentTimeMillis()+"&o=IMG&p="+page;
         File infoFile=new File(tmpDir,"visu_affiche_util.php.html");
-        downloader.downloadPage(urlAffiche, infoFile);
+        downloader.downloadToFile(urlAffiche, infoFile);
         List<String> lines=TextUtils.readAsLines(infoFile);
         infoFile.delete();
         String infosStr=lines.get(0);
@@ -233,7 +233,7 @@ public class PackagePageParser
     }
   }
 
-  public void downloadAllPages()
+  public void downloadAllPages() throws Exception
   {
     downloadPages(null,1,_nbPages);
   }

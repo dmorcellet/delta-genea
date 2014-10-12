@@ -20,14 +20,14 @@ public class Main
   {
   }
 
-  private void doIt()
+  private void doIt() throws Exception
   {
     String placeName="Billy-Berclau";
     downloadActs(placeName);
     //parseBirthActs();
   }
 
-  private void downloadActs(String placeName)
+  private void downloadActs(String placeName) throws Exception
   {
     ExpoActeSession session=new ExpoActeSession("gennpdc","http://www.gennpdc.net",OUTPUT_DIR);
     BirthPagesManager birthManager=new BirthPagesManager(session);
@@ -56,7 +56,7 @@ public class Main
   }
   */
 
-  public static void main(String[] args)
+  public static void main(String[] args) throws Exception
   {
     new Main().doIt();
   }

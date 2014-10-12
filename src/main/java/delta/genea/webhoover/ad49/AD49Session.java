@@ -32,15 +32,22 @@ public class AD49Session extends ADSession
 
   protected void additionalInitializations()
   {
-    fetchPHPSessionID();
+    try
+    {
+      fetchPHPSessionID();
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+    }
   }
   
-  private void fetchPHPSessionID()
+  private void fetchPHPSessionID() throws Exception
   {
     File tmpDir=getTmpDir();
     Downloader downloader=getDownloader();
     File registryPageFile=new File(tmpDir,"registryPage.html");
-    downloader.downloadPage(REGISTRY_PAGE, registryPageFile);
+    downloader.downloadToFile(REGISTRY_PAGE, registryPageFile);
     // Parse registry page to get PHP session ID
     {
       List<String> lines=TextUtils.readAsLines(registryPageFile);

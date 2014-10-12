@@ -4,15 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
-import delta.genea.utils.GeneaLoggers;
 import delta.genea.webhoover.ADSession;
-import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.ImageMontageMaker;
 
 /**
@@ -20,18 +16,19 @@ import delta.genea.webhoover.ImageMontageMaker;
  */
 public class MainDownloadActs
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  //private static final Logger _logger=GeneaLoggers.getGeneaLogger();
 
   /**
    * @param args
    */
-  public static void main(String[] args)
+  public static void main(String[] args) throws Exception
   {
     new MainDownloadActs().doIt();
   }
 
-  private static boolean _useThreads=true;
+  //private static boolean _useThreads=true;
 
+  /*
   private void getPages(final ActsPackage actsPackage)
   {
     Runnable r=new Runnable()
@@ -55,20 +52,21 @@ public class MainDownloadActs
       r.run();
     }
   }
+  */
 
-  private void doIt()
+  private void doIt() throws Exception
   {
     ADSession session=new ADSession();
     session.start();
     List<String> places=getPlaces(session);
-    /*
     System.out.println(places);
+    /*
     handlePlace(session,Constants.PLACE_NAME);
     */
     session.stop();
   }
 
-  private File downloadTile(ADSession session, int pageNumber, int hIndex, int vIndex, int x, int y, int width, int height)
+  private File downloadTile(ADSession session, int pageNumber, int hIndex, int vIndex, int x, int y, int width, int height) throws Exception
   {
     String urlTile=Constants.ROOT_SITE+"/cg62/visualiseur/visu_affiche_util.php?o=TILE&param=visu_0&p="+pageNumber+"&x="+x+"&y="+y+"&l="+width+"&h="+height+"&ol="+width+"&oh="+height+"&r=0&n=0&b=0&c=0";
 
@@ -76,16 +74,16 @@ public class MainDownloadActs
     File tmpDir=session.getTmpDir();
     File tileFileCacheFile=new File(tmpDir,"tileFileName.txt");
     File tileFile=new File(tmpDir,"tile"+hIndex+"_"+vIndex+".jpg");
-    downloader.downloadPage(urlTile,tileFileCacheFile);
+    downloader.downloadToFile(urlTile,tileFileCacheFile);
     List<String> lines=TextUtils.readAsLines(tileFileCacheFile);
     String cacheFileUrl=lines.get(0);
     String tileUrl=Constants.ROOT_SITE+cacheFileUrl;
-    downloader.downloadPage(tileUrl, tileFile);
+    downloader.downloadToFile(tileUrl, tileFile);
     tileFileCacheFile.delete();
     return tileFile;
   }
 
-  private void downloadPage(ADSession session, File out, int pageNumber, int width, int height, int tileSize)
+  private void downloadPage(ADSession session, File out, int pageNumber, int width, int height, int tileSize) throws Exception
   {
     //System.out.println("Handling "+_actsPackage._placeName+" / "+_actsPackage._period+" - page "+pageNumber);
     System.out.println("Handling page "+pageNumber);
@@ -128,25 +126,25 @@ public class MainDownloadActs
     }
   }
 
-  private List<String> getPlaces(ADSession session)
+  private List<String> getPlaces(ADSession session) throws Exception
   {
     List<String> placeNames=new ArrayList<String>();
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
     File tmpFile=new File(tmpDir,"TD_placesIndex.html");
     String url=Constants.getMainURL();
-    downloader.downloadPage(url, tmpFile);
+    downloader.downloadToFile(url, tmpFile);
     File tmpFile2=new File(tmpDir,"visuInit.html");
     String id=Constants.ID;
     url="http://www.archinoe.net/cg62/visualiseur/visu_init.php?fonds=ec&id="+id;
-    downloader.downloadPage(url, tmpFile2);
+    downloader.downloadToFile(url, tmpFile2);
     String sessionId=downloader.getCookieValue("PHPSESSID");
     System.out.println(sessionId);
     File tmpFile3=new File(tmpDir,"page1.html");
 
     url="http://www.archinoe.net/cg62/visualiseur/visu_registre.php?id="+id+"&w=1280&h=1024";
     //url="http://www.archinoe.net/cg62/visualiseur/visu_affiche.php?PHPSID="+sessionId+"&param=visu_0&page=1";
-    downloader.downloadPage(url, tmpFile3);
+    downloader.downloadToFile(url, tmpFile3);
 
     int tile=2280;
     int nbPages=200;//Constants.NB_PAGES;
@@ -156,7 +154,7 @@ public class MainDownloadActs
       url="http://www.archinoe.net/cg62/visualiseur/visu_affiche_util.php?PHPSID="+sessionId+"&param=visu_0&o=IMG&p="+page;
 
       File tmpFile4=new File(tmpDir,"cache.txt");
-      downloader.downloadPage(url, tmpFile4);
+      downloader.downloadToFile(url, tmpFile4);
       List<String> lines=TextUtils.readAsLines(tmpFile4);
       String line=lines.get(0);
       String[] items=StringSplitter.split(line,'\t');

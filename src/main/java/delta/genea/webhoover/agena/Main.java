@@ -11,7 +11,7 @@ public class Main
 {
   private ExpoActeSession _session;
   private static final File OUTPUT_DIR=new File("/home/dm/tmp/agena");
-  private static final File ACTS_FILE=new File("/home/dm/agena.txt");
+  //private static final File ACTS_FILE=new File("/home/dm/agena.txt");
 	  
 	  public Main()
 	  {

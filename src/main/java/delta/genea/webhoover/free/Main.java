@@ -25,7 +25,7 @@ public class Main
     _nbDownloadedActs=0;
   }
 
-  private void downloadActs()
+  private void downloadActs() throws Exception
   {
     _tmp=new TmpFilesManager(Constants.TMP_NAME);
     handleDirPage(Constants.SITE,Constants.OUT_DIR);
@@ -33,11 +33,11 @@ public class Main
     System.out.println(_nbDownloadedActs);
   }
   
-  private void handleDirPage(String url, File out)
+  private void handleDirPage(String url, File out) throws Exception
   {
     out.mkdirs();
     File tmpFile=_tmp.newTmpFile("main.html");
-    _d.downloadPage(url,tmpFile);
+    _d.downloadToFile(url,tmpFile);
     List<String> lines=TextUtils.readAsLines(tmpFile,EncodingNames.ISO8859_1);
 
 /* Looks like:
@@ -81,7 +81,7 @@ public class Main
             {
               fileUrl=url+fileUrl;
               System.out.println(fileUrl+" -> "+newFile);
-              _d.downloadPage(fileUrl,newFile);
+              _d.downloadToFile(fileUrl,newFile);
             }
           }
         }
@@ -97,7 +97,7 @@ public class Main
     }
   }
   
-  public static void main(String[] args)
+  public static void main(String[] args) throws Exception
   {
     new Main().downloadActs();
   }

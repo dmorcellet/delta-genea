@@ -25,8 +25,15 @@ public class MainDownloadActs
           AD49Session localSession=new AD49Session();
           localSession.start();
           PackagePageParser parser=new PackagePageParser(localSession,actsPackage);
-          parser.parse();
-          parser.downloadAllPages();
+          try
+          {
+            parser.parse();
+            parser.downloadAllPages();
+          }
+          catch(Exception e)
+          {
+            e.printStackTrace();
+          }
           localSession.stop();
         }
       };

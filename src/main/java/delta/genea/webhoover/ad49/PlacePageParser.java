@@ -33,14 +33,14 @@ public class PlacePageParser
 	  _placeID=placeID;
 	}
 
-	public List<ActsPackage> parse()
+	public List<ActsPackage> parse() throws Exception
 	{
     String phpSID=_session.getPHPSessionID();
     Downloader downloader=_session.getDownloader();
     String url=PLACE_PAGE_URL+phpSID+"&id="+_placeID;
     File tmpDir=_session.getTmpDir();
     File placePageFile=new File(tmpDir,"placePage.html");
-    downloader.downloadPage(url, placePageFile);
+    downloader.downloadToFile(url, placePageFile);
     List<ActsPackage> result=new ArrayList<ActsPackage>();
 	  String tableContents="";
     List<String> lines=TextUtils.readAsLines(placePageFile);
