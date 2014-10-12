@@ -102,7 +102,7 @@ public class PersonHtmlFormatter extends TextFormatter
     }
   }
 
-  private boolean isAncestor(long key)
+  private boolean isAncestor(Long key)
   {
     String dbName=_context.getDbName();
     GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);

@@ -13,7 +13,6 @@ import delta.common.framework.objects.sql.ObjectSqlDriver;
 import delta.common.utils.jdbc.CleanupManager;
 import delta.common.utils.jdbc.JDBCTools;
 import delta.genea.data.ActText;
-import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.utils.GeneaLoggers;
 
 /**
@@ -28,11 +27,10 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
   private PreparedStatement _psInsert;
   private PreparedStatement _psUpdate;
   private PreparedStatement _psCount;
-  private GeneaDataSource _mainDataSource;
 
-  public TextSqlDriver(GeneaDataSource mainDataSource)
+  public TextSqlDriver()
   {
-    _mainDataSource=mainDataSource;
+    // Nothing to do!
   }
 
   @Override

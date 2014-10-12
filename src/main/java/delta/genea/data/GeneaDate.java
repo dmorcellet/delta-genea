@@ -91,8 +91,8 @@ public class GeneaDate
   public static Integer computeAge(GeneaDate gd1, GeneaDate gd2)
   {
     // todo
-    Long d1=gd1.getDate();
-    Long d2=gd2.getDate();
+    //Long d1=gd1.getDate();
+    //Long d2=gd2.getDate();
     return null;
   }
 }

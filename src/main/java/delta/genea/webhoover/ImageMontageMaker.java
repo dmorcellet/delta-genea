@@ -26,7 +26,7 @@ public class ImageMontageMaker
   public void doIt(File[][] files, File out) throws FileNotFoundException, IOException
   {
     int columnTotal=files.length, rowTotal=files[0].length;
-    int index=0, col=0, row=0;
+    int col=0, row=0;
     Vector<RenderedOp> renderedOps=new Vector<RenderedOp>();
     RenderedOp[][] ops=new RenderedOp[columnTotal][rowTotal];
     RenderedOp op=null;
@@ -52,7 +52,6 @@ public class ImageMontageMaker
         y+=op.getHeight();
         renderedOps.add(convert(op));
         row++;
-        index++;
       }
       x+=op.getWidth();
       col++;

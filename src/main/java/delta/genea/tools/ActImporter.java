@@ -198,7 +198,7 @@ public class ActImporter
           {
             System.err.println("Bad P1 : "+act.getP1Key()+"!="+p1.getPrimaryKey());
           }
-          if (actType!=act.getActTypeKey().longValue())
+          if (!DataObject.keysAreEqual(actType,act.getActTypeKey()))
           {
             System.err.println("Bad actType : "+actType+"!="+act.getActType());
           }

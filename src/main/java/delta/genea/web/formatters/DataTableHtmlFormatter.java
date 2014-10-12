@@ -9,6 +9,7 @@ import delta.common.utils.text.EndOfLine;
 import delta.common.utils.text.TextFormatter;
 
 /**
+ * Formatter for an HTML data table.
  * @author DAM
  */
 public class DataTableHtmlFormatter extends TextFormatter
@@ -29,7 +30,7 @@ public class DataTableHtmlFormatter extends TextFormatter
   {
     int nbColumns=table.getNbColumns();
     TextFormatter[] ret=new TextFormatter[nbColumns];
-    DataTableColumn column;
+    DataTableColumn<?> column;
     String columnName;
     TextFormatter formatter;
     for(int i=0;i<nbColumns;i++)
@@ -60,7 +61,7 @@ public class DataTableHtmlFormatter extends TextFormatter
     sb.append(EndOfLine.NATIVE_EOL);
     // Header
     sb.append("<tr>");
-    DataTableColumn column;
+    DataTableColumn<?> column;
     for(int i=0;i<nbColumns;i++)
     {
       column=table.getColumn(i);

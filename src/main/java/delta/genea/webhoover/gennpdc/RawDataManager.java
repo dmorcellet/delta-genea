@@ -18,11 +18,9 @@ public class RawDataManager
   private List<Union> _unions;
   private List<Place> _places;
   private PlaceManager _placeManager;
-  private GeneaDataSource _dataSource;
 
   public RawDataManager(GeneaDataSource dataSource)
   {
-    _dataSource=dataSource;
     _persons=new ArrayList<Person>();
     _unions=new ArrayList<Union>();
     _places=new ArrayList<Place>();

@@ -77,7 +77,7 @@ public class UnionsPage extends GeneaWebPage
   public void generate(PrintWriter pw)
   {
     GeneaUserContext context=(GeneaUserContext)getUserContext();
-    long deCujus=context.getDeCujus();
+    Long deCujus=context.getDeCujus();
     PersonHtmlFormatter personsFormatter=new PersonHtmlFormatter(context);
     personsFormatter.setAsLink(true);
     personsFormatter.setDeCujus(deCujus);

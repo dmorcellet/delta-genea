@@ -78,7 +78,7 @@ public class PersonPageData
     return true;
   }
 
-  public String getSosas(long key)
+  public String getSosas(Long key)
   {
     String ret="";
 

@@ -92,8 +92,8 @@ public class GeneaDataSource extends SqlObjectsSource
       addClass(Place.class,new PlaceSqlDriver(this));
       addClass(Act.class,new ActSqlDriver(this));
       addClass(Picture.class,new PictureSqlDriver(this));
-      addClass(ActText.class,new TextSqlDriver(this));
-      addClass(ActType.class,new ActTypeSqlDriver(this));
+      addClass(ActText.class,new TextSqlDriver());
+      addClass(ActType.class,new ActTypeSqlDriver());
     }
     catch(Exception e)
     {
