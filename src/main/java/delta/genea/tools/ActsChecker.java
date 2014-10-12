@@ -113,7 +113,7 @@ public class ActsChecker
         Long unionDate=union.getDate();
         handleAct(out,sosa,sosa+1,UNION,father,mother,unionAct,unionDate,union.getPlace());
       }
-      Act weddingContract=fatherActs.getActOfWeddingContractWith(motherKey.longValue());
+      Act weddingContract=fatherActs.getActOfWeddingContractWith(motherKey);
       if (weddingContract!=null)
       {
         Long wcDate=weddingContract.getDate();

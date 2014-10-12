@@ -8,6 +8,7 @@ import delta.common.framework.objects.data.DataObject;
 import delta.genea.data.sources.GeneaDataSource;
 
 /**
+ * Gathers all acts for a single person.
  * @author DAM
  */
 public class ActsForPerson
@@ -21,12 +22,21 @@ public class ActsForPerson
   private List<Act> _weddingContractActs;
   private List<Act> _otherActs;
 
+  /**
+   * Constructor.
+   * @param dataSource Data source.
+   * @param rootPerson Targeted person.
+   */
   public ActsForPerson(GeneaDataSource dataSource, Person rootPerson)
   {
     _dataSource=dataSource;
     _rootPerson=rootPerson;
   }
 
+  /**
+   * Load data for the managed person.
+   * @return <code>true</code> if it succeeded, <code>false</code> otherwise.
+   */
   public boolean build()
   {
     if (_rootPerson==null)
@@ -114,60 +124,95 @@ public class ActsForPerson
     return true;
   }
 
+  /**
+   * Get the birth act.
+   * @return an act or <code>null</code>.
+   */
   public Act getBirthAct()
   {
     return _birthAct;
   }
 
+  /**
+   * Get the death act.
+   * @return an act or <code>null</code>.
+   */
   public Act getDeathAct()
   {
     return _deathAct;
   }
 
+  /**
+   * Get all the unions for the managed person.
+   * @return a possibly empty list of unions.
+   */
   public List<Union> getUnions()
   {
     return _unions;
   }
 
+  /**
+   * Get a list of all union acts for this person.
+   * The size of the returned list is the number of unions for
+   * the managed person.
+   * <code>null</code> items indicate unions with no associated union act.
+   * @return a list of union acts.
+   */
   public List<Act> getUnionActs()
   {
     return _unionActs;
   }
 
+  /**
+   * Get a list of all wedding contract acts for this person.
+   * The size of the returned list is the number of unions for
+   * the managed person.
+   * <code>null</code> items indicate unions with no associated
+   * wedding contract act.
+   * @return a list of union acts.
+   */
   public List<Act> getWeddingContractActs()
   {
     return _weddingContractActs;
   }
 
+  /**
+   * Get all other acts for the managed person
+   * (acts not related to birth, union or death).
+   * @return A possibly empty list of acts.
+   */
   public List<Act> getOtherActs()
   {
     return _otherActs;
   }
 
+  /**
+   * Get the (first) act of union with person designated by <code>otherKey</code>.
+   * @param otherKey Primary of the 'other' person in the targeted union.
+   * @return An act or <code>null</code> if not found.
+   */
   public Act getActOfUnionWith(Long otherKey)
   {
     if (otherKey==null)
     {
       return null;
     }
-    Act act;
-    for(Iterator<Act> it=_unionActs.iterator();it.hasNext();)
+    for(Act act : _unionActs)
     {
-      act=it.next();
       if (act!=null)
       {
-        if (act.getP1Key()!=null)
+        Long a1=act.getP1Key();
+        if (a1!=null)
         {
-          long key=act.getP1Key().longValue();
-          if (key==otherKey.longValue())
+          if (DataObject.keysAreEqual(a1,otherKey))
           {
             return act;
           }
         }
-        if (act.getP2Key()!=null)
+        Long a2=act.getP2Key();
+        if (a2!=null)
         {
-          long key=act.getP2Key().longValue();
-          if (key==otherKey.longValue())
+          if (DataObject.keysAreEqual(a2,otherKey))
           {
             return act;
           }
@@ -177,20 +222,25 @@ public class ActsForPerson
     return null;
   }
 
-  public Act getActOfWeddingContractWith(long otherKey)
+  /**
+   * Get the (first) act of wedding contract with person designated by <code>otherKey</code>.
+   * @param otherKey Primary of the 'other' person in the targeted union.
+   * @return A wedding contract act or <code>null</code> if not found.
+   */
+  public Act getActOfWeddingContractWith(Long otherKey)
   {
-    if (otherKey==0)
+    if (otherKey==null)
     {
       return null;
     }
-    Act act;
     int i=0;
-    for(Iterator<Act> it=_weddingContractActs.iterator();it.hasNext();)
+    for(Act act : _weddingContractActs)
     {
-      act=it.next();
       if (act!=null)
       {
-        if ((act.getP1Key()==otherKey) || (act.getP2Key()==otherKey))
+        Long p1=act.getP1Key();
+        Long p2=act.getP1Key();
+        if ((DataObject.keysAreEqual(p1,otherKey)) || (DataObject.keysAreEqual(p2,otherKey)))
         {
           return _weddingContractActs.get(i);
         }
@@ -200,16 +250,19 @@ public class ActsForPerson
     return null;
   }
 
+  /**
+   * Get the (first) union with person designated by <code>otherKey</code>.
+   * @param otherKey Primary of the 'other' person in the targeted union.
+   * @return A union or <code>null</code> if not found.
+   */
   public Union getUnionWith(Long otherKey)
   {
     if (otherKey==null)
     {
       return null;
     }
-    Union union;
-    for(Iterator<Union> it=_unions.iterator();it.hasNext();)
+    for(Union union : _unions)
     {
-      union=it.next();
       if (union!=null)
       {
         if (((union.getManKey()!=null) && (union.getManKey().longValue()==otherKey.longValue())) ||
@@ -222,6 +275,10 @@ public class ActsForPerson
     return null;
   }
 
+  /**
+   * Get all the acts for the managed person.
+   * @return A possibly empty list of acts.
+   */
   public List<Act> getAllActs()
   {
     ArrayList<Act> acts=new ArrayList<Act>();
@@ -233,10 +290,8 @@ public class ActsForPerson
     {
       acts.add(_deathAct);
     }
-    Act current;
-    for(Iterator<Act> it=_unionActs.iterator();it.hasNext();)
+    for(Act current : _unionActs)
     {
-      current=it.next();
       if (current!=null)
       {
         acts.add(current);

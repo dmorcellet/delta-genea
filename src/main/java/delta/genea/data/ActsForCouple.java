@@ -28,6 +28,10 @@ public class ActsForCouple
     _woman=woman;
   }
 
+  /**
+   * Load data for the managed couple.
+   * @return <code>true</code> if it succeeded, <code>false</code> otherwise.
+   */
   public boolean build()
   {
     if (_man!=null)
@@ -49,6 +53,10 @@ public class ActsForCouple
     return true;
   }
 
+  /**
+   * Get the birth act for the man.
+   * @return a birth act or <code>null</code> if not found.
+   */
   public Act getBirthActForMan()
   {
     if (_actsForMan!=null)
@@ -58,6 +66,10 @@ public class ActsForCouple
     return null;
   }
 
+  /**
+   * Get the death act for the man.
+   * @return a death act or <code>null</code> if not found.
+   */
   public Act getDeathActForMan()
   {
     if (_actsForMan!=null)
@@ -67,7 +79,11 @@ public class ActsForCouple
     return null;
   }
 
-  public Act getBirthActForWoan()
+  /**
+   * Get the birth act for the woman.
+   * @return a birth act or <code>null</code> if not found.
+   */
+  public Act getBirthActForWoman()
   {
     if (_actsForWoman!=null)
     {
@@ -76,6 +92,10 @@ public class ActsForCouple
     return null;
   }
 
+  /**
+   * Get the death act for the man.
+   * @return a death act or <code>null</code> if not found.
+   */
   public Act getDeathActForWoman()
   {
     if (_actsForWoman!=null)
@@ -85,6 +105,10 @@ public class ActsForCouple
     return null;
   }
 
+  /**
+   * Get the union act for this couple.
+   * @return a union act or <code>null</code> if not found.
+   */
   public Act getUnionAct()
   {
     return _union;

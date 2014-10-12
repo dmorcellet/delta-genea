@@ -118,12 +118,20 @@ public class ActType extends DataObject<ActType>
     return _type;
   }
 
+  /**
+   * Indicates if this act type is related to a birth.
+   * @return <code>true</code> if it is, <code>null</code>.
+   */
   public boolean isBirthAct()
   {
     Long key=getPrimaryKey();
     return ((key==BIRTH) || (key==BAPTEM));
   }
 
+  /**
+   * Indicates if this act type is related to a death.
+   * @return <code>true</code> if it is, <code>null</code>.
+   */
   public boolean isDeathAct()
   {
     Long key=getPrimaryKey();

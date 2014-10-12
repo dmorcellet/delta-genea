@@ -2,22 +2,39 @@ package delta.genea.data;
 
 import delta.common.framework.objects.data.DataObject;
 
+/**
+ * A couple, made of a man and a woman.
+ * @author DAM
+ */
 public class Couple
 {
   private Person _man;
   private Person _woman;
 
+  /**
+   * Constrcutor.
+   * @param man Man.
+   * @param woman Woman.
+   */
   public Couple(Person man, Person woman)
   {
     _man=man;
     _woman=woman;
   }
 
+  /**
+   * Get the referenced man.
+   * @return a man or <code>null</code>.
+   */
   public Person getMan()
   {
     return _man;
   }
 
+  /**
+   * Get the primary key for the referenced man.
+   * @return A primary key or <code>null</code>.
+   */
   public Long getManPrimaryKey()
   {
     Long pk=null;
@@ -28,11 +45,19 @@ public class Couple
     return pk;
   }
 
+  /**
+   * Get the referenced woman.
+   * @return a woman or <code>null</code>.
+   */
   public Person getWoman()
   {
     return _woman;
   }
 
+  /**
+   * Get the primary key for the referenced woman.
+   * @return A primary key or <code>null</code>.
+   */
   public Long getWomanPrimaryKey()
   {
     Long pk=null;

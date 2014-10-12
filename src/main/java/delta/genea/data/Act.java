@@ -64,7 +64,13 @@ public class Act extends DataObject<Act>
    * Text (transcription) of this act.
    */
   private DataProxy<ActText> _text;
+  /**
+   * Comment.
+   */
   private String _comment;
+  /**
+   * Persons referenced in this act.
+   */
   private List<PersonInAct> _personsInAct;
 
   @Override
@@ -76,7 +82,6 @@ public class Act extends DataObject<Act>
   /**
    * Constructor.
    * @param primaryKey Primary key.
-   * @param source Attached objects source.
    */
   public Act(Long primaryKey)
   {
@@ -130,16 +135,28 @@ public class Act extends DataObject<Act>
     }
   }
 
+  /**
+   * Get a proxy for the act type.
+   * @return an act type proxy or <code>null</code>.
+   */
   public DataProxy<ActType> getActTypeProxy()
   {
     return _actType;
   }
 
+  /**
+   * Set proxy for the act type.
+   * @param actType Act type proxy.
+   */
   public void setActTypeProxy(DataProxy<ActType> actType)
   {
     _actType=actType;
   }
 
+  /**
+   * Get the primary key of the act type.
+   * @return a primary key or <code>null</code>.
+   */
   public Long getActTypeKey()
   {
     Long ret=null;
@@ -150,6 +167,10 @@ public class Act extends DataObject<Act>
     return ret;
   }
 
+  /**
+   * Get the associated act type.
+   * @return an act type or <code>null</code>.
+   */
   public ActType getActType()
   {
     if(_actType!=null)
@@ -159,16 +180,28 @@ public class Act extends DataObject<Act>
     return null;
   }
 
+  /**
+   * Get a proxy for the place.
+   * @return a place proxy or <code>null</code>.
+   */
   public DataProxy<Place> getPlaceProxy()
   {
     return _place;
   }
 
+  /**
+   * Set proxy for the place.
+   * @param place Place proxy.
+   */
   public void setPlaceProxy(DataProxy<Place> place)
   {
     _place=place;
   }
 
+  /**
+   * Get the primary key of the place.
+   * @return a primary key or <code>null</code>.
+   */
   public Long getPlaceKey()
   {
     Long ret=null;
@@ -179,6 +212,10 @@ public class Act extends DataObject<Act>
     return ret;
   }
 
+  /**
+   * Get the associated place.
+   * @return a place or <code>null</code>.
+   */
   public Place getPlace()
   {
     if(_place!=null)
@@ -188,16 +225,28 @@ public class Act extends DataObject<Act>
     return null;
   }
 
+  /**
+   * Get a proxy for the person 1.
+   * @return a person proxy or <code>null</code>.
+   */
   public DataProxy<Person> getP1Proxy()
   {
     return _p1;
   }
 
+  /**
+   * Set proxy for the person 1.
+   * @param p1 Person proxy.
+   */
   public void setP1Proxy(DataProxy<Person> p1)
   {
     _p1=p1;
   }
 
+  /**
+   * Get the primary key of the person 1.
+   * @return a primary key or <code>null</code>.
+   */
   public Long getP1Key()
   {
     Long ret=null;
@@ -208,6 +257,10 @@ public class Act extends DataObject<Act>
     return ret;
   }
 
+  /**
+   * Get the associated person 1.
+   * @return a person or <code>null</code>.
+   */
   public Person getP1()
   {
     if(_p1!=null)
@@ -217,16 +270,28 @@ public class Act extends DataObject<Act>
     return null;
   }
 
+  /**
+   * Get a proxy for the person 2.
+   * @return a person proxy or <code>null</code>.
+   */
   public DataProxy<Person> getP2Proxy()
   {
     return _p2;
   }
 
+  /**
+   * Set proxy for the person 2.
+   * @param p2 Person proxy.
+   */
   public void setP2Proxy(DataProxy<Person> p2)
   {
     _p2=p2;
   }
 
+  /**
+   * Get the primary key of the person 2.
+   * @return a primary key or <code>null</code>.
+   */
   public Long getP2Key()
   {
     Long ret=null;
@@ -237,6 +302,10 @@ public class Act extends DataObject<Act>
     return ret;
   }
 
+  /**
+   * Get the associated person 2.
+   * @return a person or <code>null</code>.
+   */
   public Person getP2()
   {
     if(_p2!=null)
@@ -258,6 +327,10 @@ public class Act extends DataObject<Act>
     return ret;
   }
 
+  /**
+   * Get a label that describes this act.
+   * @return a long label.
+   */
   public String getFullLabel()
   {
     StringBuffer label=new StringBuffer();
@@ -289,59 +362,103 @@ public class Act extends DataObject<Act>
     return label.toString();
   }
 
+  /**
+   * Get the base path for the files of this act.
+   * @return a base path or <code>null</code>.
+   */
   public String getPath()
   {
     return _path;
   }
 
+  /**
+   * Set the base path for the files of this act.
+   * @param path a path or <code>null</code>.
+   */
   public void setPath(String path)
   {
     _path=path;
   }
 
+  /**
+   * Get the number of files for this act.
+   * @return a number of files (possibly 0).
+   */
   public int getNbFiles()
   {
     return _nbFiles;
   }
 
+  /**
+   * Set the number of files for this act.
+   * @param nbFiles Number of files.
+   */
   public void setNbFiles(int nbFiles)
   {
     _nbFiles=nbFiles;
   }
 
+  /**
+   * Indicates if this act has been fully exploited.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
   public boolean getTraite()
   {
     return _traite;
   }
 
+  /**
+   * Set the 'handled' flag.
+   * @param traite Value to set.
+   */
   public void setTraite(boolean traite)
   {
     _traite=traite;
   }
 
+  /**
+   * Get the comment for this act.
+   * @return a comment or <code>null/code>.
+   */
   public String getComment()
   {
     return _comment;
   }
 
+  /**
+   * Set the comment for this act.
+   * @param comment Comment to set.
+   */
   public void setComment(String comment)
   {
     _comment=comment;
   }
 
+  /**
+   * Get a proxy for the text of this act.
+   * @return a text proxy or <code>null</code>.
+   */
   public DataProxy<ActText> getTextProxy()
   {
     return _text;
   }
 
+  /**
+   * Set proxy for the act text.
+   * @param text Act text proxy.
+   */
   public void setTextProxy(DataProxy<ActText> text)
   {
     _text=text;
   }
 
-  public long getTextKey()
+  /**
+   * Get the primary key of the act text.
+   * @return a primary key or <code>null</code>.
+   */
+  public Long getTextKey()
   {
-    long ret=0;
+    Long ret=null;
     if (_text!=null)
     {
       ret=_text.getPrimaryKey();
@@ -349,6 +466,10 @@ public class Act extends DataObject<Act>
     return ret;
   }
 
+  /**
+   * Get the associated act text.
+   * @return an act text or <code>null</code>.
+   */
   public ActText getText()
   {
     if(_text!=null)
@@ -358,27 +479,40 @@ public class Act extends DataObject<Act>
     return null;
   }
 
+  /**
+   * Get the list of persons referenced in this act.
+   * @return a list of 'person in act' objects.
+   */
   public List<PersonInAct> getPersonsInAct()
   {
     return _personsInAct;
   }
 
+  /**
+   * Set the list of persons referenced in this act.
+   * @param list List to set.
+   */
   public void setPersonsInAct(List<PersonInAct> list)
   {
    _personsInAct=list;
   }
 
-  public String getActFilename(int i)
+  /**
+   * Get the filename for a page of screenshot for this act.
+   * @param index Index of screenshot (starting at 0).
+   * @return A file name.
+   */
+  public String getActFilename(int index)
   {
     if (_path==null)
     {
       return null;
     }
     StringBuffer sb=new StringBuffer(_path);
-    if (i>0)
+    if (index>0)
     {
       sb.append('-');
-      sb.append(i+1);
+      sb.append(index+1);
     }
     sb.append(".jpg");
     String imgName=sb.toString();
