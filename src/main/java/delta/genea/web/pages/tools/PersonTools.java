@@ -15,7 +15,7 @@ public class PersonTools
 {
   private PrintWriter _pw;
   private GeneaUserContext _context;
-  private long _deCujus;
+  private Long _deCujus;
   private boolean _useSexIcon;
   private boolean _useNoDescendants;
   private boolean _asLink;
@@ -52,7 +52,7 @@ public class PersonTools
     {
       if (_useIsAncestorIcon)
       {
-        long key=person.getPrimaryKey();
+        Long key=person.getPrimaryKey();
         if (isAncestor(key))
         {
           pw.print("<IMG SRC=\"ressources/ancetre.gif\" ALT=\"Ancêtre\">");
@@ -124,7 +124,7 @@ public class PersonTools
     }
   }
 
-  private boolean isAncestor(long key)
+  private boolean isAncestor(Long key)
   {
     String dbName=_context.getDbName();
     GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);

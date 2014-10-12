@@ -12,23 +12,33 @@ public class DescendantsPageParameters extends PageParameters
   static final String MAIN_PERSON_KEY="KEY";
   static final String DEPTH="DEPTH";
   static final String SAME_NAME="SAME_NAME";
-  private long _key;
+  private Long _key;
   private int _depth;
   private boolean _sameName;
 
+  /**
+   * Constructor.
+   */
   public DescendantsPageParameters()
   {
     super("genea");
-    init(0,100,false);
+    init(null,100,false);
   }
 
-  public DescendantsPageParameters(long mainPersonKey, int depth, boolean sameName)
+  /**
+   * Full constructor.
+   * @param mainPersonKey Main person primary key.
+   * @param depth Depth of the descendants tree.
+   * @param sameName <code>true</code> to include only persons whose
+   * name is the same as the name of the main person.
+   */
+  public DescendantsPageParameters(Long mainPersonKey, int depth, boolean sameName)
   {
     super("genea");
     init(mainPersonKey,depth,sameName);
   }
 
-  private void init(long mainPersonKey, int depth, boolean sameName)
+  private void init(Long mainPersonKey, int depth, boolean sameName)
   {
     setKey(mainPersonKey);
     setDepth(depth);
@@ -46,13 +56,13 @@ public class DescendantsPageParameters extends PageParameters
     return _depth;
   }
 
-  public final void setKey(long key)
+  public final void setKey(Long key)
   {
     _key=key;
-    _parameters.put(MAIN_PERSON_KEY,Long.valueOf(key));
+    _parameters.put(MAIN_PERSON_KEY,key);
   }
 
-  public long getKey()
+  public Long getKey()
   {
     return _key;
   }

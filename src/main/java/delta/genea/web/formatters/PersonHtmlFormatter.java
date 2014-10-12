@@ -18,7 +18,7 @@ import delta.genea.web.pages.PersonPageParameters;
 public class PersonHtmlFormatter extends TextFormatter
 {
   private GeneaUserContext _context;
-  private long _deCujus;
+  private Long _deCujus;
   private boolean _useSexIcon;
   private boolean _useNoDescendants;
   private boolean _useLifeTime;
@@ -35,7 +35,7 @@ public class PersonHtmlFormatter extends TextFormatter
     _useIsAncestorIcon=true;
   }
 
-  public void setDeCujus(long deCujus) { _deCujus=deCujus; }
+  public void setDeCujus(Long deCujus) { _deCujus=deCujus; }
   public void setUseSexIcon(boolean value) { _useSexIcon=value; }
   public void setUseLifeTime(boolean value) { _useLifeTime=value; }
   public void setUseNoDescendants(boolean value) { _useNoDescendants=value; }
@@ -55,7 +55,7 @@ public class PersonHtmlFormatter extends TextFormatter
     if (person==null) return;
     if (_useIsAncestorIcon)
     {
-      long key=person.getPrimaryKey();
+      Long key=person.getPrimaryKey();
       if (isAncestor(key))
       {
         sb.append("<IMG SRC=\"ressources/ancetre.gif\" ALT=\"Ancêtre\">");

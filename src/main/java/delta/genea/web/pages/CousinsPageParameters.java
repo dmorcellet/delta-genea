@@ -10,25 +10,25 @@ public class CousinsPageParameters extends PageParameters
 {
   public static final String ACTION_VALUE="COUSINS";
   private static final String KEY="KEY";
-  private long _key;
+  private Long _key;
 
   /**
    * Constructor.
    * @param key Person key.
    */
-  public CousinsPageParameters(long key)
+  public CousinsPageParameters(Long key)
   {
     super("genea");
     setKey(key);
   }
 
-  public final void setKey(long key)
+  public final void setKey(Long key)
   {
     _key=key;
-    _parameters.put(KEY,Long.valueOf(key));
+    _parameters.put(KEY,key);
   }
 
-  public long getKey()
+  public Long getKey()
   {
     return _key;
   }

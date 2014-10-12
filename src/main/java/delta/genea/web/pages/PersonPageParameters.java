@@ -10,21 +10,21 @@ public class PersonPageParameters extends PageParameters
 {
   public static final String ACTION_VALUE="PERSON";
   public static final String PERSON_KEY="PERSON_KEY";
-  private long _mainPersonKey;
+  private Long _mainPersonKey;
 
-  public PersonPageParameters(long mainPersonKey)
+  public PersonPageParameters(Long mainPersonKey)
   {
     super("genea");
     setMainPersonKey(mainPersonKey);
   }
 
-  public final void setMainPersonKey(long mainPersonKey)
+  public final void setMainPersonKey(Long mainPersonKey)
   {
     _mainPersonKey=mainPersonKey;
-    _parameters.put(PERSON_KEY,Long.valueOf(mainPersonKey));
+    _parameters.put(PERSON_KEY,mainPersonKey);
   }
 
-  public long getMainPersonKey()
+  public Long getMainPersonKey()
   {
     return _mainPersonKey;
   }

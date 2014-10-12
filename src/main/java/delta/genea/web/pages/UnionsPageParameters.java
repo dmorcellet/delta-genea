@@ -12,9 +12,9 @@ public class UnionsPageParameters extends PageParameters
   private static final String NAME="NAME";
   private String _name;
   private static final String KEY="KEY";
-  private long _key;
+  private Long _key;
 
-  public UnionsPageParameters(String name, long key)
+  public UnionsPageParameters(String name, Long key)
   {
     super("genea");
     setName(name);
@@ -32,13 +32,13 @@ public class UnionsPageParameters extends PageParameters
     return _name;
   }
 
-  public final void setKey(long key)
+  public final void setKey(Long key)
   {
     _key=key;
-    _parameters.put(KEY,Long.valueOf(key));
+    _parameters.put(KEY,key);
   }
 
-  public long getKey()
+  public Long getKey()
   {
     return _key;
   }
