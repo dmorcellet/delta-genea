@@ -294,13 +294,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         while (rs.next())
         {
           OccupationForPerson occupation=new OccupationForPerson();
-          int n=1;
-          if (!rs.wasNull())
-          {
-            Long personKey=Long.valueOf(rs.getLong(n));
-            occupation.setPersonProxy(_mainDataSource.buildProxy(Person.class,personKey));
-          }
-          n++;
+          int n=2;
           occupation.setYear(rs.getInt(n));
           n++;
           occupation.setOccupation(rs.getString(n));
@@ -349,13 +343,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         while (rs.next())
         {
           HomeForPerson home=new HomeForPerson();
-          int n=1;
-          if (!rs.wasNull())
-          {
-            Long personKey=Long.valueOf(rs.getLong(n));
-            home.setPersonProxy(_mainDataSource.buildProxy(Person.class,personKey));
-          }
-          n++;
+          int n=2;
           home.setYear(rs.getInt(n));
           n++;
           home.setPlaceDetails(rs.getString(n));
@@ -835,7 +823,6 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       try
       {
         int n=1;
-        occupation.setPersonProxy(_mainDataSource.buildProxy(Person.class,key));
         _psInsertOccupation.setLong(n,key.longValue());
         n++;
         _psInsertOccupation.setInt(n,occupation.getYear());
@@ -884,7 +871,6 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       try
       {
         int n=1;
-        home.setPersonProxy(_mainDataSource.buildProxy(Person.class,key));
         _psInsertHome.setLong(n,key.longValue());
         n++;
         _psInsertHome.setInt(n,home.getYear());

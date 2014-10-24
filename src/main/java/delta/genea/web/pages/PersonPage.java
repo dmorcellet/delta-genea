@@ -261,11 +261,9 @@ public class PersonPage extends GeneaWebPage
       }
       pw.println("<b>Résidences :</b>");
       pw.println("<ul>");
-      HomeForPerson home;
       Place place;
-      for(Iterator<HomeForPerson> it=homes.iterator();it.hasNext();)
+      for(HomeForPerson home : homes)
       {
-        home=it.next();
         place=home.getPlace();
         pw.print("<li>");
         int year=home.getYear();

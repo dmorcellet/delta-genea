@@ -2,37 +2,29 @@ package delta.genea.data;
 
 import delta.common.framework.objects.data.DataProxy;
 
+/**
+ * A single occupation data for a person.
+ * @author DAM
+ */
 public class OccupationForPerson
 {
-  private DataProxy<Person> _person;
   private String _occupation;
   private int _year;
   private DataProxy<Place> _place;
 
-  public DataProxy<Person> getPersonProxy()
-  {
-    return _person;
-  }
-
-  public void setPersonProxy(DataProxy<Person> proxy)
-  {
-    _person=proxy;
-  }
-
-  public Person getPerson()
-  {
-    if(_person!=null)
-    {
-      return _person.getDataObject();
-    }
-    return null;
-  }
-
+  /**
+   * Get a proxy to the place of this occupation.
+   * @return A proxy or <code>null</code>.
+   */
   public DataProxy<Place> getPlaceProxy()
   {
     return _place;
   }
 
+  /**
+   * Set the proxy to the place of this occupation.
+   * @param proxy Proxy to set.
+   */
   public void setPlaceProxy(DataProxy<Place> proxy)
   {
     _place=proxy;
@@ -57,16 +49,28 @@ public class OccupationForPerson
     _occupation=occupation;
   }
 
+  /**
+   * Get the year associated with this occupation data.
+   * @return A year (<code>0</code> means <code>null</code>).
+   */
   public int getYear()
   {
     return _year;
   }
 
+  /**
+   * Set the year associated with this occupation data.
+   * @param year Year to set (<code>0</code> means <code>null</code>).
+   */
   public void setYear(int year)
   {
     _year=year;
   }
 
+  /**
+   * Get a readable string that shows this occupation data.
+   * @return A string.
+   */
   public String getLabel()
   {
     StringBuffer sb=new StringBuffer();

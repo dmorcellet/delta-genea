@@ -107,7 +107,7 @@ public class GregorianDate
       {
         if((_dayOfMonth>4)&&(_dayOfMonth<FIRST_GREGORIAN_DAY))
         {
-          throw new IllegalArgumentException("Date does not exists (step between julian & gregorian calendar) !");
+          throw new IllegalArgumentException("Date does not exist (step between julian & gregorian calendar) !");
         }
       }
     }
