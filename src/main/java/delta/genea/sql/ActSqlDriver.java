@@ -42,6 +42,10 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   private PreparedStatement _psGetFromPlace;
   private ObjectsSource _mainDataSource;
 
+  /**
+   * Constructor.
+   * @param mainDataSource Main data source.
+   */
   public ActSqlDriver(ObjectsSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
@@ -128,36 +132,36 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   private void fillAct(Act act, ResultSet rs) throws SQLException
   {
     int n=2;
+    long actTypeKey=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long actTypeKey=Long.valueOf(rs.getLong(n));
-      act.setActTypeProxy(_mainDataSource.buildProxy(ActType.class,actTypeKey));
+      act.setActTypeProxy(_mainDataSource.buildProxy(ActType.class,Long.valueOf(actTypeKey)));
     }
     n++;
     act.setDate(rs.getDate(n));
     n++;
+    long placeKey=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long placeKey=Long.valueOf(rs.getLong(n));
-      act.setPlaceProxy(_mainDataSource.buildProxy(Place.class,placeKey));
+      act.setPlaceProxy(_mainDataSource.buildProxy(Place.class,Long.valueOf(placeKey)));
     }
     n++;
+    long p1Key=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long p1Key=Long.valueOf(rs.getLong(n));
-      act.setP1Proxy(_mainDataSource.buildProxy(Person.class,p1Key));
+      act.setP1Proxy(_mainDataSource.buildProxy(Person.class,Long.valueOf(p1Key)));
     }
     n++;
+    long p2Key=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long p2Key=Long.valueOf(rs.getLong(n));
-      act.setP2Proxy(_mainDataSource.buildProxy(Person.class,p2Key));
+      act.setP2Proxy(_mainDataSource.buildProxy(Person.class,Long.valueOf(p2Key)));
     }
     n++;
+    long actTextKey=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long actTextKey=Long.valueOf(rs.getLong(n));
-      act.setTextProxy(_mainDataSource.buildProxy(ActText.class,actTextKey));
+      act.setTextProxy(_mainDataSource.buildProxy(ActText.class,Long.valueOf(actTextKey)));
     }
     n++;
     act.setPath(rs.getString(n));
@@ -186,10 +190,10 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
         {
           tmp=new PersonInAct();
           int n=1;
+          long pKey=rs.getLong(n);
           if (!rs.wasNull())
           {
-            Long pKey=Long.valueOf(rs.getLong(n));
-            tmp.setPersonProxy(_mainDataSource.buildProxy(Person.class,pKey));
+            tmp.setPersonProxy(_mainDataSource.buildProxy(Person.class,Long.valueOf(pKey)));
           }
           n++;
           tmp.setPresence(rs.getString(n));
@@ -198,12 +202,11 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
           n++;
           tmp.setLink(rs.getString(n));
           n++;
+          long refLink=rs.getLong(n);
           if (!rs.wasNull())
           {
-            Long refLink=Long.valueOf(rs.getLong(n));
-            tmp.setLinkRefProxy(_mainDataSource.buildProxy(Person.class,refLink));
+            tmp.setLinkRefProxy(_mainDataSource.buildProxy(Person.class,Long.valueOf(refLink)));
           }
-
           n++;
           if (ret==null)
           {

@@ -28,6 +28,9 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
   private PreparedStatement _psUpdate;
   private PreparedStatement _psCount;
 
+  /**
+   * Constructor.
+   */
   public TextSqlDriver()
   {
     // Nothing to do!

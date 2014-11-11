@@ -64,6 +64,10 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     "DELETE FROM personne WHERE cle = ?",
   };
 
+  /**
+   * Constructor.
+   * @param mainDataSource Main data source.
+   */
   public PersonSqlDriver(GeneaDataSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
@@ -206,51 +210,51 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     n++;
     person.setBirthDate(rs.getDate(n++),rs.getString(n++));
     DataProxy<Place> birthPlaceProxy=null;
+    long birthPlaceKey=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long birthPlaceKey=Long.valueOf(rs.getLong(n));
-      birthPlaceProxy=_mainDataSource.buildProxy(Place.class,birthPlaceKey);
+      birthPlaceProxy=_mainDataSource.buildProxy(Place.class,Long.valueOf(birthPlaceKey));
     }
     person.setBirthPlaceProxy(birthPlaceProxy);
     n++;
     person.setDeathDate(rs.getDate(n++),rs.getString(n++));
     DataProxy<Place> deathPlaceProxy=null;
+    long deathPlaceKey=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long deathPlaceKey=Long.valueOf(rs.getLong(n));
-      deathPlaceProxy=_mainDataSource.buildProxy(Place.class,deathPlaceKey);
+      deathPlaceProxy=_mainDataSource.buildProxy(Place.class,Long.valueOf(deathPlaceKey));
     }
     person.setDeathPlaceProxy(deathPlaceProxy);
     n++;
     DataProxy<Person> fatherProxy=null;
+    long fatherKey=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long fatherKey=Long.valueOf(rs.getLong(n));
-      fatherProxy=getObjectSource().buildProxy(Person.class,fatherKey);
+      fatherProxy=getObjectSource().buildProxy(Person.class,Long.valueOf(fatherKey));
     }
     person.setFatherProxy(fatherProxy);
     n++;
     DataProxy<Person> motherProxy=null;
+    long motherKey=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long motherKey=Long.valueOf(rs.getLong(n));
-      motherProxy=getObjectSource().buildProxy(Person.class,motherKey);
+      motherProxy=getObjectSource().buildProxy(Person.class,Long.valueOf(motherKey));
     }
     person.setMotherProxy(motherProxy);
     n++;
     DataProxy<Person> godFatherProxy=null;
+    long godFatherKey=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long godFatherKey=Long.valueOf(rs.getLong(n));
-      godFatherProxy=getObjectSource().buildProxy(Person.class,godFatherKey);
+      godFatherProxy=getObjectSource().buildProxy(Person.class,Long.valueOf(godFatherKey));
     }
     person.setGodFatherProxy(godFatherProxy);
     n++;
     DataProxy<Person> godMotherProxy=null;
+    long godMotherKey=rs.getLong(n);
     if (!rs.wasNull())
     {
-      Long godMotherKey=Long.valueOf(rs.getLong(n));
-      godMotherProxy=getObjectSource().buildProxy(Person.class,godMotherKey);
+      godMotherProxy=getObjectSource().buildProxy(Person.class,Long.valueOf(godMotherKey));
     }
     person.setGodMotherProxy(godMotherProxy);
     n++;
@@ -299,10 +303,10 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           n++;
           occupation.setOccupation(rs.getString(n));
           n++;
+          long placeKey=rs.getLong(n);
           if (!rs.wasNull())
           {
-            Long placeKey=Long.valueOf(rs.getLong(n));
-            occupation.setPlaceProxy(_mainDataSource.buildProxy(Place.class,placeKey));
+            occupation.setPlaceProxy(_mainDataSource.buildProxy(Place.class,Long.valueOf(placeKey)));
           }
           n++;
           if (ret==null)
@@ -348,10 +352,10 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           n++;
           home.setPlaceDetails(rs.getString(n));
           n++;
+          long placeKey=rs.getLong(n);
           if (!rs.wasNull())
           {
-            Long placeKey=Long.valueOf(rs.getLong(n));
-            home.setPlaceProxy(_mainDataSource.buildProxy(Place.class,placeKey));
+            home.setPlaceProxy(_mainDataSource.buildProxy(Place.class,Long.valueOf(placeKey)));
           }
           n++;
           if (ret==null)

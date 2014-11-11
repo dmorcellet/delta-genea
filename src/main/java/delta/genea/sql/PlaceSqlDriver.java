@@ -33,6 +33,10 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
   private PreparedStatement _psInsert;
   private GeneaDataSource _mainDataSource;
 
+  /**
+   * Constructor.
+   * @param mainDataSource Main data source.
+   */
   public PlaceSqlDriver(GeneaDataSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
@@ -141,8 +145,8 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
     n++;
     place.setLevel(PlaceLevel.getFromValue(rs.getInt(n)));
     n++;
-    long parentPlaceKey=rs.getLong(n);
     DataProxy<Place> parentPlaceProxy=null;
+    long parentPlaceKey=rs.getLong(n);
     if (!rs.wasNull())
     {
       parentPlaceProxy=_mainDataSource.buildProxy(Place.class,Long.valueOf(parentPlaceKey));

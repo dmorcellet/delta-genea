@@ -38,6 +38,10 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
   private PreparedStatement _psGetPersonsInPicture;
   private GeneaDataSource _mainDataSource;
 
+  /**
+   * Constructor.
+   * @param mainDataSource Main data source.
+   */
   public PictureSqlDriver(GeneaDataSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
@@ -146,8 +150,8 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
         {
           tmp=new PersonInPicture();
           int n=1;
-          long personKey=rs.getLong(n);
           DataProxy<Person> personProxy=null;
+          long personKey=rs.getLong(n);
           if (!rs.wasNull())
           {
             personProxy=_mainDataSource.buildProxy(Person.class,Long.valueOf(personKey));

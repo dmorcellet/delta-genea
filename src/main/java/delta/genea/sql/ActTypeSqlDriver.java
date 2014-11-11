@@ -28,6 +28,9 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
   private PreparedStatement _psUpdate;
   private PreparedStatement _psCount;
 
+  /**
+   * Constructor.
+   */
   public ActTypeSqlDriver()
   {
     // Nothing to do!

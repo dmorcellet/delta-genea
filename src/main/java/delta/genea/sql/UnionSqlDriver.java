@@ -42,6 +42,10 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
 
   private GeneaDataSource _mainDataSource;
 
+  /**
+   * Constructor.
+   * @param mainDataSource Main data source.
+   */
   public UnionSqlDriver(GeneaDataSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
@@ -122,16 +126,16 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
   private void fillUnion(Union union, ResultSet rs) throws SQLException
   {
     int n=2;
-    long manKey=rs.getLong(n);
     DataProxy<Person> manProxy=null;
+    long manKey=rs.getLong(n);
     if (!rs.wasNull())
     {
       manProxy=_mainDataSource.buildProxy(Person.class,Long.valueOf(manKey));
     }
     union.setManProxy(manProxy);
     n++;
-    long womanKey=rs.getLong(n);
     DataProxy<Person> womanProxy=null;
+    long womanKey=rs.getLong(n);
     if (!rs.wasNull())
     {
       womanProxy=_mainDataSource.buildProxy(Person.class,Long.valueOf(womanKey));
@@ -139,12 +143,20 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     union.setWomanProxy(womanProxy);
     n++;
     union.setDate(rs.getDate(n++),rs.getString(n++));
+    DataProxy<Place> placeProxy=null;
     long placeKey=rs.getLong(n);
-    DataProxy<Place> placeProxy=rs.wasNull()?null:_mainDataSource.buildProxy(Place.class,Long.valueOf(placeKey));
+    if (!rs.wasNull())
+    {
+      placeProxy=_mainDataSource.buildProxy(Place.class,Long.valueOf(placeKey));
+    }
     union.setPlaceProxy(placeProxy);
     n++;
+    DataProxy<Act> contractProxy=null;
     long contractKey=rs.getLong(n);
-    DataProxy<Act> contractProxy=rs.wasNull()?null:_mainDataSource.buildProxy(Act.class,Long.valueOf(contractKey));
+    if (!rs.wasNull())
+    {
+      contractProxy=_mainDataSource.buildProxy(Act.class,Long.valueOf(contractKey));
+    }
     union.setWeddingContractProxy(contractProxy);
     n++;
     union.setComments(rs.getString(n));
@@ -165,8 +177,12 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
         rs=_psGetAll.executeQuery();
         while (rs.next())
         {
+          Long primaryKey=null;
           long key=rs.getLong(1);
-          Long primaryKey=(rs.wasNull()?null:Long.valueOf(key));
+          if (!rs.wasNull())
+          {
+            primaryKey=Long.valueOf(key);
+          }
           union=new Union(primaryKey);
           fillUnion(union,rs);
           ret.add(union);
