@@ -30,17 +30,20 @@ public class MainStatistics
     AncestorsSelectionBuilder ancestorsBuilder=new AncestorsSelectionBuilder(DATA_SOURCE,Long.valueOf(76));
     Selection<Person> ancestors=ancestorsBuilder.build();
     selections.add(ancestors);
-    System.out.println(ancestors.getSize());
+    System.out.println("Ancestors: "+ancestors.getSize());
     NameSelectionBuilder nameSelectionBuilder=new NameSelectionBuilder(DATA_SOURCE,"SAUVAGE");
     Selection<Person> namedSelection=nameSelectionBuilder.build();
+    System.out.println("SAUVAGE: "+namedSelection.getSize());
     selections.add(namedSelection);
     CompoundSelection<Person> compoundSelection=new CompoundSelection<Person>("compound",Operator.AND,selections);
-    System.out.println(compoundSelection.getSize());
+    System.out.println("SAUVAGE ancestors: "+compoundSelection.getSize());
+    int i=0;
     for(Person p : compoundSelection.getSelectedObjects())
     {
-      System.out.println(p.getFullName());
+      System.out.println("#"+(i+1)+": "+p.getFullName());
+      i++;
     }
-    
+
     QuanticDataCollection<Long> birthPlaceStats=PlaceStatistics.birthPlaceStats(compoundSelection);
     showStats("Birth place",birthPlaceStats);
     QuanticDataCollection<Long> deathPlaceStats=PlaceStatistics.deathPlaceStats(compoundSelection);

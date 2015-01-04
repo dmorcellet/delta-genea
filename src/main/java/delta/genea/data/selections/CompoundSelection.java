@@ -102,13 +102,13 @@ public class CompoundSelection<T extends DataObject<T>> implements Selection<T>
         SelectionSizeComparator<T> c=new SelectionSizeComparator<T>();
         Collections.sort(_selections,c);
         Selection<T> currentSelection=_selections.get(0);
-        System.out.println("Current selection : "+currentSelection.getSize());
+        //System.out.println("Current selection : "+currentSelection.getSize());
         for(int i=1;i<nbSelections;i++)
         {
           Selection<T> otherSelection=_selections.get(i);
-          System.out.println("Other selection : "+otherSelection.getSize());
+          //System.out.println("Other selection : "+otherSelection.getSize());
           currentSelection=and(currentSelection,otherSelection);
-          System.out.println("New current selection : "+currentSelection.getSize());
+          //System.out.println("New current selection : "+currentSelection.getSize());
         }
         for(T object : currentSelection.getSelectedObjects())
         {
