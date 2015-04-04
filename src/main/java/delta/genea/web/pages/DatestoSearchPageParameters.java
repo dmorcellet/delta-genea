@@ -8,10 +8,13 @@ import delta.common.framework.web.PageParameters;
  */
 public class DatestoSearchPageParameters extends PageParameters
 {
+  /**
+   * Value of action parameter. 
+   */
   public static final String ACTION_VALUE="DATES_TO_SEARCH";
   private static final String KEY="KEY";
   private static final String DEPTH="DEPTH";
-  private long _key;
+  private Long _key;
   private int _depth;
 
   /**
@@ -19,31 +22,47 @@ public class DatestoSearchPageParameters extends PageParameters
    * @param key Root person key.
    * @param depth Number of generations.
    */
-  public DatestoSearchPageParameters(long key, int depth)
+  public DatestoSearchPageParameters(Long key, int depth)
   {
     super("genea");
     setKey(key);
     setDepth(depth);
   }
 
+  /**
+   * Set the depth parameter.
+   * @param depth Depth to set.
+   */
   public final void setDepth(int depth)
   {
     _depth=depth;
     _parameters.put(DEPTH,Integer.valueOf(depth));
   }
 
+  /**
+   * Get the depth parameter.
+   * @return Depth to use.
+   */
   public int getDepth()
   {
     return _depth;
   }
 
-  public final void setKey(long key)
+  /**
+   * Set root person key.
+   * @param key Primary key to set.
+   */
+  public final void setKey(Long key)
   {
     _key=key;
-    _parameters.put(KEY,Long.valueOf(key));
+    _parameters.put(KEY,key);
   }
 
-  public long getMainPersonKey()
+  /**
+   * Get the person key.
+   * @return A primary or <code>null</code>.
+   */
+  public Long getMainPersonKey()
   {
     return _key;
   }

@@ -6,6 +6,7 @@ import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.web.GeneaUserContext;
 
 /**
+ * Base class for the web pages of the 'genea' web application.
  * @author DAM
  */
 public class GeneaWebPage extends WebPage
@@ -15,16 +16,10 @@ public class GeneaWebPage extends WebPage
     // Nothing to do !!
   }
 
-  public Long getPersonKey(String variableName)
-  {
-    Long key=ParameterFinder.getLongParameter(_request,variableName,null);
-    if (key==null)
-    {
-      key=ParameterFinder.getLongParameter(_request,GeneaUserContext.DE_CUJUS,Long.valueOf(0));
-    }
-    return key;
-  }
-
+  /**
+   * Get the data source for this page.
+   * @return A data source or <code>null</code>.
+   */
   public GeneaDataSource getDataSource()
   {
     String dbName=ParameterFinder.getStringParameter(_request,GeneaUserContext.DB_NAME,null);

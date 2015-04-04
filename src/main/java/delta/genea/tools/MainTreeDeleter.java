@@ -9,6 +9,10 @@ import delta.genea.data.trees.AncestorsTree;
 import delta.genea.data.trees.AncestorsTreesRegistry;
 import delta.genea.data.trees.DescendantsTree;
 
+/**
+ * Tool to remove anscestors trees or descendants trees.
+ * @author DAM
+ */
 public class MainTreeDeleter
 {
   private static int nb=0;

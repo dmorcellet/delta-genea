@@ -26,6 +26,10 @@ import javax.swing.border.BevelBorder;
 import delta.genea.data.Person;
 import delta.genea.data.Sex;
 
+/**
+ * Edition form for a person.
+ * @author DAM
+ */
 public class EditPersonForm extends JDialog
 {
   private transient Person _person;
@@ -36,6 +40,11 @@ public class EditPersonForm extends JDialog
   private JButton _okButton;
   private JButton _cancelButton;
 
+  /**
+   * Constructor.
+   * @param mother Parent frame.
+   * @param modal Modality.
+   */
   public EditPersonForm(JFrame mother, boolean modal)
   {
     super(mother, modal);
@@ -117,6 +126,10 @@ public class EditPersonForm extends JDialog
     dispose();
   }
 
+  /**
+   * Fill this form with a person.
+   * @param data Person to set.
+   */
   public void fillWithData(Person data)
   {
     _person=data;

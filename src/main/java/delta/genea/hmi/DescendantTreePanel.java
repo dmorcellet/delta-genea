@@ -8,12 +8,20 @@ import javax.swing.JTree;
 
 import delta.genea.data.trees.DescendantsTree;
 
+/**
+ * Panel with a descendants tree.
+ * @author DAM
+ */
 public class DescendantTreePanel extends JPanel
 {
   private transient DescendantsTree _tree;
   private DescendantsTreeModel _model;
   private JTree _jtree;
 
+  /**
+   * Constructor.
+   * @param tree Underlying descendants tree.
+   */
   public DescendantTreePanel(DescendantsTree tree)
   {
     _tree=tree;

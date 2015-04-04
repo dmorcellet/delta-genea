@@ -1,5 +1,9 @@
 package delta.genea.tools.db;
 
+/**
+ * Database integrity checks.
+ * @author DAM
+ */
 public class DbIntegrityChecker
 {
   // Vérification à faire :

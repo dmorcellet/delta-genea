@@ -30,6 +30,10 @@ public class OccupationForPerson
     _place=proxy;
   }
 
+  /**
+   * Get the place for this occupation.
+   * @return A place or <code>null</code>.
+   */
   public Place getPlace()
   {
     if(_place!=null)
@@ -39,11 +43,19 @@ public class OccupationForPerson
     return null;
   }
 
+  /**
+   * Get the occupation.
+   * @return the occupation or <code>null</code>.
+   */
   public String getOccupation()
   {
     return _occupation;
   }
 
+  /**
+   * Set occupation.
+   * @param occupation Occupation to set.
+   */
   public void setOccupation(String occupation)
   {
     _occupation=occupation;

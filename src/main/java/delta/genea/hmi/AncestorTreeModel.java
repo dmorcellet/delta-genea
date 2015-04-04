@@ -5,11 +5,19 @@ import javax.swing.tree.DefaultTreeModel;
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.genea.data.trees.AncestorsTree;
 
+/**
+ * Tree model for an ancestors tree.
+ * @author DAM
+ */
 public class AncestorTreeModel extends DefaultTreeModel
 {
   private static final long serialVersionUID=1L;
   private transient AncestorsTree _tree;
 
+  /**
+   * Constructor.
+   * @param tree Underlying ancestors tree.
+   */
   public AncestorTreeModel(AncestorsTree tree)
   {
     super(null);

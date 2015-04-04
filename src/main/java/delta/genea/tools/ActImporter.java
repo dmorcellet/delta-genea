@@ -17,6 +17,7 @@ import delta.genea.time.FrenchRevolutionCalendar;
 import delta.genea.time.GregorianDate;
 
 /**
+ * Import some act files in a database.
  * @author DAM
  */
 public class ActImporter
@@ -28,7 +29,7 @@ public class ActImporter
 
   private static final GregorianDate CHANGE_DATE=FrenchRevolutionCalendar.FIRST_DAY;
 
-  public void init(Long id)
+  private void init(Long id)
   {
     _map=new HashMap<String,Act>();
     try
@@ -318,7 +319,7 @@ public class ActImporter
     }
   }
 
-  public void doIt()
+  private void doIt()
   {
     _root=new File("/home/dm/tmp/actes/ninie");
     init(Long.valueOf(3));
@@ -342,12 +343,16 @@ public class ActImporter
     }
   }
 
+  /**
+   * Main method of this tool.
+   * @param args Not used.
+   */
   public static void main(String[] args)
   {
     new ActImporter().doIt();
   }
 
-  public long convertSosa(long sosa)
+  private long convertSosa(long sosa)
   {
     return sosa;
     /*

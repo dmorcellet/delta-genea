@@ -27,6 +27,10 @@ public class GregorianYear
     return _year;
   }
 
+  /**
+   * Indicates if this is a leap year or not.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
   public boolean isBissextile()
   {
     if((_year<FIRST_GREGORIAN_YEAR)&&(_year%100==0))

@@ -149,11 +149,19 @@ public class GregorianDate
     return _year;
   }
 
+  /**
+   * Get the number of days left in the current month.
+   * @return A number of days.
+   */
   public int getDaysLeftInMonth()
   {
     return(getDaysForMonthAndYear(_month, _year)-_dayOfMonth);
   }
 
+  /**
+   * Get the number of days left in the current year.
+   * @return A number of days.
+   */
   public int getDaysLeftInYear()
   {
     int ret=getDaysLeftInMonth();
@@ -168,6 +176,10 @@ public class GregorianDate
     return ret;
   }
 
+  /**
+   * Get the day in this year.
+   * @return A day index, starting at one.
+   */
   public int getDayInYear()
   {
     int ret=0;
@@ -181,6 +193,10 @@ public class GregorianDate
     return ret;
   }
 
+  /**
+   * Get the day of the week.
+   * @return A day of the week (monday=1).
+   */
   public byte getDayInWeek()
   {
     if(_year>=2500)
@@ -209,12 +225,19 @@ public class GregorianDate
     return(byte)(1+((4+code+_dayOfMonth)%7));
   }
 
+  /**
+   * Get a label for the day of the week.
+   * @return A displayable label.
+   */
   public String getDayOfWeekLabel()
   {
     byte day=getDayInWeek();
     return getLabelForDayOfWeek(day);
   }
 
+  /**
+   * Set this date to the current day.
+   */
   public void now()
   {
     Calendar c=Calendar.getInstance();
@@ -224,6 +247,11 @@ public class GregorianDate
     _year=c.get(Calendar.YEAR);
   }
 
+  /**
+   * Indicates if this date is in the gregorian era or not.
+   * @return <code>true</code> if it is a gregorian date,
+   * <code>false</code> otherwise.
+   */
   public boolean isGregorian()
   {
     if(_year>FIRST_GREGORIAN_YEAR)
@@ -258,6 +286,11 @@ public class GregorianDate
     return false;
   }
 
+  /**
+   * Indicates if this date is in the julian era or not.
+   * @return <code>true</code> if it is a julian date,
+   * <code>false</code> otherwise.
+   */
   public boolean isJulian()
   {
     if(_year>1582)
@@ -292,6 +325,11 @@ public class GregorianDate
     return false;
   }
 
+  /**
+   * Indicates if the given year is a leap year or not.
+   * @param year Year to use.
+   * @return <code>true</code> for a leap year, <code>false</code> otherwise.
+   */
   public static boolean isBissextile(int year)
   {
     if((year<FIRST_GREGORIAN_YEAR)&&(year%100==0))
@@ -309,6 +347,11 @@ public class GregorianDate
     return false;
   }
 
+  /**
+   * Indicates if the given date is before this one.
+   * @param d Date to test.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
   public boolean isBefore(GregorianDate d)
   {
     if(_year<d._year)
@@ -336,6 +379,11 @@ public class GregorianDate
     return false;
   }
 
+  /**
+   * Indicates if the given date is before or equal to this one.
+   * @param d Date to test.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
   public boolean isBeforeOrEqual(GregorianDate d)
   {
     if(_year<d._year)
@@ -363,11 +411,19 @@ public class GregorianDate
     return false;
   }
 
+  /**
+   * Indicates if the given date is equal to this one.
+   * @param date Date to test.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
   public boolean isEqual(GregorianDate date)
   {
     return((_year==date._year)&&(_month==date._month)&&(_dayOfMonth==date._dayOfMonth));
   }
 
+  /**
+   * Remove a day from this date.
+   */
   public void removeADay()
   {
     // Special handling for julian->gregorian transition
@@ -406,6 +462,12 @@ public class GregorianDate
     }
   }
 
+  /**
+   * Get the number of days in the given month and year.
+   * @param month Month to use.
+   * @param year Year to use.
+   * @return A count of days.
+   */
   public static byte getDaysForMonthAndYear(byte month, int year)
   {
     if((month==2)&&(isBissextile(year)))
@@ -415,6 +477,11 @@ public class GregorianDate
     return DAYS_FOR_MONTH[month-1];
   }
 
+  /**
+   * Get the number of days in the given year.
+   * @param year Year to use.
+   * @return A count of days.
+   */
   public static int getDaysForYear(int year)
   {
     if (isBissextile(year))
@@ -424,6 +491,9 @@ public class GregorianDate
     return 365;
   }
 
+  /**
+   * Add a day to this date.
+   */
   public void addADay()
   {
     // Special handling for julian->gregorian transition
@@ -460,6 +530,10 @@ public class GregorianDate
     }
   }
 
+  /**
+   * Add days to this date.
+   * @param days Number of days to add.
+   */
   public void addDays(int days)
   {
     if (isJulian())
@@ -525,6 +599,10 @@ public class GregorianDate
     }
   }
 
+  /**
+   * Get the number of days since 1/1/0000.
+   * @return A count of days.
+   */
   public long getDays()
   {
     long ret=0;
@@ -550,11 +628,21 @@ public class GregorianDate
     return d1.getDays()-d2.getDays();
   }
 
+  /**
+   * Get the label for a month.
+   * @param month Month (starting at 1).
+   * @return the label of the targeted month.
+   */
   public static String getLabelForMonth(byte month)
   {
     return MONTH_LABELS[month-1];
   }
 
+  /**
+   * Get the label for a day of the week.
+   * @param day Day of week (starting at 1).
+   * @return the label of the targeted day of week.
+   */
   public static String getLabelForDayOfWeek(byte day)
   {
     return DAY_OF_THE_WEEK_LABELS[day-1];

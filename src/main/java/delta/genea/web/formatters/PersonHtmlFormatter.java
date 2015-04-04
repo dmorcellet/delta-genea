@@ -25,6 +25,10 @@ public class PersonHtmlFormatter extends TextFormatter
   private boolean _asLink;
   private boolean _useIsAncestorIcon;
 
+  /**
+   * Constructor.
+   * @param context User context.
+   */
   public PersonHtmlFormatter(GeneaUserContext context)
   {
     _context=context;
@@ -35,11 +39,35 @@ public class PersonHtmlFormatter extends TextFormatter
     _useIsAncestorIcon=true;
   }
 
+  /**
+   * Set the de-cujus key.
+   * @param deCujus Person primary key.
+   */
   public void setDeCujus(Long deCujus) { _deCujus=deCujus; }
+  /**
+   * Set the 'use sex icon' flag.
+   * @param value Value to set.
+   */
   public void setUseSexIcon(boolean value) { _useSexIcon=value; }
+  /**
+   * Set the 'use life time' flag.
+   * @param value Value to set.
+   */
   public void setUseLifeTime(boolean value) { _useLifeTime=value; }
+  /**
+   * Set the 'use no descendants icon' flag.
+   * @param value Value to set.
+   */
   public void setUseNoDescendants(boolean value) { _useNoDescendants=value; }
+  /**
+   * Set the 'display as a link' flag.
+   * @param value Value to set.
+   */
   public void setAsLink(boolean value) { _asLink=value; }
+  /**
+   * Set the 'use is ancestor icon' flag.
+   * @param value Value to set.
+   */
   public void setUseIsAncestorIcon(boolean value) { _useIsAncestorIcon=value; }
 
   /**

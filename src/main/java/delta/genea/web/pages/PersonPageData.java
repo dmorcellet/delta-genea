@@ -43,6 +43,11 @@ public class PersonPageData
     _deCujusKey=deCujusKey;
   }
 
+  /**
+   * Load person data from the given data source.
+   * @param source Data source to use.
+   * @return <code>true</code> if load succeeded, <code>false</code> otherwise.
+   */
   public boolean load(GeneaDataSource source)
   {
     _dataSource=source;
@@ -78,6 +83,11 @@ public class PersonPageData
     return true;
   }
 
+  /**
+   * Get the SOSA numbers for a person.
+   * @param key Person primary key.
+   * @return A string of SOSA numbers, separated by spaces.
+   */
   public String getSosas(Long key)
   {
     String ret="";
@@ -98,46 +108,82 @@ public class PersonPageData
     return ret;
   }
 
+  /**
+   * Get the main person.
+   * @return A person or <code>null</code>.
+   */
   public Person getMain()
   {
     return _main;
   }
 
+  /**
+   * Get the father.
+   * @return A person or <code>null</code>.
+   */
   public Person getFather()
   {
     return _father;
   }
 
+  /**
+   * Get the mother.
+   * @return A person or <code>null</code>.
+   */
   public Person getMother()
   {
     return _mother;
   }
 
+  /**
+   * Get the godfather.
+   * @return A person or <code>null</code>.
+   */
   public Person getGodFather()
   {
     return _godFather;
   }
 
+  /**
+   * Get the godmother.
+   * @return A person or <code>null</code>.
+   */
   public Person getGodMother()
   {
     return _godMother;
   }
 
+  /**
+   * Get the list of children.
+   * @return A possibly empty list of persons.
+   */
   public List<Person> getChildren()
   {
     return _children;
   }
 
+  /**
+   * Get the list of godchildren.
+   * @return A possibly empty list of persons.
+   */
   public List<Person> getGodChildren()
   {
     return _godChildren;
   }
 
+  /**
+   * Get the list of acts.
+   * @return A possibly empty list of acts.
+   */
   public ActsForPerson getActs()
   {
     return _acts;
   }
 
+  /**
+   * Get the list of pictures.
+   * @return A possibly empty list of pictures.
+   */
   public List<Picture> getPictures()
   {
     return _pictures;

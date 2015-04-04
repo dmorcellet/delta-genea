@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.NumericTools;
+import delta.common.utils.ParameterFinder;
 import delta.genea.data.Act;
 import delta.genea.data.ActText;
 import delta.genea.data.Person;
@@ -39,7 +40,7 @@ public class ActPage extends GeneaWebPage
   @Override
   public void parseParameters() throws Exception
   {
-    _key=getPersonKey("KEY");
+    _key=ParameterFinder.getLongParameter(_request,ActPageParameters.KEY,null);
   }
 
   @Override
@@ -161,7 +162,7 @@ public class ActPage extends GeneaWebPage
         // Présence
         boolean useSignature=true;
         presence=personInAct.getPresence();
-        if (presence.equals("O"))
+        if ("O".equals(presence))
         {
           if (person.getSex()==Sex.FEMALE)
           {
@@ -172,7 +173,7 @@ public class ActPage extends GeneaWebPage
             pw.print("Présent");
           }
         }
-        else if (presence.equals("+"))
+        else if ("+".equals(presence))
         {
           if (person.getSex()==Sex.FEMALE)
           {
@@ -184,7 +185,7 @@ public class ActPage extends GeneaWebPage
           }
           useSignature=false;
         }
-        else if (presence.equals("N"))
+        else if ("N".equals(presence))
         {
           if (person.getSex()==Sex.FEMALE)
           {
@@ -196,7 +197,7 @@ public class ActPage extends GeneaWebPage
           }
           useSignature=false;
         }
-        else if (presence.length()==0)
+        else if ((presence==null) || (presence.length()==0))
         {
           pw.print("???");
         }
@@ -214,19 +215,19 @@ public class ActPage extends GeneaWebPage
           {
             signature="";
           }
-          if (signature.equals("S"))
+          if ("S".equals(signature))
           {
             pw.print("(Signature)");
           }
-          else if (signature.equals("M"))
+          else if ("M".equals(signature))
           {
             pw.print("(Marque)");
           }
-          else if ((signature.equals("N"))||(signature.equals("-")))
+          else if (("N".equals(signature))||("-".equals(signature)))
           {
             pw.print("(Rien)");
           }
-          else if (signature.length()==0)
+          else if ((signature==null) || (signature.length()==0))
           {
             pw.print("???");
           }

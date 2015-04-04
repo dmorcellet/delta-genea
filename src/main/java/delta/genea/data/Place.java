@@ -43,11 +43,19 @@ public class Place extends DataObject<Place>
     setPrimaryKey(primaryKey);
   }
 
+  /**
+   * Get the name of this place.
+   * @return A place name.
+   */
   public String getName()
   {
     return _name;
   }
 
+  /**
+   * Get a short name for this place (department code, country code...).
+   * @return a short name or <code>null</code>.
+   */
   public String getShortName()
   {
     return _shortName;
@@ -60,6 +68,10 @@ public class Place extends DataObject<Place>
     return ret;
   }
 
+  /**
+   * Get a full description of this place.
+   * @return A displayable string.
+   */
   public String getFullName()
   {
     if (_level==PlaceLevel.DEPARTMENT)
@@ -78,26 +90,46 @@ public class Place extends DataObject<Place>
     return sb.toString();
   }
 
+  /**
+   * Set the name of this place.
+   * @param name Name to set.
+   */
   public void setName(String name)
   {
     _name=name;
   }
 
+  /**
+   * Set the short name of this place.
+   * @param shortName Short name to set.
+   */
   public void setShortName(String shortName)
   {
     _shortName=shortName;
   }
 
+  /**
+   * Get the level of this place.
+   * @return A place level or <code>null</code> if not set.
+   */
   public PlaceLevel getLevel()
   {
     return _level;
   }
 
+  /**
+   * Set the level of this place.
+   * @param level Level to set.
+   */
   public void setLevel(PlaceLevel level)
   {
     _level=level;
   }
 
+  /**
+   * Get the parent place, if any.
+   * @return A place or <code>null</code>.
+   */
   public Place getParentPlace()
   {
     if(_parent!=null)
@@ -107,22 +139,41 @@ public class Place extends DataObject<Place>
     return null;
   }
 
+  /**
+   * Get the parent place at specified level.
+   * @param level Level to search.
+   * @return A place or <code>null</code> if not found.
+   */
   public Place getParentPlaceForLevel(PlaceLevel level)
   {
     Place current=this;
     while ((current!=null) && (current._level!=level))
     {
-      if (current._parent!=null) current=current._parent.getDataObject();
-      else current=null;
+      if (current._parent!=null)
+      {
+        current=current._parent.getDataObject();
+      }
+      else
+      {
+        current=null;
+      }
     }
     return current;
   }
 
+  /**
+   * Get the proxy for the parent place.
+   * @return A place proxy or <code>null</code>.
+   */
   public DataProxy<Place> getParentPlaceProxy()
   {
     return _parent;
   }
 
+  /**
+   * Set the proxy for the parent place.
+   * @param parent A place proxy or <code>null</code>.
+   */
   public void setParentPlaceProxy(DataProxy<Place> parent)
   {
     _parent=parent;

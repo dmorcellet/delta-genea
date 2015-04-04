@@ -16,11 +16,19 @@ public class DataTableHtmlFormatter extends TextFormatter
 {
   private HashMap<String,TextFormatter> _formatters;
 
+  /**
+   * Constructor.
+   */
   public DataTableHtmlFormatter()
   {
     _formatters=new HashMap<String,TextFormatter>();
   }
 
+  /**
+   * Set the formatter for a column.
+   * @param columnName Name of the targeted column.
+   * @param formatter Formatter to use.
+   */
   public void setFormatter(String columnName, TextFormatter formatter)
   {
     _formatters.put(columnName,formatter);

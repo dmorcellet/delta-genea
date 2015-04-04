@@ -8,9 +8,18 @@ import delta.common.framework.web.PageParameters;
  */
 public class DescendantsPageParameters extends PageParameters
 {
+  /**
+   * Value of action parameter. 
+   */
   public static final String ACTION_VALUE="DESCENDANTS_TREE";
-  static final String MAIN_PERSON_KEY="KEY";
-  static final String DEPTH="DEPTH";
+  /**
+   * Main person key parameter.
+   */
+  public static final String MAIN_PERSON_KEY="KEY";
+  /**
+   * Depth parameter.
+   */
+  public static final String DEPTH="DEPTH";
   static final String SAME_NAME="SAME_NAME";
   private Long _key;
   private int _depth;
@@ -45,34 +54,58 @@ public class DescendantsPageParameters extends PageParameters
     setSameName(sameName);
   }
 
+  /**
+   * Set the depth parameter.
+   * @param depth Depth to set.
+   */
   public final void setDepth(int depth)
   {
     _depth=depth;
     _parameters.put(DEPTH,Integer.valueOf(depth));
   }
 
+  /**
+   * Get the depth parameter.
+   * @return Depth to use.
+   */
   public int getDepth()
   {
     return _depth;
   }
 
+  /**
+   * Set root person key.
+   * @param key Primary key to set.
+   */
   public final void setKey(Long key)
   {
     _key=key;
     _parameters.put(MAIN_PERSON_KEY,key);
   }
 
+  /**
+   * Get the person key.
+   * @return A primary or <code>null</code>.
+   */
   public Long getKey()
   {
     return _key;
   }
 
+  /**
+   * Set the 'same name' flag.
+   * @param sameName Value to set.
+   */
   public final void setSameName(boolean sameName)
   {
     _sameName=sameName;
     _parameters.put(SAME_NAME,Boolean.valueOf(sameName));
   }
 
+  /**
+   * Get the 'same name' flag.
+   * @return the flag value.
+   */
   public boolean getSameName()
   {
     return _sameName;

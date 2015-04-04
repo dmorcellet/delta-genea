@@ -11,6 +11,10 @@ import delta.genea.data.trees.AncestorsTreesRegistry;
 import delta.genea.web.GeneaUserContext;
 import delta.genea.web.pages.PersonPageParameters;
 
+/**
+ * Tool methods to display person data.
+ * @author DAM
+ */
 public class PersonTools
 {
   private PrintWriter _pw;
@@ -20,8 +24,13 @@ public class PersonTools
   private boolean _useNoDescendants;
   private boolean _asLink;
   private boolean _useIsAncestorIcon;
-  private boolean _showDates;
+  private boolean _useLifeTime;
 
+  /**
+   * Constructor.
+   * @param context User context.
+   * @param pw Output writer.
+   */
   public PersonTools(GeneaUserContext context, PrintWriter pw)
   {
     _context=context;
@@ -31,20 +40,51 @@ public class PersonTools
     _useNoDescendants=false;
     _asLink=true;
     _useIsAncestorIcon=true;
-    _showDates=true;
+    _useLifeTime=true;
   }
 
+  /**
+   * Set the 'use sex icon' flag.
+   * @param value Value to set.
+   */
   public void setUseSexIcon(boolean value) { _useSexIcon=value; }
+  /**
+   * Set the 'use no descendants icon' flag.
+   * @param value Value to set.
+   */
   public void setUseNoDescendants(boolean value) { _useNoDescendants=value; }
+  /**
+   * Set the 'display as a link' flag.
+   * @param value Value to set.
+   */
   public void setAsLink(boolean value) { _asLink=value; }
+  /**
+   * Set the 'use is ancestor icon' flag.
+   * @param value Value to set.
+   */
   public void setUseIsAncestorIcon(boolean value) { _useIsAncestorIcon=value; }
-  public void setShowDates(boolean value) { _showDates=value; }
+  /**
+   * Set the 'use life time' flag.
+   * @param value Value to set.
+   */
+  public void setUseLifeTime(boolean value) { _useLifeTime=value; }
 
+  /**
+   * Generate a person name to the output write.
+   * @param person Person to use.
+   */
   public void generatePersonName(Person person)
   {
     generatePersonName(person,null,null);
   }
 
+  /**
+   * Generate a person name to the output write.
+   * @param person Person to use.
+   * @param alternativeText Alternative text for link.
+   * Uses person name if <code>null</code>.
+   * @param dbName Database name (<code>null</code> to use default current database).
+   */
   public void generatePersonName(Person person, String alternativeText, String dbName)
   {
     PrintWriter pw=_pw;
@@ -109,7 +149,7 @@ public class PersonTools
         pw.print("</A>");
       }
       pw.print("</B>");
-      if (_showDates)
+      if (_useLifeTime)
       {
         pw.print(" (");
         pw.print(person.getBirthGeneaDate().getYearString());

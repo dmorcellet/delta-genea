@@ -10,20 +10,33 @@ import delta.genea.data.Person;
 import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.formatters.GeneaDateFormatter;
-import delta.genea.time.GregorianDate;
 import delta.genea.web.GeneaUserContext;
 import delta.genea.web.pages.tools.PersonTools;
 
+/**
+ * Some HTML pages generation tools.
+ * @author DAM
+ */
 public class PageTools extends WebPageTools
 {
   private GeneaUserContext _context;
 
+  /**
+   * Constructor.
+   * @param context User context.
+   * @param pw Output writer.
+   */
   public PageTools(GeneaUserContext context, PrintWriter pw)
   {
     super(pw);
     _context=context;
   }
 
+  /**
+   * Generate a link for an act.
+   * @param act Act to link.
+   * @param label Label for the link.
+   */
   public void generateActLink(Act act, String label)
   {
     if (act!=null)
@@ -42,6 +55,12 @@ public class PageTools extends WebPageTools
     }
   }
 
+  /**
+   * Generate a link for an act involving 1 or 2 persons.
+   * @param act Act to link.
+   * @param p1 First person.
+   * @param p2 Second person (may be <code>null</code>).
+   */
   public void generateActLink(Act act, Person p1, Person p2)
   {
     if (act==null) return;
@@ -73,6 +92,10 @@ public class PageTools extends WebPageTools
     _pw.print(')');
   }
 
+  /**
+   * Generate a link for a picture.
+   * @param picture Picture to link.
+   */
   public void generatePictureLink(Picture picture)
   {
     if (picture!=null)
@@ -87,6 +110,11 @@ public class PageTools extends WebPageTools
     }
   }
 
+  /**
+   * Build a string representation of a date.
+   * @param gdate Date.
+   * @return A displayable string.
+   */
   public static String generateDate(GeneaDate gdate)
   {
     GeneaDateFormatter formatter=new GeneaDateFormatter();
@@ -96,47 +124,48 @@ public class PageTools extends WebPageTools
     return ret;
   }
 
+  /**
+   * Build a string representation of a date.
+   * @param date Date.
+   * @param infos Date information.
+   * @return A displayable string.
+   */
   public static String generateDate(Long date, String infos)
   {
     GeneaDate gdate=new GeneaDate(date,infos);
     return generateDate(gdate);
   }
 
+  /**
+   * Build a string representation of a date.
+   * @param date Date.
+   * @param infos Date information.
+   * @return A displayable string.
+   */
   public static String generateDate(Date date, String infos)
   {
     GeneaDate gdate=new GeneaDate(date,infos);
     return generateDate(gdate);
   }
 
-  public static void generateYear(Date date, String infos, PrintWriter pw)
-  {
-    if (date!=null)
-    {
-      GregorianDate gd=new GregorianDate(date);
-      pw.print(gd.getYear());
-    }
-    else if ((infos==null) || (infos.length()==0))
-    {
-      pw.print("???");
-    }
-    else
-    {
-      pw.print(infos);
-    }
-  }
-
-  public static void generatePlace(Place place, PrintWriter pw, String before, String after)
+  /**
+   * Generate a place.
+   * @param place Place to use.
+   * @param before String to write before the place (may be <code>null</code>).
+   * @param after String to write after the place (may be <code>null</code>).
+   */
+  public void generatePlace(Place place, String before, String after)
   {
     if (place!=null)
     {
       if (before!=null)
       {
-        pw.print(before);
+        _pw.print(before);
       }
-      pw.print(place.getFullName());
+      _pw.print(place.getFullName());
       if (after!=null)
       {
-        pw.print(after);
+        _pw.print(after);
       }
     }
   }

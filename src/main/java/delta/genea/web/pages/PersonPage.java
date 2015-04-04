@@ -157,7 +157,7 @@ public class PersonPage extends GeneaWebPage
     String bDate=PageTools.generateDate(main.getBirthDate(),main
         .getBirthInfos());
     pw.print(bDate);
-    PageTools.generatePlace(main.getBirthPlace(),pw," ",null);
+    tools.generatePlace(main.getBirthPlace()," ",null);
     pw.println("<br>");
 
     // Death
@@ -168,7 +168,7 @@ public class PersonPage extends GeneaWebPage
     String dDate=PageTools.generateDate(main.getDeathDate(),main
         .getDeathInfos());
     pw.print(dDate);
-    PageTools.generatePlace(main.getDeathPlace(),pw," ",null);
+    tools.generatePlace(main.getDeathPlace()," ",null);
     pw.println("<br>");
 
     // Father & Mother
@@ -244,7 +244,7 @@ public class PersonPage extends GeneaWebPage
           pw.print(year);
           pw.print(")");
         }
-        PageTools.generatePlace(place,pw," (",")");
+        tools.generatePlace(place," (",")");
         pw.println("</li>");
       }
       pw.println("</ul>");
@@ -279,7 +279,7 @@ public class PersonPage extends GeneaWebPage
           pw.print(placeDetails);
           pw.print(' ');
         }
-        PageTools.generatePlace(place,pw,"","");
+        tools.generatePlace(place,"","");
         pw.println("</li>");
       }
       pw.println("</ul>");
@@ -322,7 +322,7 @@ public class PersonPage extends GeneaWebPage
           {
             pw.print(uDate);
           }
-          PageTools.generatePlace(u.getPlace(),pw," ",null);
+          tools.generatePlace(u.getPlace()," ",null);
           pw.print(' ');
           Act weddingContract=u.getWeddingContract();
           if (weddingContract!=null)

@@ -8,6 +8,9 @@ import delta.common.framework.web.PageParameters;
  */
 public class CousinsPageParameters extends PageParameters
 {
+  /**
+   * Value of action parameter. 
+   */
   public static final String ACTION_VALUE="COUSINS";
   private static final String KEY="KEY";
   private Long _key;
@@ -22,12 +25,20 @@ public class CousinsPageParameters extends PageParameters
     setKey(key);
   }
 
+  /**
+   * Set person key.
+   * @param key Primary key to set.
+   */
   public final void setKey(Long key)
   {
     _key=key;
     _parameters.put(KEY,key);
   }
 
+  /**
+   * Get the person key.
+   * @return A primary or <code>null</code>.
+   */
   public Long getKey()
   {
     return _key;

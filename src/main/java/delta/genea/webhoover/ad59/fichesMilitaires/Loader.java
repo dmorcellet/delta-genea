@@ -183,10 +183,16 @@ Sample playlist XML document:
   {
     ADSession session=new ADSession();
     // Béthune, 1897
-    int packageId=11247;
+    //int packageId=11247;
+    // Lille, 1901
+    //int packageId=11823;
+    // Lille, 1893
+    int packageId=10683;
     Loader l=new Loader(packageId);
     session.start();
-    int pageNumber=466;
+    //int pageNumber=466;
+    //int pageNumber=552;
+    int pageNumber=149;
     l.load(session,pageNumber);
     session.stop();
   }

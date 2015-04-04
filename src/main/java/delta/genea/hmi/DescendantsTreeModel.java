@@ -6,11 +6,19 @@ import delta.common.utils.collections.TreeNode;
 import delta.genea.data.Person;
 import delta.genea.data.trees.DescendantsTree;
 
+/**
+ * Tree model for a descendants tree.
+ * @author DAM
+ */
 public class DescendantsTreeModel extends DefaultTreeModel
 {
   private static final long serialVersionUID=1L;
   private transient DescendantsTree _tree;
 
+  /**
+   * Constructor.
+   * @param tree Underlying descendants tree.
+   */
   public DescendantsTreeModel(DescendantsTree tree)
   {
     super(null);

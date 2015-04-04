@@ -28,12 +28,20 @@ public class ActsFromPlaceParameters extends PageParameters
     setKey(key);
   }
 
+  /**
+   * Set place key.
+   * @param key Primary key to set.
+   */
   public final void setKey(Long key)
   {
     _key=key;
     _parameters.put(KEY,key);
   }
 
+  /**
+   * Get the place key.
+   * @return A primary or <code>null</code>.
+   */
   public Long getKey()
   {
     return _key;

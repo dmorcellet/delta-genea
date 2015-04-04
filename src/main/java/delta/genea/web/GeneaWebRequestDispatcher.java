@@ -30,8 +30,15 @@ import delta.genea.web.pages.PlacesPage;
 import delta.genea.web.pages.UnionsPage;
 import delta.genea.web.pages.UnionsPageParameters;
 
+/**
+ * Dispatcher for genea web requests.
+ * @author DAM
+ */
 public class GeneaWebRequestDispatcher extends WebRequestDispatcher
 {
+  /**
+   * Constructor.
+   */
   public GeneaWebRequestDispatcher()
   {
     super();
