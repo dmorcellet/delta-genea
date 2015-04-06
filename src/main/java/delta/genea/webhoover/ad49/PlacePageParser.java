@@ -10,6 +10,10 @@ import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.HtmlTools;
 
+/**
+ * Parser for a place index page.
+ * @author DAM
+ */
 public class PlacePageParser
 {
   private static final String PLACE_PAGE_URL=Constants.ROOT_SITE+"/cg49work/registre_recherche.php?PHPSID=";
@@ -27,12 +31,22 @@ public class PlacePageParser
   private AD49Session _session;
   private int _placeID;
 
+  /**
+   * Constructor.
+   * @param session Session to use.
+   * @param placeID Identifier of the place to use.
+   */
 	public PlacePageParser(AD49Session session, int placeID)
 	{
 	  _session=session;
 	  _placeID=placeID;
 	}
 
+	/**
+	 * Extract definitions of acts packages for this place.
+	 * @return A list of acts packages.
+	 * @throws Exception If a problem occurs.
+	 */
 	public List<ActsPackage> parse() throws Exception
 	{
     String phpSID=_session.getPHPSessionID();

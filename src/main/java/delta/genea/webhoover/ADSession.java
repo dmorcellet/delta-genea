@@ -9,8 +9,8 @@ import delta.downloads.Downloader;
  * Base class for webhoover sessions.
  * It manages:
  * <ul>
- * <li>a directory for temporary files.
- * <li>a downloader
+ * <li>a directory for temporary files,
+ * <li>a downloader.
  * </ul>
  * @author DAM
  */
@@ -21,6 +21,9 @@ public class ADSession
   private Downloader _downloader;
   private File _tmpDir;
 
+  /**
+   * Constructor.
+   */
   public ADSession()
   {
     // Nothing to do !!
@@ -33,6 +36,9 @@ public class ADSession
     return ret;
   }
 
+  /**
+   * Start this session.
+   */
   public void start()
   {
     _downloader=new Downloader();
@@ -42,6 +48,9 @@ public class ADSession
     additionalInitializations();
   }
 
+  /**
+   * Stop this session.
+   */
   public void stop()
   {
     _downloader.dispose();
@@ -50,16 +59,27 @@ public class ADSession
     deleter.doIt();
   }
 
+  /**
+   * Get the managed downloader.
+   * @return a downloader.
+   */
   public Downloader getDownloader()
   {
     return _downloader;
   }
 
+  /**
+   * Get the base directory for temporary files.
+   * @return A directory.
+   */
   public File getTmpDir()
   {
     return _tmpDir;
   }
 
+  /**
+   * Hook for additional initializations in sub-classes.
+   */
   protected void additionalInitializations()
   {
     // Nothing to do!

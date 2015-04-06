@@ -8,6 +8,10 @@ import java.util.List;
 import delta.common.utils.text.TextUtils;
 import delta.genea.webhoover.ActsPackage;
 
+/**
+ * Parser for the places index page.
+ * @author DAM
+ */
 public class PlacePageParser
 {
 	private static final String START_OF_PLACE_ENTRY="<td valign=\"top\" class=\"nom_commune\" style=\"width:55%;\"><span>";

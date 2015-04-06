@@ -23,7 +23,9 @@ public class MainDownloadActs
   private static final Logger _logger=GeneaLoggers.getGeneaLogger();
 
   /**
-   * @param args
+   * Main method of this tool.
+   * @param args Not used.
+   * @throws Exception If a problem occurs.
    */
   public static void main(String[] args) throws Exception
   {

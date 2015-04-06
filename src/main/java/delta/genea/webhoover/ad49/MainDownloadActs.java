@@ -8,6 +8,10 @@ import java.util.Set;
 
 import delta.genea.webhoover.ActsPackage;
 
+/**
+ * Main class for the AD49 webhoover.
+ * @author DAM
+ */
 public class MainDownloadActs
 {
   private static Set<File> _scheduledDirs=new HashSet<File>();
@@ -55,7 +59,8 @@ public class MainDownloadActs
   }
 
   /**
-	 * @param args
+   * Main method of this tool.
+	 * @param args Not used.
 	 */
 	public static void main(String[] args)
 	{

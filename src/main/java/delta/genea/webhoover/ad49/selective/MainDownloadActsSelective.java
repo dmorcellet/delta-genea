@@ -8,13 +8,18 @@ import delta.genea.webhoover.ad49.AD49Session;
 import delta.genea.webhoover.ad49.PackagePageParser;
 import delta.genea.webhoover.ad49.PlacePageParser;
 
+/**
+ * Selective download of act pages.
+ * @author DAM
+ */
 public class MainDownloadActsSelective
 {
   private static final File IN_FILE=new File("/home/dm/tmp/liste.csv");
   private static final File IN_FILE2=new File("/home/dm/tmp/liste2.csv");
 
   /**
-   * @param args
+   * Main method for this tool.
+   * @param args Not used.
    */
   public static void main(String[] args)
   {

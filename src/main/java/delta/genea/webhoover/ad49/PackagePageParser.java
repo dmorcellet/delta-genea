@@ -1,7 +1,6 @@
 package delta.genea.webhoover.ad49;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 import delta.common.utils.NumericTools;
@@ -12,19 +11,28 @@ import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.ImageMontageMaker;
 
+/**
+ * Provides downloading facilities for pages of an acts package.
+ * @author DAM
+ */
 public class PackagePageParser
 {
   private File _rootActsPackageDir;
   private AD49Session _session;
-	private ActsPackage _actsPackage;
+  private ActsPackage _actsPackage;
   private int _nbPages;
 
+  /**
+   * Constructor.
+   * @param session Session to use.
+   * @param actsPackage Acts package to use.
+   */
   public PackagePageParser(AD49Session session, ActsPackage actsPackage)
-	{
+  {
     _session=session;
-		_actsPackage=actsPackage;
-		_rootActsPackageDir=_actsPackage.getDirFile(Constants.ROOT_DIR);
-	}
+    _actsPackage=actsPackage;
+    _rootActsPackageDir=_actsPackage.getDirFile(Constants.ROOT_DIR);
+  }
 
   private File downloadTile(int pageNumber, int hIndex, int vIndex, int x, int y, int width, int height) throws Exception
   {
@@ -119,11 +127,10 @@ public class PackagePageParser
     }
   }
 
-  public File getRootDir()
-  {
-    return _rootActsPackageDir;
-  }
-
+  /**
+   * Parse package and get the number of pages.
+   * @throws Exception If a problem occurs.
+   */
   public void parse() throws Exception
 	{
     _rootActsPackageDir.mkdirs();
@@ -144,12 +151,10 @@ public class PackagePageParser
     int nbPages=0;
     {
       List<String> lines=TextUtils.readAsLines(tmpFile);
-      String line;
       int index;
       String start="if (pageLoad>";
-      for(Iterator<String> it2=lines.iterator();it2.hasNext();)
+      for(String line : lines)
       {
-        line=it2.next();
         index=line.indexOf(start);
         if (index!=-1)
         {
@@ -165,8 +170,15 @@ public class PackagePageParser
     }
     tmpFile.delete();
     _nbPages=nbPages;
-	}
+  }
 
+  /**
+   * Download a series of pages.
+   * @param name Hint on the name of generated files ("xxx.jpg"). May be <code>null</code>.
+   * @param minIndex Index of the first page (starting at 1).
+   * @param maxIndex Index of the last page (maximum is the number of pages in this package).
+   * @throws Exception If a problem occurs.
+   */
   public void downloadPages(final String name, int minIndex, int maxIndex) throws Exception
   {
     Downloader downloader=_session.getDownloader();
@@ -233,6 +245,10 @@ public class PackagePageParser
     }
   }
 
+  /**
+   * Download all pages in the managed package.
+   * @throws Exception If a problem occurs.
+   */
   public void downloadAllPages() throws Exception
   {
     downloadPages(null,1,_nbPages);

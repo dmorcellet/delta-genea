@@ -5,9 +5,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+/**
+ * Check completion of act directories.
+ * @author DAM
+ */
 public class MainCheckActsDir
 {
+  /**
+   * Get the filename for an image.
+   * @param nb Image index.
+   * @return A filename.
+   */
 	public static String getImageFileName(int nb)
 	{
 		String nbStr=String.valueOf(nb);
@@ -16,6 +24,11 @@ public class MainCheckActsDir
 		return nbStr+".jpg";
 	}
 
+  /**
+   * Get the filename for a big image.
+   * @param nb Image index.
+   * @return A filename.
+   */
 	public static String getBigImageFileName(int nb)
 	{
 		String nbStr=String.valueOf(nb);
@@ -24,13 +37,17 @@ public class MainCheckActsDir
 		return "big"+nbStr+".png";
 	}
 
-	public static void handleChildDir(File childDir)
+	/**
+	 * Handle a directory.
+	 * @param dir Directory to use.
+	 */
+	public static void handleDirectory(File dir)
 	{
-		String[] childs=childDir.list();
+		String[] childs=dir.list();
 		int nbchilds=childs.length;
 		if (nbchilds%2!=0)
 		{
-			System.err.println("Odd number of files in "+childDir);
+			System.err.println("Odd number of files in "+dir);
 		}
 		List<String> names=new ArrayList<String>(nbchilds);
 		for(int i=0;i<nbchilds;i++) names.add(childs[i]);
@@ -50,6 +67,11 @@ public class MainCheckActsDir
 			}
 		}
 	}
+
+	/**
+	 * Perform checks.
+	 * @param dir Directory to use.
+	 */
 	public static void doIt(File dir)
 	{
 		File[] childs=dir.listFiles();
@@ -64,10 +86,15 @@ public class MainCheckActsDir
 			else
 			{
 				System.out.println("Handling : "+child);
-				handleChildDir(child);
+				handleDirectory(child);
 			}
 		}
 	}
+
+	/**
+	 * Main method for this tool.
+	 * @param args Not used.
+	 */
 	public static void main(String[] args)
 	{
 		doIt(Constants.ROOT_DIR);

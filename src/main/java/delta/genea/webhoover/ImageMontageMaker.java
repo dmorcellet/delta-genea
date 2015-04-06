@@ -21,8 +21,19 @@ import javax.media.jai.operator.LookupDescriptor;
 import javax.media.jai.operator.MosaicDescriptor;
 import javax.media.jai.operator.TranslateDescriptor;
 
+/**
+ * Build a single big image from a mosaic of small images.
+ * @author DAM
+ */
 public class ImageMontageMaker
 {
+  /**
+   * Build image.
+   * @param files Files to use.
+   * @param out Output image.
+   * @throws FileNotFoundException
+   * @throws IOException
+   */
   public void doIt(File[][] files, File out) throws FileNotFoundException, IOException
   {
     int columnTotal=files.length, rowTotal=files[0].length;
@@ -81,7 +92,7 @@ public class ImageMontageMaker
     // ImageIO.write(finalImage, "png", out);
   }
 
-  public static RenderedOp convert(RenderedOp image)
+  private static RenderedOp convert(RenderedOp image)
   {
     // If the source image is colormapped, convert it to 3-band RGB.
     ColorModel colorModel=image.getColorModel();

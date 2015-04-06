@@ -7,10 +7,16 @@ import java.util.List;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 
+/**
+ * Download a military form.
+ * @author DAM
+ */
 public class MainDownloadActs
 {
 	/**
-	 * @param args
+	 * Main method for this tool.
+	 * @param args Not used.
+	 * @throws Exception if a problem occurs.
 	 */
 	public static void main(String[] args) throws Exception
 	{
@@ -50,6 +56,5 @@ public class MainDownloadActs
 			}
 		}
 		mainPage.delete();
-
 	}
 }

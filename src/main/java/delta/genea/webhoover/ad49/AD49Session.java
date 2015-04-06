@@ -9,6 +9,7 @@ import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
 
 /**
+ * AD49 download session.
  * @author DAM
  */
 public class AD49Session extends ADSession
@@ -19,12 +20,19 @@ public class AD49Session extends ADSession
 
   private String _phpSID;
 
+  /**
+   * Constructor.
+   */
   public AD49Session()
   {
     super();
     _phpSID="";
   }
 
+  /**
+   * Get the PHP session ID for this session.
+   * @return A PHP session ID.
+   */
   public String getPHPSessionID()
   {
     return _phpSID;

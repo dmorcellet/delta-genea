@@ -9,6 +9,7 @@ import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 
 /**
+ * Parser for a specification file for selective pages download.
  * @author DAM
  */
 public class SpecFileParser
@@ -59,6 +60,11 @@ public class SpecFileParser
     return name;
   }
 
+  /**
+   * Parse page descriptions from a file.
+   * @param f File to use.
+   * @return A list of page descriptions.
+   */
   public List<PageDescription> parse(File f)
   {
     List<PageDescription> ret=new ArrayList<PageDescription>();

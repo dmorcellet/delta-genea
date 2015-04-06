@@ -2,17 +2,50 @@ package delta.genea.webhoover;
 
 import java.io.File;
 
+/**
+ * Storage for a package of acts.
+ * @author DAM
+ */
 public class ActsPackage
 {
+  /**
+   * Identifier.
+   */
   public String _id;
+  /**
+   * Place name.
+   */
   public String _placeName;
+  /**
+   * Church.
+   */
   public String _church;
+  /**
+   * Act type.
+   */
   public String _actType;
+  /**
+   * Period of time.
+   */
   public String _period;
+  /**
+   * Source.
+   */
   public String _source;
+  /**
+   * Comments.
+   */
   public String _comments;
+  /**
+   * URL of acts.
+   */
   public String _link;
-  
+
+  /**
+   * Get the directory for this package.
+   * @param rootDir Root directory to use.
+   * @return A directory.
+   */
   public File getDirFile(File rootDir)
   {
     File rootPlaceDir=new File(rootDir,_placeName);
