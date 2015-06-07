@@ -10,6 +10,10 @@ import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.ImageMontageMaker;
 
+/**
+ * Provides downloading facilities for pages of an acts package.
+ * @author DAM
+ */
 public class PackagePageParser
 {
 	private static final String START_OF_NB_PAGES_LINE="var iNbMax = ";
@@ -23,12 +27,21 @@ public class PackagePageParser
 	private Downloader _downloader;
 	private ActsPackage _actsPackage;
 
+  /**
+   * Constructor.
+   * @param downloader Downloader to use.
+   * @param actsPackage Acts package to use.
+   */
 	public PackagePageParser(Downloader downloader, ActsPackage actsPackage)
 	{
 	  _downloader=downloader;
 		_actsPackage=actsPackage;
 	}
 
+	/**
+	 * Parse pages.
+	 * @throws Exception If a problem occurs.
+	 */
 	public void parse() throws Exception
 	{
 		parsePage(0);
@@ -37,7 +50,11 @@ public class PackagePageParser
 			parsePage(i);
 		}
 	}
-	
+
+	/**
+	 * Get the directory name for a package.
+	 * @return A directory name.
+	 */
 	public String getDirName()
 	{
 		String ret=_actsPackage._period;
@@ -52,6 +69,7 @@ public class PackagePageParser
 		}
 		return ret;
 	}
+
 	private void parsePage(int nb) throws Exception
 	{
 		File out=getImageFileName(nb);

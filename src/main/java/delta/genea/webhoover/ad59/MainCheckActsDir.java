@@ -5,9 +5,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+/**
+ * Tool to check acts directories.
+ * @author DAM
+ */
 public class MainCheckActsDir
 {
+  /**
+   * Handle a directory.
+   * @param childDir Directory to handle.
+   */
   public static void handleChildDir(File childDir)
   {
     String[] childs=childDir.list();
@@ -25,13 +32,16 @@ public class MainCheckActsDir
     }
   }
 
+  /**
+   * Do the job.
+   * @param dir Directory to handle.
+   */
   public static void doIt(File dir)
   {
     File[] childs=dir.listFiles();
-    File child;
     for(int i=0;i<childs.length;i++)
     {
-      child=childs[i];
+      File child=childs[i];
       if (!child.isDirectory())
       {
         System.err.println("Not a directory : "+child);
@@ -43,6 +53,11 @@ public class MainCheckActsDir
       }
     }
   }
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
   public static void main(String[] args)
   {
     File dir=new File(Constants.ROOT_DIR,Constants.PLACE_NAME);

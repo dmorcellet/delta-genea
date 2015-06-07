@@ -116,10 +116,8 @@ public class PicturePage extends GeneaWebPage
       WebPageTools.generateHorizontalRuler(pw);
       pw.println("<div style=\"text-align:center;\">");
 
-      String imageName;
-      ImagePageParameters imagePage;
-      imageName=_picture.getPictureFilename();
-      imagePage=new ImagePageParameters(GeneaConstants.PICTURES_DIR,imageName);
+      String imageName=_picture.getPictureFilename();
+      ImagePageParameters imagePage=new ImagePageParameters(GeneaConstants.PICTURES_DIR,imageName);
       imagePage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
       pw.print("<img src=\"");
       pw.print(imagePage.build());

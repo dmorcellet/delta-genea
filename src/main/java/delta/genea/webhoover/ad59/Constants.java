@@ -3,21 +3,44 @@ package delta.genea.webhoover.ad59;
 import java.io.File;
 
 /**
+ * Constants for webhoover 59.
  * @author DAM
  */
 public class Constants
 {
+  /**
+   * Place name.
+   */
   public static final String PLACE_NAME="PROVIN";
-  public static final File ROOT_DIR=new File("/home/dm/ad59");
-  public static final boolean TD=false;
+  /**
+   * Root directory for storage.
+   */
+  public static final File ROOT_DIR=new File("d:\\ad59");
+  /**
+   * Use tables or acts packages.
+   */
+  public static final boolean TD=true;
 
-  public static final String SITE_ROOT="http://www.archivesdepartementales.cg59.fr/";
-  public static final String RECHERCHE_TD="?id=recherche_tables_decennales";
+  /**
+   * Site root.
+   */
+  public static final String SITE_ROOT="http://www.archivesdepartementales.cg59.fr";
 
+  /**
+   * Another site root.
+   */
+  public static final String SITE_ROOT2="http://www.archivesdepartementales.lenord.fr";
+
+  /**
+   * Get the URL of the index page for a place.
+   * @param placeName Place to use.
+   * @param td Use tables or acts packages.
+   * @return An URL.
+   */
   public static String getIndexURL(String placeName, boolean td)
   {
     long now=System.currentTimeMillis();
-    String url=SITE_ROOT+"/?id=get_thesaurus_select&thesaurus=";
+    String url=SITE_ROOT2+"/?id=get_thesaurus_select&thesaurus=";
     if (td)
     {
       url=url+"liste_TDEC.xml&";
@@ -38,7 +61,15 @@ public class Constants
     return url;
   }
 
-  //&label_unittitle=Cote+microfilm&form_search_unittitle=&tri=0  
+  //&label_unittitle=Cote+microfilm&form_search_unittitle=&tri=0
+  /**
+   * Get the URL for the packages index.
+   * @param placeName Place name.
+   * @param from Start year.
+   * @param to End year.
+   * @param td Tables/acts flag.
+   * @return An URL.
+   */
   public static String getURL(String placeName, int from, int to, boolean td)
   {
     StringBuilder sb=new StringBuilder(SITE_ROOT);
@@ -64,6 +95,13 @@ public class Constants
     return sb.toString();
   }
 
+  /**
+   * Get the URL for an act page.
+   * @param packageId Package identifier.
+   * @param pageNumber Page number (starting at one).
+   * @param td Tables/acts flag.
+   * @return An URL.
+   */
   public static String getPageURL(String packageId, int pageNumber, boolean td)
   {
     StringBuilder sb=new StringBuilder(SITE_ROOT);
@@ -87,6 +125,11 @@ public class Constants
     return sb.toString();
   }
 
+  /**
+   * Get the URL for the size of an act page.
+   * @param fileName Filename.
+   * @return An URL.
+   */
   public static String getSizeURL(String fileName)
   {
     StringBuilder sb=new StringBuilder(SITE_ROOT);
@@ -96,6 +139,15 @@ public class Constants
     return sb.toString();
   }
 
+  /**
+   * Get the URL for a fragment of act page.
+   * @param fileName Filename.
+   * @param x Start X.
+   * @param y Start Y.
+   * @param width Image width.
+   * @param height Image height.
+   * @return An URL.
+   */
   public static String getImageURL(String fileName, int x, int y, int width, int height)
   {
     StringBuilder sb=new StringBuilder(SITE_ROOT);
@@ -106,6 +158,11 @@ public class Constants
     return sb.toString();
   }
 
+  /**
+   * Get the filename to use for a page.
+   * @param pageNumber Page number (starting at one).
+   * @return A filename.
+   */
   public static String getImageName(int pageNumber)
   {
     String fileName=String.valueOf(pageNumber);
@@ -116,6 +173,12 @@ public class Constants
     return fileName;
   }
 
+  /**
+   * Get the file to use for a page.
+   * @param rootDir Root directory for this file.
+   * @param pageNumber Page number (starting at one).
+   * @return A file.
+   */
   public static File getImageFile(File rootDir, int pageNumber)
   {
     String fileName=getImageName(pageNumber);

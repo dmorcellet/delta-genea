@@ -19,6 +19,11 @@ public class PlacePageParser
 	private static final String END_OF_SPAN="</span>";
 	private static final String END_OF_TD="</td>";
 
+	/**
+	 * Parse package definitions from this place page.
+	 * @param file Input file.
+	 * @return A possibly empty list of package definitions.
+	 */
 	public List<ActsPackage> parseFile(File file)
 	{
 		List<ActsPackage> ret=new ArrayList<ActsPackage>();

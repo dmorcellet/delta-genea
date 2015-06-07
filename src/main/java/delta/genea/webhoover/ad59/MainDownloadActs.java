@@ -135,19 +135,18 @@ public class MainDownloadActs
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
     File tmpFile=new File(tmpDir,"TD_periods.html");
+    
     String url=Constants.getIndexURL(placeName,Constants.TD);
     downloader.downloadToFile(url, tmpFile);
     List<String> lines=TextUtils.readAsLines(tmpFile);
     String line=lines.get(0);
     List<String> periodOptions=TextTools.findAllBetween(line,"<option value='","</option>");
     String separator="'>";
-    String period1,period2;
-    int index;
     for(String period : periodOptions)
     {
-      index=period.indexOf(separator);
-      period1=period.substring(0,index);
-      period2=period.substring(index+separator.length());
+      int index=period.indexOf(separator);
+      String period1=period.substring(0,index);
+      String period2=period.substring(index+separator.length());
       if (!(period1.equals(period2)))
       {
         System.err.println(period);
