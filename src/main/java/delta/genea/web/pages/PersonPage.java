@@ -415,10 +415,8 @@ public class PersonPage extends GeneaWebPage
       {
         pw.println("<b>Actes :</b>");
         pw.println("<ul>");
-        Act act;
-        for(Iterator<Act> it=oActs.iterator();it.hasNext();)
+        for(Act act : oActs)
         {
-          act=it.next();
           pw.print("<li>");
           tools.generateActLink(act,act.getP1(),act.getP2());
           pw.println("</li>");

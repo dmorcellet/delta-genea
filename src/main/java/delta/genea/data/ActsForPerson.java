@@ -1,10 +1,12 @@
 package delta.genea.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import delta.common.framework.objects.data.DataObject;
+import delta.genea.data.comparators.ActDateComparator;
 import delta.genea.data.sources.GeneaDataSource;
 
 /**
@@ -121,6 +123,7 @@ public class ActsForPerson
       }
     }
     _otherActs.addAll(acts);
+    Collections.sort(_otherActs,new ActDateComparator());
     return true;
   }
 
