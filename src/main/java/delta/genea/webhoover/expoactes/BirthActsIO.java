@@ -13,10 +13,17 @@ import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.EncodingNames;
 
 /**
+ * Read/write acts data.
  * @author DAM
  */
 public class BirthActsIO
 {
+  /**
+   * Write acts to a file.
+   * @param toFile File to write.
+   * @param acts Acts to write.
+   * @return <code>true</code> if it succeeded, <code>false</code> otherwise.
+   */
   public static boolean writeActs(File toFile, List<BirthAct> acts)
   {
     boolean ok=false;
@@ -47,6 +54,11 @@ public class BirthActsIO
     return ok;
   }
 
+  /**
+   * Read acts from a file.
+   * @param inFile Input file.
+   * @return A list of acts or <code>null</code>.
+   */
   public static List<BirthAct> readActs(File inFile)
   {
     List<BirthAct> ret=null;

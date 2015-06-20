@@ -9,14 +9,21 @@ import delta.genea.webhoover.expoactes.BirthPagesManager;
 import delta.genea.webhoover.expoactes.ExpoActeSession;
 
 /**
+ * Gen N-PdC webhoover.
  * @author DAM
  */
 public class Main
 {
   private static final File OUTPUT_DIR=new File("/home/dm/tmp/gennpdc");
+  /**
+   * Path of the output file.
+   */
   public static final File ACTS_FILE=new File("/home/dm/bb.txt");
 
-  public Main()
+  /**
+   * Constructor.
+   */
+  private Main()
   {
   }
 
@@ -56,6 +63,11 @@ public class Main
   }
   */
 
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   * @throws Exception
+   */
   public static void main(String[] args) throws Exception
   {
     new Main().doIt();

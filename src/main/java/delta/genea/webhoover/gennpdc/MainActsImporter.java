@@ -14,6 +14,7 @@ import delta.genea.webhoover.expoactes.BirthAct;
 import delta.genea.webhoover.expoactes.BirthActsIO;
 
 /**
+ * Imports acts from a file into the database.
  * @author DAM
  */
 public class MainActsImporter

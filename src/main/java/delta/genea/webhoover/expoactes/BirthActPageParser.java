@@ -10,6 +10,7 @@ import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
 
 /**
+ * Parse a page of birth act.
  * @author DAM
  */
 public class BirthActPageParser
@@ -21,6 +22,12 @@ public class BirthActPageParser
   private static final String MOTHER_SEED="<strong>Mère</strong> : </td>";
   private static final DateFormat DATE_FORMAT=new SimpleDateFormat("dd/MM/yyyy");
 
+  /**
+   * Parse the given file.
+   * @param f File to use.
+   * @return A birth act or <code>null</code>.
+   * @throws Exception If a problem occurs.
+   */
   public BirthAct readFile(File f) throws Exception
   {
     //System.out.println(f);

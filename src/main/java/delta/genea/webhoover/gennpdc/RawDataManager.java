@@ -10,6 +10,7 @@ import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.gedcom.PlaceManager;
 
 /**
+ * Manages raw data (persons, unions, places).
  * @author DAM
  */
 public class RawDataManager
@@ -19,6 +20,10 @@ public class RawDataManager
   private List<Place> _places;
   private PlaceManager _placeManager;
 
+  /**
+   * Constructor.
+   * @param dataSource Data source.
+   */
   public RawDataManager(GeneaDataSource dataSource)
   {
     _persons=new ArrayList<Person>();
@@ -28,23 +33,39 @@ public class RawDataManager
     _placeManager.indicateFieldMeaning(1,PlaceManager.TOWN_NAME);
   }
 
+  /**
+   * Get the list of persons.
+   * @return a list of persons.
+   */
   public List<Person> getPersons()
   {
     return _persons;
   }
 
+  /**
+   * Get the list of unions.
+   * @return a list of unions.
+   */
   public List<Union> getUnions()
   {
     return _unions;
   }
 
+  /**
+   * Get the list of places.
+   * @return a list of places.
+   */
   public List<Place> getPlaces()
   {
     _places.clear();
     _placeManager.getPlaces(_places);
     return _places;
   }
-  
+
+  /**
+   * Get the places manager.
+   * @return the places manager.
+   */
   public PlaceManager getPlacesManager()
   {
     return _placeManager;

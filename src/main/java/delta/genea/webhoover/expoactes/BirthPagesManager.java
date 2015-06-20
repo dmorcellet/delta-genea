@@ -15,6 +15,7 @@ import delta.downloads.Downloader;
 import delta.genea.webhoover.utils.TmpFilesManager;
 
 /**
+ * Downloads birth acts for a single place.
  * @author DAM
  */
 public class BirthPagesManager
@@ -29,12 +30,22 @@ public class BirthPagesManager
   private BirthActPageParser _parser;
   private List<BirthAct> _acts;
 
+  /**
+   * Constructor.
+   * @param session Download session.
+   */
   public BirthPagesManager(ExpoActeSession session)
   {
     _session=session;
     _parser=new BirthActPageParser();
   }
 
+  /**
+   * Download all birth acts for a place.
+   * @param placeName Place name.
+   * @return A list of birth acts.
+   * @throws Exception If a problem occurs.
+   */
   public List<BirthAct> downloadBirthActs(String placeName) throws Exception
   {
     String siteRoot=_session.getSiteRoot();

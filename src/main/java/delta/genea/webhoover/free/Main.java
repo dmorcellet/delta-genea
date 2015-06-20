@@ -11,6 +11,7 @@ import delta.downloads.Downloader;
 import delta.genea.webhoover.utils.TmpFilesManager;
 
 /**
+ * Main class of the free webhoover.
  * @author DAM
  */
 public class Main
@@ -18,7 +19,10 @@ public class Main
   private Downloader _d;
   private int _nbDownloadedActs;
   private TmpFilesManager _tmp;
-  
+
+  /**
+   * Constructor.
+   */
   public Main()
   {
     _d=new Downloader();
@@ -96,7 +100,12 @@ public class Main
         handleDirPage(url+dirURL+"/",new File(out,dirItem));
     }
   }
-  
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   * @throws Exception
+   */
   public static void main(String[] args) throws Exception
   {
     new Main().downloadActs();
