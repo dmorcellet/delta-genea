@@ -21,11 +21,20 @@ import delta.genea.data.trees.DescendantsTree;
 import delta.genea.misc.DatabaseConfiguration;
 import delta.genea.time.GregorianDate;
 
+/**
+ * Tool to dump an ancestors tree.
+ * @author DAM
+ */
 public class DumpAncestorsTree
 {
   private static final int ANCESTORS_TREE=0;
   private static final int DESCENDANTS_TREE=1;
 
+  /**
+   * Do the job.
+   * @param id Root person identifier.
+   * @param type Tree type (0=ancestors, 1=descendants).
+   */
   public void handle(Long id, int type)
   {
     try
@@ -219,6 +228,10 @@ public class DumpAncestorsTree
     }
   }
 
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
   public static void main(String[] args)
   {
     new DumpAncestorsTree().doIt();

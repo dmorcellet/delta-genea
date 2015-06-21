@@ -10,6 +10,10 @@ import org.apache.log4j.Logger;
 import delta.genea.utils.GeneaLoggers;
 
 
+/**
+ * Test for gregorian dates.
+ * @author DAM
+ */
 public class TestGregorianDate extends TestCase
 {
   private static final Logger _logger=GeneaLoggers.getGeneaLogger();
@@ -22,6 +26,10 @@ public class TestGregorianDate extends TestCase
     super("Gregorian dates test");
   }
 
+  /**
+   * Add days test.
+   * @throws Exception
+   */
   public void testAddDays() throws Exception
   {
     Random rnd=new Random(System.currentTimeMillis());
@@ -110,6 +118,10 @@ public class TestGregorianDate extends TestCase
     _logger.info(nbOccurrences+" occurrences in "+(end-start)+"ms");
   }
 
+  /**
+   * Day of the week test.
+   * @throws Exception
+   */
   public void testDayOfTheWeek() throws Exception
   {
     // Checks if date incrementation is coherent with day of the week incrementation
@@ -131,6 +143,10 @@ public class TestGregorianDate extends TestCase
     }
   }
 
+  /**
+   * Test for the gap between julian and gregorian calendar.
+   * @throws Exception
+   */
   public void testJulianToGregorianStep() throws Exception
   {
     GregorianDate lastJulianDate=new GregorianDate((byte)4, (byte)10, 1582);

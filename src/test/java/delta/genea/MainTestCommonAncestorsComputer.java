@@ -8,8 +8,18 @@ import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.data.trees.AncestorsTree;
 import delta.genea.data.trees.CommonAncestorsComputer;
 
+/**
+ * Common ancestors computer.
+ * @author DAM
+ */
 public class MainTestCommonAncestorsComputer
 {
+  /**
+   * Do the job.
+   * @param dbName Database name.
+   * @param key1 First person identifier.
+   * @param key2 Second person identifier.
+   */
   public static void handle(String dbName, Long key1, Long key2)
   {
     try
@@ -30,6 +40,11 @@ public class MainTestCommonAncestorsComputer
       e.printStackTrace();
     }
   }
+
+  /**
+   * Main method for this tool.
+   * @param args Not used.
+   */
   public static void main(String[] args)
   {
     handle("genea",Long.valueOf(10481),Long.valueOf(668));
