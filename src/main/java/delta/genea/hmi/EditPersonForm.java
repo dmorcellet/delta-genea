@@ -116,8 +116,10 @@ public class EditPersonForm extends JDialog
     _person.setLastName(_surnameTextField.getText());
     _person.setFirstname(_firstNameTextField.getText());
     _person.setSex((Sex)_sexCombo.getSelectedItem());
+    _person.setComments(_commentsTextField.getText());
     System.out.println(_person);
     System.out.println(_person.getSex());
+    System.out.println(_person.getComments());
     dispose();
   }
 
