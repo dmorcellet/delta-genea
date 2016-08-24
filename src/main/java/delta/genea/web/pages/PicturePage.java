@@ -1,5 +1,6 @@
 package delta.genea.web.pages;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -116,14 +117,27 @@ public class PicturePage extends GeneaWebPage
       WebPageTools.generateHorizontalRuler(pw);
       pw.println("<div style=\"text-align:center;\">");
 
-      String imageName=_picture.getPictureFilename();
-      ImagePageParameters imagePage=new ImagePageParameters(GeneaConstants.PICTURES_DIR,imageName);
-      imagePage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
-      pw.print("<img src=\"");
-      pw.print(imagePage.build());
-      pw.print("\"");
-      pw.print(" alt=\"");pw.print(imageName);pw.print("\"");
-      pw.println(">");
+      int index=1;
+      while (true)
+      {
+        File pictureFile=_picture.getPictureFile(index);
+        if (pictureFile.exists())
+        {
+          String imageName=_picture.getPictureFilename(index);
+          ImagePageParameters imagePage=new ImagePageParameters(GeneaConstants.PICTURES_DIR,imageName);
+          imagePage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
+          pw.print("<img src=\"");
+          pw.print(imagePage.build());
+          pw.print("\"");
+          pw.print(" alt=\"");pw.print(imageName);pw.print("\"");
+          pw.println(">");
+          index++;
+        }
+        else
+        {
+          break;
+        }
+      }
       pw.println("</div>");
     }
     WebPageTools.generatePageFooter(pw);

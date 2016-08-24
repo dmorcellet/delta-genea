@@ -120,17 +120,33 @@ public class Picture extends DataObject<Picture>
   }
 
   /**
-   * Get the filename of this picture.
+   * Get the filename of a picture part.
+   * @param index Index of picture part (starting at 1).
    * @return A filename.
    */
-  public String getPictureFilename()
+  public String getPictureFilename(int index)
   {
     if (_path==null)
     {
       return null;
     }
-    String imgName=_path+".jpg";
-    return imgName;
+    String imageName;
+    if (index==1) imageName=_path+".jpg";
+    else imageName=_path+"-"+index+".jpg";
+    return imageName;
+  }
+
+  /**
+   * Get the file path of a picture part.
+   * @param index Index of picture part (starting at 1).
+   * @return A file path.
+   */
+  public File getPictureFile(int index)
+  {
+    String imageName=getPictureFilename(index);
+    File rootPath=GeneaCfg.getInstance().getPicturesRootPath();
+    File file=new File(rootPath,imageName);
+    return file;
   }
 
   /**
@@ -140,7 +156,7 @@ public class Picture extends DataObject<Picture>
   public boolean checkFiles()
   {
     File rootPath=GeneaCfg.getInstance().getPicturesRootPath();
-    File file=new File(rootPath,getPictureFilename());
+    File file=new File(rootPath,getPictureFilename(0));
     if (!file.exists())
     {
       return false;
