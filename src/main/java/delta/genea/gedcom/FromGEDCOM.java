@@ -46,7 +46,8 @@ public class FromGEDCOM
   public static void main(String[] args)
   {
     GeneaApplication.getInstance();
-    new FromGEDCOM(new File("/home/dm/tmp/michel.ged"),"genea_michel");
+    //new FromGEDCOM(new File("/home/dm/tmp/michel.ged"),"genea_michel");
+    new FromGEDCOM(new File("D:\\dam\\Donnees\\docs\\genea\\maryvonne\\Lamour_31-10-2016.ged"),"genea_maryvonne");
   }
 
   private File _fileName;
@@ -383,12 +384,14 @@ public class FromGEDCOM
           Long childKey=decodePersonID(key);
 
           int nbPersons=_persons.size();
+          boolean found=false;
           Person tmp;
           for(int i=0;i<nbPersons;i++)
           {
             tmp=_persons.get(i);
-            if (tmp.getPrimaryKey()==childKey)
+            if (tmp.getPrimaryKey().equals(childKey))
             {
+              found=true;
               if (manKey!=null)
               {
                 tmp.setFatherProxy(_dataSource.buildProxy(Person.class,manKey));
@@ -399,6 +402,10 @@ public class FromGEDCOM
               }
               break;
             }
+          }
+          if (!found)
+          {
+            System.err.println("Person ID: "+childKey+" not found!");
           }
         }
         // END OF CHIL
@@ -616,7 +623,7 @@ public class FromGEDCOM
     }
     _dataSource.setForeignKeyChecks(true);
   }
-  
+
   private FrenchRevolutionMonth getMonth(String month)
   {
     FrenchRevolutionMonth ret=null;
