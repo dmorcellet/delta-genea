@@ -76,6 +76,15 @@ public class ImagePage extends GeneaWebPage
     {
       _logger.debug("Image file ["+ret+"]");
     }
+    if (!ret.exists())
+    {
+      String filename=ret.getName();
+      if (filename.endsWith(".png.jpg"))
+      {
+        filename=filename.substring(0,filename.length()-8)+".png";
+      }
+      ret=new File(ret.getParentFile(),filename);
+    }
     return ret;
   }
 }
