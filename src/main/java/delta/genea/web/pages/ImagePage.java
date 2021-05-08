@@ -79,9 +79,10 @@ public class ImagePage extends GeneaWebPage
     if (!ret.exists())
     {
       String filename=ret.getName();
-      if (filename.endsWith(".png.jpg"))
+      if (filename.contains(".png"))
       {
-        filename=filename.substring(0,filename.length()-8)+".png";
+        filename=filename.replace(".png","");
+        filename=filename.replace(".jpg",".png");
       }
       ret=new File(ret.getParentFile(),filename);
     }
