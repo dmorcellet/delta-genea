@@ -51,10 +51,10 @@ public class UnionsPage extends GeneaWebPage
     _unions=new UnionsTable();
     Union u;
     DataTableRow row;
-    int dateColumnIndex=_unions.getColumnByName(UnionsTable.DATE_COLUMN).getIndex();
-    int placeColumnIndex=_unions.getColumnByName(UnionsTable.PLACE_COLUMN).getIndex();
-    int manColumnIndex=_unions.getColumnByName(UnionsTable.MAN_COLUMN).getIndex();
-    int womanColumnIndex=_unions.getColumnByName(UnionsTable.WOMAN_COLUMN).getIndex();
+    int dateColumnIndex=_unions.getColumnByKey(UnionsTable.DATE_COLUMN).getIndex();
+    int placeColumnIndex=_unions.getColumnByKey(UnionsTable.PLACE_COLUMN).getIndex();
+    int manColumnIndex=_unions.getColumnByKey(UnionsTable.MAN_COLUMN).getIndex();
+    int womanColumnIndex=_unions.getColumnByKey(UnionsTable.WOMAN_COLUMN).getIndex();
     for(Iterator<Union> it=unions.iterator();it.hasNext();)
     {
       u=it.next();
