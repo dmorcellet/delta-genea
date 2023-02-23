@@ -16,7 +16,6 @@ import delta.genea.data.Place;
 import delta.genea.data.PlaceLevel;
 import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * Write a GEDCOM file from database data.
@@ -24,7 +23,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class ToGEDCOM
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(ToGEDCOM.class);
 
   private Calendar _calendar;
   private String[] _months={"JAN","FEB","MAR","APR",
@@ -94,7 +93,7 @@ public class ToGEDCOM
     }
     else
     {
-      _logger.error("Pb:nbParts="+parts.length);
+      LOGGER.error("Pb:nbParts="+parts.length);
       sb.append(date);
     }
     return sb.toString();
@@ -396,7 +395,7 @@ public class ToGEDCOM
         }
         catch(Exception e)
         {
-          _logger.error("Pb avec personne : "+p.getPrimaryKey()+": "+p.getFullName(),e);
+          LOGGER.error("Pb avec personne : "+p.getPrimaryKey()+": "+p.getFullName(),e);
         }
         index++;
       }
@@ -456,7 +455,7 @@ public class ToGEDCOM
             if (label.length()>0) label=label+"/";
             label=label+woman.getFullName();
           }
-          _logger.error("Pb avec union "+label,e);
+          LOGGER.error("Pb avec union "+label,e);
         }
         indexUnions++;
       }
@@ -484,7 +483,7 @@ public class ToGEDCOM
     }
     catch(Exception e)
     {
-      _logger.error("",e);
+      LOGGER.error("",e);
     }
   }
 

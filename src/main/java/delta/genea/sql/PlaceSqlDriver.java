@@ -18,7 +18,6 @@ import delta.common.utils.jdbc.JDBCTools;
 import delta.genea.data.Place;
 import delta.genea.data.PlaceLevel;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * SQL driver for places.
@@ -26,7 +25,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class PlaceSqlDriver extends ObjectSqlDriver<Place>
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaSqlLogger();
+  private static final Logger LOGGER=Logger.getLogger(PlaceSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
   private PreparedStatement _psGetAll;
@@ -65,7 +64,7 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
     }
     catch (SQLException sqlException)
     {
-      _logger.error("Exception while building prepared statements for class Place",sqlException);
+      LOGGER.error("Exception while building prepared statements for class Place",sqlException);
     }
   }
 
@@ -93,7 +92,7 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -125,7 +124,7 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetAll);
       }
       finally
@@ -208,14 +207,14 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
             }
             else
             {
-              _logger.error("No generated key for Place create");
+              LOGGER.error("No generated key for Place create");
             }
           }
         }
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsert);
       }
     }

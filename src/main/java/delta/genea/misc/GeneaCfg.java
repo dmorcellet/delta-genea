@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import delta.common.utils.configuration.Configuration;
 import delta.common.utils.configuration.Configurations;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * Provides access to configuration information for the GENEA application.
@@ -14,7 +13,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class GeneaCfg
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(GeneaCfg.class);
 
   /**
    * Section name used to look for configuration data.
@@ -59,10 +58,10 @@ public class GeneaCfg
     Configuration cfg=Configurations.getConfiguration();
     _actsRootPath=cfg.getFileValue(SECTION_NAME,ACTS_ROOT,null);
     _picturesRootPath=cfg.getFileValue(SECTION_NAME,PICTURES_ROOT,null);
-    if (_logger.isInfoEnabled())
+    if (LOGGER.isInfoEnabled())
     {
-      _logger.info("_actsRootPath="+_actsRootPath);
-      _logger.info("_picturesRootPath="+_picturesRootPath);
+      LOGGER.info("_actsRootPath="+_actsRootPath);
+      LOGGER.info("_picturesRootPath="+_picturesRootPath);
     }
   }
 

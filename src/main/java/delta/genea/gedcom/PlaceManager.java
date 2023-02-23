@@ -13,7 +13,6 @@ import delta.genea.data.Place;
 import delta.genea.data.PlaceLevel;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.misc.GenealogySoftware;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * Manages the places found in a GEDCOM file.
@@ -21,7 +20,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class PlaceManager
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(PlaceManager.class);
 
   private GeneaDataSource _dataSource;
   private int _nbFields;
@@ -130,7 +129,7 @@ public class PlaceManager
     String[] parts=StringSplitter.split(name,',');
     if (parts.length!=_nbFields)
     {
-      _logger.error("Bad number of fields : "+parts.length+" instead of "+_nbFields);
+      LOGGER.error("Bad number of fields : "+parts.length+" instead of "+_nbFields);
       return null;
     }
 

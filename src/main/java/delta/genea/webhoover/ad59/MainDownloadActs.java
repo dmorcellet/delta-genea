@@ -10,7 +10,6 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
-import delta.genea.utils.GeneaLoggers;
 import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.ImageMontageMaker;
@@ -20,7 +19,7 @@ import delta.genea.webhoover.ImageMontageMaker;
  */
 public class MainDownloadActs
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(MainDownloadActs.class);
 
   /**
    * Main method of this tool.
@@ -280,7 +279,7 @@ public class MainDownloadActs
     catch(Exception e)
     {
       imageFile.delete();
-      _logger.error("",e);
+      LOGGER.error("",e);
     }
     for(int vIndex=0;vIndex<nbV;vIndex++)
     {

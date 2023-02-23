@@ -2,13 +2,10 @@ package delta.genea.time;
 
 import java.util.Random;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
 import org.apache.log4j.Logger;
 
-import delta.genea.utils.GeneaLoggers;
-
+import junit.framework.Assert;
+import junit.framework.TestCase;
 
 /**
  * Test for gregorian dates.
@@ -16,7 +13,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class TestGregorianDate extends TestCase
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(TestGregorianDate.class);
 
   /**
    * Constructor.
@@ -115,7 +112,7 @@ public class TestGregorianDate extends TestCase
     }
 
     long end=System.currentTimeMillis();
-    _logger.info(nbOccurrences+" occurrences in "+(end-start)+"ms");
+    LOGGER.info(nbOccurrences+" occurrences in "+(end-start)+"ms");
   }
 
   /**
@@ -137,7 +134,7 @@ public class TestGregorianDate extends TestCase
       if(day==8) day=1;
       if (d.getDayInWeek()!=day)
       {
-        _logger.error("Day ("+d+")="+GregorianDate.getLabelForDayOfWeek(day)+" and not "+GregorianDate.getLabelForDayOfWeek(d.getDayInWeek()));
+        LOGGER.error("Day ("+d+")="+GregorianDate.getLabelForDayOfWeek(day)+" and not "+GregorianDate.getLabelForDayOfWeek(d.getDayInWeek()));
       }
       Assert.assertEquals(d.getDayInWeek(),day);
     }

@@ -22,7 +22,6 @@ import delta.genea.data.ActType;
 import delta.genea.data.Person;
 import delta.genea.data.PersonInAct;
 import delta.genea.data.Place;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * SQL driver for acts.
@@ -30,7 +29,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class ActSqlDriver extends ObjectSqlDriver<Act>
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaSqlLogger();
+  private static final Logger LOGGER=Logger.getLogger(ActSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
   private PreparedStatement _psInsert;
@@ -88,7 +87,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
     }
     catch (SQLException sqlException)
     {
-      _logger.error("Exception while building prepared statements for class Act",sqlException);
+      LOGGER.error("Exception while building prepared statements for class Act",sqlException);
     }
   }
 
@@ -118,7 +117,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -217,7 +216,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -256,7 +255,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -294,7 +293,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetMainFromPerson);
       }
       finally
@@ -335,7 +334,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetOtherFromPerson);
       }
       finally
@@ -376,7 +375,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetFromPlace);
       }
       finally
@@ -508,7 +507,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsert);
       }
     }
@@ -600,7 +599,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsert);
       }
     }

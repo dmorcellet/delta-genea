@@ -14,7 +14,6 @@ import delta.genea.data.Person;
 import delta.genea.data.PersonInAct;
 import delta.genea.data.Sex;
 import delta.genea.misc.GeneaConstants;
-import delta.genea.utils.GeneaLoggers;
 import delta.genea.web.GeneaUserContext;
 import delta.genea.web.formatters.PersonHtmlFormatter;
 import delta.genea.web.pages.tools.PersonTools;
@@ -25,7 +24,7 @@ import delta.genea.web.pages.tools.PersonTools;
  */
 public class ActPage extends GeneaWebPage
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(ActPage.class);
   private static final String LINK_SEED="<a href=\"";
   private static final String LINK_SEED_END="\">";
   private static final String LINK_END="</a>";
@@ -335,7 +334,7 @@ public class ActPage extends GeneaWebPage
           else if (attributes[i].startsWith(DB_NAME_ATTR)) dbName=attributes[i].substring(DB_NAME_ATTR.length());
           else
           {
-            _logger.warn("Unmanaged attribute: ["+attributes[i]+"]");
+            LOGGER.warn("Unmanaged attribute: ["+attributes[i]+"]");
           }
         }
       }

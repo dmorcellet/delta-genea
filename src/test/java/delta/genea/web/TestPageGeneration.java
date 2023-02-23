@@ -1,17 +1,15 @@
 package delta.genea.web;
 
-import junit.framework.TestCase;
-
 import org.apache.log4j.Logger;
 
 import delta.common.framework.web.SimpleRequest;
 import delta.common.framework.web.SimpleRequestResponse;
 import delta.common.framework.web.WebRequest;
 import delta.common.framework.web.WebUserContext;
-import delta.genea.utils.GeneaLoggers;
 import delta.genea.web.pages.ActPageParameters;
 import delta.genea.web.pages.ActsFromPlaceParameters;
 import delta.genea.web.pages.PersonPageParameters;
+import junit.framework.TestCase;
 
 /**
  * Test page generations.
@@ -19,7 +17,7 @@ import delta.genea.web.pages.PersonPageParameters;
  */
 public class TestPageGeneration extends TestCase
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(TestPageGeneration.class);
 
   private GeneaWebApplication _app;
   private WebUserContext _userContext;
@@ -83,7 +81,7 @@ public class TestPageGeneration extends TestCase
     }
     catch(Exception e)
     {
-      _logger.error("Page generation error",e);
+      LOGGER.error("Page generation error",e);
     }
     String text=response.getTextResponse();
     System.out.println(text);

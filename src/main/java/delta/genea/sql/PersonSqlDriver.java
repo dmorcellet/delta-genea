@@ -23,7 +23,6 @@ import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.Sex;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * SQL driver for persons.
@@ -31,7 +30,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class PersonSqlDriver extends ObjectSqlDriver<Person>
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaSqlLogger();
+  private static final Logger LOGGER=Logger.getLogger(PersonSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
   private PreparedStatement _psGetAll;
@@ -121,7 +120,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     }
     catch (SQLException sqlException)
     {
-      _logger.error("Exception while building prepared statements for class Person",sqlException);
+      LOGGER.error("Exception while building prepared statements for class Person",sqlException);
     }
   }
 
@@ -154,7 +153,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -186,7 +185,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psPartialGetByPrimaryKey);
       }
       finally
@@ -318,7 +317,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetOccupations);
       }
       finally
@@ -367,7 +366,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetHomes);
       }
       finally
@@ -405,7 +404,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetAll);
       }
       finally
@@ -444,7 +443,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -481,7 +480,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psChildren);
       }
       finally
@@ -518,7 +517,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGodChildren);
       }
       finally
@@ -556,7 +555,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psCousins);
       }
       finally
@@ -591,7 +590,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psPatronyme);
       }
       finally
@@ -795,11 +794,11 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLWarning sqlWarning)
       {
-        _logger.warn("",sqlWarning);
+        LOGGER.warn("",sqlWarning);
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsert);
       }
     }
@@ -847,7 +846,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsertOccupation);
       }
     }
@@ -895,7 +894,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsertHome);
       }
     }
@@ -934,7 +933,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         try
         {
           connection.rollback();

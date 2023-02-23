@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.utils.collections.TreeNode;
 import delta.genea.data.Place;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * Registry for places.
@@ -17,7 +16,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public final class PlacesRegistry
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(PlacesRegistry.class);
 
   private String _dbName;
   private TreeNode<Place> _placesTree;
@@ -123,10 +122,10 @@ public final class PlacesRegistry
       }
       if (nonAttachedNodes.size()>0)
       {
-        _logger.error("There are some non attached place nodes !");
+        LOGGER.error("There are some non attached place nodes !");
         for(int i=0;i<nonAttachedNodes.size();i++)
         {
-          _logger.error("\t"+nonAttachedNodes.get(i).getData());
+          LOGGER.error("\t"+nonAttachedNodes.get(i).getData());
         }
       }
     }

@@ -22,7 +22,6 @@ import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * SQL driver for unions.
@@ -30,7 +29,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class UnionSqlDriver extends ObjectSqlDriver<Union>
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaSqlLogger();
+  private static final Logger LOGGER=Logger.getLogger(UnionSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
   private PreparedStatement _psGetAll;
@@ -88,7 +87,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     }
     catch (SQLException sqlException)
     {
-      _logger.error("Exception while building prepared statements for class Union",sqlException);
+      LOGGER.error("Exception while building prepared statements for class Union",sqlException);
     }
   }
 
@@ -112,7 +111,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -190,7 +189,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetAll);
       }
       finally
@@ -241,7 +240,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     }
     catch (SQLException sqlException)
     {
-      _logger.error("",sqlException);
+      LOGGER.error("",sqlException);
       CleanupManager.cleanup(ps);
     }
     finally
@@ -317,7 +316,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(ps);
       }
       finally
@@ -424,7 +423,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
     }

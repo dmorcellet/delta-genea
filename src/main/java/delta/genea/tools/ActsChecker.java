@@ -18,7 +18,6 @@ import delta.genea.data.Place;
 import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.data.trees.AncestorsTree;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * Finds missing acts in a ancestors tree.
@@ -30,7 +29,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class ActsChecker
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(ActsChecker.class);
   private static final SimpleDateFormat _format=new SimpleDateFormat("dd/MM/yyyy");
   private static final String BIRTH="Naissance";
   private static final String DEATH="Décès";
@@ -58,7 +57,7 @@ public class ActsChecker
   {
     try
     {
-      _logger.info("Acts checker::handling ID="+_rootPersonKey);
+      LOGGER.info("Acts checker::handling ID="+_rootPersonKey);
       GeneaDataSource dataSource=GeneaDataSource.getInstance(_dbName);
 
       DataProxy<Person> pp=dataSource.buildProxy(Person.class,_rootPersonKey);
@@ -67,7 +66,7 @@ public class ActsChecker
       tree.build();
       browseAncestorsTree(tree);
       dataSource.close();
-      _logger.info("Requests : "+dataSource.getNbGetRequests());
+      LOGGER.info("Requests : "+dataSource.getNbGetRequests());
     }
     catch (Exception e)
     {

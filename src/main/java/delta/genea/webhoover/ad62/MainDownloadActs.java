@@ -16,7 +16,7 @@ import delta.genea.webhoover.ImageMontageMaker;
  */
 public class MainDownloadActs
 {
-  //private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  //private static final Logger LOGGER=GeneaLoggers.getGeneaLogger();
 
   /**
    * Main method of this tool.

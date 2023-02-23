@@ -19,7 +19,6 @@ import delta.genea.data.Person;
 import delta.genea.data.PersonInPicture;
 import delta.genea.data.Picture;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * SQL driver for pictures.
@@ -27,7 +26,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class PictureSqlDriver extends ObjectSqlDriver<Picture>
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaSqlLogger();
+  private static final Logger LOGGER=Logger.getLogger(PictureSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
   private PreparedStatement _psGetAll;
@@ -82,7 +81,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
     }
     catch (SQLException sqlException)
     {
-      _logger.error("Exception while building prepared statements for class Picture",sqlException);
+      LOGGER.error("Exception while building prepared statements for class Picture",sqlException);
     }
   }
 
@@ -112,7 +111,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -167,7 +166,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -202,7 +201,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetAll);
       }
       finally
@@ -241,7 +240,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -278,7 +277,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetOtherFromPerson);
       }
       finally
@@ -349,7 +348,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsert);
       }
     }
@@ -384,7 +383,7 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsert);
       }
     }

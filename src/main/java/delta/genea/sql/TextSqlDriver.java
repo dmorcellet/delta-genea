@@ -13,7 +13,6 @@ import delta.common.framework.objects.sql.ObjectSqlDriver;
 import delta.common.utils.jdbc.CleanupManager;
 import delta.common.utils.jdbc.JDBCTools;
 import delta.genea.data.ActText;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * SQL driver for texts.
@@ -21,7 +20,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class TextSqlDriver extends ObjectSqlDriver<ActText>
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaSqlLogger();
+  private static final Logger LOGGER=Logger.getLogger(TextSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
   private PreparedStatement _psInsert;
@@ -64,7 +63,7 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
     }
     catch (SQLException sqlException)
     {
-      _logger.error("Exception while building prepared statements for class ActText",sqlException);
+      LOGGER.error("Exception while building prepared statements for class ActText",sqlException);
     }
   }
 
@@ -92,7 +91,7 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
       }
       finally
@@ -137,7 +136,7 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psCount);
       }
       finally
@@ -194,7 +193,7 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsert);
       }
     }
@@ -226,7 +225,7 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
       }
       catch (SQLException sqlException)
       {
-        _logger.error("",sqlException);
+        LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsert);
       }
     }

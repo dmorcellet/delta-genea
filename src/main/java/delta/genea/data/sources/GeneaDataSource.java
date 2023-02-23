@@ -21,7 +21,6 @@ import delta.genea.sql.PictureSqlDriver;
 import delta.genea.sql.PlaceSqlDriver;
 import delta.genea.sql.TextSqlDriver;
 import delta.genea.sql.UnionSqlDriver;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * Data source for the genea objects of a single database.
@@ -29,7 +28,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class GeneaDataSource extends SqlObjectsSource
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(GeneaDataSource.class);
 
   private static HashMap<String,GeneaDataSource> _sources=new HashMap<String,GeneaDataSource>();
 
@@ -70,7 +69,7 @@ public class GeneaDataSource extends SqlObjectsSource
     }
     catch(Exception e)
     {
-      _logger.error("Cannot start genea data source!",e);
+      LOGGER.error("Cannot start genea data source!",e);
     }
   }
 
@@ -97,7 +96,7 @@ public class GeneaDataSource extends SqlObjectsSource
     }
     catch(Exception e)
     {
-      _logger.error("",e);
+      LOGGER.error("",e);
     }
   }
 

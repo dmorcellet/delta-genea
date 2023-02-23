@@ -27,7 +27,6 @@ import delta.genea.time.FrenchRevolutionCalendar;
 import delta.genea.time.FrenchRevolutionDate;
 import delta.genea.time.FrenchRevolutionMonth;
 import delta.genea.time.GregorianDate;
-import delta.genea.utils.GeneaLoggers;
 
 /**
  * Imports a GEDCOM file to a genea database.
@@ -35,7 +34,7 @@ import delta.genea.utils.GeneaLoggers;
  */
 public class FromGEDCOM
 {
-  private static final Logger _logger=GeneaLoggers.getGeneaLogger();
+  private static final Logger LOGGER=Logger.getLogger(FromGEDCOM.class);
   private static final String FRENCH_REVOLUTION_DATE_SEED="@#DFRENCH R@";
   //private static final String JULIAN_DATE_SEED="@#DJULIAN@";
 
@@ -118,7 +117,7 @@ public class FromGEDCOM
         }
         catch (Exception e)
         {
-          _logger.error("Pb with person",e);
+          LOGGER.error("Pb with person",e);
         }
       }
       else if ((line.startsWith("0 "))&&(line.endsWith("FAM")))
@@ -129,7 +128,7 @@ public class FromGEDCOM
         }
         catch (Exception e)
         {
-          _logger.error("Pb with family",e);
+          LOGGER.error("Pb with family",e);
         }
       }
       else if (line.startsWith("1 SOUR"))
@@ -500,7 +499,7 @@ public class FromGEDCOM
         }
         catch(Exception e)
         {
-          _logger.error("Unable to decode French Revolution date : "+stringToUse,e);
+          LOGGER.error("Unable to decode French Revolution date : "+stringToUse,e);
           dateInfos=stringToUse;
         }
       }
@@ -520,19 +519,19 @@ public class FromGEDCOM
             }
             else
             {
-              _logger.error("Invalid years in a between ["+stringToUse+"]");
+              LOGGER.error("Invalid years in a between ["+stringToUse+"]");
             }
           }
           else
           {
-            _logger.error("Bad 'between' structure ["+stringToUse+"]");
+            LOGGER.error("Bad 'between' structure ["+stringToUse+"]");
             dateInfos=stringToUse;
           }
         }
         catch (Exception e)
         {
           dateInfos=stringToUse;
-          _logger.error("Unable to decode GEDCOM date : "+stringToUse,e);
+          LOGGER.error("Unable to decode GEDCOM date : "+stringToUse,e);
         }
       }
       else if (strings.length==3)
@@ -567,7 +566,7 @@ public class FromGEDCOM
         catch (Exception e)
         {
           dateInfos=stringToUse;
-          _logger.error("Unable to decode GEDCOM date : "+stringToUse,e);
+          LOGGER.error("Unable to decode GEDCOM date : "+stringToUse,e);
         }
       }
       else if (strings.length==2)
@@ -587,14 +586,14 @@ public class FromGEDCOM
       }
       else
       {
-        _logger.error("Pb : number of spaces="+strings.length+" ["+dateString+"]");
+        LOGGER.error("Pb : number of spaces="+strings.length+" ["+dateString+"]");
         dateInfos=dateString;
       }
       ret=new GeneaDate(date,dateInfos);
     }
     catch (Exception e)
     {
-      _logger.error("Cannot parse date : "+dateString,e);
+      LOGGER.error("Cannot parse date : "+dateString,e);
       ret=new GeneaDate((Long)null,dateString);
     }
     return ret;
