@@ -2,8 +2,8 @@ package delta.genea.data.trees;
 
 import java.util.HashMap;
 
+import delta.common.framework.objects.data.ObjectsSource;
 import delta.genea.data.Person;
-import delta.genea.data.sources.GeneaDataSource;
 
 /**
  * Registry for all ancestors trees of a data source.
@@ -11,7 +11,7 @@ import delta.genea.data.sources.GeneaDataSource;
  */
 public class AncestorsTreesRegistry
 {
-  private GeneaDataSource _dataSource;
+  private ObjectsSource _dataSource;
   /**
    * Storage map for known ancestors trees.
    */
@@ -21,7 +21,7 @@ public class AncestorsTreesRegistry
    * Private constructor.
    * @param dataSource Managed data source.
    */
-  public AncestorsTreesRegistry(GeneaDataSource dataSource)
+  public AncestorsTreesRegistry(ObjectsSource dataSource)
   {
     _dataSource=dataSource;
     _knownTrees=new HashMap<Long, AncestorsTree>();
