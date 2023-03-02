@@ -8,6 +8,7 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import delta.common.framework.objects.data.DataProxy;
@@ -131,7 +132,7 @@ public class ActXMLIO extends DefaultXMLIO<Act>
     XMLUtils.writeProxy(objectAttrs,GeneaXMLConstants.ACT_TEXT_ATTR,object.getTextProxy());
     // Path
     String path=object.getPath();
-    if (path.length()>0)
+    if ((path!=null) && (path.length()>0))
     {
       objectAttrs.addAttribute("","",GeneaXMLConstants.ACT_FILE_PATH_ATTR,XmlWriter.CDATA,path);
     }
@@ -149,17 +150,17 @@ public class ActXMLIO extends DefaultXMLIO<Act>
     }
     // Comment
     String comment=object.getComment();
-    if (comment.length()>0)
+    if ((comment!=null) && (comment.length()>0))
     {
       objectAttrs.addAttribute("","",GeneaXMLConstants.ACT_COMMENT_ATTR,XmlWriter.CDATA,comment);
     }
   }
 
   @Override
-  public void writeChildTags(TransformerHandler hd, Act object)
+  public void writeChildTags(TransformerHandler hd, Act object) throws SAXException
   {
     List<PersonInAct> pias=object.getPersonsInAct();
-    if (pias.size()>0)
+    if ((pias!=null) && (pias.size()>0))
     {
       for(PersonInAct pia : pias)
       {
@@ -174,18 +175,20 @@ public class ActXMLIO extends DefaultXMLIO<Act>
         }
         // Signature
         String signature=pia.getSignature();
-        if (signature.length()>0)
+        if ((signature!=null) && (signature.length()>0))
         {
           attrs.addAttribute("","",GeneaXMLConstants.PERSON_IN_ACT_SIGNATURE_ATTR,XmlWriter.CDATA,signature);
         }
         // Link
         String link=pia.getLink();
-        if (link.length()>0)
+        if ((link!=null) && (link.length()>0))
         {
           attrs.addAttribute("","",GeneaXMLConstants.PERSON_IN_ACT_LINK_ATTR,XmlWriter.CDATA,link);
         }
         // Other person ID
         XMLUtils.writeProxy(attrs,GeneaXMLConstants.PERSON_IN_ACT_OTHER_ID_ATTR,pia.getLinkRefProxy());
+        hd.startElement("","",GeneaXMLConstants.PERSON_IN_ACT_TAG,attrs);
+        hd.endElement("","",GeneaXMLConstants.PERSON_IN_ACT_TAG);
       }
     }
   }
