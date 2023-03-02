@@ -32,6 +32,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   private static final Logger LOGGER=Logger.getLogger(ActSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
+  private PreparedStatement _psGetAll;
   private PreparedStatement _psInsert;
   private PreparedStatement _psUpdate;
   private PreparedStatement _psCount;
@@ -59,6 +60,8 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       // Select
       String sql="SELECT "+fields+" FROM acte WHERE cle_acte = ?";
       _psGetByPrimaryKey=newConnection.prepareStatement(sql);
+      sql="SELECT "+fields+" FROM acte";
+      _psGetAll=newConnection.prepareStatement(sql);
       // Insert
       sql="INSERT INTO acte ("+fields+") VALUES (?,?,?,?,?,?,?,?,?,?,?)";
       if (usesHSQLDB())
@@ -119,6 +122,42 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       {
         LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
+      }
+      finally
+      {
+        CleanupManager.cleanup(rs);
+      }
+      return ret;
+    }
+  }
+
+  @Override
+  public List<Act> getAll()
+  {
+    Connection connection=getConnection();
+    synchronized (connection)
+    {
+      ArrayList<Act> ret=new ArrayList<Act>();
+      Act act=null;
+      ResultSet rs=null;
+      try
+      {
+        rs=_psGetAll.executeQuery();
+        while (rs.next())
+        {
+          long personKey=rs.getLong(1);
+          Long primaryKey=Long.valueOf(personKey);
+          act=new Act(primaryKey);
+          fillAct(act,rs);
+          List<PersonInAct> persons=loadPersonsInAct(primaryKey);
+          act.setPersonsInAct(persons);
+          ret.add(act);
+        }
+      }
+      catch (SQLException sqlException)
+      {
+        LOGGER.error("",sqlException);
+        CleanupManager.cleanup(_psGetAll);
       }
       finally
       {
