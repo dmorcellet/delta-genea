@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -23,6 +25,7 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
   private static final Logger LOGGER=Logger.getLogger(ActTypeSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
+  private PreparedStatement _psGetAll;
   private PreparedStatement _psInsert;
   private PreparedStatement _psUpdate;
   private PreparedStatement _psCount;
@@ -44,6 +47,9 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
       // Select
       String sql="SELECT "+fields+" FROM type_acte WHERE cle = ?";
       _psGetByPrimaryKey=newConnection.prepareStatement(sql);
+      // Select all
+      sql="SELECT "+fields+" FROM type_acte";
+      _psGetAll=newConnection.prepareStatement(sql);
       // Insert
       sql="INSERT INTO type_acte ("+fields+") VALUES (?,?)";
       if (usesHSQLDB())
@@ -93,6 +99,41 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
       {
         LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psGetByPrimaryKey);
+      }
+      finally
+      {
+        CleanupManager.cleanup(rs);
+      }
+      return ret;
+    }
+  }
+
+
+  @Override
+  public List<ActType> getAll()
+  {
+    Connection connection=getConnection();
+    synchronized (connection)
+    {
+      ArrayList<ActType> ret=new ArrayList<ActType>();
+      ActType actType=null;
+      ResultSet rs=null;
+      try
+      {
+        rs=_psGetAll.executeQuery();
+        while (rs.next())
+        {
+          long personKey=rs.getLong(1);
+          Long primaryKey=Long.valueOf(personKey);
+          actType=new ActType(primaryKey);
+          fillActType(actType,rs);
+          ret.add(actType);
+        }
+      }
+      catch (SQLException sqlException)
+      {
+        LOGGER.error("",sqlException);
+        CleanupManager.cleanup(_psGetAll);
       }
       finally
       {

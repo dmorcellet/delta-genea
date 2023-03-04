@@ -60,6 +60,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       // Select
       String sql="SELECT "+fields+" FROM acte WHERE cle_acte = ?";
       _psGetByPrimaryKey=newConnection.prepareStatement(sql);
+      // Select all
       sql="SELECT "+fields+" FROM acte";
       _psGetAll=newConnection.prepareStatement(sql);
       // Insert
