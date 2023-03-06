@@ -7,6 +7,7 @@ import delta.common.framework.objects.data.Identifiable;
 import delta.common.framework.objects.data.ObjectsManager;
 import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.genea.data.Act;
+import delta.genea.data.ActText;
 import delta.genea.data.ActType;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
@@ -30,6 +31,7 @@ public class MainDataTransfer
     handleClass(source,target,ActType.class);
     handleClass(source,target,Act.class);
     handleClass(source,target,Union.class);
+    handleClass(source,target,ActText.class);
   }
 
   private <E extends Identifiable<Long>> void handleClass(GeneaDataSource source, GeneaXmlDataSource target, Class<E> c)

@@ -8,10 +8,12 @@ import org.apache.log4j.Logger;
 import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.common.framework.objects.xml.XmlObjectsSource;
 import delta.genea.data.Act;
+import delta.genea.data.ActText;
 import delta.genea.data.ActType;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
 import delta.genea.data.trees.AncestorsTreesRegistry;
+import delta.genea.xml.ActTextXMLIO;
 import delta.genea.xml.ActTypeXMLIO;
 import delta.genea.xml.ActXMLIO;
 import delta.genea.xml.PlaceXMLIO;
@@ -102,6 +104,14 @@ public class GeneaXmlDataSource extends XmlObjectsSource
       xmlIO.setObjectSource(this);
       ObjectXmlDriver<Act> driver=new ObjectXmlDriver<Act>(xmlFile,xmlIO,xmlIO);
       addClass(Act.class,driver);
+    }
+    // Act text
+    {
+      File xmlFile=getXmlFileForClass(ActText.CLASS_NAME);
+      ActTextXMLIO xmlIO=new ActTextXMLIO();
+      xmlIO.setObjectSource(this);
+      ObjectXmlDriver<ActText> driver=new ObjectXmlDriver<ActText>(xmlFile,xmlIO,xmlIO);
+      addClass(ActText.class,driver);
     }
     // Union
     {

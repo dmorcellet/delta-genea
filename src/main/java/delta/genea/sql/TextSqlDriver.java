@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -23,6 +25,7 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
   private static final Logger LOGGER=Logger.getLogger(TextSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
+  private PreparedStatement _psGetAll;
   private PreparedStatement _psInsert;
   private PreparedStatement _psUpdate;
   private PreparedStatement _psCount;
@@ -44,6 +47,9 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
       // Select
       String sql="SELECT "+fields+" FROM texte_acte WHERE cle = ?";
       _psGetByPrimaryKey=newConnection.prepareStatement(sql);
+      // Select all
+      sql="SELECT "+fields+" FROM texte_acte ORDER BY cle";
+      _psGetAll=newConnection.prepareStatement(sql);
       // Insert
       sql="INSERT INTO texte_acte ("+fields+") VALUES (?,?)";
       if (usesHSQLDB())
@@ -102,12 +108,45 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
     }
   }
 
+  @Override
+  public List<ActText> getAll()
+  {
+    Connection connection=getConnection();
+    synchronized (connection)
+    {
+      List<ActText> list=new ArrayList<ActText>();
+      ActText actText=null;
+      ResultSet rs=null;
+      try
+      {
+        rs=_psGetAll.executeQuery();
+        while (rs.next())
+        {
+          actText=new ActText(Long.valueOf(rs.getLong(1)));
+          fillActText(actText,rs);
+          list.add(actText);
+        }
+      }
+      catch (SQLException sqlException)
+      {
+        LOGGER.error("",sqlException);
+        CleanupManager.cleanup(_psGetAll);
+      }
+      finally
+      {
+        CleanupManager.cleanup(rs);
+      }
+      return list;
+    }
+  }
+
   private void fillActText(ActText text, ResultSet rs) throws SQLException
   {
     int n=2;
     text.setText(rs.getString(n));
     n++;
   }
+
   /**
    * Indicates if the text identified by <code>primaryKey</code>
    * exists or not.

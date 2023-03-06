@@ -47,10 +47,13 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
     try
     {
       String fields="cle,nom,nom_court,level,parent";
+      // Select
       String sql="SELECT "+fields+" FROM commune WHERE cle = ?";
       _psGetByPrimaryKey=newConnection.prepareStatement(sql);
+      // Select all
       sql="SELECT "+fields+" FROM commune ORDER BY nom";
       _psGetAll=newConnection.prepareStatement(sql);
+      // Insert
       sql="INSERT INTO commune (cle,nom,nom_court,level,parent) VALUES (?,?,?,?,?)";
       if (usesHSQLDB())
       {
@@ -58,8 +61,7 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
       }
       else
       {
-        _psInsert=newConnection.prepareStatement(sql,
-            Statement.RETURN_GENERATED_KEYS);
+        _psInsert=newConnection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
       }
     }
     catch (SQLException sqlException)
