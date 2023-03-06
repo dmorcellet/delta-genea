@@ -8,7 +8,7 @@ package delta.genea.xml;
 public class GeneaXMLConstants
 {
   /**
-   * Act type: attribute 'name'.
+   * Act type, place: attribute 'name'.
    */
   public static final String NAME_ATTR="name";
 
@@ -77,4 +77,17 @@ public class GeneaXMLConstants
    * Person in Act: attribute 'otherPersonId'.
    */
   public static final String PERSON_IN_ACT_OTHER_ID_ATTR="otherPersonId";
+
+  /**
+   * Place: attribute 'shortName'.
+   */
+  public static final String PLACE_SHORT_NAME_ATTR="shortName";
+  /**
+   * Place: attribute 'level'.
+   */
+  public static final String PLACE_LEVEL_ATTR="level";
+  /**
+   * Place: attribute 'parentPlaceId'.
+   */
+  public static final String PLACE_PARENT_PLACE_ATTR="parentPlaceId";
 }

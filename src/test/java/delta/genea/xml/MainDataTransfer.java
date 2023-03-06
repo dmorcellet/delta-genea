@@ -6,6 +6,7 @@ import java.util.List;
 import delta.common.framework.objects.data.ObjectsManager;
 import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.genea.data.Act;
+import delta.genea.data.Place;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.data.sources.GeneaXmlDataSource;
 
@@ -22,20 +23,34 @@ public class MainDataTransfer
   {
     GeneaDataSource source=GeneaDataSource.getInstance(SOURCE_DATABASE);
     GeneaXmlDataSource target=GeneaXmlDataSource.getInstance(ROOT_DIR);
+    handlePlaces(source,target);
     handleActs(source,target);
+  }
+
+  private void handlePlaces(GeneaDataSource source, GeneaXmlDataSource target)
+  {
+    ObjectsManager<Place> mgr=source.getManager(Place.class);
+    List<Place> objects=mgr.loadAll();
+    ObjectsManager<Place> targetMgr=target.getManager(Place.class);
+    for(Place object : objects)
+    {
+      targetMgr.create(object);
+    }
+    ObjectXmlDriver<Place> driver=(ObjectXmlDriver<Place>)targetMgr.getDriver();
+    driver.saveAll(targetMgr.getCache().getAll());
   }
 
   private void handleActs(GeneaDataSource source, GeneaXmlDataSource target)
   {
-    ObjectsManager<Act> actsMgr=source.getManager(Act.class);
-    List<Act> acts=actsMgr.loadAll();
-    ObjectsManager<Act> targetActsMgr=target.getManager(Act.class);
-    for(Act act : acts)
+    ObjectsManager<Act> mgr=source.getManager(Act.class);
+    List<Act> objects=mgr.loadAll();
+    ObjectsManager<Act> targetMgr=target.getManager(Act.class);
+    for(Act act : objects)
     {
-      targetActsMgr.create(act);
+      targetMgr.create(act);
     }
-    ObjectXmlDriver<Act> driver=(ObjectXmlDriver<Act>)targetActsMgr.getDriver();
-    driver.saveAll(targetActsMgr.getCache().getAll());
+    ObjectXmlDriver<Act> driver=(ObjectXmlDriver<Act>)targetMgr.getDriver();
+    driver.saveAll(targetMgr.getCache().getAll());
   }
 
   /**

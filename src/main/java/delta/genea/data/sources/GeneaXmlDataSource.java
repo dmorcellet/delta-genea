@@ -9,9 +9,11 @@ import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.common.framework.objects.xml.XmlObjectsSource;
 import delta.genea.data.Act;
 import delta.genea.data.ActType;
+import delta.genea.data.Place;
 import delta.genea.data.trees.AncestorsTreesRegistry;
 import delta.genea.xml.ActTypeXMLIO;
 import delta.genea.xml.ActXMLIO;
+import delta.genea.xml.PlaceXMLIO;
 
 /**
  * Data source for the genea objects of a single XML database.
@@ -85,6 +87,14 @@ public class GeneaXmlDataSource extends XmlObjectsSource
       xmlIO.setObjectSource(this);
       ObjectXmlDriver<ActType> driver=new ObjectXmlDriver<ActType>(xmlFile,xmlIO,xmlIO);
       addClass(ActType.class,driver);
+    }
+    // Place
+    {
+      File xmlFile=getXmlFileForClass(Place.CLASS_NAME);
+      PlaceXMLIO xmlIO=new PlaceXMLIO();
+      xmlIO.setObjectSource(this);
+      ObjectXmlDriver<Place> driver=new ObjectXmlDriver<Place>(xmlFile,xmlIO,xmlIO);
+      addClass(Place.class,driver);
     }
     // Act
     {
