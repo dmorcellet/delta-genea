@@ -11,19 +11,27 @@ public class GeneaXMLConstants
    * Act type, place: attribute 'name'.
    */
   public static final String NAME_ATTR="name";
+  /**
+   * Act, union: attribute 'date'.
+   */
+  public static final String DATE_ATTR="date";
+  /**
+   * Act, union: attribute 'dateInfos'.
+   */
+  public static final String DATE_INFOS_ATTR="dateInfos";
+  /**
+   * Act, union: attribute 'placeId'.
+   */
+  public static final String PLACE_ATTR="placeId";
+  /**
+   * Act, union: attribute 'comments'.
+   */
+  public static final String COMMENTS_ATTR="comments";
 
   /**
    * Act: attribute 'typeId'.
    */
   public static final String TYPE_ATTR="typeId";
-  /**
-   * Act: attribute 'date'.
-   */
-  public static final String DATE_ATTR="date";
-  /**
-   * Act: attribute 'placeId'.
-   */
-  public static final String PLACE_ATTR="placeId";
   /**
    * Act: attribute 'personId1'.
    */
@@ -48,10 +56,6 @@ public class GeneaXMLConstants
    * Act: attribute 'textId'.
    */
   public static final String ACT_TEXT_ATTR="textId";
-  /**
-   * Act: attribute 'comment'.
-   */
-  public static final String ACT_COMMENT_ATTR="comment";
 
   /**
    * Person in act tag.
@@ -90,4 +94,17 @@ public class GeneaXMLConstants
    * Place: attribute 'parentPlaceId'.
    */
   public static final String PLACE_PARENT_PLACE_ATTR="parentPlaceId";
+
+  /**
+   * Union : man key.
+   */
+  public static final String UNION_MAN_ATTR="manId";
+  /**
+   * Union : woman key.
+   */
+  public static final String UNION_WOMAN_ATTR="womanId";
+  /**
+   * Union : woman key.
+   */
+  public static final String UNION_WEDDING_CONTRACT_ID_ATTR="weddingContractId";
 }

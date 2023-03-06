@@ -10,10 +10,12 @@ import delta.common.framework.objects.xml.XmlObjectsSource;
 import delta.genea.data.Act;
 import delta.genea.data.ActType;
 import delta.genea.data.Place;
+import delta.genea.data.Union;
 import delta.genea.data.trees.AncestorsTreesRegistry;
 import delta.genea.xml.ActTypeXMLIO;
 import delta.genea.xml.ActXMLIO;
 import delta.genea.xml.PlaceXMLIO;
+import delta.genea.xml.UnionXMLIO;
 
 /**
  * Data source for the genea objects of a single XML database.
@@ -74,9 +76,6 @@ public class GeneaXmlDataSource extends XmlObjectsSource
   {
     /*
     addClass(Person.class);
-    addClass(Union.class);
-    addClass(Place.class);
-    addClass(Act.class);
     addClass(Picture.class);
     addClass(ActText.class);
     */
@@ -103,6 +102,14 @@ public class GeneaXmlDataSource extends XmlObjectsSource
       xmlIO.setObjectSource(this);
       ObjectXmlDriver<Act> driver=new ObjectXmlDriver<Act>(xmlFile,xmlIO,xmlIO);
       addClass(Act.class,driver);
+    }
+    // Union
+    {
+      File xmlFile=getXmlFileForClass(Union.CLASS_NAME);
+      UnionXMLIO xmlIO=new UnionXMLIO();
+      xmlIO.setObjectSource(this);
+      ObjectXmlDriver<Union> driver=new ObjectXmlDriver<Union>(xmlFile,xmlIO,xmlIO);
+      addClass(Union.class,driver);
     }
   }
 

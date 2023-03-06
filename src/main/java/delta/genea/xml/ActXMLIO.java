@@ -77,7 +77,7 @@ public class ActXMLIO extends DefaultXMLIO<Act>
     boolean traite=DOMParsingTools.getBooleanAttribute(attrs,GeneaXMLConstants.ACT_TRAITE_ATTR,false);
     ret.setTraite(traite);
     // Comment
-    String comment=DOMParsingTools.getStringAttribute(attrs,GeneaXMLConstants.ACT_COMMENT_ATTR,"");
+    String comment=DOMParsingTools.getStringAttribute(attrs,GeneaXMLConstants.COMMENTS_ATTR,"");
     ret.setComment(comment);
 
     // Persons in act
@@ -152,7 +152,7 @@ public class ActXMLIO extends DefaultXMLIO<Act>
     String comment=object.getComment();
     if ((comment!=null) && (comment.length()>0))
     {
-      objectAttrs.addAttribute("","",GeneaXMLConstants.ACT_COMMENT_ATTR,XmlWriter.CDATA,comment);
+      objectAttrs.addAttribute("","",GeneaXMLConstants.COMMENTS_ATTR,XmlWriter.CDATA,comment);
     }
   }
 

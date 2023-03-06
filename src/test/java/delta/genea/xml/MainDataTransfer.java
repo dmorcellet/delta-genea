@@ -3,10 +3,13 @@ package delta.genea.xml;
 import java.io.File;
 import java.util.List;
 
+import delta.common.framework.objects.data.Identifiable;
 import delta.common.framework.objects.data.ObjectsManager;
 import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.genea.data.Act;
+import delta.genea.data.ActType;
 import delta.genea.data.Place;
+import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.data.sources.GeneaXmlDataSource;
 
@@ -23,33 +26,22 @@ public class MainDataTransfer
   {
     GeneaDataSource source=GeneaDataSource.getInstance(SOURCE_DATABASE);
     GeneaXmlDataSource target=GeneaXmlDataSource.getInstance(ROOT_DIR);
-    handlePlaces(source,target);
-    handleActs(source,target);
+    handleClass(source,target,Place.class);
+    handleClass(source,target,ActType.class);
+    handleClass(source,target,Act.class);
+    handleClass(source,target,Union.class);
   }
 
-  private void handlePlaces(GeneaDataSource source, GeneaXmlDataSource target)
+  private <E extends Identifiable<Long>> void handleClass(GeneaDataSource source, GeneaXmlDataSource target, Class<E> c)
   {
-    ObjectsManager<Place> mgr=source.getManager(Place.class);
-    List<Place> objects=mgr.loadAll();
-    ObjectsManager<Place> targetMgr=target.getManager(Place.class);
-    for(Place object : objects)
+    ObjectsManager<E> mgr=source.getManager(c);
+    List<E> objects=mgr.loadAll();
+    ObjectsManager<E> targetMgr=target.getManager(c);
+    for(E object : objects)
     {
       targetMgr.create(object);
     }
-    ObjectXmlDriver<Place> driver=(ObjectXmlDriver<Place>)targetMgr.getDriver();
-    driver.saveAll(targetMgr.getCache().getAll());
-  }
-
-  private void handleActs(GeneaDataSource source, GeneaXmlDataSource target)
-  {
-    ObjectsManager<Act> mgr=source.getManager(Act.class);
-    List<Act> objects=mgr.loadAll();
-    ObjectsManager<Act> targetMgr=target.getManager(Act.class);
-    for(Act act : objects)
-    {
-      targetMgr.create(act);
-    }
-    ObjectXmlDriver<Act> driver=(ObjectXmlDriver<Act>)targetMgr.getDriver();
+    ObjectXmlDriver<E> driver=(ObjectXmlDriver<E>)targetMgr.getDriver();
     driver.saveAll(targetMgr.getCache().getAll());
   }
 
