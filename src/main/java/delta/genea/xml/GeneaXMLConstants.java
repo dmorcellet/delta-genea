@@ -104,7 +104,24 @@ public class GeneaXMLConstants
    */
   public static final String UNION_WOMAN_ATTR="womanId";
   /**
-   * Union : woman key.
+   * Union : wedding contract ID.
    */
   public static final String UNION_WEDDING_CONTRACT_ID_ATTR="weddingContractId";
+
+  /**
+   * Picture : title.
+   */
+  public static final String PICTURE_TITLE_ATTR="title";
+  /**
+   * Picture : path.
+   */
+  public static final String PICTURE_PATH_ATTR="path";
+  /**
+   * Picture : person in picture tag.
+   */
+  public static final String PERSON_IN_PICTURE_TAG="person";
+  /**
+   * Person in picture : attribute 'id'.
+   */
+  public static final String PERSON_IN_PICTURE_ID_ATTR="id";
 }

@@ -10,12 +10,14 @@ import delta.common.framework.objects.xml.XmlObjectsSource;
 import delta.genea.data.Act;
 import delta.genea.data.ActText;
 import delta.genea.data.ActType;
+import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
 import delta.genea.data.trees.AncestorsTreesRegistry;
 import delta.genea.xml.ActTextXMLIO;
 import delta.genea.xml.ActTypeXMLIO;
 import delta.genea.xml.ActXMLIO;
+import delta.genea.xml.PictureXMLIO;
 import delta.genea.xml.PlaceXMLIO;
 import delta.genea.xml.UnionXMLIO;
 
@@ -78,8 +80,6 @@ public class GeneaXmlDataSource extends XmlObjectsSource
   {
     /*
     addClass(Person.class);
-    addClass(Picture.class);
-    addClass(ActText.class);
     */
     // Act type
     {
@@ -120,6 +120,14 @@ public class GeneaXmlDataSource extends XmlObjectsSource
       xmlIO.setObjectSource(this);
       ObjectXmlDriver<Union> driver=new ObjectXmlDriver<Union>(xmlFile,xmlIO,xmlIO);
       addClass(Union.class,driver);
+    }
+    // Picture
+    {
+      File xmlFile=getXmlFileForClass(Picture.CLASS_NAME);
+      PictureXMLIO xmlIO=new PictureXMLIO();
+      xmlIO.setObjectSource(this);
+      ObjectXmlDriver<Picture> driver=new ObjectXmlDriver<Picture>(xmlFile,xmlIO,xmlIO);
+      addClass(Picture.class,driver);
     }
   }
 

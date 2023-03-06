@@ -9,6 +9,7 @@ import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.genea.data.Act;
 import delta.genea.data.ActText;
 import delta.genea.data.ActType;
+import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
@@ -32,6 +33,7 @@ public class MainDataTransfer
     handleClass(source,target,Act.class);
     handleClass(source,target,Union.class);
     handleClass(source,target,ActText.class);
+    handleClass(source,target,Picture.class);
   }
 
   private <E extends Identifiable<Long>> void handleClass(GeneaDataSource source, GeneaXmlDataSource target, Class<E> c)
