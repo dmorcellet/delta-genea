@@ -9,6 +9,7 @@ import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.genea.data.Act;
 import delta.genea.data.ActText;
 import delta.genea.data.ActType;
+import delta.genea.data.Person;
 import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
@@ -22,7 +23,7 @@ import delta.genea.data.sources.GeneaXmlDataSource;
 public class MainDataTransfer
 {
   private static final String SOURCE_DATABASE="genea";
-  private static final File ROOT_DIR=new File("c:\\dam\\data\\genea\\xml");
+  private static final File ROOT_DIR=new File("data\\xml\\genea");
 
   private void doIt()
   {
@@ -34,6 +35,7 @@ public class MainDataTransfer
     handleClass(source,target,Union.class);
     handleClass(source,target,ActText.class);
     handleClass(source,target,Picture.class);
+    handleClass(source,target,Person.class);
   }
 
   private <E extends Identifiable<Long>> void handleClass(GeneaDataSource source, GeneaXmlDataSource target, Class<E> c)

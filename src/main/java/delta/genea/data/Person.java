@@ -39,10 +39,10 @@ public class Person extends DataObject<Person>
   private Sex _sex;
   private String _signature;
   // Birth
-  private final GeneaDate _birthDate;
+  private GeneaDate _birthDate;
   private DataProxy<Place> _birthPlace;
   // Death
-  private final GeneaDate _deathDate;
+  private GeneaDate _deathDate;
   private DataProxy<Place> _deathPlace;
   // Descendants ?
   private boolean _noDescendants;
@@ -228,6 +228,15 @@ public class Person extends DataObject<Person>
   }
 
   /**
+   * Set the birth date of this person.
+   * @param date Date to set.
+   */
+  public void setBirthDate(GeneaDate date)
+  {
+    _birthDate=date;
+  }
+
+  /**
    * Get the birth information for this person.
    * @return A birth information string.
    */
@@ -305,6 +314,15 @@ public class Person extends DataObject<Person>
   {
     _deathDate.setDate(date);
     _deathDate.setInfosDate(infosDate);
+  }
+
+  /**
+   * Set the death date of this person.
+   * @param date Date to set.
+   */
+  public void setDeathDate(GeneaDate date)
+  {
+    _deathDate=date;
   }
 
   /**

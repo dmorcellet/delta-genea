@@ -1,13 +1,10 @@
 package delta.genea.xml;
 // Date
 
-import java.util.Date;
-
 import javax.xml.transform.sax.TransformerHandler;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 import org.xml.sax.helpers.AttributesImpl;
 
 import delta.common.framework.objects.xml.DefaultXMLIO;
@@ -32,14 +29,8 @@ public class UnionXMLIO extends DefaultXMLIO<Union>
     NamedNodeMap attrs=tag.getAttributes();
 
     // Date
-    Node timestampStr=attrs.getNamedItem(GeneaXMLConstants.DATE_ATTR);
-    if (timestampStr!=null)
-    {
-      long timestamp=DOMParsingTools.getLongAttribute(attrs,GeneaXMLConstants.DATE_ATTR,-1);
-      String dateInfos=DOMParsingTools.getStringAttribute(attrs,GeneaXMLConstants.DATE_INFOS_ATTR,"");
-      GeneaDate date=new GeneaDate(new Date(timestamp),dateInfos);
-      ret.setDate(date);
-    }
+    GeneaDate date=XMLUtils.parseDate(attrs,GeneaXMLConstants.DATE_ATTR,GeneaXMLConstants.DATE_INFOS_ATTR);
+    ret.setDate(date);
     // Place
     long placeKey=DOMParsingTools.getLongAttribute(attrs,GeneaXMLConstants.PLACE_ATTR,-1);
     if (placeKey>=0)
@@ -75,16 +66,7 @@ public class UnionXMLIO extends DefaultXMLIO<Union>
   {
     // Date
     GeneaDate date=object.getGeneaDate();
-    Long timestamp=date.getDate();
-    if (timestamp!=null)
-    {
-      objectAttrs.addAttribute("","",GeneaXMLConstants.DATE_ATTR,XmlWriter.CDATA,timestamp.toString());
-    }
-    String dateInfos=date.getInfosDate();
-    if ((dateInfos!=null) && (dateInfos.length()>0))
-    {
-      objectAttrs.addAttribute("","",GeneaXMLConstants.DATE_INFOS_ATTR,XmlWriter.CDATA,dateInfos);
-    }
+    XMLUtils.writeDate(date,objectAttrs,GeneaXMLConstants.DATE_ATTR,GeneaXMLConstants.DATE_INFOS_ATTR);
     // Place
     XMLUtils.writeProxy(objectAttrs,GeneaXMLConstants.PLACE_ATTR,object.getPlaceProxy());
     // Man

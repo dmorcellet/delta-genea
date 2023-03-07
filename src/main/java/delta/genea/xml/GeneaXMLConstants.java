@@ -124,4 +124,97 @@ public class GeneaXMLConstants
    * Person in picture : attribute 'id'.
    */
   public static final String PERSON_IN_PICTURE_ID_ATTR="id";
+
+  /**
+   * Person: attribute 'lastName'.
+   */
+  public static final String PERSON_LASTNAME_ATTR="lastName";
+  /**
+   * Person: attribute 'firstName'.
+   */
+  public static final String PERSON_FIRSTNAME_ATTR="firstName";
+  /**
+   * Person: attribute 'sex'.
+   */
+  public static final String PERSON_SEX_ATTR="sex";
+  /**
+   * Person: attribute 'signature'.
+   */
+  public static final String PERSON_SIGNATURE_ATTR="signature";
+  /**
+   * Person: attribute 'birthDate'.
+   */
+  public static final String BIRTH_DATE_ATTR="birthDate";
+  /**
+   * Person: attribute 'birthDateInfos'.
+   */
+  public static final String BIRTH_DATE_INFOS_ATTR="birthDateInfos";
+  /**
+   * Person: attribute 'birthPlaceId'.
+   */
+  public static final String BIRTH_PLACE_ATTR="birthPlaceId";
+  /**
+   * Person: attribute 'deathDate'.
+   */
+  public static final String DEATH_DATE_ATTR="deathDate";
+  /**
+   * Person: attribute 'deathDateInfos'.
+   */
+  public static final String DEATH_DATE_INFOS_ATTR="deathDateInfos";
+  /**
+   * Person: attribute 'deathPlaceId'.
+   */
+  public static final String DEATH_PLACE_ATTR="deathPlaceId";
+  /**
+   * Person: attribute 'noDescendants'.
+   */
+  public static final String NO_DESCENDANTS_ATTR="noDescendants";
+  /**
+   * Person: attribute 'fatherId'.
+   */
+  public static final String FATHER_ATTR="fatherId";
+  /**
+   * Person: attribute 'motherId'.
+   */
+  public static final String MOTHER_ATTR="motherId";
+  /**
+   * Person: attribute 'godFatherId'.
+   */
+  public static final String GODFATHER_ATTR="godFatherId";
+  /**
+   * Person: attribute 'godMotherId'.
+   */
+  public static final String GODMOTHER_ATTR="godMotherId";
+  /**
+   * Person occupation tag.
+   */
+  public static final String PERSON_OCCUPATION_TAG="occupation";
+  /**
+   * Occupation: attribute 'occupation'.
+   */
+  public static final String OCCUPATION_ATTR="occupation";
+  /**
+   * Occupation: attribute 'year'.
+   */
+  public static final String OCCUPATION_YEAR_ATTR="year";
+  /**
+   * Occupation: attribute 'placeId'.
+   */
+  public static final String OCCUPATION_PLACE_ATTR="placeId";
+  /**
+   * Person home tag.
+   */
+  public static final String PERSON_HOME_TAG="home";
+  /**
+   * Home: attribute 'details'.
+   */
+  public static final String HOME_DETAILS_ATTR="details";
+  /**
+   * Home: attribute 'year'.
+   */
+  public static final String HOME_YEAR_ATTR="year";
+  /**
+   * Home: attribute 'placeId'.
+   */
+  public static final String HOME_PLACE_ATTR="placeId";
 }

@@ -10,6 +10,7 @@ import delta.common.framework.objects.xml.XmlObjectsSource;
 import delta.genea.data.Act;
 import delta.genea.data.ActText;
 import delta.genea.data.ActType;
+import delta.genea.data.Person;
 import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
@@ -17,6 +18,7 @@ import delta.genea.data.trees.AncestorsTreesRegistry;
 import delta.genea.xml.ActTextXMLIO;
 import delta.genea.xml.ActTypeXMLIO;
 import delta.genea.xml.ActXMLIO;
+import delta.genea.xml.PersonXMLIO;
 import delta.genea.xml.PictureXMLIO;
 import delta.genea.xml.PlaceXMLIO;
 import delta.genea.xml.UnionXMLIO;
@@ -78,9 +80,6 @@ public class GeneaXmlDataSource extends XmlObjectsSource
    */
   private void buildDrivers()
   {
-    /*
-    addClass(Person.class);
-    */
     // Act type
     {
       File xmlFile=getXmlFileForClass(ActType.CLASS_NAME);
@@ -96,6 +95,14 @@ public class GeneaXmlDataSource extends XmlObjectsSource
       xmlIO.setObjectSource(this);
       ObjectXmlDriver<Place> driver=new ObjectXmlDriver<Place>(xmlFile,xmlIO,xmlIO);
       addClass(Place.class,driver);
+    }
+    // Person
+    {
+      File xmlFile=getXmlFileForClass(Person.CLASS_NAME);
+      PersonXMLIO xmlIO=new PersonXMLIO();
+      xmlIO.setObjectSource(this);
+      ObjectXmlDriver<Person> driver=new ObjectXmlDriver<Person>(xmlFile,xmlIO,xmlIO);
+      addClass(Person.class,driver);
     }
     // Act
     {
