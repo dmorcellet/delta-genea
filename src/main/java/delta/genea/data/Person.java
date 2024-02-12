@@ -492,6 +492,20 @@ public class Person extends DataObject<Person>
   }
 
   /**
+   * Get the primary key for the godfather.
+   * @return A primary key or <code>null</code>.
+   */
+  public Long getGodFatherKey()
+  {
+    Long ret=null;
+    if (_godFather!=null)
+    {
+      ret=_godFather.getPrimaryKey();
+    }
+    return ret;
+  }
+
+  /**
    * Get the godfather of this person.
    * @return A person or <code>null</code>.
    */
@@ -520,6 +534,20 @@ public class Person extends DataObject<Person>
   public void setGodMotherProxy(DataProxy<Person> godMother)
   {
     _godMother=godMother;
+  }
+
+  /**
+   * Get the primary key for the godmother.
+   * @return A primary key or <code>null</code>.
+   */
+  public Long getGodMotherKey()
+  {
+    Long ret=null;
+    if (_godMother!=null)
+    {
+      ret=_godMother.getPrimaryKey();
+    }
+    return ret;
   }
 
   /**
