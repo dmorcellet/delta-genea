@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import delta.common.framework.objects.data.DataObject;
+import delta.common.framework.objects.data.ObjectsSource;
 import delta.genea.data.comparators.ActDateComparator;
-import delta.genea.data.sources.GeneaDataSource;
 
 /**
  * Gathers all acts for a single person.
@@ -15,7 +15,7 @@ import delta.genea.data.sources.GeneaDataSource;
  */
 public class ActsForPerson
 {
-  private GeneaDataSource _dataSource;
+  private ObjectsSource _dataSource;
   private Person _rootPerson;
   private Act _birthAct;
   private Act _deathAct;
@@ -29,7 +29,7 @@ public class ActsForPerson
    * @param dataSource Data source.
    * @param rootPerson Targeted person.
    */
-  public ActsForPerson(GeneaDataSource dataSource, Person rootPerson)
+  public ActsForPerson(ObjectsSource dataSource, Person rootPerson)
   {
     _dataSource=dataSource;
     _rootPerson=rootPerson;

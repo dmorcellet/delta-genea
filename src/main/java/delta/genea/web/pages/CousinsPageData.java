@@ -2,8 +2,8 @@ package delta.genea.web.pages;
 
 import java.util.List;
 
+import delta.common.framework.objects.data.ObjectsSource;
 import delta.genea.data.Person;
-import delta.genea.data.sources.GeneaDataSource;
 
 /**
  * Gathers data needed for the 'cousins' page.
@@ -48,7 +48,7 @@ public class CousinsPageData
    * @return <code>true</code> if data was successfully fetched,
    * <code>false</code> otherwise.
    */
-  public boolean load(GeneaDataSource source)
+  public boolean load(ObjectsSource source)
   {
     _main=source.load(Person.class,_key);
     if (_main==null)
