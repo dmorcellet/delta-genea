@@ -46,14 +46,18 @@ public class XMLUtils
    */
   public static GeneaDate parseDate(NamedNodeMap attrs, String dateAttrName, String dateInfosAttr)
   {
-    GeneaDate date=null;
+    GeneaDate date=new GeneaDate();
     Node timestampStr=attrs.getNamedItem(dateAttrName);
     if (timestampStr!=null)
     {
       long timestamp=DOMParsingTools.getLongAttribute(attrs,dateAttrName,-1);
-      String dateInfos=DOMParsingTools.getStringAttribute(attrs,dateInfosAttr,"");
-      date=new GeneaDate(new Date(timestamp),dateInfos);
+      if (timestamp>0)
+      {
+        date.setDate(new Date(timestamp));
+      }
     }
+    String dateInfos=DOMParsingTools.getStringAttribute(attrs,dateInfosAttr,"");
+    date.setInfosDate(dateInfos);
     return date;
   }
 
