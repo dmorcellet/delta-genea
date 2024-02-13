@@ -12,13 +12,13 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.framework.objects.data.DataProxy;
+import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.framework.objects.sql.ObjectSqlDriver;
 import delta.common.utils.jdbc.CleanupManager;
 import delta.common.utils.jdbc.JDBCTools;
 import delta.genea.data.Person;
 import delta.genea.data.PersonInPicture;
 import delta.genea.data.Picture;
-import delta.genea.data.sources.GeneaDataSource;
 
 /**
  * SQL driver for pictures.
@@ -35,13 +35,13 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
   private PreparedStatement _psCount;
   private PreparedStatement _psGetOtherFromPerson;
   private PreparedStatement _psGetPersonsInPicture;
-  private GeneaDataSource _mainDataSource;
+  private ObjectsSource _mainDataSource;
 
   /**
    * Constructor.
    * @param mainDataSource Main data source.
    */
-  public PictureSqlDriver(GeneaDataSource mainDataSource)
+  public PictureSqlDriver(ObjectsSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }

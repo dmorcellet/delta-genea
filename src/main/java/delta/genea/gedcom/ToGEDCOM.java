@@ -487,6 +487,8 @@ public class ToGEDCOM
     }
   }
 
+  private static final File ROOT_DIR=new File("data\\xml\\genea");
+
   /**
    * Do the job.
    * @param gedcomFile File to write.
@@ -496,8 +498,8 @@ public class ToGEDCOM
   {
     try
     {
-      GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
-      
+      //GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
+      GeneaDataSource dataSource=GeneaDataSource.getInstance(ROOT_DIR);
       List<Person> persons=dataSource.getManager(Person.class).loadAll();
       List<Union> unions=dataSource.getManager(Union.class).loadAll();
       System.out.println("Loaded "+persons.size()+" persons.");

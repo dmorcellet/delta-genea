@@ -8,7 +8,7 @@ import delta.common.framework.objects.data.ObjectsManager;
 import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.genea.data.Act;
 import delta.genea.data.ActType;
-import delta.genea.data.sources.GeneaXmlDataSource;
+import delta.genea.data.sources.GeneaDataSource;
 
 /**
  * Test for XML sources.
@@ -30,9 +30,9 @@ public class MainTestXmlSource
     testLoadActs();
   }
 
-  private void testWriteActTypes()
+  void testWriteActTypes()
   {
-    GeneaXmlDataSource source=GeneaXmlDataSource.getInstance(ROOT_DIR);
+    GeneaDataSource source=GeneaDataSource.getInstance(ROOT_DIR);
     ObjectsManager<ActType> actTypesMgr=source.getManager(ActType.class);
     List<ActType> actTypes=actTypesMgr.loadAll();
     for(ActType actType : actTypes)
@@ -46,7 +46,7 @@ public class MainTestXmlSource
 
   private void testLoadActs()
   {
-    GeneaXmlDataSource source=GeneaXmlDataSource.getInstance(ROOT_DIR);
+    GeneaDataSource source=GeneaDataSource.getInstance(ROOT_DIR);
     ObjectsManager<Act> actsMgr=source.getManager(Act.class);
     List<Act> acts=actsMgr.loadAll();
     System.out.println("Nb acts: "+acts.size());

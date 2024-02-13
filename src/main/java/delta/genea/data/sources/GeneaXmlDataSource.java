@@ -1,7 +1,6 @@
 package delta.genea.data.sources;
 
 import java.io.File;
-import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
@@ -14,10 +13,10 @@ import delta.genea.data.Person;
 import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
-import delta.genea.data.trees.AncestorsTreesRegistry;
 import delta.genea.xml.ActTextXMLIO;
 import delta.genea.xml.ActTypeXMLIO;
 import delta.genea.xml.ActXMLIO;
+import delta.genea.xml.PersonXMLDriver;
 import delta.genea.xml.PersonXMLIO;
 import delta.genea.xml.PictureXMLIO;
 import delta.genea.xml.PlaceXMLIO;
@@ -31,39 +30,13 @@ public class GeneaXmlDataSource extends XmlObjectsSource
 {
   private static final Logger LOGGER=Logger.getLogger(GeneaXmlDataSource.class);
 
-  private static HashMap<String,GeneaXmlDataSource> _sources=new HashMap<String,GeneaXmlDataSource>();
-
-  private AncestorsTreesRegistry _ancestorsTreesRegistry;
-
-  /**
-   * Get the data source that manages the genea objects
-   * for the given database.
-   * @param rootDirectory Root directory of the targeted database.
-   * @return A genea objects data source.
-   */
-  public static GeneaXmlDataSource getInstance(File rootDirectory)
-  {
-    synchronized (_sources)
-    {
-      String name=rootDirectory.getAbsolutePath();
-      GeneaXmlDataSource instance=_sources.get(name);
-      if (instance==null)
-      {
-        instance=new GeneaXmlDataSource(rootDirectory);
-        _sources.put(name,instance);
-      }
-      return instance;
-    }
-  }
-
   /**
    * Private constructor.
    * @param rootDir Root directory of the database to manage.
    */
-  private GeneaXmlDataSource(File rootDir)
+  public GeneaXmlDataSource(File rootDir)
   {
     super(rootDir);
-    _ancestorsTreesRegistry=new AncestorsTreesRegistry(this);
     buildDrivers();
     try
     {
@@ -101,7 +74,8 @@ public class GeneaXmlDataSource extends XmlObjectsSource
       File xmlFile=getXmlFileForClass(Person.CLASS_NAME);
       PersonXMLIO xmlIO=new PersonXMLIO();
       xmlIO.setObjectSource(this);
-      ObjectXmlDriver<Person> driver=new ObjectXmlDriver<Person>(xmlFile,xmlIO,xmlIO);
+      ObjectXmlDriver<Person> driver=new PersonXMLDriver();
+      driver.setup(xmlFile,xmlIO,xmlIO);
       addClass(Person.class,driver);
     }
     // Act
@@ -136,26 +110,5 @@ public class GeneaXmlDataSource extends XmlObjectsSource
       ObjectXmlDriver<Picture> driver=new ObjectXmlDriver<Picture>(xmlFile,xmlIO,xmlIO);
       addClass(Picture.class,driver);
     }
-  }
-
-  /**
-   * Get the registry for ancestors tree.
-   * @return the registry for ancestors tree.
-   */
-  public AncestorsTreesRegistry getAncestorsTreesRegistry()
-  {
-    return _ancestorsTreesRegistry;
-  }
-
-  /**
-   * Close all data sources.
-   */
-  public static void closeAll()
-  {
-    for(GeneaXmlDataSource source : _sources.values())
-    {
-      source.close();
-    }
-    _sources.clear();
   }
 }

@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.framework.objects.data.DataProxy;
+import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.framework.objects.sql.ObjectSqlDriver;
 import delta.common.utils.jdbc.CleanupManager;
 import delta.common.utils.jdbc.JDBCTools;
@@ -22,7 +23,6 @@ import delta.genea.data.OccupationForPerson;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.Sex;
-import delta.genea.data.sources.GeneaDataSource;
 
 /**
  * SQL driver for persons.
@@ -45,7 +45,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   private PreparedStatement _psInsertOccupation;
   private PreparedStatement _psInsertHome;
   private PreparedStatement _psPartialGetByPrimaryKey;
-  private GeneaDataSource _mainDataSource;
+  private ObjectsSource _mainDataSource;
 
   private static final String[] DELETE_REQUESTS={
     "DELETE FROM profession WHERE cle_personne = ?",
@@ -67,7 +67,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
    * Constructor.
    * @param mainDataSource Main data source.
    */
-  public PersonSqlDriver(GeneaDataSource mainDataSource)
+  public PersonSqlDriver(ObjectsSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }

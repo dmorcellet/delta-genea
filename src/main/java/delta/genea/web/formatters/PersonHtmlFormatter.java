@@ -132,8 +132,7 @@ public class PersonHtmlFormatter extends TextFormatter
 
   private boolean isAncestor(Long key)
   {
-    String dbName=_context.getDbName();
-    GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
+    GeneaDataSource dataSource=_context.getDataSource();
     AncestorsTreesRegistry registry=dataSource.getAncestorsTreesRegistry();
     AncestorsTree tree=registry.getTree(_deCujus);
     if (tree!=null)

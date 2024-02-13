@@ -7,6 +7,8 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import delta.common.framework.objects.data.DataProxy;
+import delta.common.framework.objects.data.ObjectsSource;
+import delta.common.framework.objects.sql.SqlObjectsSource;
 import delta.common.utils.NumericTools;
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.genea.data.Act;
@@ -66,7 +68,12 @@ public class ActsChecker
       tree.build();
       browseAncestorsTree(tree);
       dataSource.close();
-      LOGGER.info("Requests : "+dataSource.getNbGetRequests());
+      ObjectsSource source=dataSource.getObjectsSource();
+      if (source instanceof SqlObjectsSource)
+      {
+        long nbRequests=((SqlObjectsSource)source).getNbGetRequests();
+        LOGGER.info("Requests : "+nbRequests);
+      }
     }
     catch (Exception e)
     {
@@ -87,7 +94,7 @@ public class ActsChecker
     if (fatherNode!=null)
     {
       father=fatherNode.getData();
-      fatherActs=new ActsForPerson(dataSource,father);
+      fatherActs=new ActsForPerson(dataSource.getObjectsSource(),father);
       fatherActs.build();
       handleAct(out,sosa,-1,BIRTH,father,null,fatherActs.getBirthAct(),father.getBirthDate(),father.getBirthPlace());
       handleAct(out,sosa,-1,DEATH,father,null,fatherActs.getDeathAct(),father.getDeathDate(),father.getDeathPlace());
@@ -97,7 +104,7 @@ public class ActsChecker
     if (motherNode!=null)
     {
       mother=motherNode.getData();
-      motherActs=new ActsForPerson(dataSource,mother);
+      motherActs=new ActsForPerson(dataSource.getObjectsSource(),mother);
       motherActs.build();
       handleAct(out,sosa+1,-1,BIRTH,mother,null,motherActs.getBirthAct(),mother.getBirthDate(),mother.getBirthPlace());
       handleAct(out,sosa+1,-1,DEATH,mother,null,motherActs.getDeathAct(),mother.getDeathDate(),mother.getDeathPlace());

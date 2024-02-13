@@ -64,7 +64,7 @@ public class PersonPageData
 
     _children=source.loadRelation(Person.class,Person.CHILDREN_RELATION,_key);
     _godChildren=source.loadRelation(Person.class,Person.GOD_CHILDREN_RELATION,_key);
-    _acts=new ActsForPerson(_dataSource,_main);
+    _acts=new ActsForPerson(_dataSource.getObjectsSource(),_main);
     _acts.build();
     List<Act> acts=_acts.getAllActs();
     for(Act current : acts)

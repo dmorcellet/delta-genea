@@ -156,7 +156,7 @@ public class ActImporter
       }
     }
 
-    ActsForPerson acts=new ActsForPerson(_dataSource,p1);
+    ActsForPerson acts=new ActsForPerson(_dataSource.getObjectsSource(),p1);
     acts.build();
     Long date=null;
     Place place=null;
@@ -355,13 +355,5 @@ public class ActImporter
   private long convertSosa(long sosa)
   {
     return sosa;
-    /*
-    double log10=Math.log(sosa);
-    double log2=Math.log(2);
-    double log=log10/log2;
-    double same=Math.pow(2,Math.floor(log));
-    long tmp=sosa-(long)(same);
-    return tmp;
-    */
   }
 }

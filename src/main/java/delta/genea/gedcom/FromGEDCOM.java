@@ -9,6 +9,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.framework.objects.data.DataProxy;
+import delta.common.framework.objects.data.ObjectsSource;
+import delta.common.framework.objects.sql.SqlObjectsSource;
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileReader;
 import delta.common.utils.misc.LatineNumbers;
@@ -54,7 +56,7 @@ public class FromGEDCOM
   private List<Union> _unions;
   private List<Place> _places;
   private PlaceManager _placeManager;
-  private GeneaDataSource _dataSource;
+  private ObjectsSource _dataSource;
   private ArrayList<String> _lines;
   private int _index;
   private int _maxIndex;
@@ -68,7 +70,7 @@ public class FromGEDCOM
   {
     long time=System.currentTimeMillis();
     _fileName=fileName;
-    _dataSource=GeneaDataSource.getInstance(dbName);
+    _dataSource=GeneaDataSource.getInstance(dbName).getObjectsSource();
     reset();
     parseFileLines();
     go();
@@ -601,7 +603,10 @@ public class FromGEDCOM
 
   private void writeDB()
   {
-    _dataSource.setForeignKeyChecks(false);
+    if (_dataSource instanceof SqlObjectsSource)
+    {
+      ((SqlObjectsSource)_dataSource).setForeignKeyChecks(false);
+    }
     // Places
     int nbPlaces=_places.size();
     for(int i=0;i<nbPlaces;i++)
@@ -620,7 +625,10 @@ public class FromGEDCOM
     {
       _dataSource.create(Union.class,_unions.get(i));
     }
-    _dataSource.setForeignKeyChecks(true);
+    if (_dataSource instanceof SqlObjectsSource)
+    {
+      ((SqlObjectsSource)_dataSource).setForeignKeyChecks(true);
+    }
   }
 
   private FrenchRevolutionMonth getMonth(String month)

@@ -1,6 +1,6 @@
 package delta.genea.data;
 
-import delta.genea.data.sources.GeneaDataSource;
+import delta.common.framework.objects.data.ObjectsSource;
 
 /**
  * Gathers all acts for a couple. 
@@ -8,7 +8,7 @@ import delta.genea.data.sources.GeneaDataSource;
  */
 public class ActsForCouple
 {
-  private GeneaDataSource _dataSource;
+  private ObjectsSource _source;
   private Person _man;
   private Person _woman;
   private ActsForPerson _actsForMan;
@@ -17,13 +17,13 @@ public class ActsForCouple
 
   /**
    * Constructor.
-   * @param dataSource Associated data source.
+   * @param source Associated source.
    * @param man Man.
    * @param woman Woman.
    */
-  public ActsForCouple(GeneaDataSource dataSource, Person man, Person woman)
+  public ActsForCouple(ObjectsSource source, Person man, Person woman)
   {
-    _dataSource=dataSource;
+    _source=source;
     _man=man;
     _woman=woman;
   }
@@ -36,12 +36,12 @@ public class ActsForCouple
   {
     if (_man!=null)
     {
-      _actsForMan=new ActsForPerson(_dataSource,_man);
+      _actsForMan=new ActsForPerson(_source,_man);
       _actsForMan.build();
     }
     if (_woman!=null)
     {
-      _actsForWoman=new ActsForPerson(_dataSource,_woman);
+      _actsForWoman=new ActsForPerson(_source,_woman);
       _actsForWoman.build();
     }
 

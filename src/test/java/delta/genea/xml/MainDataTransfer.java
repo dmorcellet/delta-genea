@@ -14,7 +14,6 @@ import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.data.sources.GeneaXmlDataSource;
 
 /**
  * Tool to transfer data from a SQL source to a XML target.
@@ -28,7 +27,7 @@ public class MainDataTransfer
   private void doIt()
   {
     GeneaDataSource source=GeneaDataSource.getInstance(SOURCE_DATABASE);
-    GeneaXmlDataSource target=GeneaXmlDataSource.getInstance(ROOT_DIR);
+    GeneaDataSource target=GeneaDataSource.getInstance(ROOT_DIR);
     handleClass(source,target,Place.class);
     handleClass(source,target,ActType.class);
     handleClass(source,target,Act.class);
@@ -38,7 +37,7 @@ public class MainDataTransfer
     handleClass(source,target,Person.class);
   }
 
-  private <E extends Identifiable<Long>> void handleClass(GeneaDataSource source, GeneaXmlDataSource target, Class<E> c)
+  private <E extends Identifiable<Long>> void handleClass(GeneaDataSource source, GeneaDataSource target, Class<E> c)
   {
     ObjectsManager<E> mgr=source.getManager(c);
     List<E> objects=mgr.loadAll();

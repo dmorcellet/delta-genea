@@ -6,12 +6,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.utils.places.FrenchDepartment;
 import delta.common.utils.places.FrenchDepartmentDirectory;
 import delta.common.utils.text.StringSplitter;
 import delta.genea.data.Place;
 import delta.genea.data.PlaceLevel;
-import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.misc.GenealogySoftware;
 
 /**
@@ -22,7 +22,7 @@ public class PlaceManager
 {
   private static final Logger LOGGER=Logger.getLogger(PlaceManager.class);
 
-  private GeneaDataSource _dataSource;
+  private ObjectsSource _dataSource;
   private int _nbFields;
   private int[] _meanings;
   private int[] _fieldIndices;
@@ -69,7 +69,7 @@ public class PlaceManager
    * @param dataSource Data source.
    * @param nbFields Number of fields.
    */
-  public PlaceManager(GeneaDataSource dataSource, int nbFields)
+  public PlaceManager(ObjectsSource dataSource, int nbFields)
   {
     _dataSource=dataSource;
     _nbFields=nbFields;
@@ -235,7 +235,7 @@ public class PlaceManager
    * @param softwareType Genealogy software to use.
    * @return A places manager.
    */
-  public static PlaceManager buildFor(GeneaDataSource dataSource, int softwareType)
+  public static PlaceManager buildFor(ObjectsSource dataSource, int softwareType)
   {
     PlaceManager pm=null;
     if (softwareType==GenealogySoftware.PERSONAL_ANCESTRAL_FILE)

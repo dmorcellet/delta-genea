@@ -126,7 +126,7 @@ public class MainActsImporter
   private void doIt()
   {
     _dataSource=GeneaDataSource.getInstance("genea_tmp");
-    _data=new RawDataManager(_dataSource);
+    _data=new RawDataManager(_dataSource.getObjectsSource());
     List<BirthAct> acts=BirthActsIO.readActs(Main.ACTS_FILE);
     if ((acts!=null) && (acts.size()>0))
     {

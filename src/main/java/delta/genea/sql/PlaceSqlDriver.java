@@ -12,12 +12,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.framework.objects.data.DataProxy;
+import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.framework.objects.sql.ObjectSqlDriver;
 import delta.common.utils.jdbc.CleanupManager;
 import delta.common.utils.jdbc.JDBCTools;
 import delta.genea.data.Place;
 import delta.genea.data.PlaceLevel;
-import delta.genea.data.sources.GeneaDataSource;
 
 /**
  * SQL driver for places.
@@ -30,13 +30,13 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
   private PreparedStatement _psGetByPrimaryKey;
   private PreparedStatement _psGetAll;
   private PreparedStatement _psInsert;
-  private GeneaDataSource _mainDataSource;
+  private ObjectsSource _mainDataSource;
 
   /**
    * Constructor.
    * @param mainDataSource Main data source.
    */
-  public PlaceSqlDriver(GeneaDataSource mainDataSource)
+  public PlaceSqlDriver(ObjectsSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }

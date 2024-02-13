@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import delta.common.framework.objects.data.DataProxy;
+import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.framework.objects.sql.ObjectSqlDriver;
 import delta.common.utils.jdbc.CleanupManager;
 import delta.common.utils.jdbc.JDBCTools;
@@ -21,7 +22,6 @@ import delta.genea.data.Act;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
-import delta.genea.data.sources.GeneaDataSource;
 
 /**
  * SQL driver for unions.
@@ -39,13 +39,13 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
   private PreparedStatement _psGetByNameAndPlaceH;
   private PreparedStatement _psGetByNameAndPlaceF;
 
-  private GeneaDataSource _mainDataSource;
+  private ObjectsSource _mainDataSource;
 
   /**
    * Constructor.
    * @param mainDataSource Main data source.
    */
-  public UnionSqlDriver(GeneaDataSource mainDataSource)
+  public UnionSqlDriver(ObjectsSource mainDataSource)
   {
     _mainDataSource=mainDataSource;
   }

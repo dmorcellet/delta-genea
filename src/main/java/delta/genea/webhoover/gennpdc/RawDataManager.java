@@ -3,10 +3,10 @@ package delta.genea.webhoover.gennpdc;
 import java.util.ArrayList;
 import java.util.List;
 
+import delta.common.framework.objects.data.ObjectsSource;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
-import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.gedcom.PlaceManager;
 
 /**
@@ -22,14 +22,14 @@ public class RawDataManager
 
   /**
    * Constructor.
-   * @param dataSource Data source.
+   * @param source Data source.
    */
-  public RawDataManager(GeneaDataSource dataSource)
+  public RawDataManager(ObjectsSource source)
   {
     _persons=new ArrayList<Person>();
     _unions=new ArrayList<Union>();
     _places=new ArrayList<Place>();
-    _placeManager=new PlaceManager(dataSource,1);
+    _placeManager=new PlaceManager(source,1);
     _placeManager.indicateFieldMeaning(1,PlaceManager.TOWN_NAME);
   }
 

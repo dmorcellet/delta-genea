@@ -29,7 +29,7 @@ public class CousinsPage extends GeneaWebPage
   @Override
   public void fetchData() throws Exception
   {
-    _data.load(getDataSource());
+    _data.load(getDataSource().getObjectsSource());
   }
 
   @Override

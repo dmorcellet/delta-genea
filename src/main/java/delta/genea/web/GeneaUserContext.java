@@ -28,6 +28,10 @@ public class GeneaUserContext extends WebUserContext
    * Database parameter name.
    */
   public static final String DB_NAME="DB_NAME";
+  /**
+   * Data source parameter name.
+   */
+  public static final String DATA_SOURCE="DATA_SOURCE";
 
   /**
    * Constructor.
@@ -103,5 +107,14 @@ public class GeneaUserContext extends WebUserContext
     {
       setDbName(dbName);
     }
+  }
+
+  /**
+   * Get the genea data source.
+   * @return the genea data source.
+   */
+  public GeneaDataSource getDataSource()
+  {
+    return (GeneaDataSource)ParameterFinder.getParameter(this,DATA_SOURCE,false);
   }
 }

@@ -16,7 +16,7 @@ public class MainTestExportGEDCOM
    */
   public static void main(String[] args)
   {
-    File toFile=new File("/tmp/dada.ged");
+    File toFile=new File("dada.ged");
     ToGEDCOM toGedcom=new ToGEDCOM();
     toGedcom.go(toFile,"genea");
   }
