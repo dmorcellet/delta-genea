@@ -50,11 +50,8 @@ public class XMLUtils
     Node timestampStr=attrs.getNamedItem(dateAttrName);
     if (timestampStr!=null)
     {
-      long timestamp=DOMParsingTools.getLongAttribute(attrs,dateAttrName,-1);
-      if (timestamp>0)
-      {
-        date.setDate(new Date(timestamp));
-      }
+      long timestamp=DOMParsingTools.getLongAttribute(attrs,dateAttrName,0);
+      date.setDate(new Date(timestamp));
     }
     String dateInfos=DOMParsingTools.getStringAttribute(attrs,dateInfosAttr,"");
     date.setInfosDate(dateInfos);
