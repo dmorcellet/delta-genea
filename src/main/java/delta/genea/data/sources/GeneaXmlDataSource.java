@@ -20,6 +20,7 @@ import delta.genea.xml.PersonXMLDriver;
 import delta.genea.xml.PersonXMLIO;
 import delta.genea.xml.PictureXMLIO;
 import delta.genea.xml.PlaceXMLIO;
+import delta.genea.xml.UnionXMLDriver;
 import delta.genea.xml.UnionXMLIO;
 
 /**
@@ -99,7 +100,8 @@ public class GeneaXmlDataSource extends XmlObjectsSource
       File xmlFile=getXmlFileForClass(Union.CLASS_NAME);
       UnionXMLIO xmlIO=new UnionXMLIO();
       xmlIO.setObjectSource(this);
-      ObjectXmlDriver<Union> driver=new ObjectXmlDriver<Union>(xmlFile,xmlIO,xmlIO);
+      ObjectXmlDriver<Union> driver=new UnionXMLDriver();
+      driver.setup(xmlFile,xmlIO,xmlIO);
       addClass(Union.class,driver);
     }
     // Picture

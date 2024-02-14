@@ -138,6 +138,20 @@ public class Union extends DataObject<Union>
   }
 
   /**
+   * Get the primary key for the place of this union.
+   * @return A place primary key or <code>null</code>.
+   */
+  public Long getPlaceKey()
+  {
+    Long ret=null;
+    if (_place!=null)
+    {
+      ret=_place.getPrimaryKey();
+    }
+    return ret;
+  }
+
+  /**
    * Get the place of this union.
    * @return A place or <code>null</code>.
    */

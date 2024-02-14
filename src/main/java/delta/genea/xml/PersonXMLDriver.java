@@ -8,7 +8,8 @@ import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.genea.data.Person;
 
 /**
- * @author dm
+ * XML driver for persons.
+ * @author DAM
  */
 public class PersonXMLDriver extends ObjectXmlDriver<Person>
 {
@@ -145,6 +146,7 @@ public class PersonXMLDriver extends ObjectXmlDriver<Person>
    */
   public List<Long> getCousins(long primaryKey)
   {
+    // TODO
     return new ArrayList<Long>();
   }
 }
