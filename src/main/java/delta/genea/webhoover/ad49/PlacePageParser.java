@@ -58,15 +58,13 @@ public class PlacePageParser
     List<ActsPackage> result=new ArrayList<ActsPackage>();
 	  String tableContents="";
     List<String> lines=TextUtils.readAsLines(placePageFile);
-    String line,tmp;
-    int index;
     for(Iterator<String> it=lines.iterator();it.hasNext();)
     {
-      line=it.next();
-      index=line.indexOf(TABLE_START);
+      String line=it.next();
+      int index=line.indexOf(TABLE_START);
       if (index!=-1)
       {
-        tmp=line.substring(index+TABLE_START.length());
+        String tmp=line.substring(index+TABLE_START.length());
         index=tmp.indexOf(TABLE_START);
         tmp=tmp.substring(index+TABLE_START.length());
         index=tmp.indexOf(TABLE_END);
@@ -77,7 +75,7 @@ public class PlacePageParser
     String row;
     while(true)
     {
-      index=tableContents.indexOf(TR_START);
+      int index=tableContents.indexOf(TR_START);
       if (index==-1) break;
       tableContents=tableContents.substring(index+TR_START.length());
       index=tableContents.indexOf(TR_END);

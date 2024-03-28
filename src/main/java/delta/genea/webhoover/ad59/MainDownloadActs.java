@@ -108,13 +108,11 @@ public class MainDownloadActs
     String line=lines.get(0);
     List<String> places=TextTools.findAllBetween(line,"<option value='","</option>");
     String separator="'>";
-    String placeName1,placeName2;
-    int index;
     for(String place : places)
     {
-      index=place.indexOf(separator);
-      placeName1=place.substring(0,index);
-      placeName2=place.substring(index+separator.length());
+      int index=place.indexOf(separator);
+      String placeName1=place.substring(0,index);
+      String placeName2=place.substring(index+separator.length());
       if (!(placeName1.equals(placeName2)))
       {
         System.err.println(place);

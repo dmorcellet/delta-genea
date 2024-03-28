@@ -68,16 +68,15 @@ public class PackagePageParser
     System.out.println("Handling "+_actsPackage._placeName+" / "+_actsPackage._period+" - page "+pageNumber);
     int nbH=(width/tileSize)+(((width%tileSize)!=0)?1:0);
     int nbV=(height/tileSize)+(((height%tileSize)!=0)?1:0);
-    int x=0,y=0;
-    int tileWidth, tileHeight;
+    int x=0;
     File[][] files=new File[nbH][nbV];
     for(int hIndex=0;hIndex<nbH;hIndex++)
     {
-      tileWidth=Math.min(tileSize,width-x);
-      y=0;
+      int tileWidth=Math.min(tileSize,width-x);
+      int y=0;
       for(int vIndex=0;vIndex<nbV;vIndex++)
       {
-        tileHeight=Math.min(tileSize,height-y);
+        int tileHeight=Math.min(tileSize,height-y);
         files[hIndex][vIndex]=downloadTile(pageNumber,hIndex,vIndex,x,y,tileWidth,tileHeight);
         y+=tileHeight;
       }

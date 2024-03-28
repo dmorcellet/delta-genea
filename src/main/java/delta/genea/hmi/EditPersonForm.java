@@ -74,7 +74,7 @@ public class EditPersonForm extends JDialog
     JLabel sexLabel=new JLabel("Sex");
     dataPanel.add(sexLabel,new GridBagConstraints(0,n,1,1,0.0,0.0,GridBagConstraints.EAST,GridBagConstraints.NONE,stdInsets,5,0));
     List<Sex> listOfSex=Sex.getListOfSex();
-    _sexCombo=new JComboBox<Sex>((Sex[])listOfSex.toArray());
+    _sexCombo=new JComboBox<Sex>(listOfSex.toArray(new Sex[listOfSex.size()]));
     dataPanel.add(_sexCombo,new GridBagConstraints(1,n,1,1,1.0,0.0,GridBagConstraints.WEST,GridBagConstraints.NONE,stdInsets,5,0));
     n++;
     // Comments

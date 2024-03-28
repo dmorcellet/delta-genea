@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import delta.common.framework.objects.data.DataObject;
 import delta.common.utils.collections.BinaryTreeNode;
@@ -210,7 +211,7 @@ public class AncestorsTree
    * Such an identifier is made of the concatenation of the identifying keys
    * of the persons in the implex (e.g manKey/womanKey).
    */
-  public HashMap<String, Implex> getImplexes()
+  public Map<String, Implex> getImplexes()
   {
     HashMap<String, Implex> implexes=new HashMap<String, Implex>();
     HashMap<String, ArrayList<Long>> keysToSosas=new HashMap<String, ArrayList<Long>>();
@@ -401,7 +402,7 @@ public class AncestorsTree
    * Get the map of couples to sosa numbers of child.
    * @return A set of couples.
    */
-  public HashMap<Couple,List<Long>> buildCoupleToSOSAMap()
+  public Map<Couple,List<Long>> buildCoupleToSOSAMap()
   {
     HashMap<Couple,List<Long>> ret=new HashMap<Couple,List<Long>>();
     buildKeyToSosaMap(getRootNode(),1,ret);

@@ -42,7 +42,7 @@ public class AncestorsListPage extends GeneaWebPage
   @Override
   public void generate(PrintWriter pw)
   {
-    long nbAncestors=_data.getNbPersons()-1;
+    int nbAncestors=_data.getNbPersons()-1;
     GeneaUserContext context=(GeneaUserContext)getUserContext();
     PersonHtmlFormatter pTools=new PersonHtmlFormatter(context);
     pTools.setDeCujus(context.getDeCujus());

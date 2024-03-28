@@ -95,7 +95,8 @@ public class PackagePageParser
 		String imageName="";
 		int value;
 		int chunkHSize=0,chunkVSize=0;
-		int hsize=0,vsize=0;
+		int hsize=0;
+		int vsize=0;
 		for(Iterator<String> it=lines.iterator();it.hasNext();)
 		{
 			line=it.next();

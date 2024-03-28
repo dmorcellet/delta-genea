@@ -71,7 +71,6 @@ public class SpecFileParser
     List<String> lines=TextUtils.readAsLines(f);
     lines.remove(0);
     String[] items;
-    String placeIdStr,packageIndexStr,pageStr,sosaOld,sosaStr,sosa2Str,type;
     int placeId,packageIndex,minPageIndex,maxPageIndex;
     for(String line : lines)
     {
@@ -79,21 +78,21 @@ public class SpecFileParser
       if ((items==null) || (items.length<11)) {
         System.out.println("Bad line ["+line+"]");
       }
-      sosaOld=items[0];
+      String sosaOld=items[0];
       sosaOld=normalizeString(sosaOld);
-      sosaStr=items[1];
+      String sosaStr=items[1];
       sosaStr=normalizeString(sosaStr);
-      sosa2Str=items[2];
+      String sosa2Str=items[2];
       sosa2Str=normalizeString(sosa2Str);
-      type=items[4];
+      String type=items[4];
       type=normalizeString(type);
-      placeIdStr=items[6+2];
+      String placeIdStr=items[6+2];
       placeIdStr=normalizeString(placeIdStr);
       placeId=NumericTools.parseInt(placeIdStr,-1);
-      packageIndexStr=items[7+2];
+      String packageIndexStr=items[7+2];
       packageIndexStr=normalizeString(packageIndexStr);
       packageIndex=NumericTools.parseInt(packageIndexStr,-1);
-      pageStr=items[8+2];
+      String pageStr=items[8+2];
       pageStr=normalizeString(pageStr);
       int indexOfSeparator=pageStr.indexOf('-');
       if (indexOfSeparator!=-1)

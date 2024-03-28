@@ -280,7 +280,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
    * @param placeKey Identifier of the targeted place (<code>null</code> for no such filter).
    * @return A list of union identifiers.
    */
-  public ArrayList<Long> getByNameAndPlace(String name, Long placeKey)
+  public List<Long> getByNameAndPlace(String name, Long placeKey)
   {
     ArrayList<Long> ret=new ArrayList<Long>();
     if ((name==null) || (name.length()==0))

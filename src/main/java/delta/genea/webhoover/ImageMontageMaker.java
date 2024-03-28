@@ -36,18 +36,19 @@ public class ImageMontageMaker
    */
   public void doIt(File[][] files, File out) throws FileNotFoundException, IOException
   {
-    int columnTotal=files.length, rowTotal=files[0].length;
-    int col=0, row=0;
+    int columnTotal=files.length;
+    int rowTotal=files[0].length;
+    int col=0;
     Vector<RenderedOp> renderedOps=new Vector<RenderedOp>();
     RenderedOp[][] ops=new RenderedOp[columnTotal][rowTotal];
     RenderedOp op=null;
 
     String fileName;
-    int x=0, y=0;
+    int x=0;
     while (col<columnTotal)
     {
-      y=0;
-      row=0;
+      int y=0;
+      int row=0;
       while (row<rowTotal)
       {
         // System.out.println("c:" + col + "r:" + row);

@@ -527,12 +527,10 @@ public class FromGEDCOM
           else
           {
             LOGGER.error("Bad 'between' structure ["+stringToUse+"]");
-            dateInfos=stringToUse;
           }
         }
         catch (Exception e)
         {
-          dateInfos=stringToUse;
           LOGGER.error("Unable to decode GEDCOM date : "+stringToUse,e);
         }
       }

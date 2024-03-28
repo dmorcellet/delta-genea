@@ -632,7 +632,6 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
         _psUpdate.setString(n,act.getComment());
         n++;
         _psUpdate.setLong(n,key.longValue());
-        n++;
         _psUpdate.executeUpdate();
       }
       catch (SQLException sqlException)

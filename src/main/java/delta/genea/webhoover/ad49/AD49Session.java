@@ -38,6 +38,7 @@ public class AD49Session extends ADSession
     return _phpSID;
   }
 
+  @Override
   protected void additionalInitializations()
   {
     try

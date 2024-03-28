@@ -130,21 +130,16 @@ public class ActPage extends GeneaWebPage
       pw.println("<ul>");
 
       int nb=persons.size();
-      PersonInAct personInAct;
-      Person person;
-      Person linkReference;
-      String link, presence, signature;
-      String personLink, refLink;
       for(int i=0;i<nb;i++)
       {
-        personInAct=persons.get(i);
-        person=personInAct.getPerson();
-        linkReference=personInAct.getLinkReference();
+        PersonInAct personInAct=persons.get(i);
+        Person person=personInAct.getPerson();
+        Person linkReference=personInAct.getLinkReference();
         pw.println("<li>");
-        personLink=pTools.format(person);
+        String personLink=pTools.format(person);
         pw.print(personLink);
         // Link
-        link=personInAct.getLink();
+        String link=personInAct.getLink();
         if ((link!=null)&&(link.length()>0))
         {
           pw.print(", ");
@@ -152,7 +147,7 @@ public class ActPage extends GeneaWebPage
           if (linkReference!=null)
           {
             pw.print(" de ");
-            refLink=pTools.format(linkReference);
+            String refLink=pTools.format(linkReference);
             pw.print(refLink);
           }
         }
@@ -160,7 +155,7 @@ public class ActPage extends GeneaWebPage
 
         // Présence
         boolean useSignature=true;
-        presence=personInAct.getPresence();
+        String presence=personInAct.getPresence();
         if ("O".equals(presence))
         {
           if (person.getSex()==Sex.FEMALE)
@@ -209,7 +204,7 @@ public class ActPage extends GeneaWebPage
         if (useSignature)
         {
           pw.print(" - ");
-          signature=personInAct.getSignature();
+          String signature=personInAct.getSignature();
           if (signature==null)
           {
             signature="";
@@ -358,7 +353,6 @@ public class ActPage extends GeneaWebPage
       {
         pw.print(linkContents);
       }
-
     }
   }
 }

@@ -16,8 +16,6 @@ import delta.genea.webhoover.ImageMontageMaker;
  */
 public class MainDownloadActs
 {
-  //private static final Logger LOGGER=GeneaLoggers.getGeneaLogger();
-
   /**
    * Main method of this tool.
    * @param args Not used.
@@ -91,7 +89,8 @@ public class MainDownloadActs
     System.out.println("Handling page "+pageNumber);
     int nbH=(width/tileSize)+(((width%tileSize)!=0)?1:0);
     int nbV=(height/tileSize)+(((height%tileSize)!=0)?1:0);
-    int x=0,y=0;
+    int x=0;
+    int y=0;
     int tileWidth, tileHeight;
     File[][] files=new File[nbH][nbV];
     for(int hIndex=0;hIndex<nbH;hIndex++)
