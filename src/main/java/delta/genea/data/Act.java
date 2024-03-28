@@ -333,7 +333,7 @@ public class Act extends DataObject<Act>
    */
   public String getFullLabel()
   {
-    StringBuffer label=new StringBuffer();
+    StringBuilder label=new StringBuilder();
     label.append("Acte de ");
     label.append(getLabel());
     Person p1=getP1();
@@ -508,7 +508,7 @@ public class Act extends DataObject<Act>
     {
       return null;
     }
-    StringBuffer sb=new StringBuffer(_path);
+    StringBuilder sb=new StringBuilder(_path);
     if (index>0)
     {
       sb.append('-');

@@ -62,7 +62,8 @@ public class MainActsImporter
   private Person buildPerson(String fullName)
   {
     int index=fullName.indexOf(' ');
-    String lastName="",firstName="";
+    String lastName="";
+    String firstName="";
     if (index!=-1)
     {
       lastName=fullName.substring(0,index).trim();
@@ -106,20 +107,16 @@ public class MainActsImporter
       person.setBirthPlaceProxy(_dataSource.buildProxy(Place.class,placeKey));
     }
     Person[] parents=findCouple(act._father,act._mother,true);
-    if (parents!=null)
+    Person father=parents[0];
+    if (father!=null)
     {
-      Person father=parents[0];
-      if (father!=null)
-      {
-        person.setFatherProxy(_dataSource.buildProxy(Person.class,father.getPrimaryKey()));
-      }
-      Person mother=parents[1];
-      if (mother!=null)
-      {
-        person.setMotherProxy(_dataSource.buildProxy(Person.class,mother.getPrimaryKey()));
-      }
+      person.setFatherProxy(_dataSource.buildProxy(Person.class,father.getPrimaryKey()));
     }
-    
+    Person mother=parents[1];
+    if (mother!=null)
+    {
+      person.setMotherProxy(_dataSource.buildProxy(Person.class,mother.getPrimaryKey()));
+    }
     _data.getPersons().add(person);
   }
 
@@ -128,7 +125,7 @@ public class MainActsImporter
     _dataSource=GeneaDataSource.getInstance("genea_tmp");
     _data=new RawDataManager(_dataSource.getObjectsSource());
     List<BirthAct> acts=BirthActsIO.readActs(Main.ACTS_FILE);
-    if ((acts!=null) && (acts.size()>0))
+    if ((acts!=null) && (!acts.isEmpty()))
     {
       for(BirthAct act : acts)
       {

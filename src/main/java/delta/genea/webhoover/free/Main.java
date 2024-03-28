@@ -33,7 +33,6 @@ public class Main
   {
     _tmp=new TmpFilesManager(Constants.TMP_NAME);
     handleDirPage(Constants.SITE,Constants.OUT_DIR);
-    //tmp.cleanup();
     System.out.println(_nbDownloadedActs);
   }
   
@@ -77,8 +76,7 @@ public class Main
           {
             String href=TextTools.findBetween(line,"<A HREF=","</A>");
             String fileUrl=TextTools.findBetween(href,"\"","\"");
-            String fileName=fileUrl;
-            fileName=fileUrl.replace("%20"," ");
+            String fileName=fileUrl.replace("%20"," ");
             fileName=fileName.replace("%c3%a7","ç");
             File newFile=new File(out,fileName);
             if (!newFile.canRead())

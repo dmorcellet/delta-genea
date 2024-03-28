@@ -210,7 +210,6 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
     act.setTraite(rs.getBoolean(n));
     n++;
     act.setComment(rs.getString(n));
-    n++;
   }
 
   private List<PersonInAct> loadPersonsInAct(Long primaryKey)
@@ -354,7 +353,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   {
     if (primaryKey==null)
     {
-      return null;
+      throw new IllegalArgumentException("primaryKey is null");
     }
     Connection connection=getConnection();
     synchronized (connection)
@@ -395,7 +394,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
   {
     if (primaryKey==null)
     {
-      return null;
+      throw new IllegalArgumentException("primaryKey is null");
     }
     Connection connection=getConnection();
     synchronized (connection)
@@ -525,7 +524,6 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
         _psInsert.setBoolean(n,act.getTraite());
         n++;
         _psInsert.setString(n,act.getComment());
-        n++;
         _psInsert.executeUpdate();
         if (key==null)
         {

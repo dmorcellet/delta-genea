@@ -50,7 +50,7 @@ public class AncestorsPage extends GeneaWebPage
     _pTools.setUseNoDescendants(true);
     _pTools.setAsLink(true);
 
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     sb.append("Arbre ascendant de ");
     sb.append(_root.getLastName());
     sb.append(' ');

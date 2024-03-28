@@ -153,7 +153,6 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
       parentPlaceProxy=_mainDataSource.buildProxy(Place.class,Long.valueOf(parentPlaceKey));
     }
     place.setParentPlaceProxy(parentPlaceProxy);
-    n++;
   }
 
   @Override
@@ -190,7 +189,6 @@ public class PlaceSqlDriver extends ObjectSqlDriver<Place>
         {
           _psInsert.setNull(n,Types.INTEGER);
         }
-        n++;
         _psInsert.executeUpdate();
         if (key==null)
         {

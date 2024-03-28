@@ -33,12 +33,9 @@ public class AncestorsSelectionBuilder implements SelectionBuilder<Person>
     AncestorsTreesRegistry registry=dataSource.getAncestorsTreesRegistry();
     AncestorsTree tree=registry.getTree(_personKey,true,false);
     Person rootPerson=tree.getRootNode().getData();
-    if (tree!=null)
-    {
-      String selectionName="Ancêtres de "+rootPerson.getFullName();
-      ret=new BasicSelection<Person>(selectionName);
-      handleNode(ret,tree.getRootNode(),1,0);
-    }
+    String selectionName="Ancêtres de "+rootPerson.getFullName();
+    ret=new BasicSelection<Person>(selectionName);
+    handleNode(ret,tree.getRootNode(),1,0);
     return ret;
   }
 

@@ -144,7 +144,6 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
   {
     int n=2;
     text.setText(rs.getString(n));
-    n++;
   }
 
   /**
@@ -210,7 +209,6 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
         }
         n++;
         _psInsert.setString(n,text.getText());
-        n++;
         _psInsert.executeUpdate();
         if (key==null)
         {
@@ -259,7 +257,6 @@ public class TextSqlDriver extends ObjectSqlDriver<ActText>
         _psUpdate.setString(n,text.getText());
         n++;
         _psUpdate.setLong(n,key.longValue());
-        n++;
         _psUpdate.executeUpdate();
       }
       catch (SQLException sqlException)

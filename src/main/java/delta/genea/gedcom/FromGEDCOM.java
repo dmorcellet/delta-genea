@@ -554,7 +554,7 @@ public class FromGEDCOM
             }
             else
             {
-              StringBuffer sb=new StringBuffer();
+              StringBuilder sb=new StringBuilder();
               sb.append(day);
               sb.append('-');
               sb.append(month);
@@ -575,7 +575,7 @@ public class FromGEDCOM
       {
         int month=Month.decodeEnglishMonth(strings[0]);
         int year=Integer.parseInt(strings[1]);
-        StringBuffer sb=new StringBuffer();
+        StringBuilder sb=new StringBuilder();
         sb.append(month);
         sb.append('-');
         sb.append(year);

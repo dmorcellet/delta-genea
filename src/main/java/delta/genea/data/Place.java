@@ -79,7 +79,7 @@ public class Place extends DataObject<Place>
       return _shortName;
     }
     if (_parent==null) return _name;
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     sb.append(_name);
     Place parent=getParentPlace();
     if (parent!=null)

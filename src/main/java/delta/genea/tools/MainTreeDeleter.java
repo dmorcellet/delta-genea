@@ -110,10 +110,7 @@ public class MainTreeDeleter
           DataProxy<Person> pp=_source.buildProxy(Person.class,Long.valueOf(keys[i]));
           DescendantsTree tree=new DescendantsTree(pp,1000,false);
           tree.build(false);
-          if (tree!=null)
-          {
-            removeDescendantsTree(tree);
-          }
+          removeDescendantsTree(tree);
         }
       }
       

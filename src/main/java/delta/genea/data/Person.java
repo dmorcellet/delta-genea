@@ -140,7 +140,7 @@ public class Person extends DataObject<Person>
    */
   public String getFullName()
   {
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     sb.append(_firstName);
     sb.append(' ');
     sb.append(_lastName);

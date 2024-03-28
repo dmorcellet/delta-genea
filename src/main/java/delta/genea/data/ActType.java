@@ -113,6 +113,7 @@ public class ActType extends DataObject<ActType>
    * Get a readable label for this object.
    * @return a readable string.
    */
+  @Override
   public String getLabel()
   {
     return _type;

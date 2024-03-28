@@ -96,7 +96,7 @@ public class PersonPageData
     {
       List<Long> sosas=_tree.getSosas(key);
       Collections.sort(sosas);
-      StringBuffer sb=new StringBuffer();
+      StringBuilder sb=new StringBuilder();
       int nb=sosas.size();
       for(int i=0;i<nb;i++)
       {

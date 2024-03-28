@@ -20,7 +20,15 @@ public class BirthActPageParser
   private static final String DATE_SEED="Acte daté du : ";
   private static final String FATHER_SEED="<strong>Père</strong> : </td>";
   private static final String MOTHER_SEED="<strong>Mère</strong> : </td>";
-  private static final DateFormat DATE_FORMAT=new SimpleDateFormat("dd/MM/yyyy");
+  private final DateFormat _dateFormat;
+
+  /**
+   * Constructor.
+   */
+  public BirthActPageParser()
+  {
+    _dateFormat=new SimpleDateFormat("dd/MM/yyyy");
+  }
 
   /**
    * Parse the given file.
@@ -30,7 +38,6 @@ public class BirthActPageParser
    */
   public BirthAct readFile(File f) throws Exception
   {
-    //System.out.println(f);
     BirthAct act=null;
     List<String> lines=TextUtils.readAsLines(f,EncodingNames.ISO8859_1);
     for(String line : lines)
@@ -56,7 +63,7 @@ public class BirthActPageParser
         String dateStr=TextTools.findBetween(line,"<strong>","</strong></td>");
         try
         {
-          act._date=DATE_FORMAT.parse(dateStr);
+          act._date=_dateFormat.parse(dateStr);
         }
         catch(Exception e)
         {

@@ -93,7 +93,7 @@ public class ActsFromPlacePage extends GeneaWebPage
     ActType type=getDataSource().load(ActType.class,typeKey);
     if (type==null) return;
     List<Act> list=_actsMap.get(type.getType());
-    if ((list==null) || (list.size()==0)) return;
+    if ((list==null) || (list.isEmpty())) return;
     pw.print("<b>");
     pw.print(type.getType());
     pw.print(" (");

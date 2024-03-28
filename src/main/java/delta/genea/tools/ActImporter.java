@@ -49,11 +49,9 @@ public class ActImporter
   private void handleFile(File fileName)
   {
     System.out.println("Handling file ["+fileName+"]");
-    Long actType=ActType.BIRTH;
-    String name=fileName.getName();
-    //String newName="j_";
-    //String newName="ninie/";
-    String newName="";
+    Long actType;
+    String name=fileName.getName(); 
+    String newName=""; // or "j_" or "ninie/"
     if (name.endsWith(".jpg"))
     {
       name=name.substring(0,name.length()-4);
@@ -120,7 +118,8 @@ public class ActImporter
     if ((name.length()>1) && (name.charAt(0)=='-'))
     {
       name=name.substring(1);
-      int index=0; int n=name.length();
+      int index=0;
+      int n=name.length();
       while (index<n)
       {
         char c=name.charAt(index);
@@ -129,7 +128,6 @@ public class ActImporter
         else break;
         index++;
       }
-      //name=name.substring(index);
     }
     else
     {

@@ -260,7 +260,6 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     person.setComments(rs.getString(n));
     n++;
     person.setNoDescendants(rs.getBoolean(n));
-    n++;
   }
 
   private void fillPartialPerson(Person person, ResultSet rs)
@@ -276,14 +275,13 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     person.setBirthDate(rs.getDate(n++),rs.getString(n++));
     person.setDeathDate(rs.getDate(n++),rs.getString(n++));
     person.setNoDescendants(rs.getBoolean(n));
-    n++;
   }
 
   private List<OccupationForPerson> loadOccupations(Long primaryKey)
   {
     if (primaryKey==null)
     {
-      return null;
+      throw new IllegalArgumentException("loadOccupations: primaryKey is null");
     }
     List<OccupationForPerson> ret=null;
     Connection connection=getConnection();
@@ -332,7 +330,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   {
     if (primaryKey==null)
     {
-      return null;
+      throw new IllegalArgumentException("loadHomes: primaryKey is null");
     }
     Connection connection=getConnection();
     synchronized (connection)
@@ -606,7 +604,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   {
     if (primaryKey==null)
     {
-      return null;
+      throw new IllegalArgumentException("getRelatedObjectIDs: primaryKey is null");
     }
     List<Long> ret=null;
     if (relationName.equals(Person.CHILDREN_RELATION))
@@ -641,7 +639,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   {
     if (person==null)
     {
-      throw new IllegalArgumentException("person==null");
+      throw new IllegalArgumentException("create: person==null");
     }
     Connection connection=getConnection();
     synchronized (connection)
@@ -754,7 +752,6 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         _psInsert.setString(n,person.getComments());
         n++;
         _psInsert.setBoolean(n,person.getNoDescendants());
-        n++;
         _psInsert.executeUpdate();
         if (key==null)
         {
@@ -774,7 +771,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           }
         }
         List<OccupationForPerson> occupations=person.getOccupations();
-        if ((occupations!=null)&&(occupations.size()>0))
+        if ((occupations!=null)&&(!occupations.isEmpty()))
         {
           int nb=occupations.size();
           for (int i=0; i<nb; i++)
@@ -783,7 +780,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           }
         }
         List<HomeForPerson> homes=person.getHomes();
-        if ((homes!=null)&&(homes.size()>0))
+        if ((homes!=null)&&(!homes.isEmpty()))
         {
           int nb=homes.size();
           for (int i=0; i<nb; i++)
@@ -813,12 +810,12 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   {
     if (person==null)
     {
-      throw new IllegalArgumentException("person==null");
+      throw new IllegalArgumentException("createOccupation person==null");
     }
     Long key=person.getPrimaryKey();
     if (key==null)
     {
-      throw new IllegalArgumentException("key==null");
+      throw new IllegalArgumentException("createOccupation key==null");
     }
     Connection connection=getConnection();
     synchronized (connection)
@@ -841,7 +838,6 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         {
           _psInsertOccupation.setNull(n,Types.INTEGER);
         }
-        n++;
         _psInsertOccupation.executeUpdate();
       }
       catch (SQLException sqlException)
@@ -861,12 +857,12 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   {
     if (person==null)
     {
-      throw new IllegalArgumentException("person==null");
+      throw new IllegalArgumentException("createHome: person==null");
     }
     Long key=person.getPrimaryKey();
     if (key==null)
     {
-      throw new IllegalArgumentException("key==null");
+      throw new IllegalArgumentException("createHome: key==null");
     }
     Connection connection=getConnection();
     synchronized (connection)
@@ -889,7 +885,6 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         {
           _psInsertHome.setNull(n,Types.INTEGER);
         }
-        n++;
         _psInsertHome.executeUpdate();
       }
       catch (SQLException sqlException)

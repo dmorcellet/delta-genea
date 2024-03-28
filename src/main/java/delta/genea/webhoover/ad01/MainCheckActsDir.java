@@ -2,6 +2,7 @@ package delta.genea.webhoover.ad01;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,8 +50,7 @@ public class MainCheckActsDir
 		{
 			System.err.println("Odd number of files in "+dir);
 		}
-		List<String> names=new ArrayList<String>(nbchilds);
-		for(int i=0;i<nbchilds;i++) names.add(childs[i]);
+		List<String> names=Arrays.asList(childs);
 		Collections.sort(names);
 		int nb=nbchilds/2;
 		for(int i=0;i<nb;i++)

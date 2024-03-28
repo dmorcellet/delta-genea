@@ -147,7 +147,6 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
   {
     int n=2;
     text.setType(rs.getString(n));
-    n++;
   }
 
   /**
@@ -209,7 +208,6 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
         }
         n++;
         _psInsert.setString(n,text.getType());
-        n++;
         _psInsert.executeUpdate();
         if (usesHSQLDB())
         {
@@ -250,7 +248,6 @@ public class ActTypeSqlDriver extends ObjectSqlDriver<ActType>
         n++;
         Long key=text.getPrimaryKey();
         _psUpdate.setLong(n,key.longValue());
-        n++;
         _psUpdate.executeUpdate();
       }
       catch (SQLException sqlException)

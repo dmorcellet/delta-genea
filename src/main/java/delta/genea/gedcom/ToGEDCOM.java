@@ -354,7 +354,7 @@ public class ToGEDCOM
           if ((occupations!=null) && (occupations.size()>0))
           {
             int nbOccupations=occupations.size();
-            StringBuffer sb=new StringBuffer("1 OCCU ");
+            StringBuilder sb=new StringBuilder("1 OCCU ");
             for(int i=0;i<nbOccupations;i++)
             {
               if (i>0) sb.append(", ");

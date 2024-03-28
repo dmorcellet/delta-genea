@@ -85,7 +85,7 @@ public class OccupationForPerson
    */
   public String getLabel()
   {
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     sb.append(_occupation);
     if (_year!=0)
     {

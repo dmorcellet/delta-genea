@@ -62,7 +62,7 @@ public class PersonXMLDriver extends ObjectXmlDriver<Person>
   {
     if (primaryKey==null)
     {
-      return null;
+      throw new IllegalArgumentException("primaryKey is null");
     }
     List<Long> ret=null;
     if (relationName.equals(Person.CHILDREN_RELATION))

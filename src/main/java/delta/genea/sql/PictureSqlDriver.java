@@ -130,7 +130,6 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
     picture.setPath(rs.getString(n));
     n++;
     picture.setComment(rs.getString(n));
-    n++;
   }
 
   private List<PersonInPicture> loadPersonsInPicture(long primaryKey)
@@ -326,7 +325,6 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
         _psInsert.setString(n,picture.getPath());
         n++;
         _psInsert.setString(n,picture.getComment());
-        n++;
         _psInsert.executeUpdate();
         if (key==null)
         {
@@ -378,7 +376,6 @@ public class PictureSqlDriver extends ObjectSqlDriver<Picture>
         {
           _psUpdate.setNull(n,Types.INTEGER);
         }
-        n++;
         _psUpdate.executeUpdate();
       }
       catch (SQLException sqlException)

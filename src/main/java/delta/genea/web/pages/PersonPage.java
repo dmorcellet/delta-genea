@@ -453,13 +453,11 @@ public class PersonPage extends GeneaWebPage
           pw.println("</li>");
         }
         pw.println("</ul>");
-        previousWasAList=true;
       }
       else
       {
         pw.println("<b>Pas de photos.</b>");
         pw.println("<br>");
-        previousWasAList=false;
       }
     }
 

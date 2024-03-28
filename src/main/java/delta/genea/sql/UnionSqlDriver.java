@@ -159,7 +159,6 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     union.setWeddingContractProxy(contractProxy);
     n++;
     union.setComments(rs.getString(n));
-    n++;
   }
 
   @Override
@@ -401,7 +400,6 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
         }
         n++;
         _psInsert.setString(n,union.getComments());
-        n++;
         _psInsert.executeUpdate();
         if (key==null)
         {

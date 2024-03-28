@@ -53,7 +53,7 @@ public class CommonAncestorsPage extends GeneaWebPage
     pTools.setUseSexIcon(false);
     pTools.setUseNoDescendants(true);
     pTools.setAsLink(true);
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     sb.append("Ancêtres communs de ");
     sb.append(_p1.getFullName());
     sb.append(" et de ");
@@ -73,16 +73,15 @@ public class CommonAncestorsPage extends GeneaWebPage
     WebPageTools.generateHorizontalRuler(pw);
 
     pw.println("<div>");
-    if ((_couples!=null) && (_couples.size()>0))
+    if ((_couples!=null) && (!_couples.isEmpty()))
     {
-      Person man,woman;
       pw.println("<ul>");
       for(Couple c : _couples)
       {
-        man=c.getMan();
-        woman=c.getWoman();
+        Person man=c.getMan();
+        Person woman=c.getWoman();
         pw.println("<li>");
-        boolean outputDone=true;
+        boolean outputDone=false;
         if (man!=null)
         {
           pTools.generatePersonName(man);

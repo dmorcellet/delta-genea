@@ -53,7 +53,7 @@ public class ActsForPerson
 
     // Load unions
     _unions=_dataSource.loadRelation(Union.class,Union.UNIONS_RELATION,key);
-    if ((_unions!=null)&&(_unions.size()>0))
+    if ((_unions!=null)&&(!_unions.isEmpty()))
     {
       for(Union u : _unions)
       {

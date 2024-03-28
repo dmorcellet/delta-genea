@@ -138,7 +138,7 @@ public class ActsChecker
 
   private void handleAct(PrintStream out, int sosa1, int sosa2, String what, Person p, Person p2, Act act, Long date, Place place)
   {
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     if (p!=null) sb.append(p.getFullName());
     if (p2!=null)
     {

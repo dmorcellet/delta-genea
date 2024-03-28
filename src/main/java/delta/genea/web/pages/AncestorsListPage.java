@@ -51,7 +51,7 @@ public class AncestorsListPage extends GeneaWebPage
     pTools.setUseNoDescendants(true);
     pTools.setAsLink(true);
 
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     sb.append("Ancêtres de ");
     sb.append(_root.getLastName());
     sb.append(' ');

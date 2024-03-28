@@ -42,7 +42,7 @@ public class CousinsPage extends GeneaWebPage
     pTools.setUseNoDescendants(true);
     pTools.setAsLink(true);
     Person root=_data.getMainPerson();
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     sb.append("Cousins de ");
     sb.append(root.getLastName());
     sb.append(' ');

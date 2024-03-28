@@ -186,25 +186,21 @@ public class PackagePageParser
     File tmpDir=_session.getTmpDir();
     if (minIndex<=0)
     {
-      minIndex=1;
-      System.out.println(name+": "+"Bad min page index : 1");
+      System.out.println(name+": "+"Bad min page index: 1");
       return;
     }
     if (minIndex>_nbPages)
     {
-      minIndex=_nbPages;
       System.out.println(name+": "+"Bad min page index : ("+minIndex+">"+_nbPages+")");
       return;
     }
     if (maxIndex>_nbPages)
     {
-      maxIndex=_nbPages;
       System.out.println(name+": "+"Bad max page index : ("+maxIndex+">"+_nbPages+")");
       return;
     }
     if (maxIndex<minIndex)
     {
-      maxIndex=minIndex;
       System.out.println(name+": "+"Bad max page index : ("+maxIndex+"<"+minIndex+")");
       return;
     }
@@ -239,8 +235,6 @@ public class PackagePageParser
         int height=NumericTools.parseInt(infos[4],-1);
         int tile=2280;
         downloadPage(out,page,width,height,tile);
-        //System.out.println(out);
-        //downloader.status();
       }
     }
   }

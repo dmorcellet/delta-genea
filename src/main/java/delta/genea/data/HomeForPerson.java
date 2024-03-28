@@ -95,7 +95,7 @@ public class HomeForPerson
    */
   public String getLabel()
   {
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     if (_year!=0)
     {
       sb.append("(");

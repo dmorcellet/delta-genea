@@ -29,7 +29,7 @@ public class SpecFileParser
   
   private String getName(String type, String sosaOld, String sosa, String sosa2)
   {
-    String baseName="a";
+    String baseName;
     if ("Naissance".equals(type)) baseName="an";
     else if ("Décès".equals(type)) baseName="ad";
     else if ("Mariage".equals(type)) baseName="am";

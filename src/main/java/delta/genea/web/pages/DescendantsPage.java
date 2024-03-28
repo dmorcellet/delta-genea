@@ -52,7 +52,7 @@ public class DescendantsPage extends GeneaWebPage
 
     Person root=_data.getRootNode().getData();
     long nbDescendants=_data.getNumberOfDescendants();
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     sb.append("Arbre descendant de ");
     sb.append(root.getLastName());
     sb.append(' ');

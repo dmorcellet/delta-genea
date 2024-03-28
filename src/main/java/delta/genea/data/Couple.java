@@ -135,7 +135,7 @@ public class Couple
   @Override
   public String toString()
   {
-    StringBuffer sb=new StringBuffer();
+    StringBuilder sb=new StringBuilder();
     if (_man!=null)
     {
       sb.append(_man.getFullName());

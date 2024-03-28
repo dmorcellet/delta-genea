@@ -89,11 +89,11 @@ public class EditPersonForm extends JDialog
     // OK button
     _okButton=new JButton("OK");
     _okButton.addActionListener(new ActionListener()
-    { public void actionPerformed(ActionEvent e) { okButtonCallback(e); } });
+    { public void actionPerformed(ActionEvent e) { okButtonCallback(); } });
     // Cancel button
     _cancelButton=new JButton("Cancel");
     _cancelButton.addActionListener(new java.awt.event.ActionListener()
-    { public void actionPerformed(ActionEvent e) { cancelButtonCallback(e); } });
+    { public void actionPerformed(ActionEvent e) { cancelButtonCallback(); } });
 
     commandsPanel.add(_okButton);
     commandsPanel.add(_cancelButton);
@@ -107,11 +107,11 @@ public class EditPersonForm extends JDialog
     super.processWindowEvent(e);
     if(e.getID()==WindowEvent.WINDOW_CLOSING)
     {
-      cancelButtonCallback(null);
+      cancelButtonCallback();
     }
   }
 
-  void okButtonCallback(ActionEvent e)
+  void okButtonCallback()
   {
     _person.setLastName(_surnameTextField.getText());
     _person.setFirstname(_firstNameTextField.getText());
@@ -123,7 +123,7 @@ public class EditPersonForm extends JDialog
     dispose();
   }
 
-  void cancelButtonCallback(ActionEvent e)
+  void cancelButtonCallback()
   {
     dispose();
   }
