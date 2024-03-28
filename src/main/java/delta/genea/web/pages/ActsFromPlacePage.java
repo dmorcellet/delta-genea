@@ -88,9 +88,9 @@ public class ActsFromPlacePage extends GeneaWebPage
     WebPageTools.generatePageFooter(pw);
   }
 
-  private void generateActList(PrintWriter pw, Long typeKey, boolean useSexIcon)
+  private void generateActList(PrintWriter pw, long typeKey, boolean useSexIcon)
   {
-    ActType type=getDataSource().load(ActType.class,typeKey);
+    ActType type=getDataSource().load(ActType.class,Long.valueOf(typeKey));
     if (type==null) return;
     List<Act> list=_actsMap.get(type.getType());
     if ((list==null) || (list.isEmpty())) return;

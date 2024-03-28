@@ -11,55 +11,55 @@ public class ActType extends DataObject<ActType>
   /**
    * Act type for birth acts.
    */
-  public static final Long BIRTH=Long.valueOf(3);
+  public static final long BIRTH=3;
   /**
    * Act type for baptem acts.
    */
-  public static final Long BAPTEM=Long.valueOf(1);
+  public static final long BAPTEM=1;
   /**
    * Act type for death acts.
    */
-  public static final Long DEATH=Long.valueOf(4);
+  public static final long DEATH=4;
   /**
    * Act type for burial acts.
    */
-  public static final Long BURIAL=Long.valueOf(2);
+  public static final long BURIAL=2;
   /**
    * Act type for union acts.
    */
-  public static final Long UNION=Long.valueOf(5);
+  public static final long UNION=5;
   /**
    * Act type for consainguinity tree acts.
    */
-  public static final Long CONSANGUINITY_TREE=Long.valueOf(6);
+  public static final long CONSANGUINITY_TREE=6;
   /**
    * Act type for selling acts.
    */
-  public static final Long SELLING=Long.valueOf(7);
+  public static final long SELLING=7;
   /**
    * Act type for transaction acts.
    */
-  public static final Long TRANSACTION=Long.valueOf(8);
+  public static final long TRANSACTION=8;
   /**
    * Act type for other acts.
    */
-  public static final Long OTHER=Long.valueOf(0);
+  public static final long OTHER=0;
   /**
    * Act type for wedding contracts.
    */
-  public static final Long WEDDING_CONTRACT=Long.valueOf(12);
+  public static final long WEDDING_CONTRACT=12;
   /**
    * Act type for lease acts.
    */
-  public static final Long LEASE=Long.valueOf(9);
+  public static final long LEASE=9;
   /**
    * Act type for death acts.
    */
-  public static final Long SHARE=Long.valueOf(10);
+  public static final long SHARE=10;
   /**
    * Act type for testimonial acts.
    */
-  public static final Long TESTIMONIAL=Long.valueOf(11);
+  public static final long TESTIMONIAL=11;
 
   // Relations
   // ...
@@ -125,7 +125,7 @@ public class ActType extends DataObject<ActType>
    */
   public boolean isBirthAct()
   {
-    Long key=getPrimaryKey();
+    long key=getPrimaryKey().longValue();
     return ((key==BIRTH) || (key==BAPTEM));
   }
 
@@ -135,7 +135,7 @@ public class ActType extends DataObject<ActType>
    */
   public boolean isDeathAct()
   {
-    Long key=getPrimaryKey();
+    long key=getPrimaryKey().longValue();
     return ((key==DEATH) || (key==BURIAL));
   }
 

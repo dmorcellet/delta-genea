@@ -18,9 +18,9 @@ public class MainTestXmlSource
 {
   private static final File ROOT_DIR=new File("data\\xml\\genea");
 
-  private void createActType(ObjectsManager<ActType> actTypesMgr, Long id, String type)
+  private void createActType(ObjectsManager<ActType> actTypesMgr, long id, String type)
   {
-    ActType actType=new ActType(id);
+    ActType actType=new ActType(Long.valueOf(id));
     actType.setType(type);
     actTypesMgr.create(actType);
   }

@@ -49,7 +49,7 @@ public class ActImporter
   private void handleFile(File fileName)
   {
     System.out.println("Handling file ["+fileName+"]");
-    Long actType;
+    long actType;
     String name=fileName.getName(); 
     String newName=""; // or "j_" or "ninie/"
     if (name.endsWith(".jpg"))
@@ -181,7 +181,7 @@ public class ActImporter
         if (act==null)
         {
           act=new Act(null);
-          act.setActTypeProxy(_dataSource.buildProxy(ActType.class,actType));
+          act.setActTypeProxy(_dataSource.buildProxy(ActType.class,Long.valueOf(actType)));
           act.setDate(date);
           if (place!=null)
           {
@@ -195,11 +195,11 @@ public class ActImporter
         {
           if (!DataObject.keysAreEqual(act.getP1Key(),p1.getPrimaryKey()))
           {
-            System.err.println("Bad P1 : "+act.getP1Key()+"!="+p1.getPrimaryKey());
+            System.err.println("Bad P1: "+act.getP1Key()+"!="+p1.getPrimaryKey());
           }
-          if (!DataObject.keysAreEqual(actType,act.getActTypeKey()))
+          if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
           {
-            System.err.println("Bad actType : "+actType+"!="+act.getActType());
+            System.err.println("Bad actType: "+actType+"!="+act.getActType());
           }
         }
         act.setPath(newName);
@@ -222,7 +222,7 @@ public class ActImporter
         if (act==null)
         {
           act=new Act(null);
-          act.setActTypeProxy(_dataSource.buildProxy(ActType.class,actType));
+          act.setActTypeProxy(_dataSource.buildProxy(ActType.class,Long.valueOf(actType)));
           act.setDate(date);
           if (place!=null)
           {
@@ -238,7 +238,7 @@ public class ActImporter
           {
             System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
           }
-          if (actType!=act.getActTypeKey())
+          if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
           {
             System.err.println("Bad actType : "+actType+"!="+act.getActType());
           }
@@ -262,7 +262,7 @@ public class ActImporter
           if (act==null)
           {
             act=new Act(null);
-            act.setActTypeProxy(_dataSource.buildProxy(ActType.class,actType));
+            act.setActTypeProxy(_dataSource.buildProxy(ActType.class,Long.valueOf(actType)));
             act.setDate(date);
             if (place!=null)
             {
@@ -284,7 +284,7 @@ public class ActImporter
             {
               System.err.println("Bad P2 : "+p2Key+"!="+p2.getPrimaryKey());
             }
-            if (actType!=act.getActTypeKey())
+            if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
             {
               System.err.println("Bad actType : "+actType+"!="+act.getActType());
             }

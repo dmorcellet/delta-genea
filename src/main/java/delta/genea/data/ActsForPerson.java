@@ -90,7 +90,7 @@ public class ActsForPerson
           _deathAct=current;
           it.remove();
         }
-        else if (current.getActTypeKey()==ActType.UNION)
+        else if (DataObject.keysAreEqual(current.getActTypeKey(),Long.valueOf(ActType.UNION)))
         {
           int index=0;
           for(Union currentUnion : _unions)
@@ -105,7 +105,7 @@ public class ActsForPerson
             index++;
           }
         }
-        else if (current.getActTypeKey()==ActType.WEDDING_CONTRACT)
+        else if (DataObject.keysAreEqual(current.getActTypeKey(),Long.valueOf(ActType.WEDDING_CONTRACT)))
         {
           int index=0;
           for(Union currentUnion : _unions)
