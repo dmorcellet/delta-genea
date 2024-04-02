@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import delta.common.framework.objects.data.DataObject;
 
 /**
@@ -15,6 +17,8 @@ import delta.common.framework.objects.data.DataObject;
  */
 public class CompoundSelection<T extends DataObject<T>> implements Selection<T>
 {
+  private static final Logger LOGGER=Logger.getLogger(CompoundSelection.class);
+
   /**
    * Composition operator.
    * @author DAM
@@ -96,24 +100,38 @@ public class CompoundSelection<T extends DataObject<T>> implements Selection<T>
     }
     else if (_operator==Operator.AND)
     {
-      int nbSelections=_selections.size();
-      if (nbSelections>0)
+      handleAnd();
+    }
+  }
+
+  private void handleAnd()
+  {
+    int nbSelections=_selections.size();
+    if (nbSelections>0)
+    {
+      SelectionSizeComparator<T> c=new SelectionSizeComparator<T>();
+      Collections.sort(_selections,c);
+      Selection<T> currentSelection=_selections.get(0);
+      if (LOGGER.isDebugEnabled())
       {
-        SelectionSizeComparator<T> c=new SelectionSizeComparator<T>();
-        Collections.sort(_selections,c);
-        Selection<T> currentSelection=_selections.get(0);
-        //System.out.println("Current selection : "+currentSelection.getSize());
-        for(int i=1;i<nbSelections;i++)
+        LOGGER.debug("Current selection : "+currentSelection.getSize());
+      }
+      for(int i=1;i<nbSelections;i++)
+      {
+        Selection<T> otherSelection=_selections.get(i);
+        if (LOGGER.isDebugEnabled())
         {
-          Selection<T> otherSelection=_selections.get(i);
-          //System.out.println("Other selection : "+otherSelection.getSize());
-          currentSelection=and(currentSelection,otherSelection);
-          //System.out.println("New current selection : "+currentSelection.getSize());
+          LOGGER.debug("Other selection : "+otherSelection.getSize());
         }
-        for(T object : currentSelection.getSelectedObjects())
+        currentSelection=and(currentSelection,otherSelection);
+        if (LOGGER.isDebugEnabled())
         {
-          _result.addObject(object);
+          LOGGER.debug("New current selection : "+currentSelection.getSize());
         }
+      }
+      for(T object : currentSelection.getSelectedObjects())
+      {
+        _result.addObject(object);
       }
     }
   }

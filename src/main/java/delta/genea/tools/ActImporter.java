@@ -3,6 +3,8 @@ package delta.genea.tools;
 import java.io.File;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
 import delta.genea.data.Act;
@@ -22,6 +24,8 @@ import delta.genea.time.GregorianDate;
  */
 public class ActImporter
 {
+  private static final Logger LOGGER=Logger.getLogger(ActImporter.class);
+
   private File _root;
   private AncestorsTree _tree;
   private GeneaDataSource _dataSource;
@@ -48,10 +52,11 @@ public class ActImporter
 
   private void handleFile(File fileName)
   {
-    System.out.println("Handling file ["+fileName+"]");
+    LOGGER.info("Handling file ["+fileName+"]");
     long actType;
     String name=fileName.getName(); 
-    String newName=""; // or "j_" or "ninie/"
+    String prefix=""; // or "j_" or "ninie/"
+    String newName=prefix;
     if (name.endsWith(".jpg"))
     {
       name=name.substring(0,name.length()-4);
@@ -93,10 +98,13 @@ public class ActImporter
     if (actType==ActType.UNION)
     {
       if ((name.length()==0) || (name.charAt(0)!='-'))
+      {
         return;
+      }
       name=name.substring(1);
       {
-        int index=0; int n=name.length();
+        int index=0;
+        int n=name.length();
         while (index<n)
         {
           char c=name.charAt(index);
@@ -133,7 +141,10 @@ public class ActImporter
     {
       pageIndex=1;
     }
-    //System.out.println("Act "+actType+", sosa1="+sosa1+",sosa2="+sosa2+",pageIndex="+pageIndex);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Act "+actType+", sosa1="+sosa1+",sosa2="+sosa2+",pageIndex="+pageIndex);
+    }
 
     Person p1=null;
     Person p2=null;
@@ -142,7 +153,8 @@ public class ActImporter
       p1=_tree.getSosa(sosa1);
       if (p1==null)
       {
-        System.err.println("Erreur : pas de sosa "+sosa1);
+        LOGGER.error("Pas de sosa "+sosa1);
+        return;
       }
     }
     if (sosa2!=0)
@@ -150,7 +162,8 @@ public class ActImporter
       p2=_tree.getSosa(sosa2);
       if (p2==null)
       {
-        System.err.println("Erreur : pas de sosa "+sosa2);
+        LOGGER.error("Pas de sosa "+sosa2);
+        return;
       }
     }
 
@@ -167,7 +180,7 @@ public class ActImporter
         date=p1.getBirthDate();
         if (date==null)
         {
-          System.err.println("Date is null for birth of sosa "+sosa1);
+          LOGGER.warn("Date is null for birth of sosa "+sosa1);
         }
         else
         {
@@ -195,11 +208,11 @@ public class ActImporter
         {
           if (!DataObject.keysAreEqual(act.getP1Key(),p1.getPrimaryKey()))
           {
-            System.err.println("Bad P1: "+act.getP1Key()+"!="+p1.getPrimaryKey());
+            LOGGER.warn("Bad P1: "+act.getP1Key()+"!="+p1.getPrimaryKey());
           }
           if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
           {
-            System.err.println("Bad actType: "+actType+"!="+act.getActType());
+            LOGGER.warn("Bad actType: "+actType+"!="+act.getActType());
           }
         }
         act.setPath(newName);
@@ -212,7 +225,10 @@ public class ActImporter
       if (act==null)
       {
         date=p1.getDeathDate();
-        if (date==null) System.err.println("Date is null for death of sosa "+sosa1);
+        if (date==null)
+        {
+          LOGGER.warn("Date is null for death of sosa "+sosa1);
+        }
         if (new GregorianDate(date).isBefore(CHANGE_DATE))
         {
           actType=ActType.BURIAL;
@@ -236,11 +252,11 @@ public class ActImporter
           Long p1Key=act.getP1Key();
           if (!DataObject.keysAreEqual(p1Key,p1.getPrimaryKey()))
           {
-            System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
+            LOGGER.warn("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
           }
           if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
           {
-            System.err.println("Bad actType : "+actType+"!="+act.getActType());
+            LOGGER.warn("Bad actType : "+actType+"!="+act.getActType());
           }
         }
         act.setPath(newName);
@@ -256,7 +272,10 @@ public class ActImporter
         {
           Union u=acts.getUnionWith(p2.getPrimaryKey());
           date=u.getDate();
-          if (date==null) System.err.println("Date is null for union of sosas "+sosa1+"/"+sosa2);
+          if (date==null)
+          {
+            LOGGER.warn("Date is null for union of sosas "+sosa1+"/"+sosa2);
+          }
           place=u.getPlace();
           act=acts.getActOfUnionWith(p2.getPrimaryKey());
           if (act==null)
@@ -277,16 +296,16 @@ public class ActImporter
             Long p1Key=act.getP1Key();
             if (DataObject.keysAreEqual(p1Key,p1.getPrimaryKey()))
             {
-              System.err.println("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
+              LOGGER.warn("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
             }
             Long p2Key=act.getP2Key();
             if (DataObject.keysAreEqual(p2Key,p2.getPrimaryKey()))
             {
-              System.err.println("Bad P2 : "+p2Key+"!="+p2.getPrimaryKey());
+              LOGGER.warn("Bad P2 : "+p2Key+"!="+p2.getPrimaryKey());
             }
             if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
             {
-              System.err.println("Bad actType : "+actType+"!="+act.getActType());
+              LOGGER.warn("Bad actType : "+actType+"!="+act.getActType());
             }
           }
           act.setPath(newName);
@@ -304,15 +323,14 @@ public class ActImporter
     String newFileName=newName;
     if (pageIndex>1) newFileName=newFileName+"-"+pageIndex;
     newFileName=newFileName+".jpg";
-    //System.out.println("Renaming "+fileName.getName()+" to "+newFileName);
     boolean same=(newFileName.equals(fileName.getName()));
     if (!same)
     {
-      System.out.println("Renommage : "+fileName.getName()+" to "+newFileName);
+      LOGGER.info("Renommage : "+fileName.getName()+" to "+newFileName);
       boolean ok=fileName.renameTo(new File(_root,newFileName));
       if (!ok)
       {
-        System.err.println("Erreur renommage : "+fileName.getName()+" to "+newFileName);
+        LOGGER.error("Erreur renommage : "+fileName.getName()+" to "+newFileName);
       }
     }
   }
@@ -326,7 +344,7 @@ public class ActImporter
     {
       handleFile(files[i]);
     }
-    //System.out.println(_map.size());
+    LOGGER.info("Loaded "+_map.size()+" acts.");
 
     for(Act act : _map.values())
     {

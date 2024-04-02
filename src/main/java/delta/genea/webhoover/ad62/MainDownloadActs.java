@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
@@ -16,6 +18,8 @@ import delta.genea.webhoover.ImageMontageMaker;
  */
 public class MainDownloadActs
 {
+  private static final Logger LOGGER=Logger.getLogger(MainDownloadActs.class);
+
   /**
    * Main method of this tool.
    * @param args Not used.
@@ -85,21 +89,18 @@ public class MainDownloadActs
 
   private void downloadPage(ADSession session, File out, int pageNumber, int width, int height, int tileSize) throws Exception
   {
-    //System.out.println("Handling "+_actsPackage._placeName+" / "+_actsPackage._period+" - page "+pageNumber);
-    System.out.println("Handling page "+pageNumber);
+    LOGGER.info("Handling page "+pageNumber);
     int nbH=(width/tileSize)+(((width%tileSize)!=0)?1:0);
     int nbV=(height/tileSize)+(((height%tileSize)!=0)?1:0);
     int x=0;
-    int y=0;
-    int tileWidth, tileHeight;
     File[][] files=new File[nbH][nbV];
     for(int hIndex=0;hIndex<nbH;hIndex++)
     {
-      tileWidth=Math.min(tileSize,width-x);
-      y=0;
+      int tileWidth=Math.min(tileSize,width-x);
+      int y=0;
       for(int vIndex=0;vIndex<nbV;vIndex++)
       {
-        tileHeight=Math.min(tileSize,height-y);
+        int tileHeight=Math.min(tileSize,height-y);
         files[hIndex][vIndex]=downloadTile(session,pageNumber,hIndex,vIndex,x,y,tileWidth,tileHeight);
         y+=tileHeight;
       }
@@ -121,7 +122,7 @@ public class MainDownloadActs
         boolean ok=files[hIndex][vIndex].delete();
         if (!ok)
         {
-          System.err.println("Cannot delete : "+files[hIndex][vIndex]);
+          LOGGER.warn("Cannot delete : "+files[hIndex][vIndex]);
         }
       }
     }

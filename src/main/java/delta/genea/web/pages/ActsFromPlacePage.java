@@ -38,7 +38,7 @@ public class ActsFromPlacePage extends GeneaWebPage
     if (_place==null) return;
     _actsMap=new HashMap<String,List<Act>>();
     List<Act> acts=getDataSource().loadRelation(Act.class,Act.ACTS_FROM_PLACE,_key);
-    if ((acts!=null) && (acts.size()>0))
+    if ((acts!=null) && (!acts.isEmpty()))
     {
       _nbActs=acts.size();
       int nb=_nbActs;
@@ -91,9 +91,15 @@ public class ActsFromPlacePage extends GeneaWebPage
   private void generateActList(PrintWriter pw, long typeKey, boolean useSexIcon)
   {
     ActType type=getDataSource().load(ActType.class,Long.valueOf(typeKey));
-    if (type==null) return;
+    if (type==null)
+    {
+      return;
+    }
     List<Act> list=_actsMap.get(type.getType());
-    if ((list==null) || (list.isEmpty())) return;
+    if ((list==null) || (list.isEmpty()))
+    {
+      return;
+    }
     pw.print("<b>");
     pw.print(type.getType());
     pw.print(" (");

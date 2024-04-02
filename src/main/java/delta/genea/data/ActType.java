@@ -116,7 +116,7 @@ public class ActType extends DataObject<ActType>
   @Override
   public String getLabel()
   {
-    return _type;
+    return getType();
   }
 
   /**

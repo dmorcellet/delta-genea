@@ -32,14 +32,14 @@ import delta.genea.data.trees.AncestorsTree;
 public class ActsChecker
 {
   private static final Logger LOGGER=Logger.getLogger(ActsChecker.class);
-  private static final SimpleDateFormat _format=new SimpleDateFormat("dd/MM/yyyy");
   private static final String BIRTH="Naissance";
   private static final String DEATH="Décès";
   private static final String UNION="Mariage";
   private static final String WEDDING_CONTRACT="Contrat de mariage";
-  
-  private String _dbName;
-  private Long _rootPersonKey;
+
+  private final String _dbName;
+  private final Long _rootPersonKey;
+  private final SimpleDateFormat _format;
 
   /**
    * Constructor.
@@ -50,6 +50,7 @@ public class ActsChecker
   {
     _dbName=dbName;
     _rootPersonKey=Long.valueOf(rootPersonKey);
+    _format=new SimpleDateFormat("dd/MM/yyyy");
   }
 
   /**
@@ -66,7 +67,7 @@ public class ActsChecker
       Person moi=pp.getDataObject();
       AncestorsTree tree=new AncestorsTree(moi,1000);
       tree.build();
-      browseAncestorsTree(tree);
+      browseAncestorsTree(System.out,tree); // NOSONAR
       dataSource.close();
       ObjectsSource source=dataSource.getObjectsSource();
       if (source instanceof SqlObjectsSource)
@@ -81,9 +82,9 @@ public class ActsChecker
     }
   }
 
-  private void browseAncestorsTree(AncestorsTree tree)
+  private void browseAncestorsTree(PrintStream out, AncestorsTree tree)
   {
-    browseAncestorsTree(System.out,1,tree.getRootNode(),null);
+    browseAncestorsTree(out,1,tree.getRootNode(),null);
   }
 
   private void browseAncestorsTree(PrintStream out, int sosa, BinaryTreeNode<Person> fatherNode, BinaryTreeNode<Person> motherNode)
@@ -152,11 +153,16 @@ public class ActsChecker
     {
       showSosa(out,sosa1,sosa2);
       out.print(persons+"\t");
-      //out.print("manque acte de "+what+"\t");
       out.print(what+"\t");
-      if (place!=null) out.print(place.getName());
+      if (place!=null)
+      {
+        out.print(place.getName());
+      }
       out.print("\t");
-      if (place!=null) out.print(place.getParentPlace().getName());
+      if (place!=null)
+      {
+        out.print(place.getParentPlace().getName());
+      }
       out.print("\t");
       out.println(_format.format(new Date(date.longValue())));
     }

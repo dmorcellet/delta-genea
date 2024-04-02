@@ -374,10 +374,6 @@ public class AncestorsTree
    */
   public void dump(PrintStream out)
   {
-    if(out==null)
-    {
-      out=System.out;
-    }
     dump(out, _tree, 0);
   }
 

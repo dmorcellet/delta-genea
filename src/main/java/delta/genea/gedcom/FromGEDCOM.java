@@ -92,7 +92,6 @@ public class FromGEDCOM
   private void parseFileLines()
   {
     TextFileReader fp=new TextFileReader(_fileName,new AnselCharset());
-    //TextFileReader fp=new TextFileReader(_fileName,"ISO8859-1");
     if (!fp.start()) return;
 
     String line;
