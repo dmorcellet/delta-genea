@@ -107,11 +107,11 @@ public class DatesToSearchPage extends GeneaWebPage
     String title="Ma page";
     WebPageTools.generatePageHeader(title,pw);
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     pw.print("<b>");
     pTools.generatePersonName(_root);
     pw.println("</b>");
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generateHorizontalRuler(pw);
 
     int nb=_nbPersons;

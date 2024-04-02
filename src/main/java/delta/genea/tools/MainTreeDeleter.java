@@ -15,8 +15,6 @@ import delta.genea.data.trees.DescendantsTree;
  */
 public class MainTreeDeleter
 {
-  private static int nb=0;
-
   private GeneaDataSource _source;
 
   private void removeAscendantsTree(AncestorsTree tree)
@@ -31,11 +29,7 @@ public class MainTreeDeleter
     {
       Long pk=p.getPrimaryKey();
       Person p2=_source.load(Person.class,pk);
-      if (p2==null)
-      {
-        nb++;
-      }
-      else
+      if (p2!=null)
       {
         _source.delete(Person.class,pk);
       }
@@ -64,11 +58,7 @@ public class MainTreeDeleter
     {
       Long pk=p.getPrimaryKey();
       Person p2=_source.load(Person.class,pk);
-      if (p2==null)
-      {
-        nb++;
-      }
-      else
+      if (p2!=null)
       {
         _source.delete(Person.class,pk);
       }
@@ -115,7 +105,6 @@ public class MainTreeDeleter
       }
       
       _source.close();
-      System.out.println(nb+" personnes non détruites (car doublons suite à implexe(s)) !");
     }
     catch (Exception e)
     {

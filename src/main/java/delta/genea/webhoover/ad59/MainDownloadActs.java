@@ -10,6 +10,7 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
+import delta.genea.web.pages.HtmlConstants;
 import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.ImageMontageMaker;
@@ -244,7 +245,7 @@ public class MainDownloadActs
     String naonedViewerLine=TextTools.findLine(lines,"v1 = new NAONED_VIEWER(");
     String fileName=TextTools.findBetween(naonedViewerLine,"new NAONED_VIEWER('","',main_w,main_h");
     String nbPagesLines=TextTools.findLine(lines,"<div class=\"d32_a\" id=\"d32_a\">");
-    String nbPagesStr=TextTools.findBetween(nbPagesLines,"<div class=\"d32_a\" id=\"d32_a\">","</div>");
+    String nbPagesStr=TextTools.findBetween(nbPagesLines,"<div class=\"d32_a\" id=\"d32_a\">",HtmlConstants.END_DIV);
     int nbPages=NumericTools.parseInt(nbPagesStr,0);
     File sizeFile=new File(tmpFile.getParentFile(),seed+"_size.txt");
     String sizeUrl=Constants.getSizeURL(fileName);

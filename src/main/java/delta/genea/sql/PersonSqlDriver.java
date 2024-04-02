@@ -138,8 +138,11 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("LOAD person "+primaryKey);
+        }
         _psGetByPrimaryKey.setLong(1,primaryKey.longValue());
-        //System.out.println("LOAD person "+primaryKey);
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
@@ -174,8 +177,11 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("LOAD PARTIAL person "+primaryKey);
+        }
         _psPartialGetByPrimaryKey.setLong(1,primaryKey.longValue());
-        //System.out.println("LOAD PARTIAL person "+primaryKey);
         rs=_psPartialGetByPrimaryKey.executeQuery();
         if (rs.next())
         {
@@ -467,9 +473,12 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("GET childrens FOR "+primaryKey);
+        }
         _psChildren.setLong(1,primaryKey);
         _psChildren.setLong(2,primaryKey);
-        //System.out.println("GET childrens FOR "+primaryKey);
         rs=_psChildren.executeQuery();
         while (rs.next())
         {
@@ -504,9 +513,12 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("GET god childrens FOR "+primaryKey);
+        }
         _psGodChildren.setLong(1,primaryKey);
         _psGodChildren.setLong(2,primaryKey);
-        //System.out.println("GET god childrens FOR "+primaryKey);
         rs=_psGodChildren.executeQuery();
         while (rs.next())
         {
@@ -541,9 +553,12 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("GET cousins FOR "+primaryKey);
+        }
         _psCousins.setLong(1,primaryKey);
         _psCousins.setLong(2,primaryKey);
-        //System.out.println("GET cousins FOR "+primaryKey);
         rs=_psCousins.executeQuery();
         while (rs.next())
         {
@@ -578,8 +593,11 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("GET BY NAME "+name);
+        }
         _psPatronyme.setString(1,name);
-        //System.out.println("GET BY NAME "+name);
         rs=_psPatronyme.executeQuery();
         while (rs.next())
         {
@@ -916,7 +934,10 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
             int nbRows=statement.executeUpdate(sql);
             if (nbRows!=0)
             {
-              //System.out.println(nbRows+" : "+sql);
+              if (LOGGER.isDebugEnabled())
+              {
+                LOGGER.debug("Deleted "+nbRows+" row(s) with "+sql);
+              }
             }
           }
           finally

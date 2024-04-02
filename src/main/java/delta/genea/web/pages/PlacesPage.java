@@ -36,14 +36,14 @@ public class PlacesPage extends GeneaWebPage
     pw.print(title);
     pw.print("</h1>");
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     TreeNode<Place> node=_places.getFirstChild();
     while (node!=null)
     {
       generateTree(node,pw);
       node=node.getNextBrother();
     }
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generatePageFooter(pw);
   }
 
@@ -52,7 +52,7 @@ public class PlacesPage extends GeneaWebPage
     GeneaUserContext context=(GeneaUserContext)getUserContext();
     Place p=node.getData();
     pw.println("<ul>");
-    pw.print("<li>");
+    pw.print(HtmlConstants.LI);
     pw.print(' ');
     if (p.getLevel()==PlaceLevel.TOWN)
     {
@@ -74,7 +74,7 @@ public class PlacesPage extends GeneaWebPage
       generateTree(subPlace,pw);
       subPlace=subPlace.getNextBrother();
     }
-    pw.println("</li>");
+    pw.println(HtmlConstants.END_LI);
     pw.println("</ul>");
   }
 }

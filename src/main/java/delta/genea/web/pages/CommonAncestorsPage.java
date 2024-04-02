@@ -62,17 +62,17 @@ public class CommonAncestorsPage extends GeneaWebPage
     String title=sb.toString();
     WebPageTools.generatePageHeader(title,pw);
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     pw.print("<b>");
     pw.print("Ancêtres communs de ");
     pTools.generatePersonName(_p1);
     pw.print(" et de ");
     pTools.generatePersonName(_p2);
     pw.print("</b>");
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generateHorizontalRuler(pw);
 
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     if ((_couples!=null) && (!_couples.isEmpty()))
     {
       pw.println("<ul>");
@@ -80,7 +80,7 @@ public class CommonAncestorsPage extends GeneaWebPage
       {
         Person man=c.getMan();
         Person woman=c.getWoman();
-        pw.println("<li>");
+        pw.println(HtmlConstants.LI);
         boolean outputDone=false;
         if (man!=null)
         {
@@ -92,11 +92,11 @@ public class CommonAncestorsPage extends GeneaWebPage
           if (outputDone) pw.print(" - ");
           pTools.generatePersonName(woman);
         }
-        pw.println("</li>");
+        pw.println(HtmlConstants.END_LI);
       }
       pw.println("</ul>");
     }
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generatePageFooter(pw);
   }
 }

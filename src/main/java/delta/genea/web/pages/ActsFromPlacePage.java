@@ -76,14 +76,14 @@ public class ActsFromPlacePage extends GeneaWebPage
     {
       pw.print("<h1>"); pw.print(title);
       pw.print(" ("); pw.print(_nbActs); pw.print(')'); pw.println("</H1>");
-      pw.println("<div>");
+      pw.println(HtmlConstants.DIV);
       generateActList(pw,ActType.BAPTEM,true);
       generateActList(pw,ActType.BIRTH,true);
       generateActList(pw,ActType.UNION,false);
       generateActList(pw,ActType.WEDDING_CONTRACT,false);
       generateActList(pw,ActType.BURIAL,true);
       generateActList(pw,ActType.DEATH,true);
-      pw.println("</div>");
+      pw.println(HtmlConstants.END_DIV);
     }
     WebPageTools.generatePageFooter(pw);
   }
@@ -108,10 +108,10 @@ public class ActsFromPlacePage extends GeneaWebPage
     PageTools tools=new PageTools(context,pw);
     for(int i=0;i<nb;i++)
     {
-      pw.println("<li>");
+      pw.println(HtmlConstants.LI);
       act=list.get(i);
       tools.generateActLink(act,act.getP1(),act.getP2());
-      pw.println("</li>");
+      pw.println(HtmlConstants.END_LI);
     }
     pw.println("</ul>");
   }

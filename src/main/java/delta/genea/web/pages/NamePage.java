@@ -112,7 +112,7 @@ public class NamePage extends GeneaWebPage
     int nbPersonnes=_data.getNumberOfDescendants();
 
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     pw.print("<b>");
     pw.print("Patronyme ");
     pw.print(_name);
@@ -133,10 +133,10 @@ public class NamePage extends GeneaWebPage
     if (_noDescendants) pw.print("Masquer les personnes sans descendance");
     else pw.print("Afficher les personnes sans descendance");
     pw.println("</a></b>");
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generateHorizontalRuler(pw);
 
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     if (nbPersonnes>0)
     {
       TreeNode<Person> node=_data.getFirstChild();
@@ -150,7 +150,7 @@ public class NamePage extends GeneaWebPage
     {
       pw.println("Aucune");
     }
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generatePageFooter(pw);
   }
 
@@ -158,7 +158,7 @@ public class NamePage extends GeneaWebPage
   {
     Person p=node.getData();
     pw.println("<ul>");
-    pw.print("<li>");
+    pw.print(HtmlConstants.LI);
     pw.print(' ');
     _pTools.generatePersonName(p);
     TreeNode<Person> son=node.getFirstChild();
@@ -167,7 +167,7 @@ public class NamePage extends GeneaWebPage
       generateTree(son,pw);
       son=son.getNextBrother();
     }
-    pw.println("</li>");
+    pw.println(HtmlConstants.END_LI);
     pw.println("</ul>");
   }
 }

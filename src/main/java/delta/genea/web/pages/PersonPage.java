@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import delta.common.framework.web.PageParameters;
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
 import delta.genea.data.Act;
@@ -66,7 +67,7 @@ public class PersonPage extends GeneaWebPage
     String title="Fiche de "+main.getFullName();
     WebPageTools.generatePageHeader(title,pw);
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     pw.print("<b>Fiche de ");
     String sosas=_data.getSosas(main.getPrimaryKey());
     if (sosas.length()>0)
@@ -92,17 +93,11 @@ public class PersonPage extends GeneaWebPage
           .getPrimaryKey(),100);
       ancestorsPage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
       pw.println("<b>");
-      pw.print("<a href=\"");
-      pw.print(ancestorsPage.build());
-      pw.println("\">Ascendance</a> ");
+      doLink(pw,ancestorsPage,"Ascendance");
       for(int i=1;i<=9;i++)
       {
-        pw.print("<a href=\"");
         ancestorsPage.setDepth(i);
-        pw.print(ancestorsPage.build());
-        pw.print("\">");
-        pw.print(i);
-        pw.println("</a> ");
+        doLink(pw,ancestorsPage,String.valueOf(i));
       }
       pw.println("</b>");
     }
@@ -112,43 +107,33 @@ public class PersonPage extends GeneaWebPage
       descendantsPage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
       descendantsPage.setKey(main.getPrimaryKey());
       pw.println("<b>");
-      pw.print("<a href=\"");
-      pw.print(descendantsPage.build());
-      pw.println("\">Descendance</a> ");
+      doLink(pw,descendantsPage,"Descendance");
       for(int i=1;i<=9;i++)
       {
-        pw.print("<a href=\"");
         descendantsPage.setDepth(i);
-        pw.print(descendantsPage.build());
-        pw.print("\">");
-        pw.print(i);
-        pw.println("</a> ");
+        doLink(pw,descendantsPage,String.valueOf(i));
       }
       pw.println("</b>");
     }
     // Patronyme
     NamePageParameters namePage=new NamePageParameters(main.getLastName());
     namePage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
-    pw.println(" <b>");
-    pw.print("<a href=\"");
-    pw.print(namePage.build());
-    pw.println("\">Patronyme</a>");
+    pw.println("<b>");
+    doLink(pw,namePage,"Patronyme");
     pw.println("</b>");
 
     // Cousins
     CousinsPageParameters cousinsPage=new CousinsPageParameters(main
         .getPrimaryKey());
     cousinsPage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
-    pw.println(" <b>");
-    pw.print("<a href=\"");
-    pw.print(cousinsPage.build());
-    pw.println("\">Cousins</a>");
+    pw.println("<b>");
+    doLink(pw,cousinsPage,"Cousins");
     pw.println("</b>");
 
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generateHorizontalRuler(pw);
 
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     // Birth
     Act birth=_data.getActs().getBirthAct();
     pw.print("<b>");
@@ -221,21 +206,37 @@ public class PersonPage extends GeneaWebPage
     }
 
     boolean previousWasAList=false;
-
     // Professions
+    previousWasAList=doProfessions(pw,tools,main,previousWasAList);
+    // Homes
+    previousWasAList=doHomes(pw,tools,main,previousWasAList);
+    // Unions
+    previousWasAList=doUnions(pw,pTools,tools,main,previousWasAList);
+    // Children
+    previousWasAList=doChildren(pw,pTools,previousWasAList);
+    // God children
+    previousWasAList=doGodChildren(pw,pTools,main,previousWasAList);
+    // Acts
+    previousWasAList=doActs(pw,tools,previousWasAList);
+    // Pictures
+    doPictures(pw,tools,previousWasAList);
+
+    pw.println(HtmlConstants.END_DIV);
+    WebPageTools.generatePageFooter(pw);
+  }
+
+  private boolean doProfessions(PrintWriter pw, PageTools tools, Person main, boolean previousWasAList)
+  {
     List<OccupationForPerson> occupations=main.getOccupations();
-    if ((occupations!=null)&&(occupations.size()>0))
+    if ((occupations!=null)&&(!occupations.isEmpty()))
     {
       pw.println("<br>");
       pw.println("<b>Professions :</b>");
-      pw.println("<ul>");
-      OccupationForPerson occupation;
-      Place place;
-      for(Iterator<OccupationForPerson> it=occupations.iterator();it.hasNext();)
+      pw.println(HtmlConstants.UL);
+      for(OccupationForPerson occupation : occupations)
       {
-        occupation=it.next();
-        place=occupation.getPlace();
-        pw.print("<li>");
+        Place place=occupation.getPlace();
+        pw.print(HtmlConstants.LI);
         pw.print(occupation.getOccupation());
         int year=occupation.getYear();
         if (year!=0)
@@ -245,27 +246,30 @@ public class PersonPage extends GeneaWebPage
           pw.print(")");
         }
         tools.generatePlace(place," (",")");
-        pw.println("</li>");
+        pw.println(HtmlConstants.END_LI);
       }
-      pw.println("</ul>");
+      pw.println(HtmlConstants.END_UL);
       previousWasAList=true;
     }
+    return previousWasAList;
+  }
 
-    // Homes
+  private boolean doHomes(PrintWriter pw, PageTools tools, Person main, boolean previousWasAList)
+  {
     List<HomeForPerson> homes=main.getHomes();
-    if ((homes!=null)&&(homes.size()>0))
+    if ((homes!=null)&&(!homes.isEmpty()))
     {
       if (!previousWasAList)
       {
         pw.println("<br>");
       }
       pw.println("<b>Résidences :</b>");
-      pw.println("<ul>");
+      pw.println(HtmlConstants.UL);
       Place place;
       for(HomeForPerson home : homes)
       {
         place=home.getPlace();
-        pw.print("<li>");
+        pw.print(HtmlConstants.LI);
         int year=home.getYear();
         if (year!=0)
         {
@@ -280,188 +284,200 @@ public class PersonPage extends GeneaWebPage
           pw.print(' ');
         }
         tools.generatePlace(place,"","");
-        pw.println("</li>");
+        pw.println(HtmlConstants.END_LI);
       }
-      pw.println("</ul>");
+      pw.println(HtmlConstants.END_UL);
       previousWasAList=true;
     }
+    return previousWasAList;
+  }
 
-    // Unions
+  private boolean doUnions(PrintWriter pw, PersonTools pTools, PageTools tools, Person main, boolean previousWasAList)
+  {
+    List<Union> unions=_data.getActs().getUnions();
+    List<Act> unionActs=_data.getActs().getUnionActs();
+
+    if ((unions!=null)&&(!unions.isEmpty()))
     {
-      List<Union> unions=_data.getActs().getUnions();
-      List<Act> unionActs=_data.getActs().getUnionActs();
-
-      if ((unions!=null)&&(unions.size()>0))
-      {
-        if (!previousWasAList)
-        {
-          pw.println("<br>");
-        }
-        pw.println("<b>Mariages :</b>");
-        pw.println("<ul>");
-        int i=0;
-        for(Union u : unions)
-        {
-          Person other;
-          if (main.getPrimaryKey().equals(u.getManKey()))
-          {
-            other=u.getWoman();
-          }
-          else
-          {
-            other=u.getMan();
-          }
-          pw.print("<li>");
-          String uDate=PageTools.generateDate(u.getDate(),u.getInfos());
-          Act unionAct=unionActs.get(i);
-          if (unionAct!=null)
-          {
-            tools.generateActLink(unionAct,uDate);
-          }
-          else
-          {
-            pw.print(uDate);
-          }
-          tools.generatePlace(u.getPlace()," ",null);
-          pw.print(' ');
-          Act weddingContract=u.getWeddingContract();
-          if (weddingContract!=null)
-          {
-            pw.print("<b>");
-            tools.generateActLink(weddingContract,"(CM)");
-            pw.print("</b>");
-            pw.print(' ');
-          }
-          pTools.generatePersonName(other);
-          pw.println("</li>");
-          i++;
-        }
-        pw.println("</ul>");
-        previousWasAList=true;
-      }
-    }
-
-    // Children
-    {
-      List<Person> children=_data.getChildren();
-      if ((children!=null)&&(children.size()>0))
-      {
-        Collections.sort(children,new PersonComparator(COMPARISON_CRITERIA.BIRTH_DATE));
-        if (!previousWasAList)
-        {
-          pw.println("<br>");
-        }
-        pw.println("<b>Enfants :</b>");
-        pw.println("<ul>");
-        pTools.setUseSexIcon(true);
-        for(Person child : children)
-        {
-          pw.print("<li>");
-          pTools.generatePersonName(child);
-          pw.println("</li>");
-        }
-        pTools.setUseSexIcon(false);
-        pw.println("</ul>");
-        previousWasAList=true;
-      }
-    }
-
-    // God children
-    {
-      List<Person> godChildren=_data.getGodChildren();
-
-      if ((godChildren!=null)&&(godChildren.size()>0))
-      {
-        if (!previousWasAList)
-        {
-          pw.println("<br>");
-        }
-        String pm="Parrain";
-        if (main.getSex()==Sex.FEMALE)
-        {
-          pm="Marraine";
-        }
-        pw.print("<b>");
-        pw.print(pm);
-        pw.print(" de :</b>");
-        pw.println("<ul>");
-        Person godChild;
-        pTools.setUseSexIcon(true);
-        for(Iterator<Person> it=godChildren.iterator();it.hasNext();)
-        {
-          godChild=it.next();
-          pw.print("<li>");
-          PageTools.generateDate(godChild.getBirthDate(),godChild
-              .getBirthInfos());
-          pw.print(' ');
-          pTools.generatePersonName(godChild);
-          pw.println("</li>");
-        }
-        pTools.setUseSexIcon(false);
-        pw.println("</ul>");
-        previousWasAList=true;
-      }
-    }
-
-    // Acts
-    {
-      List<Act> oActs=_data.getActs().getOtherActs();
-
       if (!previousWasAList)
       {
         pw.println("<br>");
       }
-      if ((oActs!=null)&&(oActs.size()>0))
+      pw.println("<b>Mariages :</b>");
+      pw.println(HtmlConstants.UL);
+      int i=0;
+      for(Union u : unions)
       {
-        pw.println("<b>Actes :</b>");
-        pw.println("<ul>");
-        for(Act act : oActs)
-        {
-          pw.print("<li>");
-          tools.generateActLink(act,act.getP1(),act.getP2());
-          pw.println("</li>");
-        }
-        pw.println("</ul>");
-        previousWasAList=true;
+        Act unionAct=unionActs.get(i);
+        doUnion(pw,main,u,unionAct,pTools,tools);
+        i++;
       }
-      else
-      {
-        pw.println("<b>Pas d'autres actes.</b>");
-        pw.println("<br>");
-        previousWasAList=false;
-      }
+      pw.println(HtmlConstants.END_UL);
+      previousWasAList=true;
     }
+    return previousWasAList;
+  }
 
-    // Pictures
+  private void doUnion(PrintWriter pw, Person main, Union u, Act unionAct, PersonTools pTools, PageTools tools)
+  {
+    Person other;
+    if (main.getPrimaryKey().equals(u.getManKey()))
     {
-      List<Picture> pictures=_data.getPictures();
+      other=u.getWoman();
+    }
+    else
+    {
+      other=u.getMan();
+    }
+    pw.print(HtmlConstants.LI);
+    String uDate=PageTools.generateDate(u.getDate(),u.getInfos());
+    if (unionAct!=null)
+    {
+      tools.generateActLink(unionAct,uDate);
+    }
+    else
+    {
+      pw.print(uDate);
+    }
+    tools.generatePlace(u.getPlace()," ",null);
+    pw.print(' ');
+    Act weddingContract=u.getWeddingContract();
+    if (weddingContract!=null)
+    {
+      pw.print("<b>");
+      tools.generateActLink(weddingContract,"(CM)");
+      pw.print("</b>");
+      pw.print(' ');
+    }
+    pTools.generatePersonName(other);
+    pw.println(HtmlConstants.END_LI);
+  }
 
+  private boolean doChildren(PrintWriter pw, PersonTools pTools, boolean previousWasAList)
+  {
+    List<Person> children=_data.getChildren();
+    if ((children!=null)&&(!children.isEmpty()))
+    {
+      Collections.sort(children,new PersonComparator(COMPARISON_CRITERIA.BIRTH_DATE));
       if (!previousWasAList)
       {
         pw.println("<br>");
       }
-      if ((pictures!=null)&&(pictures.size()>0))
+      pw.println("<b>Enfants :</b>");
+      pw.println(HtmlConstants.UL);
+      pTools.setUseSexIcon(true);
+      for(Person child : children)
       {
-        pw.println("<b>Photos :</b>");
-        pw.println("<ul>");
-        Picture picture;
-        for(Iterator<Picture> it=pictures.iterator();it.hasNext();)
-        {
-          picture=it.next();
-          pw.print("<li>");
-          tools.generatePictureLink(picture);
-          pw.println("</li>");
-        }
-        pw.println("</ul>");
+        pw.print(HtmlConstants.LI);
+        pTools.generatePersonName(child);
+        pw.println(HtmlConstants.END_LI);
       }
-      else
+      pTools.setUseSexIcon(false);
+      pw.println(HtmlConstants.END_UL);
+      previousWasAList=true;
+    }
+    return previousWasAList;
+  }
+
+  private boolean doGodChildren(PrintWriter pw, PersonTools pTools, Person main, boolean previousWasAList)
+  {
+    List<Person> godChildren=_data.getGodChildren();
+
+    if ((godChildren!=null)&&(!godChildren.isEmpty()))
+    {
+      if (!previousWasAList)
       {
-        pw.println("<b>Pas de photos.</b>");
         pw.println("<br>");
       }
+      String pm="Parrain";
+      if (main.getSex()==Sex.FEMALE)
+      {
+        pm="Marraine";
+      }
+      pw.print("<b>");
+      pw.print(pm);
+      pw.print(" de :</b>");
+      pw.println(HtmlConstants.UL);
+      pTools.setUseSexIcon(true);
+      for(Person godChild : godChildren)
+      {
+        pw.print(HtmlConstants.LI);
+        PageTools.generateDate(godChild.getBirthDate(),godChild
+            .getBirthInfos());
+        pw.print(' ');
+        pTools.generatePersonName(godChild);
+        pw.println(HtmlConstants.END_LI);
+      }
+      pTools.setUseSexIcon(false);
+      pw.println(HtmlConstants.END_UL);
+      previousWasAList=true;
     }
+    return previousWasAList;
+  }
 
-    pw.println("</div>");
-    WebPageTools.generatePageFooter(pw);
+  private boolean doActs(PrintWriter pw, PageTools tools, boolean previousWasAList)
+  {
+    List<Act> oActs=_data.getActs().getOtherActs();
+
+    if (!previousWasAList)
+    {
+      pw.println("<br>");
+    }
+    if ((oActs!=null)&&(!oActs.isEmpty()))
+    {
+      pw.println("<b>Actes :</b>");
+      pw.println(HtmlConstants.UL);
+      for(Act act : oActs)
+      {
+        pw.print(HtmlConstants.LI);
+        tools.generateActLink(act,act.getP1(),act.getP2());
+        pw.println(HtmlConstants.END_LI);
+      }
+      pw.println(HtmlConstants.END_UL);
+      previousWasAList=true;
+    }
+    else
+    {
+      pw.println("<b>Pas d'autres actes.</b>");
+      pw.println("<br>");
+      previousWasAList=false;
+    }
+    return previousWasAList;
+  }
+
+  private void doPictures(PrintWriter pw, PageTools tools, boolean previousWasAList)
+  {
+    List<Picture> pictures=_data.getPictures();
+
+    if (!previousWasAList)
+    {
+      pw.println("<br>");
+    }
+    if ((pictures!=null)&&(!pictures.isEmpty()))
+    {
+      pw.println("<b>Photos :</b>");
+      pw.println(HtmlConstants.UL);
+      Picture picture;
+      for(Iterator<Picture> it=pictures.iterator();it.hasNext();)
+      {
+        picture=it.next();
+        pw.print(HtmlConstants.LI);
+        tools.generatePictureLink(picture);
+        pw.println(HtmlConstants.END_LI);
+      }
+      pw.println(HtmlConstants.END_UL);
+    }
+    else
+    {
+      pw.println("<b>Pas de photos.</b>");
+      pw.println("<br>");
+    }
+  }
+
+  private static void doLink(PrintWriter pw, PageParameters parameters, String linkText)
+  {
+    pw.print("<a href=\"");
+    pw.print(parameters.build());
+    pw.println("\">"+linkText+"</a>");
   }
 }

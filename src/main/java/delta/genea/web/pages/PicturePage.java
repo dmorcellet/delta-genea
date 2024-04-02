@@ -35,7 +35,7 @@ public class PicturePage extends GeneaWebPage
     _picture=getDataSource().load(Picture.class,_key);
     if (_picture==null) return;
     List<PersonInPicture> persons=_picture.getPersonsInPicture();
-    if ((persons!=null)&&(persons.size()>0))
+    if ((persons!=null)&&(!persons.isEmpty()))
     {
       int nb=persons.size();
       PersonInPicture person;
@@ -54,9 +54,9 @@ public class PicturePage extends GeneaWebPage
     {
       String title="Photo non trouvée";
       WebPageTools.generatePageHeader(title,pw);
-      pw.println("<div>");
+      pw.println(HtmlConstants.DIV);
       pw.println("<B>Photo non trouvée !</B>");
-      pw.println("</div>");
+      pw.println(HtmlConstants.END_DIV);
       WebPageTools.generatePageFooter(pw);
     }
 
@@ -72,13 +72,13 @@ public class PicturePage extends GeneaWebPage
     WebPageTools.generatePageHeader(title,pw);
     WebPageTools.generateHorizontalRuler(pw);
 
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     pw.print(_picture.getTitle());
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
 
     WebPageTools.generateHorizontalRuler(pw);
 
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     String comment=_picture.getComment();
     if ((comment!=null) && (comment.length()>0))
     {
@@ -87,11 +87,11 @@ public class PicturePage extends GeneaWebPage
       pw.println("<br>");
     }
     List<PersonInPicture> persons=_picture.getPersonsInPicture();
-    if ((persons!=null)&&(persons.size()>0))
+    if ((persons!=null)&&(!persons.isEmpty()))
     {
       pw.println("<div style=\"text-decoration:underline;\">");
       pw.println("Personnes identifiées");
-      pw.println("</div>");
+      pw.println(HtmlConstants.END_DIV);
       pw.println("<ul>");
 
       int nb=persons.size();
@@ -102,14 +102,14 @@ public class PicturePage extends GeneaWebPage
       {
         personInPicture=persons.get(i);
         person=personInPicture.getPerson();
-        pw.println("<li>");
+        pw.println(HtmlConstants.LI);
         personLink=pTools.format(person);
         pw.print(personLink);
-        pw.println("</li>");
+        pw.println(HtmlConstants.END_LI);
       }
       pw.println("</ul>");
     }
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
 
     String path=_picture.getPath();
     if ((path!=null)&&(path.length()>0))
@@ -138,7 +138,7 @@ public class PicturePage extends GeneaWebPage
           break;
         }
       }
-      pw.println("</div>");
+      pw.println(HtmlConstants.END_DIV);
     }
     WebPageTools.generatePageFooter(pw);
   }

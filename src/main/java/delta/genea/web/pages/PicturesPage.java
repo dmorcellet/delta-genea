@@ -35,7 +35,7 @@ public class PicturesPage extends GeneaWebPage
     pw.print(title);
     pw.print("</h1>");
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     if ((_pictures!=null) && (_pictures.size()>0))
     {
       GeneaUserContext context=(GeneaUserContext)getUserContext();
@@ -49,7 +49,7 @@ public class PicturesPage extends GeneaWebPage
       {
         PicturePageParameters params=new PicturePageParameters(picture.getPrimaryKey());
         params.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
-        pw.print("<li>");
+        pw.print(HtmlConstants.LI);
         pw.print("<a href=\"");
         pw.print(params.build());
         pw.print("\">");
@@ -66,11 +66,11 @@ public class PicturesPage extends GeneaWebPage
             pTools.generatePersonName(p);
           }
         }
-        pw.println("</li>");
+        pw.println(HtmlConstants.END_LI);
       }
       pw.println("</ul>");
     }
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generatePageFooter(pw);
   }
 }

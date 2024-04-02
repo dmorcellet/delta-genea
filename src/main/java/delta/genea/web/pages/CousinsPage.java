@@ -51,16 +51,16 @@ public class CousinsPage extends GeneaWebPage
     String title=sb.toString();
     WebPageTools.generatePageHeader(title,pw);
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     pw.print("<B>Cousins de ");
     pTools.generatePersonName(root);
     pw.println("</B>");
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generateHorizontalRuler(pw);
 
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     List<Person> persons=_data.getCousins();
-    if ((persons!=null) && (persons.size()>0))
+    if ((persons!=null) && (!persons.isEmpty()))
     {
       pw.println("<ul>");
       CommonAncestorsPageParameters params;
@@ -68,7 +68,7 @@ public class CousinsPage extends GeneaWebPage
       pTools.setUseSexIcon(true);
       for(Iterator<Person> it=persons.iterator();it.hasNext();)
       {
-        pw.print("<li>");
+        pw.print(HtmlConstants.LI);
         p=it.next();
         pTools.generatePersonName(p);
         params=new CommonAncestorsPageParameters(root.getPrimaryKey(),p.getPrimaryKey());
@@ -77,7 +77,7 @@ public class CousinsPage extends GeneaWebPage
         pw.print("<a href=\"");
         pw.print(params.build());
         pw.println("\">Ancêtres communs</a>");
-        pw.println("</li>");
+        pw.println(HtmlConstants.END_LI);
       }
       pTools.setUseSexIcon(false);
       pw.println("</ul>");
@@ -86,7 +86,7 @@ public class CousinsPage extends GeneaWebPage
     {
       pw.println("Aucun !");
     }
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generatePageFooter(pw);
   }
 }

@@ -50,7 +50,7 @@ public class ActPage extends GeneaWebPage
     _act.getP1();
     _act.getP2();
     List<PersonInAct> persons=_act.getPersonsInAct();
-    if ((persons!=null)&&(persons.size()>0))
+    if ((persons!=null)&&(!persons.isEmpty()))
     {
       int nb=persons.size();
       PersonInAct person;
@@ -71,9 +71,9 @@ public class ActPage extends GeneaWebPage
     {
       String title="Acte non trouvé";
       WebPageTools.generatePageHeader(title,pw);
-      pw.println("<div>");
+      pw.println(HtmlConstants.DIV);
       pw.println("<B>Acte non trouvé !</B>");
-      pw.println("</div>");
+      pw.println(HtmlConstants.END_DIV);
       WebPageTools.generatePageFooter(pw);
     }
 
@@ -90,7 +90,7 @@ public class ActPage extends GeneaWebPage
     Person p2=_act.getP2();
     WebPageTools.generatePageHeader(title,pw);
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
 
     if (_act.getTraite())
     {
@@ -109,11 +109,11 @@ public class ActPage extends GeneaWebPage
     pw.print(" (");
     pw.print(PageTools.generateDate(_act.getDate(),""));
     pw.println(")");
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
 
     WebPageTools.generateHorizontalRuler(pw);
 
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     String comment=_act.getComment();
     if ((comment!=null) && (comment.length()>0))
     {
@@ -126,7 +126,7 @@ public class ActPage extends GeneaWebPage
     {
       pw.println("<div style=\"text-decoration:underline;\">");
       pw.println("Personnes mentionnées");
-      pw.println("</div>");
+      pw.println(HtmlConstants.END_DIV);
       pw.println("<ul>");
 
       int nb=persons.size();
@@ -135,7 +135,7 @@ public class ActPage extends GeneaWebPage
         PersonInAct personInAct=persons.get(i);
         Person person=personInAct.getPerson();
         Person linkReference=personInAct.getLinkReference();
-        pw.println("<li>");
+        pw.println(HtmlConstants.LI);
         String personLink=pTools.format(person);
         pw.print(personLink);
         // Link
@@ -230,11 +230,11 @@ public class ActPage extends GeneaWebPage
             pw.print(signature);
           }
         }
-        pw.println("</li>");
+        pw.println(HtmlConstants.END_LI);
       }
       pw.println("</ul>");
     }
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
 
     String path=_act.getPath();
     if ((path!=null)&&(path.length()>0))
@@ -256,7 +256,7 @@ public class ActPage extends GeneaWebPage
         pw.print(" alt=\"");pw.print(imageName);pw.print("\"");
         pw.println(">");
       }
-      pw.println("</div>");
+      pw.println(HtmlConstants.END_DIV);
     }
 
     // Handle act text
@@ -273,7 +273,7 @@ public class ActPage extends GeneaWebPage
       String textStr=text.getText();
       textStr=textStr.replace("\r\n","\n");
       textStr=textStr.replace("\n","<br>\n");
-      pw.println("<div>");
+      pw.println(HtmlConstants.DIV);
       int textIndex=0;
       int length=textStr.length();
       while (textIndex<length)
@@ -308,7 +308,7 @@ public class ActPage extends GeneaWebPage
           textIndex=length;
         }
       }
-      pw.println("</div>");
+      pw.println(HtmlConstants.END_DIV);
     }
   }
 

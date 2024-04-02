@@ -97,7 +97,7 @@ public class UnionsPage extends GeneaWebPage
     WebPageTools.generatePageHeader(title,pw);
     int nbUnions=_unions.getNbRows();
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     pw.print("<b>");
     pw.print(title);
     pw.print(" (");
@@ -113,7 +113,7 @@ public class UnionsPage extends GeneaWebPage
     tableFormatter.format(_unions,sb);
     pw.print(sb);
     // todo Manage wedding contract
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generatePageFooter(pw);
   }
 }

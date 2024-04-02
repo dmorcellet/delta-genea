@@ -61,7 +61,7 @@ public class DescendantsPage extends GeneaWebPage
     String title=sb.toString();
     WebPageTools.generatePageHeader(title,pw);
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     _pTools.generatePersonName(root);
     pw.print(" (");
     pw.print(nbDescendants);
@@ -75,12 +75,12 @@ public class DescendantsPage extends GeneaWebPage
     if (_sameName) pw.print("Complète");
     else pw.print("Même nom");
     pw.println("</a>");
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     TreeNode<Person> rootNode=_data.getRootNode();
     generateTree(rootNode,pw);
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generatePageFooter(pw);
   }
 
@@ -88,7 +88,7 @@ public class DescendantsPage extends GeneaWebPage
   {
     Person p=node.getData();
     pw.println("<ul>");
-    pw.print("<li>");
+    pw.print(HtmlConstants.LI);
     pw.print(' ');
     _pTools.generatePersonName(p);
     TreeNode<Person> son=node.getFirstChild();
@@ -97,7 +97,7 @@ public class DescendantsPage extends GeneaWebPage
       generateTree(son,pw);
       son=son.getNextBrother();
     }
-    pw.println("</li>");
+    pw.println(HtmlConstants.END_LI);
     pw.println("</ul>");
   }
 }

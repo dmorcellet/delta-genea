@@ -58,7 +58,7 @@ public class AncestorsPage extends GeneaWebPage
     String title=sb.toString();
     WebPageTools.generatePageHeader(title,pw);
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     String personLink=_pTools.format(_root);
     pw.print(personLink);
     pw.print(" (");
@@ -69,12 +69,12 @@ public class AncestorsPage extends GeneaWebPage
     pw.print(" <a href=\"");
     pw.print(listPage.build());
     pw.println("\">Ascendance en liste</a>");
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generateHorizontalRuler(pw);
-    pw.println("<div>");
+    pw.println(HtmlConstants.DIV);
     BinaryTreeNode<Person> rootNode=_data.getRootNode();
     generateTree(rootNode,pw,1);
-    pw.println("</div>");
+    pw.println(HtmlConstants.END_DIV);
     WebPageTools.generatePageFooter(pw);
   }
 
@@ -83,7 +83,7 @@ public class AncestorsPage extends GeneaWebPage
   {
     Person p=node.getData();
     pw.println("<ul>");
-    pw.print("<li>");
+    pw.print(HtmlConstants.LI);
     pw.print(sosa);
     pw.print(" - ");
     String personLink=_pTools.format(p);
@@ -98,7 +98,7 @@ public class AncestorsPage extends GeneaWebPage
     {
       generateTree(mother,pw,2*sosa+1);
     }
-    pw.println("</li>");
+    pw.println(HtmlConstants.END_LI);
     pw.println("</ul>");
   }
 }
