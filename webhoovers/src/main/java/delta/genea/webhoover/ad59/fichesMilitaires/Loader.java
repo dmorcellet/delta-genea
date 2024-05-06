@@ -18,9 +18,10 @@ import delta.genea.webhoover.ImageMontageMaker;
  */
 public class Loader
 {
-  private static final String BASE_URL="http://www.archivesdepartementales.lenord.fr/";
+  private static final String BASE_URL="https://archivesdepartementales.lenord.fr/";
+  private static final String BASE_VIEWER_URL="http://viewer-archivesdepartementales.lenord.fr/";
   private static final String FICHE_MATRICULES_PLAYLIST="accounts/mnesys_ad59/datas/playlists/fiches_matriculesXXX.xml?time=TIME";
-  private static final String FIRST_PAGE="?id=viewer&doc=accounts%2Fmnesys_ad59%2Fdatas%2Fir%2FRegistres%20militaires%2FFiches%2Ffiches_matricules.xml&page_ref=XXX&lot_num=1&img_num=1&index_in_visu=";
+  private static final String FIRST_PAGE="?id=viewer&doc=accounts%2Fmnesys_ad59%2Fdatas%2Fir%2FRegistres%20militaires%2FFiches%2Ffiches_matricules.xml&page_ref=XXX&lot_num=1&img_num=1";
 
   private int _packageId;
   private String _basePath;
@@ -117,7 +118,7 @@ public class Loader
     Downloader downloader=session.getDownloader();
     File out=new File(tmpDir,"image_"+pageNumber+".jpg");
     item=item.replace(".jpg","_jpg");
-    String urlTemplate=BASE_URL+_basePath+item+"_/2_COUNT.jpg";
+    String urlTemplate=BASE_VIEWER_URL+_basePath+item+"_/3_COUNT.jpg";
     int nbH=4;
     int nbV=6;
     File[][] files=new File[nbH][nbV];
@@ -127,13 +128,14 @@ public class Loader
       int x=i%nbH;
       int y=i/nbH;
       File tileFile=new File(tmpDir,"tile"+x+"_"+y+".jpg");
+      tileFile.getParentFile().mkdirs();
       downloader.downloadToFile(url,tileFile);
       files[x][y]=tileFile;
     }
     ImageMontageMaker maker=new ImageMontageMaker();
     try
     {
-      // Image building may raise if JAI is not installed correctly
+      // Image building may raise an exception if JAI is not installed correctly
       // One way to do it is to install it on the JRE
       maker.doIt(files, out);
     }
@@ -184,15 +186,18 @@ Sample playlist XML document:
     ADSession session=new ADSession();
     // Béthune, 1897
     //int packageId=11247;
+    //int pageNumber=466;
     // Lille, 1901
     //int packageId=11823;
+    //int pageNumber=552;
     // Lille, 1893
-    int packageId=10683;
+    //int packageId=10683;
+    //int pageNumber=149;
+    // Lille, 1885
+    int packageId=9615;
+    int pageNumber=189;
     Loader l=new Loader(packageId);
     session.start();
-    //int pageNumber=466;
-    //int pageNumber=552;
-    int pageNumber=149;
     l.load(session,pageNumber);
     session.stop();
   }
