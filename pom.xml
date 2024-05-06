@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>delta-genea</artifactId>
-  <packaging>jar</packaging>
+  <artifactId>delta-genea-parent</artifactId>
+  <packaging>pom</packaging>
   <version>1.1-SNAPSHOT</version>
   <name>genea</name>
   <parent>
@@ -10,6 +10,10 @@
     <artifactId>maven-definitions</artifactId>
     <version>2.0</version>
   </parent>
+  <modules>
+    <module>genea</module>
+    <module>webhoovers</module>
+  </modules>
   <dependencies>
     <dependency>
       <groupId>servletapi</groupId>
@@ -48,16 +52,6 @@
       <artifactId>delta-framework-objects</artifactId>
       <version>1.1-SNAPSHOT</version>
     </dependency>
-    <dependency>
-      <groupId>com.sun.media</groupId>
-      <artifactId>jai-core</artifactId>
-      <version>1.1.3</version>
-      </dependency>
-    <dependency>
-      <groupId>com.sun.media</groupId>
-      <artifactId>jai-codec</artifactId>
-      <version>1.1.3</version>
-      </dependency>
   </dependencies>
 </project>
 

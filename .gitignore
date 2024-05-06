@@ -1,5 +1,5 @@
-/target/
-/.settings
-/.classpath
-/.project
-/genea.log
+**/target/
+**/.settings
+**/.classpath
+**/.project
+**/genea.log
