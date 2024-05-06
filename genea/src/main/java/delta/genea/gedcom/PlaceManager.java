@@ -272,12 +272,14 @@ public class PlaceManager
     }
     else if (softwareType==GenealogySoftware.GENEATIQUE)
     {
+      //2 PLAC Lassigny, 60350, Oise, Picardie, France, 
+
       pm=new PlaceManager(dataSource,6);
       pm.indicateFieldMeaning(1,TOWN_NAME);
-      pm.indicateFieldMeaning(2,DEPT_CODE);
+      pm.indicateFieldMeaning(2,POSTAL_CODE);
       pm.indicateFieldMeaning(3,DEPT_NAME);
-      pm.indicateFieldMeaning(4,UNUSED);
-      pm.indicateFieldMeaning(5,UNUSED);
+      pm.indicateFieldMeaning(4,REGION_NAME);
+      pm.indicateFieldMeaning(5,COUNTRY_NAME);
       pm.indicateFieldMeaning(6,UNUSED);
     }
     else if (softwareType==GenealogySoftware.GENEA)
