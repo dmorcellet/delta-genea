@@ -3,3 +3,5 @@
 **/.classpath
 **/.project
 **/genea.log
+/data/xml
+genea_xml
