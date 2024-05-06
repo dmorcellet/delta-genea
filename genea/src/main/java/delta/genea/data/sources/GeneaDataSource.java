@@ -21,6 +21,21 @@ public class GeneaDataSource
   private AncestorsTreesRegistry _ancestorsTreesRegistry;
   private ObjectsSource _source;
 
+  public static GeneaDataSource getByName(String name)
+  {
+    GeneaDataSource dataSource;
+    File xmlDir=new File(name);
+    if (xmlDir.exists())
+    {
+      dataSource=GeneaDataSource.getInstance(xmlDir);
+    }
+    else
+    {
+      dataSource=GeneaDataSource.getInstance(name);
+    }
+    return dataSource;
+  }
+
   /**
    * Get the data source that manages the genea objects
    * for the given database.

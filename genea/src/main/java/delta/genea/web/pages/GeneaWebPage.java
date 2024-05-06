@@ -1,7 +1,5 @@
 package delta.genea.web.pages;
 
-import java.io.File;
-
 import delta.common.framework.web.WebPage;
 import delta.common.utils.ParameterFinder;
 import delta.genea.data.sources.GeneaDataSource;
@@ -29,16 +27,7 @@ public class GeneaWebPage extends WebPage
     {
       return null;
     }
-    GeneaDataSource dataSource;
-    File xmlDir=new File(dbName);
-    if (xmlDir.exists())
-    {
-      dataSource=GeneaDataSource.getInstance(xmlDir);
-    }
-    else
-    {
-      dataSource=GeneaDataSource.getInstance(dbName);
-    }
+    GeneaDataSource dataSource=GeneaDataSource.getByName(dbName);
     getUserContext().putParameter(GeneaUserContext.DATA_SOURCE,dataSource);
     return dataSource;
   }
