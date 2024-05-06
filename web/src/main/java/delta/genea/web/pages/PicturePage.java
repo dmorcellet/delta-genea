@@ -6,6 +6,7 @@ import java.util.List;
 
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
+import delta.common.utils.html.HtmlConstants;
 import delta.genea.data.Person;
 import delta.genea.data.PersonInPicture;
 import delta.genea.data.Picture;

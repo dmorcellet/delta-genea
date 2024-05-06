@@ -6,6 +6,7 @@ import java.util.List;
 
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
+import delta.common.utils.html.HtmlConstants;
 import delta.common.utils.tables.DataTableRow;
 import delta.common.utils.tables.DataTableSort;
 import delta.genea.data.Place;

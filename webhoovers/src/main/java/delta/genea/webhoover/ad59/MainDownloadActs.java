@@ -7,10 +7,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import delta.common.utils.NumericTools;
+import delta.common.utils.html.HtmlConstants;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
-import delta.genea.web.pages.HtmlConstants;
 import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.ImageMontageMaker;

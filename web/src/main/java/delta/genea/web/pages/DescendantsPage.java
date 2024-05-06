@@ -6,6 +6,7 @@ import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
 import delta.common.utils.collections.TreeNode;
+import delta.common.utils.html.HtmlConstants;
 import delta.genea.data.Person;
 import delta.genea.data.trees.DescendantsTree;
 import delta.genea.web.GeneaUserContext;
