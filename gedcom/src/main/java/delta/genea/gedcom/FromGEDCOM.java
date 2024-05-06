@@ -22,6 +22,7 @@ import delta.genea.data.GeneaDate;
 import delta.genea.data.OccupationForPerson;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
+import delta.genea.data.PlaceManager;
 import delta.genea.data.Sex;
 import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
@@ -37,6 +38,9 @@ import delta.genea.time.GregorianDate;
 public class FromGEDCOM
 {
   private static final Logger LOGGER=Logger.getLogger(FromGEDCOM.class);
+
+  private static final String LINE_2_PLAC="2 PLAC ";
+  private static final String LINE_2_DATE="2 DATE";
   private static final String FRENCH_REVOLUTION_DATE_SEED="@#DFRENCH R@";
   //private static final String JULIAN_DATE_SEED="@#DJULIAN@";
 
@@ -49,6 +53,7 @@ public class FromGEDCOM
     GeneaApplication.getInstance();
     //new FromGEDCOM(new File("/home/dm/tmp/michel.ged"),"genea_michel");
     new FromGEDCOM(new File("D:\\dam\\Donnees\\docs\\genea\\maryvonne\\Lamour_31-10-2016.ged"),"genea_maryvonne");
+    //new FromGEDCOM(new File("D:\\tmp\\Ninie au 20120925.ged"),"genea_ninie");
   }
 
   private File _fileName;
@@ -75,7 +80,7 @@ public class FromGEDCOM
     parseFileLines();
     go();
     long time2=System.currentTimeMillis();
-    System.out.println("Time to import : "+(time2-time)+"ms");
+    LOGGER.info("Time to import : "+(time2-time)+"ms");
   }
 
   private void reset()
@@ -138,7 +143,10 @@ public class FromGEDCOM
       }
       else
       {
-        // System.out.println("Ligne inexploitée ["+line+"]");
+        if (LOGGER.isDebugEnabled())
+        {
+          LOGGER.debug("Ligne inexploitée ["+line+"]");
+        }
         _index++;
       }
     }
@@ -227,7 +235,7 @@ public class FromGEDCOM
                 _index--;
                 break;
               }
-              else if (line.startsWith("2 DATE"))
+              else if (line.startsWith(LINE_2_DATE))
               {
                 String tmp=line.substring(7).trim();
                 GeneaDate d=decodeDate(tmp);
@@ -236,7 +244,7 @@ public class FromGEDCOM
                   p.setBirthDate(d.getDate(),d.getInfosDate());
                 }
               }
-              else if (line.startsWith("2 PLAC "))
+              else if (line.startsWith(LINE_2_PLAC))
               {
                 String tmp=line.substring(7).trim();
                 Long key=_placeManager.decodePlaceName(tmp);
@@ -262,7 +270,7 @@ public class FromGEDCOM
                 _index--;
                 break;
               }
-              else if (line.startsWith("2 DATE"))
+              else if (line.startsWith(LINE_2_DATE))
               {
                 String tmp=line.substring(7).trim();
                 GeneaDate d=decodeDate(tmp);
@@ -271,7 +279,7 @@ public class FromGEDCOM
                   p.setDeathDate(d.getDate(),d.getInfosDate());
                 }
               }
-              else if (line.startsWith("2 PLAC "))
+              else if (line.startsWith(LINE_2_PLAC))
               {
                 String tmp=line.substring(7).trim();
                 Long key=_placeManager.decodePlaceName(tmp);
@@ -294,7 +302,10 @@ public class FromGEDCOM
         // END OF OCCU
         else
         {
-          // System.out.println("Ligne inexploitée ["+line+"]");
+          if (LOGGER.isDebugEnabled())
+          {
+            LOGGER.debug("Ligne inexploitée ["+line+"]");
+          }
         }
       }
     }
@@ -356,7 +367,7 @@ public class FromGEDCOM
                 _index--;
                 break;
               }
-              else if (line.startsWith("2 DATE"))
+              else if (line.startsWith(LINE_2_DATE))
               {
                 String tmp=line.substring(7).trim();
                 GeneaDate d=decodeDate(tmp);
@@ -365,7 +376,7 @@ public class FromGEDCOM
                   u.setDate(d);
                 }
               }
-              else if (line.startsWith("2 PLAC "))
+              else if (line.startsWith(LINE_2_PLAC))
               {
                 String tmp=line.substring(7).trim();
                 Long key=_placeManager.decodePlaceName(tmp);
@@ -411,7 +422,10 @@ public class FromGEDCOM
         // END OF CHIL
         else
         {
-          // System.out.println("Ligne inexploitée ["+line+"]");
+          if (LOGGER.isDebugEnabled())
+          {
+            LOGGER.debug("Ligne inexploitée ["+line+"]");
+          }
         }
       }
     }
@@ -538,9 +552,9 @@ public class FromGEDCOM
         // Full date ?
         try
         {
-          int day=Integer.parseInt(strings[0]);
+          int day=NumericTools.parseInt(strings[0],1);
           int month=Month.decodeEnglishMonth(strings[1]);
-          int year=Integer.parseInt(strings[2]);
+          int year=NumericTools.parseInt(strings[2],0);
           if ((day>0)&&(month>0)&&(year>0))
           {
             if (dateType==0)

@@ -21,6 +21,11 @@ public class GeneaDataSource
   private AncestorsTreesRegistry _ancestorsTreesRegistry;
   private ObjectsSource _source;
 
+  /**
+   * Get a data source that manages the genea objects.
+   * @param name Data source name. 
+   * @return A new data source (XML or SQL).
+   */
   public static GeneaDataSource getByName(String name)
   {
     GeneaDataSource dataSource;

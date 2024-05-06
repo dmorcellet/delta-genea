@@ -1,4 +1,4 @@
-package delta.genea.gedcom;
+package delta.genea.data;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +10,6 @@ import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.utils.places.FrenchDepartment;
 import delta.common.utils.places.FrenchDepartmentDirectory;
 import delta.common.utils.text.StringSplitter;
-import delta.genea.data.Place;
-import delta.genea.data.PlaceLevel;
 import delta.genea.misc.GenealogySoftware;
 
 /**

@@ -6,8 +6,8 @@ import java.util.List;
 import delta.common.framework.objects.data.ObjectsSource;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
+import delta.genea.data.PlaceManager;
 import delta.genea.data.Union;
-import delta.genea.gedcom.PlaceManager;
 
 /**
  * Manages raw data (persons, unions, places).

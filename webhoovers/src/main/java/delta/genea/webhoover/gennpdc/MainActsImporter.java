@@ -6,10 +6,10 @@ import java.util.List;
 import delta.common.framework.objects.data.ObjectsManager;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
+import delta.genea.data.PlaceManager;
 import delta.genea.data.Sex;
 import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.gedcom.PlaceManager;
 import delta.genea.webhoover.expoactes.BirthAct;
 import delta.genea.webhoover.expoactes.BirthActsIO;
 
