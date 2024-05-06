@@ -675,7 +675,12 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           _psInsert.setLong(n,key.longValue());
         }
         n++;
-        _psInsert.setString(n,person.getLastName());
+        String lastName=person.getLastName();
+        if (lastName.length()>32)
+        {
+          lastName=lastName.substring(0,32);
+        }
+        _psInsert.setString(n,lastName);
         n++;
         _psInsert.setString(n,person.getFirstname());
         n++;
