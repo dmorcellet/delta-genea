@@ -1,12 +1,10 @@
-package delta.genea;
+package delta.genea.data.trees;
 
 import java.util.Set;
 
 import delta.genea.data.Couple;
 import delta.genea.data.Person;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.data.trees.AncestorsTree;
-import delta.genea.data.trees.CommonAncestorsComputer;
 
 /**
  * Common ancestors computer.

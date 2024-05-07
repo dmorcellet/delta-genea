@@ -1,4 +1,4 @@
-package delta.genea;
+package delta.genea.tools;
 
 import java.io.PrintStream;
 import java.util.Iterator;

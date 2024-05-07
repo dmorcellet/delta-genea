@@ -18,5 +18,6 @@
     <module>ui</module>
     <module>web</module>
     <module>webhoovers</module>
+    <module>xml</module>
   </modules>
 </project>
