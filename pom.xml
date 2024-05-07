@@ -13,6 +13,7 @@
   <modules>
     <module>genea</module>
     <module>gedcom</module>
+    <module>sql</module>
     <module>tools</module>
     <module>ui</module>
     <module>web</module>

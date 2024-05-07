@@ -18,7 +18,7 @@ import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.data.trees.AncestorsTree;
 import delta.genea.data.trees.DescendantsTree;
-import delta.genea.misc.DatabaseConfiguration;
+import delta.genea.misc.DataSourceConfiguration;
 import delta.genea.time.GregorianDate;
 
 /**
@@ -39,7 +39,7 @@ public class DumpAncestorsTree
   {
     try
     {
-      String dbName=DatabaseConfiguration.getInstance().getDefaultDbName();
+      String dbName=DataSourceConfiguration.getInstance().getDefaultDatasourceName();
       GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
 
       DataProxy<Person> pp=dataSource.buildProxy(Person.class,id);

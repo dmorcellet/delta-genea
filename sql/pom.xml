@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>delta-genea</artifactId>
+  <artifactId>delta-genea-sql</artifactId>
   <packaging>jar</packaging>
   <name>genea</name>
   <parent>
@@ -11,13 +11,29 @@
   </parent>
   <dependencies>
     <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>8.0.32</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-common</artifactId>
       <version>1.11</version>
     </dependency>
     <dependency>
       <groupId>com.dam.delta4j</groupId>
+      <artifactId>delta-utils-jdbc</artifactId>
+      <version>1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.dam.delta4j</groupId>
       <artifactId>delta-framework-objects</artifactId>
+      <version>1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.dam.delta4j</groupId>
+      <artifactId>delta-genea</artifactId>
       <version>1.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
