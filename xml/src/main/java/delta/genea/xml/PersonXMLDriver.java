@@ -103,7 +103,6 @@ public class PersonXMLDriver extends ObjectXmlDriver<Person>
       if ((motherKey!=null) && (motherKey.longValue()==primaryKey))
       {
         ret.add(person.getPrimaryKey());
-        continue;
       }
     }
     return ret;
@@ -132,7 +131,6 @@ public class PersonXMLDriver extends ObjectXmlDriver<Person>
       if ((godMotherKey!=null) && (godMotherKey.longValue()==primaryKey))
       {
         ret.add(person.getPrimaryKey());
-        continue;
       }
     }
     return ret;

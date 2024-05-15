@@ -48,7 +48,6 @@ public class UnionXMLDriver extends ObjectXmlDriver<Union>
       if ((womanKey!=null) && (womanKey.longValue()==primaryKey))
       {
         ret.add(union.getPrimaryKey());
-        continue;
       }
     }
     return ret;

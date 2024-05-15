@@ -168,18 +168,17 @@ public class MainDownloadActs
     downloader.downloadToFile(url, tmpFile);
     List<String> lines=TextUtils.readAsLines(tmpFile);
     int index=0;
-    String line,actTypeLine;
     int nbLines=lines.size();
     for(int i=0;i<nbLines;i++)
     {
-      line=lines.get(i);
+      String line=lines.get(i);
       if (line.contains("&page_ref"))
       {
         index++;
         if ((index>1) && ((index-1)%2==0))
         {
           String packageId=TextTools.findBetween(line,"&page_ref=","&");
-          actTypeLine=lines.get(i+1);
+          String actTypeLine=lines.get(i+1);
           String actType=TextTools.findBetween(actTypeLine,"&gt;","</p>").trim();
           ActsPackage newPackage=new ActsPackage();
           newPackage._actType=actType;

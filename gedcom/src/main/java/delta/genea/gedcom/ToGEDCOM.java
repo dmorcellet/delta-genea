@@ -351,7 +351,7 @@ public class ToGEDCOM
 
           // Professions
           List<OccupationForPerson> occupations=p.getOccupations();
-          if ((occupations!=null) && (occupations.size()>0))
+          if ((occupations!=null) && (!occupations.isEmpty()))
           {
             int nbOccupations=occupations.size();
             StringBuilder sb=new StringBuilder("1 OCCU ");

@@ -20,7 +20,7 @@ import delta.genea.webhoover.utils.TmpFilesManager;
  */
 public class BirthPagesManager
 {
-  private static Log logger=LogFactory.getLog("BirthPagesManager");
+  private static final Log LOGGER=LogFactory.getLog("BirthPagesManager");
   private static final String BIRTHS_LINE_START="<td>&nbsp;<a href=\"/releves/tab_naiss.php?args=";
   private static final String BIRTH_ACT_REF_LINE_SEED="<a href=\"/releves/acte_naiss.php?xid=";
   private static final String PARTIAL_BIRTH_URL="/releves/acte_naiss.php?xid=";
@@ -141,7 +141,7 @@ public class BirthPagesManager
     }
     catch(Exception e)
     {
-      logger.error("Error when parsing birth file ["+f+"]",e);
+      LOGGER.error("Error when parsing birth file ["+f+"]",e);
     }
   }
 }

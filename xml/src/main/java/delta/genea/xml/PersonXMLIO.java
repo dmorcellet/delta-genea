@@ -216,7 +216,7 @@ public class PersonXMLIO extends DefaultXMLIO<Person>
   private void writeOccupations(TransformerHandler hd, Person object) throws SAXException
   {
     List<OccupationForPerson> occupations=object.getOccupations();
-    if ((occupations!=null) && (occupations.size()>0))
+    if ((occupations!=null) && (!occupations.isEmpty()))
     {
       for(OccupationForPerson occupationForPerson : occupations)
       {

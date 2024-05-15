@@ -38,7 +38,6 @@ public class ActXMLDriver extends ObjectXmlDriver<Act>
       if ((p2Key!=null) && (p2Key.longValue()==primaryKey.longValue()))
       {
         ret.add(act.getPrimaryKey());
-        continue;
       }
     }
     return ret;

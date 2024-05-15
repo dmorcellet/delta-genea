@@ -6,6 +6,7 @@ import java.util.List;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextUtils;
+import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.ImageMontageMaker;
@@ -94,7 +95,8 @@ public class PackagePageParser
 		int index;
 		String imageName="";
 		int value;
-		int chunkHSize=0,chunkVSize=0;
+		int chunkHSize=0;
+		int chunkVSize=0;
 		int hsize=0;
 		int vsize=0;
 		for(Iterator<String> it=lines.iterator();it.hasNext();)
@@ -142,7 +144,7 @@ public class PackagePageParser
 		return ret;
 	}
 
-	private void downloadImage(int nb,String imageName) throws Exception
+	private void downloadImage(int nb,String imageName) throws DownloadException
 	{
 		String url=Constants.VISU_PAGE+"IMAGE="+imageName+"&SI=img0";
 		File out=getImageFileName(nb);

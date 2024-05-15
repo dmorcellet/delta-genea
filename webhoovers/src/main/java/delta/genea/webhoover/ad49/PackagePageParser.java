@@ -211,7 +211,7 @@ public class PackagePageParser
         String newName=name;
         if (page>minIndex)
         {
-          newName=name.replace(".jpg","-"+String.valueOf(page-minIndex+1)+".jpg");
+          newName=name.replace(".jpg","-"+(page-minIndex+1)+".jpg");
         }
         out=new File(Constants.ROOT_ACTS_DIR,newName);
       }

@@ -6,8 +6,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -39,7 +40,7 @@ public class ImageMontageMaker
     int columnTotal=files.length;
     int rowTotal=files[0].length;
     int col=0;
-    Vector<RenderedOp> renderedOps=new Vector<RenderedOp>();
+    List<RenderedOp> renderedOps=new ArrayList<RenderedOp>();
     RenderedOp[][] ops=new RenderedOp[columnTotal][rowTotal];
     RenderedOp op=null;
 
@@ -77,11 +78,11 @@ public class ImageMontageMaker
     // System.out.println(jiioWriter.getClass().getName());
 
     MemoryCacheImageOutputStream mos=new MemoryCacheImageOutputStream(new FileOutputStream(out));
-    IIOImage iio_image=new IIOImage(finalImage,null,null);
+    IIOImage iioImage=new IIOImage(finalImage,null,null);
     jiioWriter.setOutput(mos);
     ImageWriteParam param=jiioWriter.getDefaultWriteParam();
     // param.setCompressionMode(ImageWriteParam.MODE_DEFAULT);
-    jiioWriter.write(null,iio_image,param);
+    jiioWriter.write(null,iioImage,param);
     mos.close();
     for(int i=0;i<columnTotal;i++)
     {

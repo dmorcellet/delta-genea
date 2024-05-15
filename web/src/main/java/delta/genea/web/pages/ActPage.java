@@ -123,7 +123,7 @@ public class ActPage extends GeneaWebPage
       pw.println("<br>");
     }
     List<PersonInAct> persons=_act.getPersonsInAct();
-    if ((persons!=null)&&(persons.size()>0))
+    if ((persons!=null)&&(!persons.isEmpty()))
     {
       pw.println("<div style=\"text-decoration:underline;\">");
       pw.println("Personnes mentionnées");

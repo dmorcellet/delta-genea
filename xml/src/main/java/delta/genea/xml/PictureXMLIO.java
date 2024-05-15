@@ -81,7 +81,7 @@ public class PictureXMLIO extends DefaultXMLIO<Picture>
   public void writeChildTags(TransformerHandler hd, Picture object) throws SAXException
   {
     List<PersonInPicture> pips=object.getPersonsInPicture();
-    if ((pips!=null) && (pips.size()>0))
+    if ((pips!=null) && (!pips.isEmpty()))
     {
       for(PersonInPicture pip : pips)
       {

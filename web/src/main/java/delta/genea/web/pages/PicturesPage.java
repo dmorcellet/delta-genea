@@ -37,7 +37,7 @@ public class PicturesPage extends GeneaWebPage
     pw.print("</h1>");
     WebPageTools.generateHorizontalRuler(pw);
     pw.println(HtmlConstants.DIV);
-    if ((_pictures!=null) && (_pictures.size()>0))
+    if ((_pictures!=null) && (!_pictures.isEmpty()))
     {
       GeneaUserContext context=(GeneaUserContext)getUserContext();
       PersonTools pTools=new PersonTools(context,pw);
@@ -57,7 +57,7 @@ public class PicturesPage extends GeneaWebPage
         pw.print(picture.getTitle());
         pw.print("</a>");
         List<PersonInPicture> persons=picture.getPersonsInPicture();
-        if ((persons!=null) && (persons.size()>0))
+        if ((persons!=null) && (!persons.isEmpty()))
         {
           pw.print(':');
           for(PersonInPicture pip : persons)

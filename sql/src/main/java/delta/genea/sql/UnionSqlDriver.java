@@ -213,7 +213,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
       ArrayList<Long> ret=new ArrayList<Long>();
       List<Long> retMan=getFromManOrWoman(_psGetFromMan,primaryKey);
       ret.addAll(retMan);
-      if (ret.size()==0)
+      if (ret.isEmpty())
       {
         List<Long> retWoman=getFromManOrWoman(_psGetFromWoman,primaryKey);
         ret.addAll(retWoman);

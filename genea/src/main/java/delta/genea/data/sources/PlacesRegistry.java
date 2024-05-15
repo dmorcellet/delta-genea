@@ -120,7 +120,7 @@ public final class PlacesRegistry
           }
         }
       }
-      if (nonAttachedNodes.size()>0)
+      if (!nonAttachedNodes.isEmpty())
       {
         LOGGER.error("There are some non attached place nodes !");
         for(int i=0;i<nonAttachedNodes.size();i++)

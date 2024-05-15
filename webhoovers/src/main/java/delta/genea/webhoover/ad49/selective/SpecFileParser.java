@@ -71,7 +71,6 @@ public class SpecFileParser
     List<String> lines=TextUtils.readAsLines(f);
     lines.remove(0);
     String[] items;
-    int placeId,packageIndex,minPageIndex,maxPageIndex;
     for(String line : lines)
     {
       items=StringSplitter.split(line,'\t');
@@ -88,13 +87,15 @@ public class SpecFileParser
       type=normalizeString(type);
       String placeIdStr=items[6+2];
       placeIdStr=normalizeString(placeIdStr);
-      placeId=NumericTools.parseInt(placeIdStr,-1);
+      int placeId=NumericTools.parseInt(placeIdStr,-1);
       String packageIndexStr=items[7+2];
       packageIndexStr=normalizeString(packageIndexStr);
-      packageIndex=NumericTools.parseInt(packageIndexStr,-1);
+      int packageIndex=NumericTools.parseInt(packageIndexStr,-1);
       String pageStr=items[8+2];
       pageStr=normalizeString(pageStr);
       int indexOfSeparator=pageStr.indexOf('-');
+      int minPageIndex;
+      int maxPageIndex;
       if (indexOfSeparator!=-1)
       {
         minPageIndex=NumericTools.parseInt(pageStr.substring(0,indexOfSeparator),-1);

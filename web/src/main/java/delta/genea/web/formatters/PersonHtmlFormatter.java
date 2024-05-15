@@ -138,7 +138,7 @@ public class PersonHtmlFormatter extends TextFormatter
     if (tree!=null)
     {
       List<Long> sosas=tree.getSosas(key);
-      return ((sosas!=null)&&(sosas.size()>0));
+      return ((sosas!=null)&&(!sosas.isEmpty()));
     }
     return false;
   }

@@ -160,7 +160,7 @@ public class ActXMLIO extends DefaultXMLIO<Act>
   public void writeChildTags(TransformerHandler hd, Act object) throws SAXException
   {
     List<PersonInAct> pias=object.getPersonsInAct();
-    if ((pias!=null) && (pias.size()>0))
+    if ((pias!=null) && (!pias.isEmpty()))
     {
       for(PersonInAct pia : pias)
       {
