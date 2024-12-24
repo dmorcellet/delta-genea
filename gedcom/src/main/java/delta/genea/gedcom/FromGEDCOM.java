@@ -6,7 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.objects.data.ObjectsSource;
@@ -37,7 +38,7 @@ import delta.genea.time.GregorianDate;
  */
 public class FromGEDCOM
 {
-  private static final Logger LOGGER=Logger.getLogger(FromGEDCOM.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(FromGEDCOM.class);
 
   private static final String LINE_2_PLAC="2 PLAC ";
   private static final String LINE_2_DATE="2 DATE";

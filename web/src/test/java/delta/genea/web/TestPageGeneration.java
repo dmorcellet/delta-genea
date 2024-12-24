@@ -1,6 +1,7 @@
 package delta.genea.web;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.web.SimpleRequest;
 import delta.common.framework.web.SimpleRequestResponse;
@@ -17,7 +18,7 @@ import junit.framework.TestCase;
  */
 public class TestPageGeneration extends TestCase
 {
-  private static final Logger LOGGER=Logger.getLogger(TestPageGeneration.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(TestPageGeneration.class);
 
   private GeneaWebApplication _app;
   private WebUserContext _userContext;

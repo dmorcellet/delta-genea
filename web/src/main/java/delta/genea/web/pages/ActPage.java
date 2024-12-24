@@ -3,7 +3,8 @@ package delta.genea.web.pages;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.NumericTools;
@@ -25,7 +26,7 @@ import delta.genea.web.pages.tools.PersonTools;
  */
 public class ActPage extends GeneaWebPage
 {
-  private static final Logger LOGGER=Logger.getLogger(ActPage.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ActPage.class);
   private static final String LINK_SEED="<a href=\"";
   private static final String LINK_SEED_END="\">";
   private static final String LINK_END="</a>";

@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.utils.places.FrenchDepartment;
@@ -18,7 +19,7 @@ import delta.genea.misc.GenealogySoftware;
  */
 public class PlaceManager
 {
-  private static final Logger LOGGER=Logger.getLogger(PlaceManager.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(PlaceManager.class);
 
   private ObjectsSource _dataSource;
   private int _nbFields;

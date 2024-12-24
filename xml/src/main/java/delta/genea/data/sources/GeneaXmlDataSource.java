@@ -2,7 +2,8 @@ package delta.genea.data.sources;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.common.framework.objects.xml.XmlObjectsSource;
@@ -30,7 +31,7 @@ import delta.genea.xml.UnionXMLIO;
  */
 public class GeneaXmlDataSource extends XmlObjectsSource
 {
-  private static final Logger LOGGER=Logger.getLogger(GeneaXmlDataSource.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(GeneaXmlDataSource.class);
 
   /**
    * Private constructor.

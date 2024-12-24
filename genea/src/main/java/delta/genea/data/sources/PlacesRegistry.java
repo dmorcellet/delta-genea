@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.utils.collections.TreeNode;
@@ -16,7 +17,7 @@ import delta.genea.data.Place;
  */
 public final class PlacesRegistry
 {
-  private static final Logger LOGGER=Logger.getLogger(PlacesRegistry.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(PlacesRegistry.class);
 
   private String _dbName;
   private TreeNode<Place> _placesTree;

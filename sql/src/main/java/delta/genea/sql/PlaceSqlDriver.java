@@ -9,7 +9,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.objects.data.ObjectsSource;
@@ -25,7 +26,7 @@ import delta.genea.data.PlaceLevel;
  */
 public class PlaceSqlDriver extends ObjectSqlDriver<Place>
 {
-  private static final Logger LOGGER=Logger.getLogger(PlaceSqlDriver.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(PlaceSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
   private PreparedStatement _psGetAll;

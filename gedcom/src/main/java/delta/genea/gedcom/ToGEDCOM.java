@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataObject;
 import delta.common.utils.files.TextFileWriter;
@@ -23,7 +24,7 @@ import delta.genea.data.sources.GeneaDataSource;
  */
 public class ToGEDCOM
 {
-  private static final Logger LOGGER=Logger.getLogger(ToGEDCOM.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ToGEDCOM.class);
 
   private Calendar _calendar;
   private String[] _months={"JAN","FEB","MAR","APR",

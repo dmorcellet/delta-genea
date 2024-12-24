@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.StringSplitter;
@@ -18,7 +19,7 @@ import delta.genea.webhoover.ImageMontageMaker;
  */
 public class MainDownloadActs
 {
-  private static final Logger LOGGER=Logger.getLogger(MainDownloadActs.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDownloadActs.class);
 
   /**
    * Main method of this tool.

@@ -6,7 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataObject;
 
@@ -17,7 +18,7 @@ import delta.common.framework.objects.data.DataObject;
  */
 public class CompoundSelection<T extends DataObject<T>> implements Selection<T>
 {
-  private static final Logger LOGGER=Logger.getLogger(CompoundSelection.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(CompoundSelection.class);
 
   /**
    * Composition operator.

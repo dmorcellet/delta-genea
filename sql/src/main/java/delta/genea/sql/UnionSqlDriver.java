@@ -11,7 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.objects.data.ObjectsSource;
@@ -29,7 +30,7 @@ import delta.genea.data.Union;
  */
 public class UnionSqlDriver extends ObjectSqlDriver<Union>
 {
-  private static final Logger LOGGER=Logger.getLogger(UnionSqlDriver.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(UnionSqlDriver.class);
 
   private PreparedStatement _psGetByPrimaryKey;
   private PreparedStatement _psGetAll;

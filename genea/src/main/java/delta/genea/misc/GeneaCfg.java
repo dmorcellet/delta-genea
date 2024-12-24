@@ -2,7 +2,8 @@ package delta.genea.misc;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.configuration.Configuration;
 import delta.common.utils.configuration.Configurations;
@@ -13,7 +14,7 @@ import delta.common.utils.configuration.Configurations;
  */
 public class GeneaCfg
 {
-  private static final Logger LOGGER=Logger.getLogger(GeneaCfg.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(GeneaCfg.class);
 
   /**
    * Section name used to look for configuration data.

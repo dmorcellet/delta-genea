@@ -1,6 +1,7 @@
 package delta.genea.data.sources;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.sql.DatabaseConfiguration;
 import delta.common.framework.objects.sql.SqlObjectsSource;
@@ -25,7 +26,7 @@ import delta.genea.sql.UnionSqlDriver;
  */
 public class GeneaSqlDataSource extends SqlObjectsSource
 {
-  private static final Logger LOGGER=Logger.getLogger(GeneaSqlDataSource.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(GeneaSqlDataSource.class);
 
   /**
    * Constructor.

@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Data source configuration.
@@ -12,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public class DataSourceConfiguration
 {
-  private static final Logger LOGGER=Logger.getLogger(DataSourceConfiguration.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(DataSourceConfiguration.class);
 
   private String _datasourceName;
 

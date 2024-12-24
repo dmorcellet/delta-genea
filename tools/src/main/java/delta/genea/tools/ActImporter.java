@@ -3,7 +3,8 @@ package delta.genea.tools;
 import java.io.File;
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
@@ -24,7 +25,7 @@ import delta.genea.time.GregorianDate;
  */
 public class ActImporter
 {
-  private static final Logger LOGGER=Logger.getLogger(ActImporter.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ActImporter.class);
 
   private File _root;
   private AncestorsTree _tree;

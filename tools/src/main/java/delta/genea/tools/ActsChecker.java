@@ -4,7 +4,8 @@ import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.objects.data.ObjectsSource;
@@ -31,7 +32,7 @@ import delta.genea.data.trees.AncestorsTree;
  */
 public class ActsChecker
 {
-  private static final Logger LOGGER=Logger.getLogger(ActsChecker.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(ActsChecker.class);
   private static final String BIRTH="Naissance";
   private static final String DEATH="Décès";
   private static final String UNION="Mariage";
