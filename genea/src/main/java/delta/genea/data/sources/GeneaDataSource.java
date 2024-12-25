@@ -1,8 +1,8 @@
 package delta.genea.data.sources;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ServiceLoader;
 
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.objects.data.Identifiable;
@@ -22,66 +22,53 @@ public class GeneaDataSource
   private ObjectsSource _source;
 
   /**
-   * Get a data source that manages the genea objects.
-   * @param name Data source name. 
-   * @return A new data source (XML or SQL).
-   */
-  public static GeneaDataSource getByName(String name)
-  {
-    GeneaDataSource dataSource;
-    File xmlDir=new File(name);
-    if (xmlDir.exists())
-    {
-      dataSource=GeneaDataSource.getInstance(xmlDir);
-    }
-    else
-    {
-      dataSource=GeneaDataSource.getInstance(name);
-    }
-    return dataSource;
-  }
-
-  /**
-   * Get the data source that manages the genea objects
-   * for the given database.
-   * @param dbName Name of the targeted database.
+   * Get a data source that manages genea objects
+   * for the given source identifier.
+   * @param sourceID Identifier of the targeted source.
    * @return A genea objects data source.
    */
-  public static GeneaDataSource getInstance(String dbName)
+  public static GeneaDataSource getInstance(String sourceID)
   {
     synchronized (_sources)
     {
-      GeneaDataSource instance=_sources.get(dbName);
+      GeneaDataSource instance=_sources.get(sourceID);
       if (instance==null)
       {
-        ObjectsSource source=new GeneaSqlDataSource(dbName);
-        instance=new GeneaDataSource(source);
-        _sources.put(dbName,instance);
+        ObjectsSource source=buildSource(sourceID);
+        if (source!=null)
+        {
+          instance=new GeneaDataSource(source);
+          _sources.put(sourceID,instance);
+        }
       }
       return instance;
     }
   }
 
   /**
-   * Get the data source that manages the genea objects
-   * for the given database.
-   * @param rootDirectory Root directory of the targeted database.
-   * @return A genea objects data source.
+   * Build an objects source.
+   * @param id Source identifier.
+   * @return An object source or <code>null</code>
    */
-  public static GeneaDataSource getInstance(File rootDirectory)
+  public static ObjectsSource buildSource(String id)
   {
-    synchronized (_sources)
+    ObjectsSource source=null;
+    ServiceLoader<GeneaObjectsSourceFactory> sl=ServiceLoader.load(GeneaObjectsSourceFactory.class);
+    boolean hasFactories=false;
+    for(GeneaObjectsSourceFactory factory : sl)
     {
-      String name=rootDirectory.getAbsolutePath();
-      GeneaDataSource instance=_sources.get(name);
-      if (instance==null)
+      hasFactories=true;
+      source=factory.build(id);
+      if (source!=null)
       {
-        ObjectsSource source=new GeneaXmlDataSource(rootDirectory);
-        instance=new GeneaDataSource(source);
-        _sources.put(name,instance);
+        return source;
       }
-      return instance;
     }
+    if ((source==null) && (hasFactories))
+    {
+      return buildSource("sql:"+id);
+    }
+    return null;
   }
 
   /**

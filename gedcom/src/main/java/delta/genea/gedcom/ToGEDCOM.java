@@ -488,19 +488,15 @@ public class ToGEDCOM
     }
   }
 
-  private static final File ROOT_DIR=new File("data\\xml\\genea");
-
   /**
    * Do the job.
+   * @param dataSource Source to use.
    * @param gedcomFile File to write.
-   * @param dbName Name of the database to use.
    */
-  public void go(File gedcomFile, String dbName) 
+  public void go(GeneaDataSource dataSource, File gedcomFile)
   {
     try
     {
-      //GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
-      GeneaDataSource dataSource=GeneaDataSource.getInstance(ROOT_DIR);
       List<Person> persons=dataSource.getManager(Person.class).loadAll();
       List<Union> unions=dataSource.getManager(Union.class).loadAll();
       System.out.println("Loaded "+persons.size()+" persons.");

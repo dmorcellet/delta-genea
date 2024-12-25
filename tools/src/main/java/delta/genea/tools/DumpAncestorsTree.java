@@ -1,7 +1,6 @@
 package delta.genea.tools;
 
 import java.io.PrintStream;
-import java.util.Iterator;
 import java.util.List;
 
 import delta.common.framework.objects.data.DataProxy;
@@ -152,19 +151,14 @@ public class DumpAncestorsTree
     // Unions
     GeneaDataSource ds=GeneaDataSource.getInstance("genea");
     List<Union> unions=ds.loadRelation(Union.class,Union.UNIONS_RELATION,p.getPrimaryKey());
-    Union union;
-    Long unionDate;
-    String unionInfos;
-    Place unionPlace;
-    for(Iterator<Union> it=unions.iterator();it.hasNext();)
+    for(Union union : unions)
     {
-      union=it.next();
       Person partner;
       if (p.getSex()==Sex.MALE) partner=union.getWoman();
       else partner=union.getMan();
-      unionDate=union.getDate();
-      unionInfos=union.getInfos();
-      unionPlace=union.getPlace();
+      Long unionDate=union.getDate();
+      String unionInfos=union.getInfos();
+      Place unionPlace=union.getPlace();
       for(int i=0;i<step;i++) out.print(' ');
       out.print("x ");
       if (unionDate!=null)

@@ -56,7 +56,7 @@ public class GeneaUserContext extends WebUserContext
     if (!DataObject.keysAreEqual(previous,key))
     {
       String dbName=getDbName();
-      Person p=GeneaDataSource.getByName(dbName).load(Person.class,key);
+      Person p=GeneaDataSource.getInstance(dbName).load(Person.class,key);
       if (p!=null)
       {
         putLongParameter(DE_CUJUS,key.longValue());

@@ -27,7 +27,7 @@ public class GeneaWebPage extends WebPage
     {
       return null;
     }
-    GeneaDataSource dataSource=GeneaDataSource.getByName(dbName);
+    GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
     getUserContext().putParameter(GeneaUserContext.DATA_SOURCE,dataSource);
     return dataSource;
   }

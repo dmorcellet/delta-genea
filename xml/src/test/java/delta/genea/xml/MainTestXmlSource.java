@@ -16,7 +16,7 @@ import delta.genea.data.sources.GeneaDataSource;
  */
 public class MainTestXmlSource
 {
-  private static final File ROOT_DIR=new File("data\\xml\\genea");
+  private static final File ROOT_DIR=new File("..\\data\\xml\\genea");
 
   private void createActType(ObjectsManager<ActType> actTypesMgr, long id, String type)
   {
@@ -32,7 +32,7 @@ public class MainTestXmlSource
 
   void testWriteActTypes()
   {
-    GeneaDataSource source=GeneaDataSource.getInstance(ROOT_DIR);
+    GeneaDataSource source=GeneaDataSource.getInstance("xml:"+ROOT_DIR.getPath());
     ObjectsManager<ActType> actTypesMgr=source.getManager(ActType.class);
     List<ActType> actTypes=actTypesMgr.loadAll();
     for(ActType actType : actTypes)
@@ -46,7 +46,7 @@ public class MainTestXmlSource
 
   private void testLoadActs()
   {
-    GeneaDataSource source=GeneaDataSource.getInstance(ROOT_DIR);
+    GeneaDataSource source=GeneaDataSource.getInstance("xml:"+ROOT_DIR.getPath());
     ObjectsManager<Act> actsMgr=source.getManager(Act.class);
     List<Act> acts=actsMgr.loadAll();
     System.out.println("Nb acts: "+acts.size());
