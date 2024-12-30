@@ -218,16 +218,13 @@ public class ToGEDCOM
     List<Union> ret=new ArrayList<Union>();
     long unionKey=5000;
 
-    Long fatherKey;
-    Long motherKey;
     for(Person p : persons)
     {
-      fatherKey=p.getFatherKey();
-      motherKey=p.getMotherKey();
+      Long fatherKey=p.getFatherKey();
+      Long motherKey=p.getMotherKey();
       if ((DataObject.isNotNull(fatherKey)) || (DataObject.isNotNull(motherKey)))
       {
         boolean found=false;
-
         for(Union u : unions)
         {
           if ((DataObject.keysAreEqual(u.getManKey(),fatherKey)) ||
@@ -238,7 +235,6 @@ public class ToGEDCOM
             break;
           }
         }
-
         if (!found)
         {
           Union newUnion=new Union(Long.valueOf(unionKey));
@@ -261,14 +257,12 @@ public class ToGEDCOM
   {
     List<List<Union>> ret=new ArrayList<List<Union>>();
 
-    List<Union> families=null;
     for(Person p : persons)
     {
-      families=null;
-
+      List<Union> families=null;
       for(Union u : unions)
       {
-        if (DataObject.keysAreEqual(u.getManKey(),p.getPrimaryKey()))
+        if (DataObject.keysAreEqual(u.getManKey(),p.getPrimaryKey())) // Only men?
         {
           if (families==null)
           {
@@ -282,14 +276,13 @@ public class ToGEDCOM
     return ret;
   }
 
-  private List<List<Person>> getChildrenListForEachPerson(List<Person> persons, List<Union> unions)
+  private List<List<Person>> getChildrenListForEachUnion(List<Person> persons, List<Union> unions)
   {
     List<List<Person>> ret=new ArrayList<List<Person>>();
 
-    List<Person> children=null;
     for(Union u : unions)
     {
-      children=null;
+      List<Person> children=null;
       for(Person p : persons)
       {
         if ((DataObject.keysAreEqual(p.getFatherKey(),u.getManKey())) &&
@@ -402,16 +395,14 @@ public class ToGEDCOM
       }
 
       int indexUnions=0;
-      Long manKey;
-      Long womanKey;
       for(Union u : unions)
       {
         try
         {
           String id="0 @"+u.getPrimaryKey()+"@ FAM";
           writer.writeNextLine(id);
-          manKey=u.getManKey();
-          womanKey=u.getWomanKey();
+          Long manKey=u.getManKey();
+          Long womanKey=u.getWomanKey();
           if (DataObject.isNotNull(manKey))
           {
             String manLine="1 HUSB @"+manKey+"@";
@@ -467,16 +458,12 @@ public class ToGEDCOM
 
   private void go(File fileName, List<Person> persons, List<Union> unions)
   {
-    List<List<Union>> families;
-    List<Union> parentsFamily;
-    List<List<Person>> familyToChildren;
-
     // Add missing families and get parent's family for each person
-    parentsFamily=getParentsFamilyForEachPerson(persons,unions);
+    List<Union> parentsFamily=getParentsFamilyForEachPerson(persons,unions);
     // Build family list for each person
-    families=getFamiliesListForEachPerson(persons, unions);
+    List<List<Union>> families=getFamiliesListForEachPerson(persons, unions);
     // Build children list for each family
-    familyToChildren=getChildrenListForEachPerson(persons,unions);
+    List<List<Person>> familyToChildren=getChildrenListForEachUnion(persons,unions);
 
     try
     {

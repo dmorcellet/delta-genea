@@ -16,6 +16,7 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileReader;
 import delta.common.utils.misc.LatineNumbers;
 import delta.common.utils.text.StringSplitter;
+import delta.common.utils.text.TextUtils;
 import delta.common.utils.text.ansel.AnselCharset;
 import delta.common.utils.time.Month;
 import delta.genea.GeneaApplication;
@@ -63,7 +64,7 @@ public class FromGEDCOM
   private List<Place> _places;
   private PlaceManager _placeManager;
   private ObjectsSource _dataSource;
-  private ArrayList<String> _lines;
+  private List<String> _lines;
   private int _index;
   private int _maxIndex;
 
@@ -98,15 +99,7 @@ public class FromGEDCOM
   private void parseFileLines()
   {
     TextFileReader fp=new TextFileReader(_fileName,new AnselCharset());
-    if (!fp.start()) return;
-
-    String line;
-    while (true)
-    {
-      line=fp.getNextLine();
-      if (line==null) break;
-      _lines.add(line);
-    }
+    _lines=TextUtils.readAsLines(fp);
     _maxIndex=_lines.size();
   }
 
@@ -303,10 +296,7 @@ public class FromGEDCOM
         // END OF OCCU
         else
         {
-          if (LOGGER.isDebugEnabled())
-          {
-            LOGGER.debug("Ligne inexploitée ["+line+"]");
-          }
+          LOGGER.debug("Ligne inexploitée [{}]",line);
         }
       }
     }
@@ -535,17 +525,17 @@ public class FromGEDCOM
             }
             else
             {
-              LOGGER.error("Invalid years in a between ["+stringToUse+"]");
+              LOGGER.error("Invalid years in a between [{}]",stringToUse);
             }
           }
           else
           {
-            LOGGER.error("Bad 'between' structure ["+stringToUse+"]");
+            LOGGER.error("Bad 'between' structure [{}]",stringToUse);
           }
         }
         catch (Exception e)
         {
-          LOGGER.error("Unable to decode GEDCOM date : "+stringToUse,e);
+          LOGGER.error("Unable to decode GEDCOM date: "+stringToUse,e);
         }
       }
       else if (strings.length==3)
