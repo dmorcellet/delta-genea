@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>delta-genea-web</artifactId>
   <packaging>jar</packaging>
-  <name>genea</name>
+  <name>genea-web</name>
   <parent>
     <groupId>com.dam.delta4j</groupId>
     <artifactId>delta-genea-parent</artifactId>
