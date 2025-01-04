@@ -217,4 +217,10 @@ public class GeneaDataSource
     }
     _sources.clear();
   }
+
+  @Override
+  public String toString()
+  {
+    return "Genea data source with objects source: "+_source;
+  }
 }

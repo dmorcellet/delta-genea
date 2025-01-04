@@ -3,6 +3,9 @@ package delta.genea.web.pages;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.genea.data.Act;
 import delta.genea.data.ActsForPerson;
 import delta.genea.data.Person;
@@ -17,10 +20,11 @@ import delta.genea.data.trees.AncestorsTreesRegistry;
  */
 public class PersonPageData
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(PersonPageData.class);
+
   private Long _key;
   private Long _deCujusKey;
 
-  private GeneaDataSource _dataSource;
   private Person _main;
   private Person _father;
   private Person _mother;
@@ -50,9 +54,12 @@ public class PersonPageData
    */
   public boolean load(GeneaDataSource source)
   {
-    _dataSource=source;
     _main=source.load(Person.class,_key);
-    if (_main==null) return false;
+    if (_main==null)
+    {
+      LOGGER.warn("Person not found: key={}, source={}",_key,source);
+      return false;
+    }
 
     _father=_main.getFather();
     _mother=_main.getMother();
@@ -64,7 +71,7 @@ public class PersonPageData
 
     _children=source.loadRelation(Person.class,Person.CHILDREN_RELATION,_key);
     _godChildren=source.loadRelation(Person.class,Person.GOD_CHILDREN_RELATION,_key);
-    _acts=new ActsForPerson(_dataSource.getObjectsSource(),_main);
+    _acts=new ActsForPerson(source.getObjectsSource(),_main);
     _acts.build();
     List<Act> acts=_acts.getAllActs();
     for(Act current : acts)
@@ -75,7 +82,7 @@ public class PersonPageData
         current.getP2();
       }
     }
-    AncestorsTreesRegistry registry=_dataSource.getAncestorsTreesRegistry();
+    AncestorsTreesRegistry registry=source.getAncestorsTreesRegistry();
     _tree=registry.getTree(_deCujusKey);
     // Pictures
     _pictures=source.loadRelation(Picture.class,Picture.PICTURES_FOR_PERSON_RELATION,_key);

@@ -56,10 +56,7 @@ public class DataSourceConfiguration
   private void loadFromProperties(Properties props)
   {
     _datasourceName=props.getProperty("datasource.default.name","genea");
-    if (LOGGER.isInfoEnabled())
-    {
-      LOGGER.info("_datasourceName="+_datasourceName);
-    }
+    LOGGER.info("_datasourceName={}",_datasourceName);
   }
 
   /**
