@@ -657,12 +657,12 @@ public class GregorianDate
   @Override
   public boolean equals(Object o)
   {
-  	if (!(o instanceof GregorianDate)) return false;
-  	GregorianDate gd=(GregorianDate)o;
-  	if (gd._dayOfMonth!=_dayOfMonth) return false;
-  	if (gd._month!=_month) return false;
-  	if (gd._year!=_year) return false;
-  	return true;
+    if (!(o instanceof GregorianDate)) return false;
+    GregorianDate gd=(GregorianDate)o;
+    if (gd._dayOfMonth!=_dayOfMonth) return false;
+    if (gd._month!=_month) return false;
+    if (gd._year!=_year) return false;
+    return true;
   }
 
   @Override

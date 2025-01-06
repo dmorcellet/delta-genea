@@ -86,6 +86,6 @@ public class TestFrenchRevolutionCalendar extends TestCase
       checkToGregorian(rDates[i],gDates[i]);
     }
 
-  	checkToFrenchRevolution(new GregorianDate((byte)13, (byte)5, 1976),null);
+    checkToFrenchRevolution(new GregorianDate((byte)13, (byte)5, 1976),null);
   }
 }

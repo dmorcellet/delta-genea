@@ -87,19 +87,19 @@ public class TestGregorianDate extends TestCase
         {
           if (!computation1Exploded)
           {
-          	String msg=date+".addDays("+daysToAdd+")="+computedDate1+ " / "+date+".addADay() "+daysToAdd+" times="+computedDate2;
-          	Assert.assertEquals(msg,computedDate1,computedDate2);
+            String msg=date+".addDays("+daysToAdd+")="+computedDate1+ " / "+date+".addADay() "+daysToAdd+" times="+computedDate2;
+            Assert.assertEquals(msg,computedDate1,computedDate2);
           }
         }
         else
         {
           if (computation1Exploded)
           {
-          	Assert.assertTrue(date+".addDays("+daysToAdd+") exploded !",false);
+            Assert.assertTrue(date+".addDays("+daysToAdd+") exploded !",false);
           }
           if (computation2Exploded)
           {
-          	Assert.assertTrue(date+".addADay() "+daysToAdd+" times exploded !",false);
+            Assert.assertTrue(date+".addADay() "+daysToAdd+" times exploded !",false);
           }
         }
       }
@@ -107,7 +107,7 @@ public class TestGregorianDate extends TestCase
       {
         if (validDate)
         {
-        	throw e;
+          throw e;
         }
       }
     }

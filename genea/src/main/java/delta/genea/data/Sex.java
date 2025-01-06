@@ -71,7 +71,7 @@ public final class Sex
    */
   public char getValue()
   {
-  	return _value;
+    return _value;
   }
 
   /**

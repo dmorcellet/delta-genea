@@ -269,7 +269,7 @@ public class ActsForPerson
       if (union!=null)
       {
         if (((union.getManKey()!=null) && (union.getManKey().longValue()==otherKey.longValue())) ||
-        	((union.getWomanKey()!=null) && (union.getWomanKey().longValue()==otherKey.longValue())))
+            ((union.getWomanKey()!=null) && (union.getWomanKey().longValue()==otherKey.longValue())))
         {
           return union;
         }

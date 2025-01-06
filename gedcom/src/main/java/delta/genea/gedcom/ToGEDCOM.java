@@ -270,7 +270,7 @@ public class ToGEDCOM
           }
           families.add(u);
         }
-	  }
+      }
       ret.add(families);
     }
     return ret;
