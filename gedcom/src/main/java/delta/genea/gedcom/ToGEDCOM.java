@@ -493,7 +493,7 @@ public class ToGEDCOM
     }
     catch (Exception e)
     {
-      e.printStackTrace();
+      LOGGER.error("Error!",e);
     }
   }
 }

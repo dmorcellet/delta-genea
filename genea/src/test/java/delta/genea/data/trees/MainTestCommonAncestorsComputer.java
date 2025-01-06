@@ -2,6 +2,9 @@ package delta.genea.data.trees;
 
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.genea.data.Couple;
 import delta.genea.data.Person;
 import delta.genea.data.sources.GeneaDataSource;
@@ -12,6 +15,8 @@ import delta.genea.data.sources.GeneaDataSource;
  */
 public class MainTestCommonAncestorsComputer
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainTestCommonAncestorsComputer.class);
+
   /**
    * Do the job.
    * @param dbName Database name.
@@ -35,7 +40,7 @@ public class MainTestCommonAncestorsComputer
     }
     catch (Exception e)
     {
-      e.printStackTrace();
+      LOGGER.error("Error!",e);
     }
   }
 

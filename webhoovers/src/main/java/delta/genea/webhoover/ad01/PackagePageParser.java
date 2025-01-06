@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.DownloadException;
@@ -17,6 +20,8 @@ import delta.genea.webhoover.ImageMontageMaker;
  */
 public class PackagePageParser
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(PackagePageParser.class);
+
 	private static final String START_OF_NB_PAGES_LINE="var iNbMax = ";
 	private static final String START_IMAGE_NAME_LINE="CTX[\"IMAGE\"]=\"";
 	private static final String START_CHUNK_HSIZE_LINE="CTX[\"WDALX\"]=";
@@ -209,7 +214,7 @@ public class PackagePageParser
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			LOGGER.warn("Could not make image!",e);
 		}
 		for(int hIndex=0;hIndex<nbH;hIndex++)
 		{

@@ -33,6 +33,7 @@ import delta.genea.data.trees.AncestorsTree;
 public class ActsChecker
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(ActsChecker.class);
+
   private static final String BIRTH="Naissance";
   private static final String DEATH="Décès";
   private static final String UNION="Mariage";
@@ -61,7 +62,7 @@ public class ActsChecker
   {
     try
     {
-      LOGGER.info("Acts checker::handling ID="+_rootPersonKey);
+      LOGGER.info("Acts checker::handling ID={}",_rootPersonKey);
       GeneaDataSource dataSource=GeneaDataSource.getInstance(_dbName);
 
       DataProxy<Person> pp=dataSource.buildProxy(Person.class,_rootPersonKey);
@@ -74,12 +75,12 @@ public class ActsChecker
       if (source instanceof SqlObjectsSource)
       {
         long nbRequests=((SqlObjectsSource)source).getNbGetRequests();
-        LOGGER.info("Requests : "+nbRequests);
+        LOGGER.info("Requests: {}",Long.valueOf(nbRequests));
       }
     }
     catch (Exception e)
     {
-      e.printStackTrace();
+      LOGGER.error("Error!",e);
     }
   }
 

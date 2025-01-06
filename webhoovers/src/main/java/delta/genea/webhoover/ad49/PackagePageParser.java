@@ -3,6 +3,9 @@ package delta.genea.webhoover.ad49;
 import java.io.File;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.StringSplitter;
@@ -17,6 +20,8 @@ import delta.genea.webhoover.ImageMontageMaker;
  */
 public class PackagePageParser
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(PackagePageParser.class);
+
   private File _rootActsPackageDir;
   private AD49Session _session;
   private ActsPackage _actsPackage;
@@ -89,7 +94,7 @@ public class PackagePageParser
     }
     catch(Exception e)
     {
-      e.printStackTrace();
+      LOGGER.warn("Could not make image!",e);
     }
     for(int hIndex=0;hIndex<nbH;hIndex++)
     {

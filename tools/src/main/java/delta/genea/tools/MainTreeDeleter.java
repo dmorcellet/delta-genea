@@ -1,5 +1,8 @@
 package delta.genea.tools;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.common.utils.collections.TreeNode;
@@ -10,11 +13,13 @@ import delta.genea.data.trees.AncestorsTreesRegistry;
 import delta.genea.data.trees.DescendantsTree;
 
 /**
- * Tool to remove anscestors trees or descendants trees.
+ * Tool to remove ancestors trees or descendants trees.
  * @author DAM
  */
 public class MainTreeDeleter
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainTreeDeleter.class);
+
   private GeneaDataSource _source;
 
   private void removeAscendantsTree(AncestorsTree tree)
@@ -108,7 +113,7 @@ public class MainTreeDeleter
     }
     catch (Exception e)
     {
-      e.printStackTrace();
+      LOGGER.warn("Error!",e);
     }
   }
 

@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
@@ -14,6 +17,8 @@ import delta.genea.webhoover.ADSession;
  */
 public class AD49Session extends ADSession
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(AD49Session.class);
+
   private static final String PHPSID_SEED="PHPSID=";
   private static final String PHPSID_TERMINATOR="'";
   private static final String REGISTRY_PAGE=Constants.ROOT_SITE+"/cg49work/registre.php";
@@ -47,7 +52,7 @@ public class AD49Session extends ADSession
     }
     catch(Exception e)
     {
-      e.printStackTrace();
+      LOGGER.warn("Could not fetch PHP session ID!",e);
     }
   }
   

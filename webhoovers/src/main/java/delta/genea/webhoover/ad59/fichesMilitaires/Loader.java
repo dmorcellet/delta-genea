@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
 import delta.common.utils.xml.DOMParsingTools;
@@ -18,6 +20,8 @@ import delta.genea.webhoover.ImageMontageMaker;
  */
 public class Loader
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(Loader.class);
+
   private static final String BASE_URL="https://archivesdepartementales.lenord.fr/";
   private static final String BASE_VIEWER_URL="http://viewer-archivesdepartementales.lenord.fr/";
   private static final String FICHE_MATRICULES_PLAYLIST="accounts/mnesys_ad59/datas/playlists/fiches_matriculesXXX.xml?time=TIME";
@@ -141,7 +145,7 @@ public class Loader
     }
     catch(Exception e)
     {
-      e.printStackTrace();
+      LOGGER.warn("Could not make image!",e);
     }
     /*
     for(int hIndex=0;hIndex<nbH;hIndex++)

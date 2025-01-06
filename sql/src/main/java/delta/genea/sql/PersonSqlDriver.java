@@ -962,7 +962,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         }
         catch(Exception e)
         {
-          e.printStackTrace();
+          LOGGER.error("Error in rollback!",e);
         }
       }
     }

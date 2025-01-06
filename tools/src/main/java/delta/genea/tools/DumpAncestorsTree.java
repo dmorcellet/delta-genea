@@ -3,6 +3,9 @@ package delta.genea.tools;
 import java.io.PrintStream;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.utils.NumericTools;
 import delta.common.utils.collections.BinaryTreeNode;
@@ -26,6 +29,8 @@ import delta.genea.time.GregorianDate;
  */
 public class DumpAncestorsTree
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(DumpAncestorsTree.class);
+
   private static final int ANCESTORS_TREE=0;
   private static final int DESCENDANTS_TREE=1;
 
@@ -59,7 +64,7 @@ public class DumpAncestorsTree
     }
     catch (Exception e)
     {
-      e.printStackTrace();
+      LOGGER.error("Error",e);
     }
   }
 

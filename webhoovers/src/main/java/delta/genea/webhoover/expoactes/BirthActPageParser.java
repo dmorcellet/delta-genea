@@ -5,6 +5,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
@@ -15,6 +18,8 @@ import delta.common.utils.text.TextUtils;
  */
 public class BirthActPageParser
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(BirthActPageParser.class);
+
   private static final String PLACE_SEED="<strong>Commune/Paroisse</strong>"; 
   private static final String BABY_SEED="<strong>Nouveau-n";
   private static final String DATE_SEED="Acte daté du : ";
@@ -67,7 +72,7 @@ public class BirthActPageParser
         }
         catch(Exception e)
         {
-          e.printStackTrace();
+          LOGGER.warn("Could not parse date ["+dateStr+"],e");
         }
       }
       if (line.contains(FATHER_SEED))

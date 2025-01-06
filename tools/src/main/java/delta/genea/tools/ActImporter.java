@@ -47,7 +47,7 @@ public class ActImporter
     }
     catch (Exception e)
     {
-      e.printStackTrace();
+      LOGGER.error("Error!",e);
     }
   }
 

@@ -3,6 +3,9 @@ package delta.genea.webhoover.ad49.selective;
 import java.io.File;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.ad49.AD49Session;
 import delta.genea.webhoover.ad49.PackagePageParser;
@@ -14,6 +17,8 @@ import delta.genea.webhoover.ad49.PlacePageParser;
  */
 public class MainDownloadActsSelective
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDownloadActsSelective.class);
+
   private static final File IN_FILE=new File("/home/dm/tmp/liste.csv");
   private static final File IN_FILE2=new File("/home/dm/tmp/liste2.csv");
 
@@ -60,7 +65,7 @@ public class MainDownloadActsSelective
       }
       catch(Exception e)
       {
-        e.printStackTrace();
+        LOGGER.warn("Could not handle page: "+page,e);
       }
     }
   }

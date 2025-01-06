@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.genea.webhoover.ActsPackage;
 
 /**
@@ -14,8 +17,11 @@ import delta.genea.webhoover.ActsPackage;
  */
 public class MainDownloadActs
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainDownloadActs.class);
+
   private static Set<File> _scheduledDirs=new HashSet<File>();
   private static boolean _useThreads=true;
+
   private static void doIt(final ActsPackage actsPackage)
   {
     File dir=actsPackage.getDirFile(Constants.ROOT_DIR);
@@ -36,7 +42,7 @@ public class MainDownloadActs
           }
           catch(Exception e)
           {
-            e.printStackTrace();
+            LOGGER.error("Exception with package: "+actsPackage,e);
           }
           localSession.stop();
         }
@@ -85,7 +91,7 @@ public class MainDownloadActs
 		}
 		catch(Exception e)
 		{
-		  e.printStackTrace();
+		  LOGGER.warn("Could not handle package!",e);
 		}
 		finally
 		{

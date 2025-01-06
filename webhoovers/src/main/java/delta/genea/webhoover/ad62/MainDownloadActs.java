@@ -114,7 +114,7 @@ public class MainDownloadActs
     }
     catch(Exception e)
     {
-      e.printStackTrace();
+      LOGGER.warn("Could not make image!",e);
     }
     for(int hIndex=0;hIndex<nbH;hIndex++)
     {

@@ -49,7 +49,7 @@ public class MainDownloadActs
         }
         catch(Exception e)
         {
-          e.printStackTrace();
+          LOGGER.error("Exception with package: "+actsPackage,e);
         }
         localSession.stop();
       }
