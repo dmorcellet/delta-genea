@@ -17,8 +17,8 @@ import delta.genea.webhoover.HtmlTools;
 public class PlacePageParser
 {
   private static final String PLACE_PAGE_URL=Constants.ROOT_SITE+"/cg49work/registre_recherche.php?PHPSID=";
-	private static final String TABLE_START="<table >";
-	private static final String TABLE_END="</table>";
+  private static final String TABLE_START="<table >";
+  private static final String TABLE_END="</table>";
   private static final String TR_START="<tr";
   private static final String TR_END="</tr>";
   private static final String TD_START="<td ";
@@ -36,27 +36,27 @@ public class PlacePageParser
    * @param session Session to use.
    * @param placeID Identifier of the place to use.
    */
-	public PlacePageParser(AD49Session session, int placeID)
-	{
-	  _session=session;
-	  _placeID=placeID;
-	}
+  public PlacePageParser(AD49Session session, int placeID)
+  {
+    _session=session;
+    _placeID=placeID;
+  }
 
-	/**
-	 * Extract definitions of acts packages for this place.
-	 * @return A list of acts packages.
-	 * @throws Exception If a problem occurs.
-	 */
-	public List<ActsPackage> parse() throws Exception
-	{
+  /**
+   * Extract definitions of acts packages for this place.
+   * @return A list of acts packages.
+   * @throws Exception If a problem occurs.
+   */
+  public List<ActsPackage> parse() throws Exception
+  {
     String phpSID=_session.getPHPSessionID();
     Downloader downloader=_session.getDownloader();
     String url=PLACE_PAGE_URL+phpSID+"&id="+_placeID;
     File tmpDir=_session.getTmpDir();
     File placePageFile=new File(tmpDir,"placePage.html");
-    downloader.downloadToFile(url, placePageFile);
+    downloader.downloadToFile(url,placePageFile);
     List<ActsPackage> result=new ArrayList<ActsPackage>();
-	  String tableContents="";
+    String tableContents="";
     List<String> lines=TextUtils.readAsLines(placePageFile);
     for(Iterator<String> it=lines.iterator();it.hasNext();)
     {
@@ -73,7 +73,7 @@ public class PlacePageParser
       }
     }
     String row;
-    while(true)
+    while (true)
     {
       int index=tableContents.indexOf(TR_START);
       if (index==-1) break;
@@ -87,10 +87,10 @@ public class PlacePageParser
     }
     placePageFile.delete();
     return result;
-	}
+  }
 
-	private ActsPackage handleRow(String row)
-	{
+  private ActsPackage handleRow(String row)
+  {
     int index;
     index=row.indexOf(TD_START);
     if (index==-1) return null;
@@ -112,17 +112,17 @@ public class PlacePageParser
     actsPackage._source=items.get(4);
     actsPackage._comments=items.get(5);
     return actsPackage;
-	}
+  }
 
-	private List<String> splitAsTags(String tag, String contents)
-	{
-	  String startTag=START_TAG+tag;
-	  String endTag=START_TAG+SLASH+tag+END_TAG;
-	  List<String> tags=new ArrayList<String>();
-	  int index;
-	  String contentsLeft=contents;
-	  String item;
-    while(true)
+  private List<String> splitAsTags(String tag, String contents)
+  {
+    String startTag=START_TAG+tag;
+    String endTag=START_TAG+SLASH+tag+END_TAG;
+    List<String> tags=new ArrayList<String>();
+    int index;
+    String contentsLeft=contents;
+    String item;
+    while (true)
     {
       index=contentsLeft.indexOf(startTag);
       if (index==-1) break;
@@ -138,5 +138,5 @@ public class PlacePageParser
       tags.add(item);
     }
     return tags;
-	}
+  }
 }

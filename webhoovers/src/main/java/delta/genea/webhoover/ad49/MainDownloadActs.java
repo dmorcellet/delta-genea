@@ -40,7 +40,7 @@ public class MainDownloadActs
             parser.parse();
             parser.downloadAllPages();
           }
-          catch(Exception e)
+          catch (Exception e)
           {
             LOGGER.error("Exception with package: "+actsPackage,e);
           }
@@ -66,36 +66,36 @@ public class MainDownloadActs
 
   /**
    * Main method of this tool.
-	 * @param args Not used.
-	 */
-	public static void main(String[] args)
-	{
-	  AD49Session session=new AD49Session();
-		session.start();
-		try
-		{
+   * @param args Not used.
+   */
+  public static void main(String[] args)
+  {
+    AD49Session session=new AD49Session();
+    session.start();
+    try
+    {
       int id=490000359;
-  		PlacePageParser placeParser=new PlacePageParser(session,id);
-  		List<ActsPackage> actsPackages=placeParser.parse();
-  		ActsPackage actsPackage;
-  		for(Iterator<ActsPackage> it=actsPackages.iterator();it.hasNext();)
-  		{
-  		  actsPackage=it.next();
-  	    //if ((actsPackage._period.startsWith("17")) || (actsPackage._period.startsWith("16")) || (actsPackage._period.startsWith("15")))
-  		  //if ((actsPackage._period.startsWith("An")) || (actsPackage._period.startsWith("18")))
-  	    //if (actsPackage._period.startsWith("18"))
-  		  {
-  	      doIt(actsPackage);
-  		  }
-  		}
-		}
-		catch(Exception e)
-		{
-		  LOGGER.warn("Could not handle package!",e);
-		}
-		finally
-		{
-		  session.stop();
-		}
-	}
+      PlacePageParser placeParser=new PlacePageParser(session,id);
+      List<ActsPackage> actsPackages=placeParser.parse();
+      ActsPackage actsPackage;
+      for(Iterator<ActsPackage> it=actsPackages.iterator();it.hasNext();)
+      {
+        actsPackage=it.next();
+        //if ((actsPackage._period.startsWith("17")) || (actsPackage._period.startsWith("16")) || (actsPackage._period.startsWith("15")))
+        //if ((actsPackage._period.startsWith("An")) || (actsPackage._period.startsWith("18")))
+        //if (actsPackage._period.startsWith("18"))
+        {
+          doIt(actsPackage);
+        }
+      }
+    }
+    catch (Exception e)
+    {
+      LOGGER.warn("Could not handle package!",e);
+    }
+    finally
+    {
+      session.stop();
+    }
+  }
 }

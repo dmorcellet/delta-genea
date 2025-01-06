@@ -52,7 +52,7 @@ public class PackagePageParser
     List<String> lines=TextUtils.readAsLines(tileFileCacheFile);
     String cacheFileUrl=lines.get(0);
     String tileUrl=Constants.ROOT_SITE+cacheFileUrl;
-    downloader.downloadToFile(tileUrl, tileFile);
+    downloader.downloadToFile(tileUrl,tileFile);
     tileFileCacheFile.delete();
     return tileFile;
   }
@@ -90,9 +90,9 @@ public class PackagePageParser
     ImageMontageMaker maker=new ImageMontageMaker();
     try
     {
-      maker.doIt(files, out);
+      maker.doIt(files,out);
     }
-    catch(Exception e)
+    catch (Exception e)
     {
       LOGGER.warn("Could not make image!",e);
     }
@@ -136,7 +136,7 @@ public class PackagePageParser
    * @throws Exception If a problem occurs.
    */
   public void parse() throws Exception
-	{
+  {
     _rootActsPackageDir.mkdirs();
     buildInfoFile(new File(_rootActsPackageDir,"infos.txt"));
     String id=_actsPackage._id;
@@ -145,11 +145,11 @@ public class PackagePageParser
     File tmpDir=_session.getTmpDir();
     String urlRegistrePrepare=Constants.ROOT_SITE+"/cg49work/registre_prepare.php?id="+id+"&PHPSID="+phpSID+"&hauteur=1024&largeur=1280&code=Mozilla&nom=Netscape&version=5.0%20(X11;%20fr)&langue=fr&platform=Linux%20x86_64";
     File tmpFile=new File(tmpDir,"registre_prepare.php.html");
-    downloader.downloadToFile(urlRegistrePrepare, tmpFile);
+    downloader.downloadToFile(urlRegistrePrepare,tmpFile);
     tmpFile.delete();
     String urlVisu=Constants.ROOT_SITE+"/cg49work/visu_affiche.php?PHPSID="+phpSID+"&param=visu&page=1";
     tmpFile=new File(tmpDir,"visu_affiche.php.html");
-    downloader.downloadToFile(urlVisu, tmpFile);
+    downloader.downloadToFile(urlVisu,tmpFile);
 
     // Calcule le nombre de pages
     int nbPages=0;
@@ -157,7 +157,7 @@ public class PackagePageParser
       List<String> lines=TextUtils.readAsLines(tmpFile);
       int index;
       String start="if (pageLoad>";
-      for(String line : lines)
+      for(String line:lines)
       {
         index=line.indexOf(start);
         if (index!=-1)
@@ -229,7 +229,7 @@ public class PackagePageParser
       {
         String urlAffiche=Constants.ROOT_SITE+"/cg49work/visu_affiche_util.php?PHPSID="+phpSID+"&param=visu&uid="+System.currentTimeMillis()+"&o=IMG&p="+page;
         File infoFile=new File(tmpDir,"visu_affiche_util.php.html");
-        downloader.downloadToFile(urlAffiche, infoFile);
+        downloader.downloadToFile(urlAffiche,infoFile);
         List<String> lines=TextUtils.readAsLines(infoFile);
         infoFile.delete();
         String infosStr=lines.get(0);
