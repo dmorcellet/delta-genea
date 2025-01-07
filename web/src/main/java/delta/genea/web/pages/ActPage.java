@@ -331,7 +331,7 @@ public class ActPage extends GeneaWebPage
           else if (attributes[i].startsWith(DB_NAME_ATTR)) dbName=attributes[i].substring(DB_NAME_ATTR.length());
           else
           {
-            LOGGER.warn("Unmanaged attribute: ["+attributes[i]+"]");
+            LOGGER.warn("Unmanaged attribute: [{}]",attributes[i]);
           }
         }
       }

@@ -115,19 +115,19 @@ public class CompoundSelection<T extends DataObject<T>> implements Selection<T>
       Selection<T> currentSelection=_selections.get(0);
       if (LOGGER.isDebugEnabled())
       {
-        LOGGER.debug("Current selection : "+currentSelection.getSize());
+        LOGGER.debug("Current selection: {}",Integer.valueOf(currentSelection.getSize()));
       }
       for(int i=1;i<nbSelections;i++)
       {
         Selection<T> otherSelection=_selections.get(i);
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("Other selection : "+otherSelection.getSize());
+          LOGGER.debug("Other selection: {}",Integer.valueOf(otherSelection.getSize()));
         }
         currentSelection=and(currentSelection,otherSelection);
         if (LOGGER.isDebugEnabled())
         {
-          LOGGER.debug("New current selection : "+currentSelection.getSize());
+          LOGGER.debug("New current selection: {}",Integer.valueOf(currentSelection.getSize()));
         }
       }
       for(T object : currentSelection.getSelectedObjects())

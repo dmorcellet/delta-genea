@@ -139,10 +139,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
-        if (LOGGER.isDebugEnabled())
-        {
-          LOGGER.debug("LOAD person "+primaryKey);
-        }
+        LOGGER.debug("LOAD person {}",primaryKey);
         _psGetByPrimaryKey.setLong(1,primaryKey.longValue());
         rs=_psGetByPrimaryKey.executeQuery();
         if (rs.next())
@@ -178,10 +175,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
-        if (LOGGER.isDebugEnabled())
-        {
-          LOGGER.debug("LOAD PARTIAL person "+primaryKey);
-        }
+        LOGGER.debug("LOAD PARTIAL person {}",primaryKey);
         _psPartialGetByPrimaryKey.setLong(1,primaryKey.longValue());
         rs=_psPartialGetByPrimaryKey.executeQuery();
         if (rs.next())
@@ -474,10 +468,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
-        if (LOGGER.isDebugEnabled())
-        {
-          LOGGER.debug("GET childrens FOR "+primaryKey);
-        }
+        LOGGER.debug("GET childrens FOR {}",Long.valueOf(primaryKey));
         _psChildren.setLong(1,primaryKey);
         _psChildren.setLong(2,primaryKey);
         rs=_psChildren.executeQuery();
@@ -514,10 +505,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
-        if (LOGGER.isDebugEnabled())
-        {
-          LOGGER.debug("GET god childrens FOR "+primaryKey);
-        }
+        LOGGER.debug("GET god childrens FOR {}",Long.valueOf(primaryKey));
         _psGodChildren.setLong(1,primaryKey);
         _psGodChildren.setLong(2,primaryKey);
         rs=_psGodChildren.executeQuery();
@@ -554,10 +542,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
-        if (LOGGER.isDebugEnabled())
-        {
-          LOGGER.debug("GET cousins FOR "+primaryKey);
-        }
+        LOGGER.debug("GET cousins FOR {}",Long.valueOf(primaryKey));
         _psCousins.setLong(1,primaryKey);
         _psCousins.setLong(2,primaryKey);
         rs=_psCousins.executeQuery();
@@ -594,10 +579,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       ResultSet rs=null;
       try
       {
-        if (LOGGER.isDebugEnabled())
-        {
-          LOGGER.debug("GET BY NAME "+name);
-        }
+        LOGGER.debug("GET BY NAME {}",name);
         _psPatronyme.setString(1,name);
         rs=_psPatronyme.executeQuery();
         while (rs.next())
@@ -940,10 +922,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
             int nbRows=statement.executeUpdate(sql);
             if (nbRows!=0)
             {
-              if (LOGGER.isDebugEnabled())
-              {
-                LOGGER.debug("Deleted "+nbRows+" row(s) with "+sql);
-              }
+              LOGGER.debug("Deleted {} row(s) with {}",Integer.valueOf(nbRows),sql);
             }
           }
           finally

@@ -64,7 +64,7 @@ public class MainDownloadActs
     ADSession session=new ADSession();
     session.start();
     List<String> places=getPlaces(session);
-    System.out.println(places);
+    LOGGER.info("Got places: {}",places);
     /*
     handlePlace(session,Constants.PLACE_NAME);
     */
@@ -90,7 +90,7 @@ public class MainDownloadActs
 
   private void downloadPage(ADSession session, File out, int pageNumber, int width, int height, int tileSize) throws Exception
   {
-    LOGGER.info("Handling page "+pageNumber);
+    LOGGER.info("Handling page {}",Integer.valueOf(pageNumber));
     int nbH=(width/tileSize)+(((width%tileSize)!=0)?1:0);
     int nbV=(height/tileSize)+(((height%tileSize)!=0)?1:0);
     int x=0;

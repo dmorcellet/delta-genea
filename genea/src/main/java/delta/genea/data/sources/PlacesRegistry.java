@@ -126,7 +126,7 @@ public final class PlacesRegistry
         LOGGER.error("There are some non attached place nodes !");
         for(int i=0;i<nonAttachedNodes.size();i++)
         {
-          LOGGER.error("\t"+nonAttachedNodes.get(i).getData());
+          LOGGER.error("\t{}",nonAttachedNodes.get(i).getData());
         }
       }
     }

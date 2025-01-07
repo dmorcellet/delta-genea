@@ -128,11 +128,9 @@ public class PlaceManager
     String[] parts=StringSplitter.split(name,',');
     if (parts.length!=_nbFields)
     {
-      LOGGER.error("Bad number of fields : "+parts.length+" instead of "+_nbFields);
+      LOGGER.error("Bad number of fields: {} instead of {}",Integer.valueOf(parts.length),Integer.valueOf(_nbFields));
       return null;
     }
-
-    //2 PLAC Lesquin,59,Nord,,France,
 
     String placeName=getPart(parts,TOWN_NAME);
     String deptCode=getPart(parts,DEPT_CODE);
@@ -164,7 +162,7 @@ public class PlaceManager
     }
 
     Place deptPlace=null;
-    if (country.toUpperCase().equals("FRANCE"))
+    if (country.equalsIgnoreCase("FRANCE"))
     {
       FrenchDepartment frenchDept;
       if ((deptName==null) || (deptName.length()==0)) deptName="Nord";
@@ -257,22 +255,11 @@ public class PlaceManager
       pm.indicateFieldMeaning(4,DEPT_CODE);
       pm.indicateFieldMeaning(5,COUNTRY_NAME);
     }
-    else if (softwareType==GenealogySoftware.HEREDIS)
+    else if ((softwareType==GenealogySoftware.HEREDIS) || (softwareType==GenealogySoftware.GENEATIQUE))
     {
       //   HEREDIS 6.1 PC : 1 SOUR HEREDIS 6.1 PC
       //   Nom ville, Code Postal, Nom département, Nom région, Pays, Subdivision
-      pm=new PlaceManager(dataSource,6);
-      pm.indicateFieldMeaning(1,TOWN_NAME);
-      pm.indicateFieldMeaning(2,POSTAL_CODE);
-      pm.indicateFieldMeaning(3,DEPT_NAME);
-      pm.indicateFieldMeaning(4,REGION_NAME);
-      pm.indicateFieldMeaning(5,COUNTRY_NAME);
-      pm.indicateFieldMeaning(6,UNUSED);
-    }
-    else if (softwareType==GenealogySoftware.GENEATIQUE)
-    {
-      //2 PLAC Lassigny, 60350, Oise, Picardie, France, 
-
+      //   2 PLAC Lassigny, 60350, Oise, Picardie, France, 
       pm=new PlaceManager(dataSource,6);
       pm.indicateFieldMeaning(1,TOWN_NAME);
       pm.indicateFieldMeaning(2,POSTAL_CODE);

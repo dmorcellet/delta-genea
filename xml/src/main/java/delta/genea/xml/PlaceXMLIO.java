@@ -21,12 +21,6 @@ public class PlaceXMLIO extends DefaultXMLIO<Place>
   @Override
   public Place readObject(Element tag, Long id)
   {
-    /*
-  private String _name;
-  private String _shortName;
-  private PlaceLevel _level;
-  private DataProxy<Place> _parent;
-     */
     Place ret=new Place(id);
     NamedNodeMap attrs=tag.getAttributes();
     // Name

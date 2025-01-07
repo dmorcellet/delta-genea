@@ -51,9 +51,9 @@ public class Loader
     // Otherwise playlist gives a "not found" error...
     loadFirstPage(session);
     List<String> items=loadPlayList(session);
-    System.out.println(items);
+    LOGGER.info("Got items: {}",items);
     loadPage(session,pageNumber,items.get(pageNumber-1));
-    System.out.println(session.getDownloader().getStatistics());
+    LOGGER.info(session.getDownloader().getStatistics());
   }
 
   private void loadFirstPage(ADSession session) throws DownloadException
@@ -64,7 +64,7 @@ public class Loader
     downloader.setStoreCookies(true);
     File tmpFile=new File(tmpDir,"first"+_packageId+".html");
     downloader.downloadToFile(url, tmpFile);
-    System.out.println("Cookies: "+downloader.getCookies());
+    LOGGER.debug("Cookies: {}",downloader.getCookies());
   }
 
   private String getFirstPageURL()
@@ -90,7 +90,6 @@ public class Loader
     Downloader downloader=session.getDownloader();
     File tmpFile=new File(tmpDir,"playlist"+_packageId+".xml");
     downloader.downloadToFile(url, tmpFile);
-    //List<String> lines=TextUtils.readAsLines(tmpFile);
     Element rootElement=DOMParsingTools.parse(tmpFile);
     String basePath=DOMParsingTools.getStringAttribute(rootElement.getAttributes(),"basepath",null);
     if (basePath!=null)
@@ -107,7 +106,7 @@ public class Loader
         }
         if (nbItems!=ret.size())
         {
-          System.err.println("Attention! Nb pages incorrect!");
+          LOGGER.error("Attention! Nb pages incorrect!");
         }
         _basePath=basePath;
       }
@@ -188,16 +187,10 @@ Sample playlist XML document:
   public static void main(String[] args) throws DownloadException
   {
     ADSession session=new ADSession();
-    // Béthune, 1897
-    //int packageId=11247;
-    //int pageNumber=466;
-    // Lille, 1901
-    //int packageId=11823;
-    //int pageNumber=552;
-    // Lille, 1893
-    //int packageId=10683;
-    //int pageNumber=149;
-    // Lille, 1885
+    // Béthune, 1897: packageId=11247, pageNumber=466
+    // Lille, 1901:   packageId=11823, pageNumber=552
+    // Lille, 1893:   packageId=10683, pageNumber=149
+    // Lille, 1885:   packageId=9615,  pageNumber=189
     int packageId=9615;
     int pageNumber=189;
     Loader l=new Loader(packageId);

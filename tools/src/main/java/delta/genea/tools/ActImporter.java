@@ -27,6 +27,9 @@ public class ActImporter
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(ActImporter.class);
 
+  private static final String BAD_ACT_TYPE="Bad actType: {}!={}";
+  private static final String BAD_P1="Bad P1: {}!={}";
+
   private File _root;
   private AncestorsTree _tree;
   private GeneaDataSource _dataSource;
@@ -53,7 +56,7 @@ public class ActImporter
 
   private void handleFile(File fileName)
   {
-    LOGGER.info("Handling file ["+fileName+"]");
+    LOGGER.info("Handling file [{}]",fileName);
     long actType;
     String name=fileName.getName(); 
     String prefix=""; // or "j_" or "ninie/"
@@ -144,7 +147,7 @@ public class ActImporter
     }
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Act "+actType+", sosa1="+sosa1+",sosa2="+sosa2+",pageIndex="+pageIndex);
+      LOGGER.debug("Act {}, sosa1={},sosa2={},pageIndex={}",Long.valueOf(actType),Long.valueOf(sosa1),Long.valueOf(sosa2),Long.valueOf(pageIndex));
     }
 
     Person p1=null;
@@ -154,7 +157,7 @@ public class ActImporter
       p1=_tree.getSosa(sosa1);
       if (p1==null)
       {
-        LOGGER.error("Pas de sosa "+sosa1);
+        LOGGER.error("Pas de sosa {}",Long.valueOf(sosa1));
         return;
       }
     }
@@ -163,7 +166,7 @@ public class ActImporter
       p2=_tree.getSosa(sosa2);
       if (p2==null)
       {
-        LOGGER.error("Pas de sosa "+sosa2);
+        LOGGER.error("Pas de sosa {}",Long.valueOf(sosa2));
         return;
       }
     }
@@ -181,7 +184,7 @@ public class ActImporter
         date=p1.getBirthDate();
         if (date==null)
         {
-          LOGGER.warn("Date is null for birth of sosa "+sosa1);
+          LOGGER.warn("Date is null for birth of sosa {}",Long.valueOf(sosa1));
         }
         else
         {
@@ -209,11 +212,11 @@ public class ActImporter
         {
           if (!DataObject.keysAreEqual(act.getP1Key(),p1.getPrimaryKey()))
           {
-            LOGGER.warn("Bad P1: "+act.getP1Key()+"!="+p1.getPrimaryKey());
+            LOGGER.warn(BAD_P1,act.getP1Key(),p1.getPrimaryKey());
           }
           if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
           {
-            LOGGER.warn("Bad actType: "+actType+"!="+act.getActType());
+            LOGGER.warn(BAD_ACT_TYPE,Long.valueOf(actType),act.getActType());
           }
         }
         act.setPath(newName);
@@ -228,7 +231,7 @@ public class ActImporter
         date=p1.getDeathDate();
         if (date==null)
         {
-          LOGGER.warn("Date is null for death of sosa "+sosa1);
+          LOGGER.warn("Date is null for death of sosa {}",Long.valueOf(sosa1));
         }
         if (new GregorianDate(date).isBefore(CHANGE_DATE))
         {
@@ -253,11 +256,11 @@ public class ActImporter
           Long p1Key=act.getP1Key();
           if (!DataObject.keysAreEqual(p1Key,p1.getPrimaryKey()))
           {
-            LOGGER.warn("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
+            LOGGER.warn(BAD_P1,p1Key,p1.getPrimaryKey());
           }
           if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
           {
-            LOGGER.warn("Bad actType : "+actType+"!="+act.getActType());
+            LOGGER.warn(BAD_ACT_TYPE,Long.valueOf(actType),act.getActType());
           }
         }
         act.setPath(newName);
@@ -275,7 +278,7 @@ public class ActImporter
           date=u.getDate();
           if (date==null)
           {
-            LOGGER.warn("Date is null for union of sosas "+sosa1+"/"+sosa2);
+            LOGGER.warn("Date is null for union of sosas {}/{}",Long.valueOf(sosa1),Long.valueOf(sosa2));
           }
           place=u.getPlace();
           act=acts.getActOfUnionWith(p2.getPrimaryKey());
@@ -297,16 +300,16 @@ public class ActImporter
             Long p1Key=act.getP1Key();
             if (DataObject.keysAreEqual(p1Key,p1.getPrimaryKey()))
             {
-              LOGGER.warn("Bad P1 : "+p1Key+"!="+p1.getPrimaryKey());
+              LOGGER.warn(BAD_P1,p1Key,p1.getPrimaryKey());
             }
             Long p2Key=act.getP2Key();
             if (DataObject.keysAreEqual(p2Key,p2.getPrimaryKey()))
             {
-              LOGGER.warn("Bad P2 : "+p2Key+"!="+p2.getPrimaryKey());
+              LOGGER.warn("Bad P2: {}!={}",p2Key,p2.getPrimaryKey());
             }
             if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
             {
-              LOGGER.warn("Bad actType : "+actType+"!="+act.getActType());
+              LOGGER.warn(BAD_ACT_TYPE,Long.valueOf(actType),act.getActType());
             }
           }
           act.setPath(newName);
@@ -327,11 +330,11 @@ public class ActImporter
     boolean same=(newFileName.equals(fileName.getName()));
     if (!same)
     {
-      LOGGER.info("Renommage : "+fileName.getName()+" to "+newFileName);
+      LOGGER.info("Renommage : {} to {}",fileName.getName(),newFileName);
       boolean ok=fileName.renameTo(new File(_root,newFileName));
       if (!ok)
       {
-        LOGGER.error("Erreur renommage : "+fileName.getName()+" to "+newFileName);
+        LOGGER.error("Erreur renommage : {} to {}",fileName.getName(),newFileName);
       }
     }
   }
@@ -345,7 +348,7 @@ public class ActImporter
     {
       handleFile(files[i]);
     }
-    LOGGER.info("Loaded "+_map.size()+" acts.");
+    LOGGER.info("Loaded {} acts.",Integer.valueOf(_map.size()));
 
     for(Act act : _map.values())
     {

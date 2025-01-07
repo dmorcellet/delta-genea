@@ -35,7 +35,7 @@ public class MainDownloadActs
 
   private static boolean _useThreads=true;
 
-  private void getPages(final ActsPackage actsPackage,final boolean td) throws Exception
+  private void getPages(final ActsPackage actsPackage,final boolean td)
   {
     Runnable r=new Runnable()
     {
@@ -71,7 +71,7 @@ public class MainDownloadActs
     ADSession session=new ADSession();
     session.start();
     List<String> places=getPlaces(session);
-    System.out.println(places);
+    LOGGER.info("Got places: {}",places);
     handlePlace(session,Constants.PLACE_NAME,true);
     session.stop();
   }
@@ -79,7 +79,7 @@ public class MainDownloadActs
   private void handlePlace(ADSession session, String placeName, boolean td) throws Exception
   {
     List<String> periods=getPeriods(session,placeName);
-    System.out.println(periods);
+    LOGGER.info("Got periods: {}",periods);
     for(String period : periods)
     {
       int index=period.indexOf('-');
@@ -117,7 +117,7 @@ public class MainDownloadActs
       String placeName2=place.substring(index+separator.length());
       if (!(placeName1.equals(placeName2)))
       {
-        System.err.println(place);
+        LOGGER.warn("Bad place value: [{}]",place);
       }
       if (placeName1.length()>0)
       {
@@ -148,7 +148,7 @@ public class MainDownloadActs
       String period2=period.substring(index+separator.length());
       if (!(period1.equals(period2)))
       {
-        System.err.println(period);
+        LOGGER.warn("Bad period value: [{}]",period);
       }
       if (period1.length()>0)
       {
@@ -214,7 +214,7 @@ public class MainDownloadActs
 
   private void getPages(ADSession session, ActsPackage actsPackage, boolean td) throws Exception
   {
-    System.out.println("Handling "+actsPackage+" with session "+session.getTmpDir());
+    LOGGER.info("Handling {} with session {}",actsPackage,session.getTmpDir());
     int nbPages=getPage(session,actsPackage,1,td);
     for(int i=2;i<=nbPages;i++)
     {
@@ -285,13 +285,9 @@ public class MainDownloadActs
       boolean ok=files[0][vIndex].delete();
       if (!ok)
       {
-        System.err.println("Cannot delete : "+files[0][vIndex]);
+        LOGGER.error("Cannot delete: {}",files[0][vIndex]);
       }
     }
-    //downloader.downloadPage(imageURL,imageFile);
-    //System.out.println("nbPages="+nbPages);
-    //System.out.println("width="+width);
-    //System.out.println("height="+height);
     return nbPages;
   }
 }

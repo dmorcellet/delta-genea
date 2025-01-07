@@ -58,12 +58,9 @@ public class GeneaCfg
   {
     Configuration cfg=Configurations.getConfiguration();
     _actsRootPath=cfg.getFileValue(SECTION_NAME,ACTS_ROOT,null);
+    LOGGER.info("_actsRootPath={}",_actsRootPath);
     _picturesRootPath=cfg.getFileValue(SECTION_NAME,PICTURES_ROOT,null);
-    if (LOGGER.isInfoEnabled())
-    {
-      LOGGER.info("_actsRootPath="+_actsRootPath);
-      LOGGER.info("_picturesRootPath="+_picturesRootPath);
-    }
+    LOGGER.info("_picturesRootPath={}",_picturesRootPath);
   }
 
   /**
