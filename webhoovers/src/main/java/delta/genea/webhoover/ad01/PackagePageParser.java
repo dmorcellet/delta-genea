@@ -88,7 +88,6 @@ public class PackagePageParser
     {
       if ((out.exists())&&(bigOut.exists()))
       {
-        // System.out.println("ALREADY EXISTS page : "+page2);
         return;
       }
       url=url.substring(0,url.indexOf('?'));
@@ -132,7 +131,6 @@ public class PackagePageParser
     int nbV=(vsize/chunkVSize)+(((vsize%chunkVSize)!=0)?1:0);
     downloadBigImage(nb,imageName,nbH,nbV);
     page.delete();
-    System.gc();
   }
 
   private int parseIntValue(String line, String startOfLine)
@@ -223,7 +221,7 @@ public class PackagePageParser
         boolean ok=files[hIndex][vIndex].delete();
         if (!ok)
         {
-          System.err.println("Cannot delete : "+files[hIndex][vIndex]);
+          LOGGER.warn("Cannot delete file: {}",files[hIndex][vIndex]);
         }
       }
     }

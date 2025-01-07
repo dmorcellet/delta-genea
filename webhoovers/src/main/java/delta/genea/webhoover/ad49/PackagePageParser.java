@@ -70,7 +70,7 @@ public class PackagePageParser
   private void downloadPage(File out, int pageNumber, int width, int height, int tileSize) throws Exception
   {
     out.getParentFile().mkdirs();
-    System.out.println("Handling "+_actsPackage._placeName+" / "+_actsPackage._period+" - page "+pageNumber);
+    LOGGER.info("Handling {} / {} - page {}",_actsPackage._placeName,_actsPackage._period,Integer.valueOf(pageNumber));
     int nbH=(width/tileSize)+(((width%tileSize)!=0)?1:0);
     int nbV=(height/tileSize)+(((height%tileSize)!=0)?1:0);
     int x=0;
@@ -103,7 +103,7 @@ public class PackagePageParser
         boolean ok=files[hIndex][vIndex].delete();
         if (!ok)
         {
-          System.err.println("Cannot delete : "+files[hIndex][vIndex]);
+          LOGGER.warn("Cannot delete: {}",files[hIndex][vIndex]);
         }
       }
     }
@@ -190,22 +190,22 @@ public class PackagePageParser
     File tmpDir=_session.getTmpDir();
     if (minIndex<=0)
     {
-      System.out.println(name+": "+"Bad min page index: 1");
+      LOGGER.warn("{}: "+"Bad min page index: 1",name);
       return;
     }
     if (minIndex>_nbPages)
     {
-      System.out.println(name+": "+"Bad min page index : ("+minIndex+">"+_nbPages+")");
+      LOGGER.warn("{}: "+"Bad min page index : ({}>{})",name,Integer.valueOf(minIndex),Integer.valueOf(_nbPages));
       return;
     }
     if (maxIndex>_nbPages)
     {
-      System.out.println(name+": "+"Bad max page index : ("+maxIndex+">"+_nbPages+")");
+      LOGGER.warn("{}: "+"Bad max page index : ({}>{})",name,Integer.valueOf(maxIndex),Integer.valueOf(_nbPages));
       return;
     }
     if (maxIndex<minIndex)
     {
-      System.out.println(name+": "+"Bad max page index : ("+maxIndex+"<"+minIndex+")");
+      LOGGER.warn("{}: "+"Bad max page index : ({}<{})",name,Integer.valueOf(maxIndex),Integer.valueOf(minIndex));
       return;
     }
     for(int page=minIndex;page<=maxIndex;page++)

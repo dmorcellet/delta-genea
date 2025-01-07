@@ -53,9 +53,7 @@ public class FromGEDCOM
   public static void main(String[] args)
   {
     GeneaApplication.getInstance();
-    //new FromGEDCOM(new File("/home/dm/tmp/michel.ged"),"genea_michel");
     new FromGEDCOM(new File("D:\\dam\\Donnees\\docs\\genea\\maryvonne\\Lamour_31-10-2016.ged"),"genea_maryvonne");
-    //new FromGEDCOM(new File("D:\\tmp\\Ninie au 20120925.ged"),"genea_ninie");
   }
 
   private File _fileName;
@@ -137,10 +135,7 @@ public class FromGEDCOM
       }
       else
       {
-        if (LOGGER.isDebugEnabled())
-        {
-          LOGGER.debug("Ligne inexploitée ["+line+"]");
-        }
+        LOGGER.debug("Ligne inexploitée [{}]",line);
         _index++;
       }
     }
@@ -407,16 +402,13 @@ public class FromGEDCOM
           }
           if (!found)
           {
-            System.err.println("Person ID: "+childKey+" not found!");
+            LOGGER.warn("Person ID: {} not found!",childKey);
           }
         }
         // END OF CHIL
         else
         {
-          if (LOGGER.isDebugEnabled())
-          {
-            LOGGER.debug("Ligne inexploitée ["+line+"]");
-          }
+          LOGGER.debug("Ligne inexploitée [{}]",line);
         }
       }
     }
@@ -590,7 +582,7 @@ public class FromGEDCOM
       }
       else
       {
-        LOGGER.error("Pb : number of spaces="+strings.length+" ["+dateString+"]");
+        LOGGER.error("Pb: number of spaces={} [{}]",Integer.valueOf(strings.length),dateString);
         dateInfos=dateString;
       }
       ret=new GeneaDate(date,dateInfos);

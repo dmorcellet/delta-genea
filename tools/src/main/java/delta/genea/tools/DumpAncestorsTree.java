@@ -70,7 +70,7 @@ public class DumpAncestorsTree
 
   private void dumpAncestorsTree(AncestorsTree tree)
   {
-    dumpAncestorsTree(System.out,tree.getRootNode(),1,0);
+    dumpAncestorsTree(System.out,tree.getRootNode(),1,0); // NOSONAR
   }
 
   private void dumpAncestorsTree(PrintStream out, BinaryTreeNode<Person> node, long sosa, int step)
@@ -92,7 +92,7 @@ public class DumpAncestorsTree
   private void dumpDescendantsTree(DescendantsTree tree)
   {
     String name="1";
-    dumpDescendantsTree(System.out,tree.getRootNode(),name,0);
+    dumpDescendantsTree(System.out,tree.getRootNode(),name,0); // NOSONAR
   }
 
   private void dumpDescendantsTree(PrintStream out, TreeNode<Person> node, String name, int step)

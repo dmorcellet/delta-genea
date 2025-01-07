@@ -9,9 +9,9 @@ import junit.framework.TestCase;
  */
 public class TestDateInformation extends TestCase
 {
-  private static String[] SAMPLES=
+  private static final String[] SAMPLES=
   { "01-1688ca","04-06-1688/10-11-1688","05-02-1688av","05-1710av","17-08-1613ap"};
-  
+
   /**
    * Constructor.
    */

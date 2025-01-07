@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
@@ -14,6 +17,8 @@ import delta.common.utils.text.TextUtils;
  */
 public class SpecFileParser
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(SpecFileParser.class);
+
   private String normalizeString(String s)
   {
     if (s.startsWith("\""))
@@ -35,7 +40,7 @@ public class SpecFileParser
     else if ("Mariage".equals(type)) baseName="am";
     else if ("Publication".equals(type)) baseName="ap";
     else {
-      System.out.println("Type acte inconnu ["+type+"]");
+      LOGGER.warn("Type acte inconnu [{}]",type);
       return null;
     }
     String number=sosa;
@@ -43,7 +48,7 @@ public class SpecFileParser
     {
       if ((sosaOld==null) || (sosaOld.length()==0))
       {
-        System.out.println("Sosa invalide !");
+        LOGGER.warn("Sosa invalide !");
       }
       number=sosaOld;
     }
@@ -51,7 +56,7 @@ public class SpecFileParser
     {
       if ("0".equals(sosa2))
       {
-        System.out.println("Bad sosa2");
+        LOGGER.warn("Bad sosa2");
         return null;
       }
       number=number+"-"+sosa2;
@@ -74,8 +79,9 @@ public class SpecFileParser
     for(String line : lines)
     {
       items=StringSplitter.split(line,'\t');
-      if ((items==null) || (items.length<11)) {
-        System.out.println("Bad line ["+line+"]");
+      if ((items==null) || (items.length<11))
+      {
+        LOGGER.warn("Bad line [{}]",line);
       }
       String sosaOld=items[0];
       sosaOld=normalizeString(sosaOld);
@@ -120,12 +126,8 @@ public class SpecFileParser
         }
         else
         {
-          System.out.println("Bad line ["+line+"]");
+          LOGGER.warn("Bad line [{}]",line);
         }
-      }
-      else
-      {
-        //System.out.println("Error with line ["+line+"]");
       }
     }
     return ret;

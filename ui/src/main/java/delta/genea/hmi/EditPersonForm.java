@@ -23,6 +23,9 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.genea.data.Person;
 import delta.genea.data.Sex;
 
@@ -32,6 +35,8 @@ import delta.genea.data.Sex;
  */
 public class EditPersonForm extends JDialog
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(EditPersonForm.class);
+
   private transient Person _person;
   private JTextField _surnameTextField;
   private JTextField _firstNameTextField;
@@ -117,9 +122,12 @@ public class EditPersonForm extends JDialog
     _person.setFirstname(_firstNameTextField.getText());
     _person.setSex((Sex)_sexCombo.getSelectedItem());
     _person.setComments(_commentsTextField.getText());
-    System.out.println(_person);
-    System.out.println(_person.getSex());
-    System.out.println(_person.getComments());
+    if (LOGGER.isInfoEnabled())
+    {
+      LOGGER.info("{}",_person);
+      LOGGER.info("{}",_person.getSex());
+      LOGGER.info("{}",_person.getComments());
+    }
     dispose();
   }
 

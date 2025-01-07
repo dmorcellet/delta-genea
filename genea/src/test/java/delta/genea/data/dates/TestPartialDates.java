@@ -9,11 +9,11 @@ import junit.framework.TestCase;
  */
 public class TestPartialDates extends TestCase
 {
-  private static String[] SAMPLES=
+  private static final String[] SAMPLES=
   { "01-1688","04-06-1688","05-??-1688","1710","17-08-??","??-??-??","??-12-??","??-??-1710","??-190" };
-  private static String[] NORMALIZED=
+  private static final String[] NORMALIZED=
   { "01-1688","04-06-1688","05-??-1688","1710","17-08-????",null,"12-????","1710","0190" };
-  
+
   /**
    * Constructor.
    */

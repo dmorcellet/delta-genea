@@ -5,12 +5,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Check completion of act directories.
  * @author DAM
  */
 public class MainCheckActsDir
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainCheckActsDir.class);
+
   /**
    * Get the filename for an image.
    * @param nb Image index.
@@ -47,7 +52,7 @@ public class MainCheckActsDir
     int nbchilds=childs.length;
     if (nbchilds%2!=0)
     {
-      System.err.println("Odd number of files in "+dir);
+      LOGGER.warn("Odd number of files in {}",dir);
     }
     List<String> names=Arrays.asList(childs);
     Collections.sort(names);
@@ -57,12 +62,12 @@ public class MainCheckActsDir
       String expected=getImageFileName(i);
       if (!names.get(i).equals(expected))
       {
-        System.err.println("Expected : "+expected);
+        LOGGER.warn("Expected: {}",expected);
       }
       String expected2=getBigImageFileName(i);
       if (!names.get(i+nb).equals(expected2))
       {
-        System.err.println("Expected : "+expected2);
+        LOGGER.warn("Expected: {}",expected2);
       }
     }
   }
@@ -80,11 +85,11 @@ public class MainCheckActsDir
       child=childs[i];
       if (!child.isDirectory())
       {
-        System.err.println("Not a directory : "+child);
+        LOGGER.error("Not a directory: {}",child);
       }
       else
       {
-        System.out.println("Handling : "+child);
+        LOGGER.info("Handling: {}",child);
         handleDirectory(child);
       }
     }
@@ -97,8 +102,5 @@ public class MainCheckActsDir
   public static void main(String[] args)
   {
     doIt(Constants.ROOT_DIR);
-    doIt(new File("D:\\ArchivesDeLAin\\stGermain"));
-    doIt(new File("D:\\ArchivesDeLAin\\stBois"));
-    doIt(new File("D:\\ArchivesDeLAin\\colomieu"));
   }
 }
