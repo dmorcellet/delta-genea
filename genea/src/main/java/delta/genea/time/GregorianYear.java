@@ -41,10 +41,6 @@ public class GregorianYear
     {
       return true;
     }
-    if((_year%100>0)&&(_year%4==0))
-    {
-      return true;
-    }
-    return false;
+    return ((_year%100>0)&&(_year%4==0));
   }
 }

@@ -14,6 +14,7 @@ import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.ActsPackage;
+import delta.genea.webhoover.utils.FileUtils;
 import delta.genea.webhoover.utils.ImageUtils;
 
 /**
@@ -124,7 +125,7 @@ public class MainDownloadActs
         placeNames.add(placeName1);
       }
     }
-    tmpFile.delete();
+    FileUtils.deleteFile(tmpFile);
     return placeNames;
   }
 
@@ -155,7 +156,7 @@ public class MainDownloadActs
         periods.add(period1);
       }
     }
-    tmpFile.delete();
+    FileUtils.deleteFile(tmpFile);
     return periods;
   }
 
@@ -241,7 +242,7 @@ public class MainDownloadActs
     String url=Constants.getPageURL(packageId,pageNumber,td);
     downloader.downloadToFile(url, tmpFile);
     List<String> lines=TextUtils.readAsLines(tmpFile);
-    tmpFile.delete();
+    FileUtils.deleteFile(tmpFile);
     String naonedViewerLine=TextTools.findLine(lines,"v1 = new NAONED_VIEWER(");
     String fileName=TextTools.findBetween(naonedViewerLine,"new NAONED_VIEWER('","',main_w,main_h");
     String nbPagesLines=TextTools.findLine(lines,"<div class=\"d32_a\" id=\"d32_a\">");
@@ -255,7 +256,7 @@ public class MainDownloadActs
     int width=NumericTools.parseInt(widthStr,0);
     String heightStr=TextTools.findBetween(sizeLine,"main_h=",";");
     int height=NumericTools.parseInt(heightStr,0);
-    sizeFile.delete();
+    FileUtils.deleteFile(sizeFile);
 
     final int CHUNK=100;
     int nbV=(height/CHUNK)+((height%CHUNK==0)?0:1);

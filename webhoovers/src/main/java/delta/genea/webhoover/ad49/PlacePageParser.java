@@ -9,6 +9,7 @@ import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.HtmlTools;
+import delta.genea.webhoover.utils.FileUtils;
 
 /**
  * Parser for a place index page.
@@ -85,7 +86,7 @@ public class PlacePageParser
       ActsPackage packageInfo=handleRow(row);
       result.add(packageInfo);
     }
-    placePageFile.delete();
+    FileUtils.deleteFile(placePageFile);
     return result;
   }
 

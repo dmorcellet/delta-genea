@@ -12,6 +12,7 @@ import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
+import delta.genea.webhoover.utils.FileUtils;
 import delta.genea.webhoover.utils.ImageUtils;
 
 /**
@@ -84,7 +85,7 @@ public class MainDownloadActs
     String cacheFileUrl=lines.get(0);
     String tileUrl=Constants.ROOT_SITE+cacheFileUrl;
     downloader.downloadToFile(tileUrl, tileFile);
-    tileFileCacheFile.delete();
+    FileUtils.deleteFile(tileFileCacheFile);
     return tileFile;
   }
 

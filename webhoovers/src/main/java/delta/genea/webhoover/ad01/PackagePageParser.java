@@ -12,6 +12,7 @@ import delta.common.utils.text.TextUtils;
 import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
+import delta.genea.webhoover.utils.FileUtils;
 import delta.genea.webhoover.utils.ImageUtils;
 
 /**
@@ -130,7 +131,7 @@ public class PackagePageParser
     int nbH=(hsize/chunkHSize)+(((hsize%chunkHSize)!=0)?1:0);
     int nbV=(vsize/chunkVSize)+(((vsize%chunkVSize)!=0)?1:0);
     downloadBigImage(nb,imageName,nbH,nbV);
-    page.delete();
+    FileUtils.deleteFile(page);
   }
 
   private int parseIntValue(String line, String startOfLine)

@@ -6,6 +6,7 @@ import java.util.List;
 
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
+import delta.genea.webhoover.utils.FileUtils;
 
 /**
  * Download a military form.
@@ -55,6 +56,6 @@ public class MainDownloadActs
         parser.parse();
       }
     }
-    mainPage.delete();
+    FileUtils.deleteFile(mainPage);
   }
 }

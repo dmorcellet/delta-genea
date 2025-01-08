@@ -157,14 +157,6 @@ public class Picture extends DataObject<Picture>
   {
     File rootPath=GeneaCfg.getInstance().getPicturesRootPath();
     File file=new File(rootPath,getPictureFilename(0));
-    if (!file.exists())
-    {
-      return false;
-    }
-    if (file.length()==0)
-    {
-      return false;
-    }
-    return true;
+    return ((file.exists()) && (file.length()>0));
   }
 }

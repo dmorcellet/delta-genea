@@ -12,7 +12,7 @@ import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
-import delta.genea.webhoover.utils.ImageMontageMaker;
+import delta.genea.webhoover.utils.FileUtils;
 import delta.genea.webhoover.utils.ImageUtils;
 
 /**
@@ -54,7 +54,7 @@ public class PackagePageParser
     String cacheFileUrl=lines.get(0);
     String tileUrl=Constants.ROOT_SITE+cacheFileUrl;
     downloader.downloadToFile(tileUrl,tileFile);
-    tileFileCacheFile.delete();
+    FileUtils.deleteFile(tileFileCacheFile);
     return tileFile;
   }
 
@@ -128,7 +128,7 @@ public class PackagePageParser
     String urlRegistrePrepare=Constants.ROOT_SITE+"/cg49work/registre_prepare.php?id="+id+"&PHPSID="+phpSID+"&hauteur=1024&largeur=1280&code=Mozilla&nom=Netscape&version=5.0%20(X11;%20fr)&langue=fr&platform=Linux%20x86_64";
     File tmpFile=new File(tmpDir,"registre_prepare.php.html");
     downloader.downloadToFile(urlRegistrePrepare,tmpFile);
-    tmpFile.delete();
+    FileUtils.deleteFile(tmpFile);
     String urlVisu=Constants.ROOT_SITE+"/cg49work/visu_affiche.php?PHPSID="+phpSID+"&param=visu&page=1";
     tmpFile=new File(tmpDir,"visu_affiche.php.html");
     downloader.downloadToFile(urlVisu,tmpFile);
@@ -154,7 +154,7 @@ public class PackagePageParser
         }
       }
     }
-    tmpFile.delete();
+    FileUtils.deleteFile(tmpFile);
     _nbPages=nbPages;
   }
 
@@ -213,7 +213,7 @@ public class PackagePageParser
         File infoFile=new File(tmpDir,"visu_affiche_util.php.html");
         downloader.downloadToFile(urlAffiche,infoFile);
         List<String> lines=TextUtils.readAsLines(infoFile);
-        infoFile.delete();
+        FileUtils.deleteFile(infoFile);
         String infosStr=lines.get(0);
         String[] infos=StringSplitter.split(infosStr,'\t');
 

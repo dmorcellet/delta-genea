@@ -12,6 +12,7 @@ import delta.common.utils.xml.DOMParsingTools;
 import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
+import delta.genea.webhoover.utils.FileUtils;
 import delta.genea.webhoover.utils.ImageUtils;
 
 /**
@@ -111,7 +112,7 @@ public class Loader
         _basePath=basePath;
       }
     }
-    tmpFile.delete();
+    FileUtils.deleteFile(tmpFile);
     return ret;
   }
 

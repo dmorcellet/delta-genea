@@ -278,12 +278,7 @@ public class GregorianDate
     {
       return true;
     }
-    if(_dayOfMonth<=4)
-    {
-      return false;
-    }
-
-    return false;
+    return (_dayOfMonth>4);
   }
 
   /**
@@ -317,12 +312,7 @@ public class GregorianDate
     {
       return false;
     }
-    if(_dayOfMonth<=4)
-    {
-      return true;
-    }
-
-    return false;
+    return (_dayOfMonth<=4);
   }
 
   /**
@@ -340,11 +330,7 @@ public class GregorianDate
     {
       return true;
     }
-    if((year%100>0)&&(year%4==0))
-    {
-      return true;
-    }
-    return false;
+    return ((year%100>0)&&(year%4==0));
   }
 
   /**
@@ -371,12 +357,7 @@ public class GregorianDate
     {
       return false;
     }
-
-    if(_dayOfMonth<d._dayOfMonth)
-    {
-      return true;
-    }
-    return false;
+    return (_dayOfMonth<d._dayOfMonth);
   }
 
   /**
@@ -403,12 +384,7 @@ public class GregorianDate
     {
       return false;
     }
-
-    if(_dayOfMonth<=d._dayOfMonth)
-    {
-      return true;
-    }
-    return false;
+    return (_dayOfMonth<=d._dayOfMonth);
   }
 
   /**
@@ -661,8 +637,7 @@ public class GregorianDate
     GregorianDate gd=(GregorianDate)o;
     if (gd._dayOfMonth!=_dayOfMonth) return false;
     if (gd._month!=_month) return false;
-    if (gd._year!=_year) return false;
-    return true;
+    return (gd._year==_year);
   }
 
   @Override
