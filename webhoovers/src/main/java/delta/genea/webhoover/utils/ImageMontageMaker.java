@@ -1,4 +1,4 @@
-package delta.genea.webhoover;
+package delta.genea.webhoover.utils;
 
 import java.awt.image.ColorModel;
 import java.awt.image.IndexColorModel;

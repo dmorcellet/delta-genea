@@ -12,7 +12,7 @@ import delta.common.utils.xml.DOMParsingTools;
 import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
-import delta.genea.webhoover.ImageMontageMaker;
+import delta.genea.webhoover.utils.ImageUtils;
 
 /**
  * Loader for military forms (AD59).
@@ -135,29 +135,7 @@ public class Loader
       downloader.downloadToFile(url,tileFile);
       files[x][y]=tileFile;
     }
-    ImageMontageMaker maker=new ImageMontageMaker();
-    try
-    {
-      // Image building may raise an exception if JAI is not installed correctly
-      // One way to do it is to install it on the JRE
-      maker.doIt(files, out);
-    }
-    catch(Exception e)
-    {
-      LOGGER.warn("Could not make image!",e);
-    }
-    /*
-    for(int hIndex=0;hIndex<nbH;hIndex++)
-    {
-      for(int vIndex=0;vIndex<nbV;vIndex++)
-      {
-        boolean ok=files[hIndex][vIndex].delete();
-        if (!ok)
-        {
-          System.err.println("Cannot delete : "+files[hIndex][vIndex]);
-        }
-      }
-    }*/
+    ImageUtils.makeImage(files,out);
   }
 
 /*

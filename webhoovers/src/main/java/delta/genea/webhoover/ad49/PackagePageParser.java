@@ -12,7 +12,8 @@ import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
-import delta.genea.webhoover.ImageMontageMaker;
+import delta.genea.webhoover.utils.ImageMontageMaker;
+import delta.genea.webhoover.utils.ImageUtils;
 
 /**
  * Provides downloading facilities for pages of an acts package.
@@ -87,26 +88,7 @@ public class PackagePageParser
       }
       x+=tileWidth;
     }
-    ImageMontageMaker maker=new ImageMontageMaker();
-    try
-    {
-      maker.doIt(files,out);
-    }
-    catch (Exception e)
-    {
-      LOGGER.warn("Could not make image!",e);
-    }
-    for(int hIndex=0;hIndex<nbH;hIndex++)
-    {
-      for(int vIndex=0;vIndex<nbV;vIndex++)
-      {
-        boolean ok=files[hIndex][vIndex].delete();
-        if (!ok)
-        {
-          LOGGER.warn("Cannot delete: {}",files[hIndex][vIndex]);
-        }
-      }
-    }
+    ImageUtils.makeImage(files,out);
   }
 
   private void buildInfoFile(File to)

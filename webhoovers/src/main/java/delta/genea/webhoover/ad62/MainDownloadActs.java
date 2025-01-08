@@ -12,7 +12,7 @@ import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
-import delta.genea.webhoover.ImageMontageMaker;
+import delta.genea.webhoover.utils.ImageUtils;
 
 /**
  * @author DAM
@@ -107,26 +107,7 @@ public class MainDownloadActs
       }
       x+=tileWidth;
     }
-    ImageMontageMaker maker=new ImageMontageMaker();
-    try
-    {
-      maker.doIt(files, out);
-    }
-    catch(Exception e)
-    {
-      LOGGER.warn("Could not make image!",e);
-    }
-    for(int hIndex=0;hIndex<nbH;hIndex++)
-    {
-      for(int vIndex=0;vIndex<nbV;vIndex++)
-      {
-        boolean ok=files[hIndex][vIndex].delete();
-        if (!ok)
-        {
-          LOGGER.warn("Cannot delete : "+files[hIndex][vIndex]);
-        }
-      }
-    }
+    ImageUtils.makeImage(files,out);
   }
 
   private List<String> getPlaces(ADSession session) throws Exception

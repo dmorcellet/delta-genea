@@ -14,7 +14,7 @@ import delta.common.utils.text.TextUtils;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.ActsPackage;
-import delta.genea.webhoover.ImageMontageMaker;
+import delta.genea.webhoover.utils.ImageUtils;
 
 /**
  * @author DAM
@@ -270,24 +270,7 @@ public class MainDownloadActs
       downloader.downloadToFile(imageURLStr, image);
       files[0][vIndex]=image;
     }
-    ImageMontageMaker maker=new ImageMontageMaker();
-    try
-    {
-      maker.doIt(files, imageFile);
-    }
-    catch(Exception e)
-    {
-      imageFile.delete();
-      LOGGER.error("",e);
-    }
-    for(int vIndex=0;vIndex<nbV;vIndex++)
-    {
-      boolean ok=files[0][vIndex].delete();
-      if (!ok)
-      {
-        LOGGER.error("Cannot delete: {}",files[0][vIndex]);
-      }
-    }
+    ImageUtils.makeImage(files,imageFile);
     return nbPages;
   }
 }
