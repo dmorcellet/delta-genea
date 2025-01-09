@@ -26,6 +26,13 @@ public class ToGEDCOM
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(ToGEDCOM.class);
 
+  // Add missing families and get parent's family for each person
+  private List<Union> _parentsFamily;
+  // Build family list for each person
+  private List<List<Union>> _families;
+  // Build children list for each family
+  private List<List<Person>> _familyToChildren;
+
   private Calendar _calendar;
   private String[] _months={"JAN","FEB","MAR","APR",
       "MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"};
@@ -94,7 +101,7 @@ public class ToGEDCOM
     }
     else
     {
-      LOGGER.error("Pb:nbParts="+parts.length);
+      LOGGER.error("Pb:nbParts={}",Integer.valueOf(parts.length));
       sb.append(date);
     }
     return sb.toString();
@@ -316,10 +323,7 @@ public class ToGEDCOM
     }
   }
 
-  private void writeGEDCOMFile(File filename,
-      List<Person> persons, List<Union> unions,
-      List<List<Union>> families, List<Union> parents,
-      List<List<Person>> childrens)
+  private void writeGEDCOMFile(File filename, List<Person> persons, List<Union> unions)
   {
     TextFileWriter writer=new TextFileWriter(filename,"ISO8859-1");
     if (writer.start())
@@ -330,125 +334,14 @@ public class ToGEDCOM
       int index=0;
       for(Person p : persons)
       {
-        try
-        {
-          String id="0 @"+p.getPrimaryKey();
-          writer.writeNextLine(id+"@ INDI");
-          String name="1 NAME "+p.getFirstname()+'/'+p.getLastName()+"/";
-          writer.writeNextLine(name);
-          String givenName="2 GIVN "+p.getFirstname();
-          writer.writeNextLine(givenName);
-          String surName="2 SURN "+p.getLastName();
-          writer.writeNextLine(surName);
-          String sex="1 SEX "+p.getSex().getValue();
-          writer.writeNextLine(sex);
-
-          // Professions
-          List<OccupationForPerson> occupations=p.getOccupations();
-          if ((occupations!=null) && (!occupations.isEmpty()))
-          {
-            int nbOccupations=occupations.size();
-            StringBuilder sb=new StringBuilder("1 OCCU ");
-            for(int i=0;i<nbOccupations;i++)
-            {
-              if (i>0) sb.append(", ");
-              sb.append(occupations.get(i).getLabel());
-            }
-            writer.writeNextLine(sb.toString());
-          }
-
-          // Birth date
-          String birthDate=encodeDate(p.getBirthInfos(),p.getBirthDate());
-          String birthPlace=encodePlace(p.getBirthPlace());
-          writeDateAndPlace(writer,"BIRT",birthDate,birthPlace);
-
-          // Death date
-          String deathDate=encodeDate(p.getDeathInfos(),p.getDeathDate());
-          String deathPlace=encodePlace(p.getDeathPlace());
-          writeDateAndPlace(writer,"DEAT",deathDate,deathPlace);
-
-          // Families
-          List<Union> familiesForPerson=families.get(index);
-          if (familiesForPerson!=null)
-          {
-            String familyLine;
-            for(Union u : familiesForPerson)
-            {
-              familyLine="1 FAMS @"+u.getPrimaryKey()+"@";
-              writer.writeNextLine(familyLine);
-            }
-          }
-          // FAMC
-          Union parentsFamily=parents.get(index);
-          Long pk=(parentsFamily!=null)?parentsFamily.getPrimaryKey():null;
-          if (pk!=null)
-          {
-            String familyLine="1 FAMC @"+pk.longValue()+"@";
-            writer.writeNextLine(familyLine);
-          }
-        }
-        catch(Exception e)
-        {
-          LOGGER.error("Pb avec personne : "+p.getPrimaryKey()+": "+p.getFullName(),e);
-        }
+        writePerson(writer,p,index);
         index++;
       }
 
       int indexUnions=0;
       for(Union u : unions)
       {
-        try
-        {
-          String id="0 @"+u.getPrimaryKey()+"@ FAM";
-          writer.writeNextLine(id);
-          Long manKey=u.getManKey();
-          Long womanKey=u.getWomanKey();
-          if (DataObject.isNotNull(manKey))
-          {
-            String manLine="1 HUSB @"+manKey+"@";
-            writer.writeNextLine(manLine);
-          }
-          if (DataObject.isNotNull(womanKey))
-          {
-            String womanLine="1 WIFE @"+womanKey+"@";
-            writer.writeNextLine(womanLine);
-          }
-
-          // Children
-          List<Person> childs=childrens.get(indexUnions);
-          if (childs!=null)
-          {
-            String childLine;
-            for(Person child : childs)
-            {
-              childLine="1 CHIL @"+child.getPrimaryKey()+"@";
-              writer.writeNextLine(childLine);
-            }
-            String nbChildsLine="1 NCHI "+Integer.toString(childs.size());
-            writer.writeNextLine(nbChildsLine);
-          }
-          else
-          {
-            writer.writeNextLine("1 NCHI 0");
-          }
-
-          String unionDate=encodeDate(u.getInfos(),u.getDate());
-          String unionPlace=encodePlace(u.getPlace());
-          writeDateAndPlace(writer,"MARR",unionDate,unionPlace);
-        }
-        catch(Exception e)
-        {
-          Person man=u.getMan();
-          String label="";
-          if (man!=null) label=man.getFullName();
-          Person woman=u.getWoman();
-          if (woman!=null)
-          {
-            if (label.length()>0) label=label+"/";
-            label=label+woman.getFullName();
-          }
-          LOGGER.error("Pb avec union "+label,e);
-        }
+        writeUnion(writer,u,indexUnions);
         indexUnions++;
       }
       writer.writeNextLine("0 TRLR");
@@ -456,18 +349,139 @@ public class ToGEDCOM
     }
   }
 
+  private void writePerson(TextFileWriter writer, Person p, int index)
+  {
+    try
+    {
+      String id="0 @"+p.getPrimaryKey();
+      writer.writeNextLine(id+"@ INDI");
+      String name="1 NAME "+p.getFirstname()+'/'+p.getLastName()+"/";
+      writer.writeNextLine(name);
+      String givenName="2 GIVN "+p.getFirstname();
+      writer.writeNextLine(givenName);
+      String surName="2 SURN "+p.getLastName();
+      writer.writeNextLine(surName);
+      String sex="1 SEX "+p.getSex().getValue();
+      writer.writeNextLine(sex);
+
+      // Professions
+      List<OccupationForPerson> occupations=p.getOccupations();
+      if ((occupations!=null) && (!occupations.isEmpty()))
+      {
+        int nbOccupations=occupations.size();
+        StringBuilder sb=new StringBuilder("1 OCCU ");
+        for(int i=0;i<nbOccupations;i++)
+        {
+          if (i>0) sb.append(", ");
+          sb.append(occupations.get(i).getLabel());
+        }
+        writer.writeNextLine(sb.toString());
+      }
+
+      // Birth date
+      String birthDate=encodeDate(p.getBirthInfos(),p.getBirthDate());
+      String birthPlace=encodePlace(p.getBirthPlace());
+      writeDateAndPlace(writer,"BIRT",birthDate,birthPlace);
+
+      // Death date
+      String deathDate=encodeDate(p.getDeathInfos(),p.getDeathDate());
+      String deathPlace=encodePlace(p.getDeathPlace());
+      writeDateAndPlace(writer,"DEAT",deathDate,deathPlace);
+
+      // Families
+      List<Union> familiesForPerson=_families.get(index);
+      if (familiesForPerson!=null)
+      {
+        String familyLine;
+        for(Union u : familiesForPerson)
+        {
+          familyLine="1 FAMS @"+u.getPrimaryKey()+"@";
+          writer.writeNextLine(familyLine);
+        }
+      }
+      // FAMC
+      Union parentsFamily=_parentsFamily.get(index);
+      Long pk=(parentsFamily!=null)?parentsFamily.getPrimaryKey():null;
+      if (pk!=null)
+      {
+        String familyLine="1 FAMC @"+pk.longValue()+"@";
+        writer.writeNextLine(familyLine);
+      }
+    }
+    catch(Exception e)
+    {
+      LOGGER.error("Pb avec personne : "+p.getPrimaryKey()+": "+p.getFullName(),e);
+    }
+  }
+
+  private void writeUnion(TextFileWriter writer, Union u, int indexUnions)
+  {
+    try
+    {
+      String id="0 @"+u.getPrimaryKey()+"@ FAM";
+      writer.writeNextLine(id);
+      Long manKey=u.getManKey();
+      Long womanKey=u.getWomanKey();
+      if (DataObject.isNotNull(manKey))
+      {
+        String manLine="1 HUSB @"+manKey+"@";
+        writer.writeNextLine(manLine);
+      }
+      if (DataObject.isNotNull(womanKey))
+      {
+        String womanLine="1 WIFE @"+womanKey+"@";
+        writer.writeNextLine(womanLine);
+      }
+
+      // Children
+      List<Person> childs=_familyToChildren.get(indexUnions);
+      if (childs!=null)
+      {
+        String childLine;
+        for(Person child : childs)
+        {
+          childLine="1 CHIL @"+child.getPrimaryKey()+"@";
+          writer.writeNextLine(childLine);
+        }
+        String nbChildsLine="1 NCHI "+Integer.toString(childs.size());
+        writer.writeNextLine(nbChildsLine);
+      }
+      else
+      {
+        writer.writeNextLine("1 NCHI 0");
+      }
+
+      String unionDate=encodeDate(u.getInfos(),u.getDate());
+      String unionPlace=encodePlace(u.getPlace());
+      writeDateAndPlace(writer,"MARR",unionDate,unionPlace);
+    }
+    catch(Exception e)
+    {
+      Person man=u.getMan();
+      String label="";
+      if (man!=null) label=man.getFullName();
+      Person woman=u.getWoman();
+      if (woman!=null)
+      {
+        if (label.length()>0) label=label+"/";
+        label=label+woman.getFullName();
+      }
+      LOGGER.error("Pb avec union "+label,e);
+    }
+  }
+
   private void go(File fileName, List<Person> persons, List<Union> unions)
   {
     // Add missing families and get parent's family for each person
-    List<Union> parentsFamily=getParentsFamilyForEachPerson(persons,unions);
+    _parentsFamily=getParentsFamilyForEachPerson(persons,unions);
     // Build family list for each person
-    List<List<Union>> families=getFamiliesListForEachPerson(persons, unions);
+    _families=getFamiliesListForEachPerson(persons, unions);
     // Build children list for each family
-    List<List<Person>> familyToChildren=getChildrenListForEachUnion(persons,unions);
+    _familyToChildren=getChildrenListForEachUnion(persons,unions);
 
     try
     {
-      writeGEDCOMFile(fileName,persons,unions,families,parentsFamily,familyToChildren);
+      writeGEDCOMFile(fileName,persons,unions);
     }
     catch(Exception e)
     {
@@ -486,8 +500,8 @@ public class ToGEDCOM
     {
       List<Person> persons=dataSource.getManager(Person.class).loadAll();
       List<Union> unions=dataSource.getManager(Union.class).loadAll();
-      System.out.println("Loaded "+persons.size()+" persons.");
-      System.out.println("Loaded "+unions.size()+" unions.");
+      System.out.println("Loaded "+persons.size()+" persons."); // NOSONAR
+      System.out.println("Loaded "+unions.size()+" unions."); // NOSONAR
       go(gedcomFile,persons,unions);
       dataSource.close();
     }

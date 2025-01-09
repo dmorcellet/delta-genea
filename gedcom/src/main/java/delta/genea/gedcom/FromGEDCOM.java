@@ -2,8 +2,6 @@ package delta.genea.gedcom;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,11 +12,8 @@ import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.framework.objects.sql.SqlObjectsSource;
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileReader;
-import delta.common.utils.misc.LatineNumbers;
-import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
 import delta.common.utils.text.ansel.AnselCharset;
-import delta.common.utils.time.Month;
 import delta.genea.GeneaApplication;
 import delta.genea.data.GeneaDate;
 import delta.genea.data.OccupationForPerson;
@@ -28,10 +23,6 @@ import delta.genea.data.PlaceManager;
 import delta.genea.data.Sex;
 import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
-import delta.genea.time.FrenchRevolutionCalendar;
-import delta.genea.time.FrenchRevolutionDate;
-import delta.genea.time.FrenchRevolutionMonth;
-import delta.genea.time.GregorianDate;
 
 /**
  * Imports a GEDCOM file to a genea database.
@@ -39,12 +30,12 @@ import delta.genea.time.GregorianDate;
  */
 public class FromGEDCOM
 {
+  private static final String UNUSED_LINE="Ligne inexploitée [{}]";
+
   private static final Logger LOGGER=LoggerFactory.getLogger(FromGEDCOM.class);
 
   private static final String LINE_2_PLAC="2 PLAC ";
   private static final String LINE_2_DATE="2 DATE";
-  private static final String FRENCH_REVOLUTION_DATE_SEED="@#DFRENCH R@";
-  //private static final String JULIAN_DATE_SEED="@#DJULIAN@";
 
   /**
    * Main method for the GEDCOM import tool.
@@ -80,7 +71,8 @@ public class FromGEDCOM
     parseFileLines();
     go();
     long time2=System.currentTimeMillis();
-    LOGGER.info("Time to import : "+(time2-time)+"ms");
+    long duration=time2-time;
+    LOGGER.info("Time to import: {}ms",Long.valueOf(duration));
   }
 
   private void reset()
@@ -135,7 +127,7 @@ public class FromGEDCOM
       }
       else
       {
-        LOGGER.debug("Ligne inexploitée [{}]",line);
+        LOGGER.debug(UNUSED_LINE,line);
         _index++;
       }
     }
@@ -227,7 +219,7 @@ public class FromGEDCOM
               else if (line.startsWith(LINE_2_DATE))
               {
                 String tmp=line.substring(7).trim();
-                GeneaDate d=decodeDate(tmp);
+                GeneaDate d=DateUtils.decodeDate(tmp);
                 if (d!=null)
                 {
                   p.setBirthDate(d.getDate(),d.getInfosDate());
@@ -262,7 +254,7 @@ public class FromGEDCOM
               else if (line.startsWith(LINE_2_DATE))
               {
                 String tmp=line.substring(7).trim();
-                GeneaDate d=decodeDate(tmp);
+                GeneaDate d=DateUtils.decodeDate(tmp);
                 if (d!=null)
                 {
                   p.setDeathDate(d.getDate(),d.getInfosDate());
@@ -291,7 +283,7 @@ public class FromGEDCOM
         // END OF OCCU
         else
         {
-          LOGGER.debug("Ligne inexploitée [{}]",line);
+          LOGGER.debug(UNUSED_LINE,line);
         }
       }
     }
@@ -356,7 +348,7 @@ public class FromGEDCOM
               else if (line.startsWith(LINE_2_DATE))
               {
                 String tmp=line.substring(7).trim();
-                GeneaDate d=decodeDate(tmp);
+                GeneaDate d=DateUtils.decodeDate(tmp);
                 if (d!=null)
                 {
                   u.setDate(d);
@@ -408,7 +400,7 @@ public class FromGEDCOM
         // END OF CHIL
         else
         {
-          LOGGER.debug("Ligne inexploitée [{}]",line);
+          LOGGER.debug(UNUSED_LINE,line);
         }
       }
     }
@@ -426,173 +418,6 @@ public class FromGEDCOM
     }
     long ret=NumericTools.parseLong(sb.toString(),0);
     return (ret==0)?null:Long.valueOf(ret);
-  }
-
-  private GeneaDate decodeDate(String dateString)
-  {
-    GeneaDate ret=null;
-    try
-    {
-      String stringToUse;
-      String dateInfos="";
-      Date date=null;
-      int dateType=0;
-      boolean isFrenchRevolutionDate=false;
-      /*
-      if (dateString.startsWith(JULIAN_DATE_SEED))
-      {
-        dateString=dateString.substring(JULIAN_DATE_SEED.length()).trim();
-      }
-      */
-      if (dateString.startsWith("ABT"))
-      {
-        dateType=1;
-        stringToUse=dateString.substring(3);
-        dateInfos="ca";
-      }
-      else if (dateString.startsWith("AFT"))
-      {
-        dateType=2;
-        stringToUse=dateString.substring(3);
-        dateInfos="ap";
-      }
-      else if (dateString.startsWith("BEF"))
-      {
-        dateType=3;
-        stringToUse=dateString.substring(3);
-        dateInfos="av";
-      }
-      else if (dateString.startsWith(FRENCH_REVOLUTION_DATE_SEED))
-      {
-        dateType=0;
-        stringToUse=dateString.substring(FRENCH_REVOLUTION_DATE_SEED.length()).trim();
-        isFrenchRevolutionDate=true;
-      }
-      else
-      {
-        stringToUse=dateString;
-      }
-      stringToUse=stringToUse.trim();
-      String[] strings=StringSplitter.split(stringToUse,' ');
-
-      if (isFrenchRevolutionDate)
-      {
-        try
-        {
-          int day=NumericTools.parseInt(strings[0],-1);
-          FrenchRevolutionMonth month=getMonth(strings[1]);
-          int year=LatineNumbers.convert(strings[3]);
-          if ((day!=-1) && (month!=null) && (year>0))
-          {
-            FrenchRevolutionDate frDate=new FrenchRevolutionDate((byte)day,month,year);
-            GregorianDate gDate=FrenchRevolutionCalendar.convert(frDate);
-            Calendar c=Calendar.getInstance();
-            c.set(gDate.getYear(),gDate.getMonth()-1,gDate.getDayOfMonth());
-            date=c.getTime();
-          }
-          else
-          {
-            dateInfos=stringToUse;
-          }
-        }
-        catch(Exception e)
-        {
-          LOGGER.error("Unable to decode French Revolution date : "+stringToUse,e);
-          dateInfos=stringToUse;
-        }
-      }
-      else if (strings.length==4)
-      {
-        try
-        {
-          dateInfos=stringToUse;
-          if (("BET".equals(strings[0])) && ("AND".equals(strings[2])))
-          {
-            int year1=NumericTools.parseInt(strings[1],0);
-            int year2=NumericTools.parseInt(strings[3],0);
-
-            if ((year1>0) && (year2>0))
-            {
-              dateInfos=year1+"/"+year2;
-            }
-            else
-            {
-              LOGGER.error("Invalid years in a between [{}]",stringToUse);
-            }
-          }
-          else
-          {
-            LOGGER.error("Bad 'between' structure [{}]",stringToUse);
-          }
-        }
-        catch (Exception e)
-        {
-          LOGGER.error("Unable to decode GEDCOM date: "+stringToUse,e);
-        }
-      }
-      else if (strings.length==3)
-      {
-        // Full date ?
-        try
-        {
-          int day=NumericTools.parseInt(strings[0],1);
-          int month=Month.decodeEnglishMonth(strings[1]);
-          int year=NumericTools.parseInt(strings[2],0);
-          if ((day>0)&&(month>0)&&(year>0))
-          {
-            if (dateType==0)
-            {
-              Calendar c=Calendar.getInstance();
-              c.set(year,month-1,day);
-              date=c.getTime();
-            }
-            else
-            {
-              StringBuilder sb=new StringBuilder();
-              sb.append(day);
-              sb.append('-');
-              sb.append(month);
-              sb.append('-');
-              sb.append(year);
-              sb.append(dateInfos);
-              dateInfos=sb.toString();
-            }
-          }
-        }
-        catch (Exception e)
-        {
-          dateInfos=stringToUse;
-          LOGGER.error("Unable to decode GEDCOM date : "+stringToUse,e);
-        }
-      }
-      else if (strings.length==2)
-      {
-        int month=Month.decodeEnglishMonth(strings[0]);
-        int year=Integer.parseInt(strings[1]);
-        StringBuilder sb=new StringBuilder();
-        sb.append(month);
-        sb.append('-');
-        sb.append(year);
-        sb.append(dateInfos);
-        dateInfos=sb.toString()+dateInfos;
-      }
-      else if (strings.length==1)
-      {
-        dateInfos=strings[0]+dateInfos;
-      }
-      else
-      {
-        LOGGER.error("Pb: number of spaces={} [{}]",Integer.valueOf(strings.length),dateString);
-        dateInfos=dateString;
-      }
-      ret=new GeneaDate(date,dateInfos);
-    }
-    catch (Exception e)
-    {
-      LOGGER.error("Cannot parse date : "+dateString,e);
-      ret=new GeneaDate((Long)null,dateString);
-    }
-    return ret;
   }
 
   private void writeDB()
@@ -623,23 +448,5 @@ public class FromGEDCOM
     {
       ((SqlObjectsSource)_dataSource).setForeignKeyChecks(true);
     }
-  }
-
-  private FrenchRevolutionMonth getMonth(String month)
-  {
-    FrenchRevolutionMonth ret=null;
-    if ("BRUM".equals(month)) ret=FrenchRevolutionMonth.BRUMAIRE;
-    if ("FLOR".equals(month)) ret=FrenchRevolutionMonth.FLOREAL;
-    if ("FRIM".equals(month)) ret=FrenchRevolutionMonth.FRIMAIRE;
-    if ("FRUC".equals(month)) ret=FrenchRevolutionMonth.FRUCTIDOR;
-    if ("GERM".equals(month)) ret=FrenchRevolutionMonth.GERMINAL;
-    if ("MESS".equals(month)) ret=FrenchRevolutionMonth.MESSIDOR;
-    if ("NIVO".equals(month)) ret=FrenchRevolutionMonth.NIVOSE;
-    if ("PLUV".equals(month)) ret=FrenchRevolutionMonth.PLUVIOSE;
-    if ("PRAI".equals(month)) ret=FrenchRevolutionMonth.PRAIRIAL;
-    if ("THER".equals(month)) ret=FrenchRevolutionMonth.THERMIDOR;
-    if ("VEND".equals(month)) ret=FrenchRevolutionMonth.VENDEMIAIRE;
-    if ("VENT".equals(month)) ret=FrenchRevolutionMonth.VENTOSE;
-    return ret;
   }
 }
