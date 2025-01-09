@@ -126,118 +126,138 @@ public class ActPage extends GeneaWebPage
     List<PersonInAct> persons=_act.getPersonsInAct();
     if ((persons!=null)&&(!persons.isEmpty()))
     {
-      pw.println("<div style=\"text-decoration:underline;\">");
-      pw.println("Personnes mentionnées");
-      pw.println(HtmlConstants.END_DIV);
-      pw.println("<ul>");
-
-      int nb=persons.size();
-      for(int i=0;i<nb;i++)
-      {
-        PersonInAct personInAct=persons.get(i);
-        Person person=personInAct.getPerson();
-        Person linkReference=personInAct.getLinkReference();
-        pw.println(HtmlConstants.LI);
-        String personLink=pTools.format(person);
-        pw.print(personLink);
-        // Link
-        String link=personInAct.getLink();
-        if ((link!=null)&&(link.length()>0))
-        {
-          pw.print(", ");
-          pw.print(link);
-          if (linkReference!=null)
-          {
-            pw.print(" de ");
-            String refLink=pTools.format(linkReference);
-            pw.print(refLink);
-          }
-        }
-        pw.print(" - ");
-
-        // Présence
-        boolean useSignature=true;
-        String presence=personInAct.getPresence();
-        if ("O".equals(presence))
-        {
-          if (person.getSex()==Sex.FEMALE)
-          {
-            pw.print("Présente");
-          }
-          else
-          {
-            pw.print("Présent");
-          }
-        }
-        else if ("+".equals(presence))
-        {
-          if (person.getSex()==Sex.FEMALE)
-          {
-            pw.print("Décédée");
-          }
-          else
-          {
-            pw.print("Décédé");
-          }
-          useSignature=false;
-        }
-        else if ("N".equals(presence))
-        {
-          if (person.getSex()==Sex.FEMALE)
-          {
-            pw.print("Absente");
-          }
-          else
-          {
-            pw.print("Absent");
-          }
-          useSignature=false;
-        }
-        else if ((presence==null) || (presence.length()==0))
-        {
-          pw.print("???");
-        }
-        else
-        {
-          pw.print(presence);
-        }
-
-        // Signature
-        if (useSignature)
-        {
-          pw.print(" - ");
-          String signature=personInAct.getSignature();
-          if (signature==null)
-          {
-            signature="";
-          }
-          if ("S".equals(signature))
-          {
-            pw.print("(Signature)");
-          }
-          else if ("M".equals(signature))
-          {
-            pw.print("(Marque)");
-          }
-          else if (("N".equals(signature))||("-".equals(signature)))
-          {
-            pw.print("(Rien)");
-          }
-          else if ((signature==null) || (signature.length()==0))
-          {
-            pw.print("???");
-          }
-          else
-          {
-            pw.print(signature);
-          }
-        }
-        pw.println(HtmlConstants.END_LI);
-      }
-      pw.println("</ul>");
+      generatePersons(pw,pTools,persons);
     }
     pw.println(HtmlConstants.END_DIV);
 
+    // Handle act image
+    generateActImage(pw);
+
+    // Handle act text
+    ActText text=_act.getText();
+    generateActText(pw,text);
+
+    WebPageTools.generatePageFooter(pw);
+  }
+
+  private void generatePersons(PrintWriter pw, PersonHtmlFormatter pTools, List<PersonInAct> persons)
+  {
+    pw.println("<div style=\"text-decoration:underline;\">");
+    pw.println("Personnes mentionnées");
+    pw.println(HtmlConstants.END_DIV);
+    pw.println("<ul>");
+
+    int nb=persons.size();
+    for(int i=0;i<nb;i++)
+    {
+      PersonInAct personInAct=persons.get(i);
+      Person person=personInAct.getPerson();
+      Person linkReference=personInAct.getLinkReference();
+      pw.println(HtmlConstants.LI);
+      String personLink=pTools.format(person);
+      pw.print(personLink);
+      // Link
+      String link=personInAct.getLink();
+      if ((link!=null)&&(link.length()>0))
+      {
+        pw.print(", ");
+        pw.print(link);
+        if (linkReference!=null)
+        {
+          pw.print(" de ");
+          String refLink=pTools.format(linkReference);
+          pw.print(refLink);
+        }
+      }
+      pw.print(" - ");
+
+      // Présence
+      boolean useSignature=true;
+      String presence=personInAct.getPresence();
+      if ("O".equals(presence))
+      {
+        if (person.getSex()==Sex.FEMALE)
+        {
+          pw.print("Présente");
+        }
+        else
+        {
+          pw.print("Présent");
+        }
+      }
+      else if ("+".equals(presence))
+      {
+        if (person.getSex()==Sex.FEMALE)
+        {
+          pw.print("Décédée");
+        }
+        else
+        {
+          pw.print("Décédé");
+        }
+        useSignature=false;
+      }
+      else if ("N".equals(presence))
+      {
+        if (person.getSex()==Sex.FEMALE)
+        {
+          pw.print("Absente");
+        }
+        else
+        {
+          pw.print("Absent");
+        }
+        useSignature=false;
+      }
+      else if ((presence==null) || (presence.length()==0))
+      {
+        pw.print("???");
+      }
+      else
+      {
+        pw.print(presence);
+      }
+
+      // Signature
+      if (useSignature)
+      {
+        pw.print(" - ");
+        String signature=personInAct.getSignature();
+        String toDisplay=getDisplayableSignature(signature);
+        pw.print(toDisplay);
+      }
+      pw.println(HtmlConstants.END_LI);
+    }
+    pw.println("</ul>");
+  }
+
+  private String getDisplayableSignature(String signature)
+  {
+    if (signature==null)
+    {
+      signature="";
+    }
+    if ("S".equals(signature))
+    {
+      return "(Signature)";
+    }
+    if ("M".equals(signature))
+    {
+      return "(Marque)";
+    }
+    if (("N".equals(signature))||("-".equals(signature)))
+    {
+      return "(Rien)";
+    }
+    if (signature.isEmpty())
+    {
+      return "???";
+    }
+    return signature;
+  }
+
+  private void generateActImage(PrintWriter pw)
+  {
     String path=_act.getPath();
     if ((path!=null)&&(path.length()>0))
     {
@@ -245,12 +265,11 @@ public class ActPage extends GeneaWebPage
       pw.println("<div style=\"text-align:center;\">");
 
       int nb=_act.getNbFiles();
-      String imageName;
-      ImagePageParameters imagePage;
+      GeneaUserContext context=(GeneaUserContext)getUserContext();
       for(int i=0;i<nb;i++)
       {
-        imageName=_act.getActFilename(i);
-        imagePage=new ImagePageParameters(GeneaConstants.ACTS_DIR,imageName);
+        String imageName=_act.getActFilename(i);
+        ImagePageParameters imagePage=new ImagePageParameters(GeneaConstants.ACTS_DIR,imageName);
         imagePage.setParameter(GeneaUserContext.DB_NAME,context.getDbName());
         pw.print("<img src=\"");
         pw.print(imagePage.build());
@@ -260,12 +279,6 @@ public class ActPage extends GeneaWebPage
       }
       pw.println(HtmlConstants.END_DIV);
     }
-
-    // Handle act text
-    ActText text=_act.getText();
-    generateActText(pw,text);
-
-    WebPageTools.generatePageFooter(pw);
   }
 
   private void generateActText(PrintWriter pw, ActText text)

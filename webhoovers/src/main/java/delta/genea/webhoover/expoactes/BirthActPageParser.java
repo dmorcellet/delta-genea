@@ -18,6 +18,8 @@ import delta.common.utils.text.TextUtils;
  */
 public class BirthActPageParser
 {
+  private static final String STRONG_TAG="<strong>";
+
   private static final Logger LOGGER=LoggerFactory.getLogger(BirthActPageParser.class);
 
   private static final String PLACE_SEED="<strong>Commune/Paroisse</strong>"; 
@@ -54,25 +56,25 @@ public class BirthActPageParser
       if (line.contains(PLACE_SEED))
       {
         int index=line.indexOf(PLACE_SEED);
-        act._place=TextTools.findBetween(line.substring(index+PLACE_SEED.length()),"<strong>","</strong></a>");
+        act._place=TextTools.findBetween(line.substring(index+PLACE_SEED.length()),STRONG_TAG,"</strong></a>");
       }
       if (line.contains(BABY_SEED))
       {
         int index=line.indexOf(BABY_SEED);
         String tmp=line.substring(index+BABY_SEED.length());
-        act._lastName=TextTools.findBetween(tmp,"<strong>","</strong></a>");
+        act._lastName=TextTools.findBetween(tmp,STRONG_TAG,"</strong></a>");
         act._firstName=TextTools.findBetween(tmp,"</strong></a> <strong>","</strong></td></tr>");
       }
       if (line.contains(DATE_SEED))
       {
-        String dateStr=TextTools.findBetween(line,"<strong>","</strong></td>");
+        String dateStr=TextTools.findBetween(line,STRONG_TAG,"</strong></td>");
         try
         {
           act._date=_dateFormat.parse(dateStr);
         }
         catch(Exception e)
         {
-          LOGGER.warn("Could not parse date ["+dateStr+"],e");
+          LOGGER.warn("Could not parse date ["+dateStr+"]",e);
         }
       }
       if (line.contains(FATHER_SEED))

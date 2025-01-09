@@ -132,9 +132,8 @@ public class MainDownloadActs
     downloader.downloadToFile(url, tmpFile3);
 
     int tile=2280;
-    int nbPages=200;//Constants.NB_PAGES;
-    //for(int page=1;page<=nbPages;page++)
-    for(int page=nbPages;page<=nbPages;page++)
+    int nbPages=200;
+    for(int page=1;page<=nbPages;page++)
     {
       url="http://www.archinoe.net/cg62/visualiseur/visu_affiche_util.php?PHPSID="+sessionId+"&param=visu_0&o=IMG&p="+page;
 

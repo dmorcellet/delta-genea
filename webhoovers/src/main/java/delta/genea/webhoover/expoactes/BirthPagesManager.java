@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.EncodingNames;
@@ -20,7 +20,10 @@ import delta.genea.webhoover.utils.TmpFilesManager;
  */
 public class BirthPagesManager
 {
-  private static final Log LOGGER=LogFactory.getLog("BirthPagesManager");
+  private static final String A_HREF_SEED="<a href=\"";
+
+  private static final Logger LOGGER=LoggerFactory.getLogger(BirthPagesManager.class);
+
   private static final String BIRTHS_LINE_START="<td>&nbsp;<a href=\"/releves/tab_naiss.php?args=";
   private static final String BIRTH_ACT_REF_LINE_SEED="<a href=\"/releves/acte_naiss.php?xid=";
   private static final String PARTIAL_BIRTH_URL="/releves/acte_naiss.php?xid=";
@@ -56,7 +59,7 @@ public class BirthPagesManager
     _acts=null;
     return ret;
   }
-  
+
   private void handleBirthPage(String url, boolean lookForMultiplePages) throws Exception
   {
     TmpFilesManager tmpFilesManager=_session.getTmpFilesManager();
@@ -70,20 +73,21 @@ public class BirthPagesManager
     {
       if (line.startsWith(BIRTHS_LINE_START))
       {
-        String partialURL=TextTools.findBetween(line,"<a href=\"","\">");
-        //System.out.println(partialURL);
+        String partialURL=TextTools.findBetween(line,A_HREF_SEED,"\">");
+        LOGGER.debug("Partial URL: {}",partialURL);
         String newURL=siteRoot+partialURL;
         handleBirthPage(newURL,lookForMultiplePages);
       }
       if (line.contains(BIRTH_ACT_REF_LINE_SEED))
       {
-        String partialURL=TextTools.findBetween(line,"<a href=\"","\">");
+        String partialURL=TextTools.findBetween(line,A_HREF_SEED,"\">");
         String newURL=siteRoot+partialURL;
-        //System.out.println(newURL);
+        LOGGER.debug("New URL: {}",newURL);
         foundBirthRefs=true;
         int index=newURL.indexOf("?xid=");
         String idStr=newURL.substring(index+1);
-        int id=-1,ct=-1;
+        int id=-1;
+        int ct=-1;
         String[] ids=idStr.split("&");
         if ((ids!=null) && (ids.length>0))
         {
@@ -96,7 +100,7 @@ public class BirthPagesManager
             else if (ids[i].startsWith("xct="))
             {
               ct=NumericTools.parseInt(ids[i].substring(4),-1);
-            } 
+            }
           }
         }
         if ((id!=-1) && (ct!=-1))
@@ -108,8 +112,8 @@ public class BirthPagesManager
       {
         if (line.contains("&amp;xord=D&amp;pg="))
         {
-          String partialURL=TextTools.findBetween(line,"<a href=\"","\">");
-          //System.out.println(partialURL);
+          String partialURL=TextTools.findBetween(line,A_HREF_SEED,"\">");
+          LOGGER.debug("Partial URL: {}",partialURL);
           String newURL=siteRoot+partialURL;
           newURL=newURL.replace("&amp;","&");
           handleBirthPage(newURL,false);
@@ -136,7 +140,7 @@ public class BirthPagesManager
       if (act!=null)
       {
         _acts.add(act);
-        System.out.println(act);
+        LOGGER.info("{}",act);
       }
     }
     catch(Exception e)

@@ -3,7 +3,6 @@ package delta.genea.webhoover.utils;
 import java.awt.image.ColorModel;
 import java.awt.image.IndexColorModel;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,20 +21,24 @@ import javax.media.jai.operator.LookupDescriptor;
 import javax.media.jai.operator.MosaicDescriptor;
 import javax.media.jai.operator.TranslateDescriptor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Build a single big image from a mosaic of small images.
  * @author DAM
  */
 public class ImageMontageMaker
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(ImageMontageMaker.class);
+
   /**
    * Build image.
    * @param files Files to use.
    * @param out Output image.
-   * @throws FileNotFoundException
    * @throws IOException
    */
-  public void doIt(File[][] files, File out) throws FileNotFoundException, IOException
+  public void doIt(File[][] files, File out) throws IOException
   {
     int columnTotal=files.length;
     int rowTotal=files[0].length;
@@ -52,7 +55,6 @@ public class ImageMontageMaker
       int row=0;
       while (row<rowTotal)
       {
-        // System.out.println("c:" + col + "r:" + row);
         // Load image
         fileName=files[col][row].getAbsolutePath();
         ops[col][row]=FileLoadDescriptor.create(fileName,null,null,null);
@@ -71,11 +73,9 @@ public class ImageMontageMaker
     }
     RenderedOp finalImage=MosaicDescriptor.create(renderedOps.toArray(new RenderedOp[renderedOps
         .size()]),MosaicDescriptor.MOSAIC_TYPE_OVERLAY,null,null,null,null,null);
-    // ImageWriteParam param=new ImageWriteParam();
-    // param.setCompressionMode(ImageWriteParam.MODE_DEFAULT);
     Iterator<ImageWriter> iter=ImageIO.getImageWritersByFormatName("jpg");
     ImageWriter jiioWriter=iter.next();
-    // System.out.println(jiioWriter.getClass().getName());
+    LOGGER.debug("Image write class: {}",jiioWriter.getClass().getName());
 
     MemoryCacheImageOutputStream mos=new MemoryCacheImageOutputStream(new FileOutputStream(out));
     IIOImage iioImage=new IIOImage(finalImage,null,null);
@@ -91,7 +91,7 @@ public class ImageMontageMaker
         ops[i][j].dispose();
       }
     }
-    // ImageIO.write(finalImage, "png", out);
+    //ImageIO.write(finalImage, "png", out);
   }
 
   private static RenderedOp convert(RenderedOp image)

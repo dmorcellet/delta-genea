@@ -173,151 +173,20 @@ public class ActImporter
 
     ActsForPerson acts=new ActsForPerson(_dataSource.getObjectsSource(),p1);
     acts.build();
-    Long date=null;
-    Place place=null;
     Act act=null;
     if (actType==ActType.BIRTH)
     {
-      act=_map.get(newName);
-      if (act==null)
-      {
-        date=p1.getBirthDate();
-        if (date==null)
-        {
-          LOGGER.warn("Date is null for birth of sosa {}",Long.valueOf(sosa1));
-        }
-        else
-        {
-          if (new GregorianDate(date).isBefore(CHANGE_DATE))
-          {
-            actType=ActType.BAPTEM;
-          }
-        }
-        place=p1.getBirthPlace();
-        act=acts.getBirthAct();
-        if (act==null)
-        {
-          act=new Act(null);
-          act.setActTypeProxy(_dataSource.buildProxy(ActType.class,Long.valueOf(actType)));
-          act.setDate(date);
-          if (place!=null)
-          {
-            act.setPlaceProxy(_dataSource.buildProxy(Place.class,place.getPrimaryKey()));
-          }
-          act.setNbFiles(pageIndex);
-          act.setTraite(false);
-          act.setP1Proxy(_dataSource.buildProxy(Person.class,p1.getPrimaryKey()));
-        }
-        else
-        {
-          if (!DataObject.keysAreEqual(act.getP1Key(),p1.getPrimaryKey()))
-          {
-            LOGGER.warn(BAD_P1,act.getP1Key(),p1.getPrimaryKey());
-          }
-          if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
-          {
-            LOGGER.warn(BAD_ACT_TYPE,Long.valueOf(actType),act.getActType());
-          }
-        }
-        act.setPath(newName);
-      }
-      if (pageIndex>act.getNbFiles()) act.setNbFiles(pageIndex);
+      act=handleBirth(newName,acts,p1,sosa1,pageIndex);
     }
     else if (actType==ActType.DEATH)
     {
-      act=_map.get(newName);
-      if (act==null)
-      {
-        date=p1.getDeathDate();
-        if (date==null)
-        {
-          LOGGER.warn("Date is null for death of sosa {}",Long.valueOf(sosa1));
-        }
-        if (new GregorianDate(date).isBefore(CHANGE_DATE))
-        {
-          actType=ActType.BURIAL;
-        }
-        place=p1.getDeathPlace();
-        act=acts.getDeathAct();
-        if (act==null)
-        {
-          act=new Act(null);
-          act.setActTypeProxy(_dataSource.buildProxy(ActType.class,Long.valueOf(actType)));
-          act.setDate(date);
-          if (place!=null)
-          {
-            act.setPlaceProxy(_dataSource.buildProxy(Place.class,place.getPrimaryKey()));
-          }
-          act.setNbFiles(pageIndex);
-          act.setP1Proxy(_dataSource.buildProxy(Person.class,p1.getPrimaryKey()));
-        }
-        else
-        {
-          Long p1Key=act.getP1Key();
-          if (!DataObject.keysAreEqual(p1Key,p1.getPrimaryKey()))
-          {
-            LOGGER.warn(BAD_P1,p1Key,p1.getPrimaryKey());
-          }
-          if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
-          {
-            LOGGER.warn(BAD_ACT_TYPE,Long.valueOf(actType),act.getActType());
-          }
-        }
-        act.setPath(newName);
-      }
-      if (pageIndex>act.getNbFiles()) act.setNbFiles(pageIndex);
+      act=handleDeath(newName,acts,p1,sosa1,pageIndex);
     }
     else if (actType==ActType.UNION)
     {
       if ((p1!=null) && (p2!=null))
       {
-        act=_map.get(newName);
-        if (act==null)
-        {
-          Union u=acts.getUnionWith(p2.getPrimaryKey());
-          date=u.getDate();
-          if (date==null)
-          {
-            LOGGER.warn("Date is null for union of sosas {}/{}",Long.valueOf(sosa1),Long.valueOf(sosa2));
-          }
-          place=u.getPlace();
-          act=acts.getActOfUnionWith(p2.getPrimaryKey());
-          if (act==null)
-          {
-            act=new Act(null);
-            act.setActTypeProxy(_dataSource.buildProxy(ActType.class,Long.valueOf(actType)));
-            act.setDate(date);
-            if (place!=null)
-            {
-              act.setPlaceProxy(_dataSource.buildProxy(Place.class,place.getPrimaryKey()));
-            }
-            act.setNbFiles(pageIndex);
-            act.setP1Proxy(_dataSource.buildProxy(Person.class,p1.getPrimaryKey()));
-            act.setP2Proxy(_dataSource.buildProxy(Person.class,p2.getPrimaryKey()));
-          }
-          else
-          {
-            Long p1Key=act.getP1Key();
-            if (DataObject.keysAreEqual(p1Key,p1.getPrimaryKey()))
-            {
-              LOGGER.warn(BAD_P1,p1Key,p1.getPrimaryKey());
-            }
-            Long p2Key=act.getP2Key();
-            if (DataObject.keysAreEqual(p2Key,p2.getPrimaryKey()))
-            {
-              LOGGER.warn("Bad P2: {}!={}",p2Key,p2.getPrimaryKey());
-            }
-            if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
-            {
-              LOGGER.warn(BAD_ACT_TYPE,Long.valueOf(actType),act.getActType());
-            }
-          }
-          act.setPath(newName);
-        }
-        if ((act!=null) && (pageIndex>act.getNbFiles())) 
-        {
-          act.setNbFiles(pageIndex);
-        }
+        act=handleUnion(newName,acts,p1,sosa1,p2,sosa2,pageIndex);
       }
     }
     if (act!=null)
@@ -337,6 +206,161 @@ public class ActImporter
         LOGGER.error("Erreur renommage : {} to {}",fileName.getName(),newFileName);
       }
     }
+  }
+
+  private Act handleBirth(final String newName, ActsForPerson acts, final Person p1, long sosa1, int pageIndex)
+  {
+    long actType=ActType.BIRTH;
+    Act act=_map.get(newName);
+    if (act==null)
+    {
+      Long date=p1.getBirthDate();
+      if (date==null)
+      {
+        LOGGER.warn("Date is null for birth of sosa {}",Long.valueOf(sosa1));
+      }
+      else
+      {
+        if (new GregorianDate(date).isBefore(CHANGE_DATE))
+        {
+          actType=ActType.BAPTEM;
+        }
+      }
+      Place place=p1.getBirthPlace();
+      act=acts.getBirthAct();
+      if (act==null)
+      {
+        act=new Act(null);
+        act.setActTypeProxy(_dataSource.buildProxy(ActType.class,Long.valueOf(actType)));
+        act.setDate(date);
+        if (place!=null)
+        {
+          act.setPlaceProxy(_dataSource.buildProxy(Place.class,place.getPrimaryKey()));
+        }
+        act.setNbFiles(pageIndex);
+        act.setTraite(false);
+        act.setP1Proxy(_dataSource.buildProxy(Person.class,p1.getPrimaryKey()));
+      }
+      else
+      {
+        if (!DataObject.keysAreEqual(act.getP1Key(),p1.getPrimaryKey()))
+        {
+          LOGGER.warn(BAD_P1,act.getP1Key(),p1.getPrimaryKey());
+        }
+        if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
+        {
+          LOGGER.warn(BAD_ACT_TYPE,Long.valueOf(actType),act.getActType());
+        }
+      }
+      act.setPath(newName);
+    }
+    if (pageIndex>act.getNbFiles())
+    {
+      act.setNbFiles(pageIndex);
+    }
+    return act;
+  }
+
+  private Act handleDeath(final String newName, ActsForPerson acts, final Person p1, long sosa1, int pageIndex)
+  {
+    long actType=ActType.DEATH;
+    Act act=_map.get(newName);
+    if (act==null)
+    {
+      Long date=p1.getDeathDate();
+      if (date==null)
+      {
+        LOGGER.warn("Date is null for death of sosa {}",Long.valueOf(sosa1));
+      }
+      if (new GregorianDate(date).isBefore(CHANGE_DATE))
+      {
+        actType=ActType.BURIAL;
+      }
+      Place place=p1.getDeathPlace();
+      act=acts.getDeathAct();
+      if (act==null)
+      {
+        act=new Act(null);
+        act.setActTypeProxy(_dataSource.buildProxy(ActType.class,Long.valueOf(actType)));
+        act.setDate(date);
+        if (place!=null)
+        {
+          act.setPlaceProxy(_dataSource.buildProxy(Place.class,place.getPrimaryKey()));
+        }
+        act.setNbFiles(pageIndex);
+        act.setP1Proxy(_dataSource.buildProxy(Person.class,p1.getPrimaryKey()));
+      }
+      else
+      {
+        Long p1Key=act.getP1Key();
+        if (!DataObject.keysAreEqual(p1Key,p1.getPrimaryKey()))
+        {
+          LOGGER.warn(BAD_P1,p1Key,p1.getPrimaryKey());
+        }
+        if (!DataObject.keysAreEqual(Long.valueOf(actType),act.getActTypeKey()))
+        {
+          LOGGER.warn(BAD_ACT_TYPE,Long.valueOf(actType),act.getActType());
+        }
+      }
+      act.setPath(newName);
+    }
+    if (pageIndex>act.getNbFiles())
+    {
+      act.setNbFiles(pageIndex);
+    }
+    return act;
+  }
+
+  private Act handleUnion(String newName, ActsForPerson acts, Person p1, long sosa1, Person p2, long sosa2, int pageIndex)
+  {
+    Act act=_map.get(newName);
+    if (act==null)
+    {
+      Union u=acts.getUnionWith(p2.getPrimaryKey());
+      Long date=u.getDate();
+      if (date==null)
+      {
+        LOGGER.warn("Date is null for union of sosas {}/{}",Long.valueOf(sosa1),Long.valueOf(sosa2));
+      }
+      Place place=u.getPlace();
+      act=acts.getActOfUnionWith(p2.getPrimaryKey());
+      if (act==null)
+      {
+        act=new Act(null);
+        act.setActTypeProxy(_dataSource.buildProxy(ActType.class,Long.valueOf(ActType.UNION)));
+        act.setDate(date);
+        if (place!=null)
+        {
+          act.setPlaceProxy(_dataSource.buildProxy(Place.class,place.getPrimaryKey()));
+        }
+        act.setNbFiles(pageIndex);
+        act.setP1Proxy(_dataSource.buildProxy(Person.class,p1.getPrimaryKey()));
+        act.setP2Proxy(_dataSource.buildProxy(Person.class,p2.getPrimaryKey()));
+      }
+      else
+      {
+        Long p1Key=act.getP1Key();
+        if (DataObject.keysAreEqual(p1Key,p1.getPrimaryKey()))
+        {
+          LOGGER.warn(BAD_P1,p1Key,p1.getPrimaryKey());
+        }
+        Long p2Key=act.getP2Key();
+        if (DataObject.keysAreEqual(p2Key,p2.getPrimaryKey()))
+        {
+          LOGGER.warn("Bad P2: {}!={}",p2Key,p2.getPrimaryKey());
+        }
+        if (!DataObject.keysAreEqual(Long.valueOf(ActType.UNION),act.getActTypeKey()))
+        {
+          LOGGER.warn(BAD_ACT_TYPE,Long.valueOf(ActType.UNION),act.getActType());
+        }
+      }
+      act.setPath(newName);
+    }
+    if ((act!=null) && (pageIndex>act.getNbFiles())) 
+    {
+      act.setNbFiles(pageIndex);
+    }
+    return act;
   }
 
   private void doIt()

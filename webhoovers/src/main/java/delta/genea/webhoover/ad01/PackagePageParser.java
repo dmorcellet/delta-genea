@@ -4,9 +4,6 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.DownloadException;
@@ -21,8 +18,6 @@ import delta.genea.webhoover.utils.ImageUtils;
  */
 public class PackagePageParser
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(PackagePageParser.class);
-
   private static final String START_OF_NB_PAGES_LINE="var iNbMax = ";
   private static final String START_IMAGE_NAME_LINE="CTX[\"IMAGE\"]=\"";
   private static final String START_CHUNK_HSIZE_LINE="CTX[\"WDALX\"]=";
@@ -47,9 +42,9 @@ public class PackagePageParser
 
   /**
    * Parse pages.
-   * @throws Exception If a problem occurs.
+   * @throws DownloadException If a problem occurs.
    */
-  public void parse() throws Exception
+  public void parse() throws DownloadException
   {
     parsePage(0);
     for(int i=1;i<_nbPages;i++)
@@ -77,7 +72,7 @@ public class PackagePageParser
     return ret;
   }
 
-  private void parsePage(int nb) throws Exception
+  private void parsePage(int nb) throws DownloadException
   {
     File out=getImageFileName(nb);
     File bigOut=getBigImageFileName(nb);
@@ -180,7 +175,7 @@ public class PackagePageParser
     return out;
   }
 
-  private void downloadBigImage(int nb, String imageName, int nbH, int nbV) throws Exception
+  private void downloadBigImage(int nb, String imageName, int nbH, int nbV) throws DownloadException
   {
     File out=getBigImageFileName(nb);
     File parent=out.getParentFile();
