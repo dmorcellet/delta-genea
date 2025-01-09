@@ -39,17 +39,20 @@ public class ActsChecker
   private static final String UNION="Mariage";
   private static final String WEDDING_CONTRACT="Contrat de mariage";
 
+  private PrintStream _out;
   private final String _dbName;
   private final Long _rootPersonKey;
   private final SimpleDateFormat _format;
 
   /**
    * Constructor.
+   * @param out Output.
    * @param dbName Database identifier.
    * @param rootPersonKey Root person primary key.
    */
-  public ActsChecker(String dbName, long rootPersonKey)
+  public ActsChecker(PrintStream out, String dbName, long rootPersonKey)
   {
+    _out=out;
     _dbName=dbName;
     _rootPersonKey=Long.valueOf(rootPersonKey);
     _format=new SimpleDateFormat("dd/MM/yyyy");
@@ -69,7 +72,7 @@ public class ActsChecker
       Person moi=pp.getDataObject();
       AncestorsTree tree=new AncestorsTree(moi,1000);
       tree.build();
-      browseAncestorsTree(System.out,tree); // NOSONAR
+      browseAncestorsTree(tree);
       dataSource.close();
       ObjectsSource source=dataSource.getObjectsSource();
       if (source instanceof SqlObjectsSource)
@@ -84,12 +87,12 @@ public class ActsChecker
     }
   }
 
-  private void browseAncestorsTree(PrintStream out, AncestorsTree tree)
+  private void browseAncestorsTree(AncestorsTree tree)
   {
-    browseAncestorsTree(out,1,tree.getRootNode(),null);
+    browseAncestorsTree(1,tree.getRootNode(),null);
   }
 
-  private void browseAncestorsTree(PrintStream out, int sosa, BinaryTreeNode<Person> fatherNode, BinaryTreeNode<Person> motherNode)
+  private void browseAncestorsTree(int sosa, BinaryTreeNode<Person> fatherNode, BinaryTreeNode<Person> motherNode)
   {
     GeneaDataSource dataSource=GeneaDataSource.getInstance(_dbName);
     Person father=null;
@@ -99,8 +102,9 @@ public class ActsChecker
       father=fatherNode.getData();
       fatherActs=new ActsForPerson(dataSource.getObjectsSource(),father);
       fatherActs.build();
-      handleAct(out,sosa,-1,BIRTH,father,null,fatherActs.getBirthAct(),father.getBirthDate(),father.getBirthPlace());
-      handleAct(out,sosa,-1,DEATH,father,null,fatherActs.getDeathAct(),father.getDeathDate(),father.getDeathPlace());
+      String persons=buildPersons(father,null);
+      handleAct(sosa,-1,BIRTH,persons,fatherActs.getBirthAct(),father.getBirthDate(),father.getBirthPlace());
+      handleAct(sosa,-1,DEATH,persons,fatherActs.getDeathAct(),father.getDeathDate(),father.getDeathPlace());
     }
     Person mother=null;
     ActsForPerson motherActs=null;
@@ -109,8 +113,9 @@ public class ActsChecker
       mother=motherNode.getData();
       motherActs=new ActsForPerson(dataSource.getObjectsSource(),mother);
       motherActs.build();
-      handleAct(out,sosa+1,-1,BIRTH,mother,null,motherActs.getBirthAct(),mother.getBirthDate(),mother.getBirthPlace());
-      handleAct(out,sosa+1,-1,DEATH,mother,null,motherActs.getDeathAct(),mother.getDeathDate(),mother.getDeathPlace());
+      String persons=buildPersons(mother,null);
+      handleAct(sosa+1,-1,BIRTH,persons,motherActs.getBirthAct(),mother.getBirthDate(),mother.getBirthPlace());
+      handleAct(sosa+1,-1,DEATH,persons,motherActs.getDeathAct(),mother.getDeathDate(),mother.getDeathPlace());
     }
     if ((father!=null) && (mother!=null))
     {
@@ -120,26 +125,28 @@ public class ActsChecker
       {
         Act unionAct=fatherActs.getActOfUnionWith(motherKey);
         Long unionDate=union.getDate();
-        handleAct(out,sosa,sosa+1,UNION,father,mother,unionAct,unionDate,union.getPlace());
+        String persons=buildPersons(father,mother);
+        handleAct(sosa,sosa+1,UNION,persons,unionAct,unionDate,union.getPlace());
       }
       Act weddingContract=fatherActs.getActOfWeddingContractWith(motherKey);
       if (weddingContract!=null)
       {
         Long wcDate=weddingContract.getDate();
-        handleAct(out,sosa,sosa+1,WEDDING_CONTRACT,father,mother,weddingContract,wcDate,null);
+        String persons=buildPersons(father,mother);
+        handleAct(sosa,sosa+1,WEDDING_CONTRACT,persons,weddingContract,wcDate,null);
       }
     }
     if (fatherNode!=null)
     {
-      browseAncestorsTree(out,sosa*2,fatherNode.getLeftNode(),fatherNode.getRightNode());
+      browseAncestorsTree(sosa*2,fatherNode.getLeftNode(),fatherNode.getRightNode());
     }
     if (motherNode!=null)
     {
-      browseAncestorsTree(out,(sosa+1)*2,motherNode.getLeftNode(),motherNode.getRightNode());
+      browseAncestorsTree((sosa+1)*2,motherNode.getLeftNode(),motherNode.getRightNode());
     }
   }
 
-  private void handleAct(PrintStream out, int sosa1, int sosa2, String what, Person p, Person p2, Act act, Long date, Place place)
+  private String buildPersons(Person p, Person p2)
   {
     StringBuilder sb=new StringBuilder();
     if (p!=null) sb.append(p.getFullName());
@@ -149,72 +156,88 @@ public class ActsChecker
         sb.append("/");
       sb.append(p2.getFullName());
     }
-    String persons=sb.toString();
+    return sb.toString();
+  }
+
+  private void handleAct(int sosa1, int sosa2, String what, String persons, Act act, Long date, Place place)
+  {
     if (date==null) return;
     if (act==null)
     {
-      showSosa(out,sosa1,sosa2);
-      out.print(persons+"\t");
-      out.print(what+"\t");
-      if (place!=null)
-      {
-        out.print(place.getName());
-      }
-      out.print("\t");
-      if (place!=null)
-      {
-        out.print(place.getParentPlace().getName());
-      }
-      out.print("\t");
-      out.println(_format.format(new Date(date.longValue())));
+      handleMissingAct(sosa1,sosa2,what,persons,date,place);
     }
     else
     {
-      if (act.getNbFiles()==0)
-      {
-        ActText text=act.getText();
-        if (text==null)
-        {
-          showSosa(out,sosa1,sosa2);
-          out.print(persons+"\t");
-          ActType type=act.getActType();
-          if (type!=null) {
-            what=type.getType();
-          }
-          out.print("manque reproduction acte de "+what+"\t");
-          if (place!=null) out.print(place.getName());
-          out.print("\t");
-          if (place!=null) out.print(place.getParentPlace().getName());
-          out.print("\t");
-          out.println(_format.format(new Date(date.longValue())));
-        }
-      }
-      else if (!act.checkFiles())
-      {
-        showSosa(out,sosa1,sosa2);
-        out.print(persons+"\t");
-        out.print("manque fichier(s) pour acte de "+what+"\t");
-        if (place!=null) out.print(place.getName());
-        out.print("\t");
-        if (place!=null) out.print(place.getParentPlace().getName());
-        out.print("\t");
-        out.println(_format.format(new Date(date.longValue())));
-      }
+      handleFoundAct(sosa1,sosa2,what,act,persons,date,place);
     }
   }
 
-  private void showSosa(PrintStream out, long sosa1, long sosa2)
+  private void handleMissingAct(int sosa1, int sosa2, String what, String persons, Long date, Place place)
+  {
+    showSosa(sosa1,sosa2);
+    _out.print(persons+"\t");
+    _out.print(what+"\t");
+    if (place!=null)
+    {
+      _out.print(place.getName());
+    }
+    _out.print("\t");
+    if (place!=null)
+    {
+      _out.print(place.getParentPlace().getName());
+    }
+    _out.print("\t");
+    _out.println(_format.format(new Date(date.longValue())));
+  }
+
+  private void handleFoundAct(int sosa1, int sosa2, String what, Act act, String persons, Long date, Place place)
+  {
+    if (act.getNbFiles()==0)
+    {
+      ActText text=act.getText();
+      if (text==null)
+      {
+        showSosa(sosa1,sosa2);
+        _out.print(persons+"\t");
+        ActType type=act.getActType();
+        if (type!=null)
+        {
+          what=type.getType();
+        }
+        _out.print("manque reproduction acte de "+what+"\t");
+        if (place!=null) _out.print(place.getName());
+        _out.print("\t");
+        if (place!=null) _out.print(place.getParentPlace().getName());
+        _out.print("\t");
+        _out.println(_format.format(new Date(date.longValue())));
+      }
+    }
+    else if (!act.checkFiles())
+    {
+      showSosa(sosa1,sosa2);
+      _out.print(persons+"\t");
+      _out.print("manque fichier(s) pour acte de "+what+"\t");
+      if (place!=null) _out.print(place.getName());
+      _out.print("\t");
+      if (place!=null) _out.print(place.getParentPlace().getName());
+      _out.print("\t");
+      _out.println(_format.format(new Date(date.longValue())));
+    }
+  }
+
+  
+  private void showSosa(long sosa1, long sosa2)
   {
     if (sosa1!=-1)
     {
-      out.print(sosa1);
+      _out.print(sosa1);
     }
-    out.print("\t");
+    _out.print("\t");
     if (sosa2!=-1)
     {
-      out.print(sosa2);
+      _out.print(sosa2);
     }
-    out.print("\t");
+    _out.print("\t");
   }
 
   /**
@@ -229,7 +252,7 @@ public class ActsChecker
       long rootPersonKey=NumericTools.parseLong(args[1],-1);
       if ((dbName.length()>0) && (rootPersonKey!=-1))
       {
-        new ActsChecker(dbName,rootPersonKey).doIt();
+        new ActsChecker(System.out,dbName,rootPersonKey).doIt(); // NOSONAR
       }
     }
   }

@@ -72,10 +72,14 @@ public class MainDownloadActs
     session.stop();
   }
 
-  private File downloadTile(ADSession session, int pageNumber, int hIndex, int vIndex, int x, int y, int width, int height) throws Exception
+  private String getTileURL(int pageNumber, int x, int y, int width, int height)
   {
     String urlTile=Constants.ROOT_SITE+"/cg62/visualiseur/visu_affiche_util.php?o=TILE&param=visu_0&p="+pageNumber+"&x="+x+"&y="+y+"&l="+width+"&h="+height+"&ol="+width+"&oh="+height+"&r=0&n=0&b=0&c=0";
+    return urlTile;
+  }
 
+  private File downloadTile(ADSession session, String urlTile, int hIndex, int vIndex) throws Exception
+  {
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
     File tileFileCacheFile=new File(tmpDir,"tileFileName.txt");
@@ -84,7 +88,7 @@ public class MainDownloadActs
     List<String> lines=TextUtils.readAsLines(tileFileCacheFile);
     String cacheFileUrl=lines.get(0);
     String tileUrl=Constants.ROOT_SITE+cacheFileUrl;
-    downloader.downloadToFile(tileUrl, tileFile);
+    downloader.downloadToFile(tileUrl,tileFile);
     FileUtils.deleteFile(tileFileCacheFile);
     return tileFile;
   }
@@ -103,7 +107,8 @@ public class MainDownloadActs
       for(int vIndex=0;vIndex<nbV;vIndex++)
       {
         int tileHeight=Math.min(tileSize,height-y);
-        files[hIndex][vIndex]=downloadTile(session,pageNumber,hIndex,vIndex,x,y,tileWidth,tileHeight);
+        String urlTile=getTileURL(pageNumber,x,y,tileWidth,tileHeight);
+        files[hIndex][vIndex]=downloadTile(session,urlTile,hIndex,vIndex);
         y+=tileHeight;
       }
       x+=tileWidth;
