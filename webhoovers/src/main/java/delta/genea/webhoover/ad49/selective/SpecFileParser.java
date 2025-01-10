@@ -115,12 +115,13 @@ public class SpecFileParser
       if ((placeId!=-1) && (packageIndex!=-1) && (minPageIndex!=-1) && (maxPageIndex!=-1))
       {
         PageDescription p=new PageDescription();
-        p._placeId=placeId;
-        p._packageIndex=packageIndex;
-        p._minPageIndex=minPageIndex;
-        p._maxPageIndex=maxPageIndex;
-        p._name=getName(type,sosaOld,sosaStr,sosa2Str);
-        if (p._name!=null)
+        p.setPlaceId(placeId);
+        p.setPackageIndex(packageIndex);
+        p.setMinPageIndex(minPageIndex);
+        p.setMaxPageIndex(maxPageIndex);
+        String name=getName(type,sosaOld,sosaStr,sosa2Str);
+        p.setName(name);
+        if (name!=null)
         {
           ret.add(p);
         }

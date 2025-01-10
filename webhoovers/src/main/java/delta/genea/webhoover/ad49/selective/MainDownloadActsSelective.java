@@ -44,23 +44,24 @@ public class MainDownloadActsSelective
     {
       try
       {
-        int id=page._placeId;
+        int id=page.getPlaceId();
+        int packageIndex=page.getPackageIndex();
         PlacePageParser placeParser=new PlacePageParser(session,id);
         List<ActsPackage> actsPackages=placeParser.parse();
         ActsPackage actsPackage=null;
-        if (actsPackages.size()>=page._packageIndex)
+        if (actsPackages.size()>=packageIndex)
         {
-          actsPackage=actsPackages.get(page._packageIndex-1);
+          actsPackage=actsPackages.get(packageIndex-1);
         }
         else
         {
-          System.out.println("Cannot find package index ["+page._packageIndex+"] for place ["+page._placeId+"]");
+          System.out.println("Cannot find package index ["+page.getPackageIndex()+"] for place ["+id+"]");
         }
         if (actsPackage!=null)
         {
           PackagePageParser packageParser=new PackagePageParser(session,actsPackage);
           packageParser.parse();
-          packageParser.downloadPages(page._name,page._minPageIndex,page._maxPageIndex);
+          packageParser.downloadPages(page.getName(),page.getMinPageIndex(),page.getMaxPageIndex());
         }
       }
       catch(Exception e)

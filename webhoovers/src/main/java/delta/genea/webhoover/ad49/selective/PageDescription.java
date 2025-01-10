@@ -9,24 +9,105 @@ public class PageDescription
   /**
    * Place identifier.
    */
-  public int _placeId;
+  private int _placeId;
   /**
    * Package index.
    */
-  public int _packageIndex;
+  private int _packageIndex;
   /**
    * Index of the first page (starting at 1).
    */
-  public int _minPageIndex;
+  private int _minPageIndex;
   /**
    * Index of the last page.
    */
-  public int _maxPageIndex;
+  private int _maxPageIndex;
   /**
    * Name of files to generate ("xxx.jpg").
    */
-  public String _name;
-  
+  private String _name;
+
+  /**
+   * @return the placeId
+   */
+  public int getPlaceId()
+  {
+    return _placeId;
+  }
+
+  /**
+   * @param placeId the placeId to set
+   */
+  public void setPlaceId(int placeId)
+  {
+    _placeId=placeId;
+  }
+
+  /**
+   * @return the packageIndex
+   */
+  public int getPackageIndex()
+  {
+    return _packageIndex;
+  }
+
+  /**
+   * @param packageIndex the packageIndex to set
+   */
+  public void setPackageIndex(int packageIndex)
+  {
+    _packageIndex=packageIndex;
+  }
+
+  /**
+   * @return the minPageIndex
+   */
+  public int getMinPageIndex()
+  {
+    return _minPageIndex;
+  }
+
+  /**
+   * @param minPageIndex the minPageIndex to set
+   */
+  public void setMinPageIndex(int minPageIndex)
+  {
+    _minPageIndex=minPageIndex;
+  }
+
+  /**
+   * @return the maxPageIndex
+   */
+  public int getMaxPageIndex()
+  {
+    return _maxPageIndex;
+  }
+
+  /**
+   * @param maxPageIndex the maxPageIndex to set
+   */
+  public void setMaxPageIndex(int maxPageIndex)
+  {
+    _maxPageIndex=maxPageIndex;
+  }
+
+  /**
+   * @return the name
+   */
+  public String getName()
+  {
+    return _name;
+  }
+
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name)
+  {
+    _name=name;
+  }
+
+  @Override
   public String toString()
   {
     StringBuilder sb=new StringBuilder();
