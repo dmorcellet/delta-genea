@@ -59,7 +59,7 @@ public class PackagePageParser
    */
   public String getDirName()
   {
-    String ret=_actsPackage._period;
+    String ret=_actsPackage.getPeriod();
     if ((ret.indexOf("AN 6-AN 9")!=-1) ||
       (ret.indexOf("AN 6-AN 10")!=-1) ||
       (ret.indexOf("AN 2-AN 2")!=-1) ||
@@ -67,7 +67,7 @@ public class PackagePageParser
       (ret.indexOf("AN 6")!=-1) ||
       (ret.indexOf("AN 7")!=-1))
     {
-      ret=ret+" ("+_actsPackage._actType+")";
+      ret=ret+" ("+_actsPackage.getActType()+")";
     }
     return ret;
   }
@@ -79,7 +79,7 @@ public class PackagePageParser
     File rootDir=new File(Constants.ROOT_DIR,getDirName());
     rootDir.mkdirs();
     File page=new File(rootDir,"page.html");
-    String url=_actsPackage._link;
+    String url=_actsPackage.getLink();
     if (nb>0)
     {
       if ((out.exists())&&(bigOut.exists()))

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import delta.common.utils.text.TextUtils;
+import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.HtmlTools;
@@ -46,9 +47,9 @@ public class PlacePageParser
   /**
    * Extract definitions of acts packages for this place.
    * @return A list of acts packages.
-   * @throws Exception If a problem occurs.
+   * @throws DownloadException If a problem occurs.
    */
-  public List<ActsPackage> parse() throws Exception
+  public List<ActsPackage> parse() throws DownloadException
   {
     String phpSID=_session.getPHPSessionID();
     Downloader downloader=_session.getDownloader();
@@ -105,13 +106,13 @@ public class PlacePageParser
     String id=tmp.substring(0,index);
     List<String> items=splitAsTags("td",cells);
     ActsPackage actsPackage=new ActsPackage();
-    actsPackage._id=id;
-    actsPackage._placeName=items.get(0);
-    actsPackage._church=items.get(1);
-    actsPackage._actType=items.get(2);
-    actsPackage._period=items.get(3);
-    actsPackage._source=items.get(4);
-    actsPackage._comments=items.get(5);
+    actsPackage.setId(id);
+    actsPackage.setPlaceName(items.get(0));
+    actsPackage.setChurch(items.get(1));
+    actsPackage.setActType(items.get(2));
+    actsPackage.setPeriod(items.get(3));
+    actsPackage.setSource(items.get(4));
+    actsPackage.setComments(items.get(5));
     return actsPackage;
   }
 

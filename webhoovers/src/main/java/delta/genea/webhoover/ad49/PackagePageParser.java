@@ -71,7 +71,7 @@ public class PackagePageParser
   private void downloadPage(File out, int pageNumber, int width, int height, int tileSize) throws Exception
   {
     out.getParentFile().mkdirs();
-    LOGGER.info("Handling {} / {} - page {}",_actsPackage._placeName,_actsPackage._period,Integer.valueOf(pageNumber));
+    LOGGER.info("Handling {} / {} - page {}",_actsPackage.getPlaceName(),_actsPackage.getPeriod(),Integer.valueOf(pageNumber));
     int nbH=(width/tileSize)+(((width%tileSize)!=0)?1:0);
     int nbV=(height/tileSize)+(((height%tileSize)!=0)?1:0);
     int x=0;
@@ -96,18 +96,18 @@ public class PackagePageParser
     TextFileWriter w=new TextFileWriter(to);
     if (w.start())
     {
-      w.writeNextLine("Commune : "+_actsPackage._placeName);
-      if (_actsPackage._church.length()>0)
+      w.writeNextLine("Commune : "+_actsPackage.getPlaceName());
+      if (_actsPackage.getChurch().length()>0)
       {
-        w.writeNextLine("Paroisse : "+_actsPackage._church);
+        w.writeNextLine("Paroisse : "+_actsPackage.getChurch());
       }
-      w.writeNextLine("Actes : "+_actsPackage._actType);
-      w.writeNextLine("Période : "+_actsPackage._period);
-      w.writeNextLine("Collection : "+_actsPackage._source);
-      if (_actsPackage._comments.length()>0)
+      w.writeNextLine("Actes : "+_actsPackage.getActType());
+      w.writeNextLine("Période : "+_actsPackage.getPeriod());
+      w.writeNextLine("Collection : "+_actsPackage.getSource());
+      if (_actsPackage.getComments().length()>0)
       {
         w.writeNextLine("Notes, détails, lacunes : ");
-        w.writeNextLine(_actsPackage._comments);
+        w.writeNextLine(_actsPackage.getComments());
       }
       w.terminate();
     }
@@ -121,7 +121,7 @@ public class PackagePageParser
   {
     _rootActsPackageDir.mkdirs();
     buildInfoFile(new File(_rootActsPackageDir,"infos.txt"));
-    String id=_actsPackage._id;
+    String id=_actsPackage.getId();
     Downloader downloader=_session.getDownloader();
     String phpSID=_session.getPHPSessionID();
     File tmpDir=_session.getTmpDir();

@@ -11,35 +11,163 @@ public class ActsPackage
   /**
    * Identifier.
    */
-  public String _id;
+  private String _id;
   /**
    * Place name.
    */
-  public String _placeName;
+  private String _placeName;
   /**
    * Church.
    */
-  public String _church;
+  private String _church;
   /**
    * Act type.
    */
-  public String _actType;
+  private String _actType;
   /**
    * Period of time.
    */
-  public String _period;
+  private String _period;
   /**
    * Source.
    */
-  public String _source;
+  private String _source;
   /**
    * Comments.
    */
-  public String _comments;
+  private String _comments;
   /**
    * URL of acts.
    */
-  public String _link;
+  private String _link;
+
+  /**
+   * @return the id
+   */
+  public String getId()
+  {
+    return _id;
+  }
+
+  /**
+   * @param id the id to set
+   */
+  public void setId(String id)
+  {
+    _id=id;
+  }
+
+  /**
+   * @return the placeName
+   */
+  public String getPlaceName()
+  {
+    return _placeName;
+  }
+
+  /**
+   * @param placeName the placeName to set
+   */
+  public void setPlaceName(String placeName)
+  {
+    _placeName=placeName;
+  }
+
+  /**
+   * @return the church
+   */
+  public String getChurch()
+  {
+    return _church;
+  }
+
+  /**
+   * @param church the church to set
+   */
+  public void setChurch(String church)
+  {
+    _church=church;
+  }
+
+  /**
+   * @return the actType
+   */
+  public String getActType()
+  {
+    return _actType;
+  }
+
+  /**
+   * @param actType the actType to set
+   */
+  public void setActType(String actType)
+  {
+    _actType=actType;
+  }
+
+  /**
+   * @return the period
+   */
+  public String getPeriod()
+  {
+    return _period;
+  }
+
+  /**
+   * @param period the period to set
+   */
+  public void setPeriod(String period)
+  {
+    _period=period;
+  }
+
+  /**
+   * @return the source
+   */
+  public String getSource()
+  {
+    return _source;
+  }
+
+  /**
+   * @param source the source to set
+   */
+  public void setSource(String source)
+  {
+    _source=source;
+  }
+
+  /**
+   * @return the comments
+   */
+  public String getComments()
+  {
+    return _comments;
+  }
+
+  /**
+   * @param comments the comments to set
+   */
+  public void setComments(String comments)
+  {
+    _comments=comments;
+  }
+
+  /**
+   * @return the link
+   */
+  public String getLink()
+  {
+    return _link;
+  }
+
+  /**
+   * @param link the link to set
+   */
+  public void setLink(String link)
+  {
+    _link=link;
+  }
 
   /**
    * Get the directory for this package.

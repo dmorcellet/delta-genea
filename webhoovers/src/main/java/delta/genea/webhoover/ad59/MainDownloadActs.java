@@ -34,7 +34,7 @@ public class MainDownloadActs
     new MainDownloadActs().doIt();
   }
 
-  private static boolean _useThreads=true;
+  private static boolean USE_THREADS=true;
 
   private void getPages(final ActsPackage actsPackage,final boolean td)
   {
@@ -55,7 +55,7 @@ public class MainDownloadActs
         localSession.stop();
       }
     };
-    if (_useThreads)
+    if (USE_THREADS)
     {
       Thread t=new Thread(r);
       t.setDaemon(false);
@@ -183,10 +183,10 @@ public class MainDownloadActs
           String actTypeLine=lines.get(i+1);
           String actType=TextTools.findBetween(actTypeLine,"&gt;","</p>").trim();
           ActsPackage newPackage=new ActsPackage();
-          newPackage._actType=actType;
-          newPackage._id=packageId;
-          newPackage._period=from+"-"+to;
-          newPackage._placeName=placeName;
+          newPackage.setActType(actType);
+          newPackage.setId(packageId);
+          newPackage.setPeriod(from+"-"+to);
+          newPackage.setPlaceName(placeName);
           packages.add(newPackage);
         }
       }
@@ -236,7 +236,7 @@ public class MainDownloadActs
     {
       return 0;
     }
-    String packageId=actsPackage._id;
+    String packageId=actsPackage.getId();
     String seed="TD_package"+packageId+"_page"+pageNumber;
     File tmpFile=new File(tmpDir,seed+".html");
     String url=Constants.getPageURL(packageId,pageNumber,td);

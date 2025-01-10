@@ -90,10 +90,10 @@ public class PlacePageParser
       link=Constants.ROOT_SITE+link;
     }
     ActsPackage ret=new ActsPackage();
-    ret._placeName=placeName;
-    ret._actType=actType;
-    ret._period=period;
-    ret._link=link;
+    ret.setPlaceName(placeName);
+    ret.setActType(actType);
+    ret.setPeriod(period);
+    ret.setLink(link);
     return ret;
   }
 
