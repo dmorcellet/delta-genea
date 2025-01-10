@@ -11,6 +11,7 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.html.HtmlConstants;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
+import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.ActsPackage;
@@ -18,6 +19,7 @@ import delta.genea.webhoover.utils.FileUtils;
 import delta.genea.webhoover.utils.ImageUtils;
 
 /**
+ * Download acts for department 59.
  * @author DAM
  */
 public class MainDownloadActs
@@ -34,7 +36,7 @@ public class MainDownloadActs
     new MainDownloadActs().doIt();
   }
 
-  private static boolean USE_THREADS=true;
+  private static final boolean USE_THREADS=true;
 
   private void getPages(final ActsPackage actsPackage,final boolean td)
   {
@@ -67,7 +69,7 @@ public class MainDownloadActs
     }
   }
 
-  private void doIt() throws Exception
+  private void doIt() throws DownloadException
   {
     ADSession session=new ADSession();
     session.start();
@@ -77,7 +79,7 @@ public class MainDownloadActs
     session.stop();
   }
 
-  private void handlePlace(ADSession session, String placeName, boolean td) throws Exception
+  private void handlePlace(ADSession session, String placeName, boolean td) throws DownloadException
   {
     List<String> periods=getPeriods(session,placeName);
     LOGGER.info("Got periods: {}",periods);
@@ -90,7 +92,7 @@ public class MainDownloadActs
     }
   }
 
-  private void handlePeriod(ADSession session, String placeName, int from, int to, boolean td) throws Exception
+  private void handlePeriod(ADSession session, String placeName, int from, int to, boolean td) throws DownloadException
   {
     List<ActsPackage> actsPackages=getPackages(session,placeName,from,to);
     for(ActsPackage actsPackage : actsPackages)
@@ -99,7 +101,7 @@ public class MainDownloadActs
     }
   }
 
-  private List<String> getPlaces(ADSession session) throws Exception
+  private List<String> getPlaces(ADSession session) throws DownloadException
   {
     List<String> placeNames=new ArrayList<String>();
     Downloader downloader=session.getDownloader();
@@ -129,7 +131,7 @@ public class MainDownloadActs
     return placeNames;
   }
 
-  private List<String> getPeriods(ADSession session, String placeName) throws Exception
+  private List<String> getPeriods(ADSession session, String placeName) throws DownloadException
   {
     List<String> periods=new ArrayList<String>();
     Downloader downloader=session.getDownloader();
@@ -160,7 +162,7 @@ public class MainDownloadActs
     return periods;
   }
 
-  private List<ActsPackage> getPackages(ADSession session, String placeName, int from, int to) throws Exception
+  private List<ActsPackage> getPackages(ADSession session, String placeName, int from, int to) throws DownloadException
   {
     List<ActsPackage> packages=new ArrayList<ActsPackage>();
     Downloader downloader=session.getDownloader();
@@ -213,7 +215,7 @@ public class MainDownloadActs
   }
   */
 
-  private void getPages(ADSession session, ActsPackage actsPackage, boolean td) throws Exception
+  private void getPages(ADSession session, ActsPackage actsPackage, boolean td) throws DownloadException
   {
     LOGGER.info("Handling {} with session {}",actsPackage,session.getTmpDir());
     int nbPages=getPage(session,actsPackage,1,td);
@@ -223,7 +225,7 @@ public class MainDownloadActs
     }
   }
 
-  private int getPage(ADSession session, ActsPackage actsPackage, int pageNumber, boolean td) throws Exception
+  private int getPage(ADSession session, ActsPackage actsPackage, int pageNumber, boolean td) throws DownloadException
   {
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();

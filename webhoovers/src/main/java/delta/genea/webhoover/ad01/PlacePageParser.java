@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.common.utils.text.TextUtils;
 import delta.genea.webhoover.ActsPackage;
 
@@ -14,6 +17,8 @@ import delta.genea.webhoover.ActsPackage;
  */
 public class PlacePageParser
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(PlacePageParser.class);
+
   private static final String START_OF_PLACE_ENTRY="<td valign=\"top\" class=\"nom_commune\" style=\"width:55%;\"><span>";
   private static final String START_OF_LINE_4="<td valign=\"top\" align=\"middle\" style=\"width:8%;\"><a href=\"";
   private static final String END_OF_SPAN="</span>";
@@ -54,7 +59,7 @@ public class PlacePageParser
     String placeName=line0.substring(START_OF_PLACE_ENTRY.length());
     int index=placeName.indexOf(END_OF_SPAN);
     placeName=placeName.substring(0,index);
-    System.out.println("Place name : "+placeName);
+    LOGGER.info("Place name: {}",placeName);
     // Autres?
 /*
     String actType=lines.get(2);
@@ -75,12 +80,12 @@ public class PlacePageParser
     period=removeUntil(period,">");
     index=period.indexOf(END_OF_TD);
     period=period.substring(0,index);
-    System.out.println("Period : "+period);
+    LOGGER.info("Period: {}",period);
     String link=lines.get(3);
     link=link.substring(START_OF_LINE_4.length());
     index=link.indexOf("\"");
     link=link.substring(0,index);
-    System.out.println("link : "+link);
+    LOGGER.info("Link: {}",link);
     if (link.equals("#"))
     {
       link=null;

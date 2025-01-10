@@ -10,6 +10,7 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileWriter;
 import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
+import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
 import delta.genea.webhoover.utils.FileUtils;
@@ -40,7 +41,7 @@ public class PackagePageParser
     _rootActsPackageDir=_actsPackage.getDirFile(Constants.ROOT_DIR);
   }
 
-  private File downloadTile(int pageNumber, int hIndex, int vIndex, int x, int y, int width, int height) throws Exception
+  private File downloadTile(int pageNumber, int hIndex, int vIndex, int x, int y, int width, int height) throws DownloadException
   {
     String phpSID=_session.getPHPSessionID();
     String urlTile=Constants.ROOT_SITE+"/cg49work/visu_affiche_util.php?o=TILE&param=visu&p="+pageNumber+"&x="+x+"&y="+y+"&l="+width+"&h="+height+"&ol="+width+"&oh="+height+"&r=0&n=0&b=0&c=0&PHPSID="+phpSID;
@@ -68,7 +69,7 @@ public class PackagePageParser
     return out;
   }
 
-  private void downloadPage(File out, int pageNumber, int width, int height, int tileSize) throws Exception
+  private void downloadPage(File out, int pageNumber, int width, int height, int tileSize) throws DownloadException
   {
     out.getParentFile().mkdirs();
     LOGGER.info("Handling {} / {} - page {}",_actsPackage.getPlaceName(),_actsPackage.getPeriod(),Integer.valueOf(pageNumber));
@@ -115,9 +116,9 @@ public class PackagePageParser
 
   /**
    * Parse package and get the number of pages.
-   * @throws Exception If a problem occurs.
+   * @throws DownloadException If a problem occurs.
    */
-  public void parse() throws Exception
+  public void parse() throws DownloadException
   {
     _rootActsPackageDir.mkdirs();
     buildInfoFile(new File(_rootActsPackageDir,"infos.txt"));
@@ -135,23 +136,21 @@ public class PackagePageParser
 
     // Calcule le nombre de pages
     int nbPages=0;
+    List<String> lines=TextUtils.readAsLines(tmpFile);
+    int index;
+    String start="if (pageLoad>";
+    for(String line:lines)
     {
-      List<String> lines=TextUtils.readAsLines(tmpFile);
-      int index;
-      String start="if (pageLoad>";
-      for(String line:lines)
+      index=line.indexOf(start);
+      if (index!=-1)
       {
-        index=line.indexOf(start);
+        line=line.substring(index+start.length());
+        index=line.indexOf(")");
         if (index!=-1)
         {
-          line=line.substring(index+start.length());
-          index=line.indexOf(")");
-          if (index!=-1)
-          {
-            nbPages=NumericTools.parseInt(line.substring(0,index),0);
-          }
-          break;
+          nbPages=NumericTools.parseInt(line.substring(0,index),0);
         }
+        break;
       }
     }
     FileUtils.deleteFile(tmpFile);
@@ -163,9 +162,9 @@ public class PackagePageParser
    * @param name Hint on the name of generated files ("xxx.jpg"). May be <code>null</code>.
    * @param minIndex Index of the first page (starting at 1).
    * @param maxIndex Index of the last page (maximum is the number of pages in this package).
-   * @throws Exception If a problem occurs.
+   * @throws DownloadException If a problem occurs.
    */
-  public void downloadPages(final String name, int minIndex, int maxIndex) throws Exception
+  public void downloadPages(final String name, int minIndex, int maxIndex) throws DownloadException
   {
     Downloader downloader=_session.getDownloader();
     String phpSID=_session.getPHPSessionID();
@@ -227,9 +226,9 @@ public class PackagePageParser
 
   /**
    * Download all pages in the managed package.
-   * @throws Exception If a problem occurs.
+   * @throws DownloadException If a problem occurs.
    */
-  public void downloadAllPages() throws Exception
+  public void downloadAllPages() throws DownloadException
   {
     downloadPages(null,1,_nbPages);
   }
