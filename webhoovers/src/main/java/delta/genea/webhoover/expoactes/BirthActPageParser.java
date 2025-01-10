@@ -3,6 +3,7 @@ package delta.genea.webhoover.expoactes;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -56,21 +57,25 @@ public class BirthActPageParser
       if (line.contains(PLACE_SEED))
       {
         int index=line.indexOf(PLACE_SEED);
-        act._place=TextTools.findBetween(line.substring(index+PLACE_SEED.length()),STRONG_TAG,"</strong></a>");
+        String place=TextTools.findBetween(line.substring(index+PLACE_SEED.length()),STRONG_TAG,"</strong></a>");
+        act.setPlace(place);
       }
       if (line.contains(BABY_SEED))
       {
         int index=line.indexOf(BABY_SEED);
         String tmp=line.substring(index+BABY_SEED.length());
-        act._lastName=TextTools.findBetween(tmp,STRONG_TAG,"</strong></a>");
-        act._firstName=TextTools.findBetween(tmp,"</strong></a> <strong>","</strong></td></tr>");
+        String lastName=TextTools.findBetween(tmp,STRONG_TAG,"</strong></a>");
+        act.setLastName(lastName);
+        String firstName=TextTools.findBetween(tmp,"</strong></a> <strong>","</strong></td></tr>");
+        act.setFirstName(firstName);
       }
       if (line.contains(DATE_SEED))
       {
         String dateStr=TextTools.findBetween(line,STRONG_TAG,"</strong></td>");
         try
         {
-          act._date=_dateFormat.parse(dateStr);
+          Date date=_dateFormat.parse(dateStr);
+          act.setDate(date);
         }
         catch(Exception e)
         {
@@ -79,11 +84,13 @@ public class BirthActPageParser
       }
       if (line.contains(FATHER_SEED))
       {
-        act._father=TextTools.findBetween(line,"<td class=\"fich1\">","</td></tr>");
+        String father=TextTools.findBetween(line,"<td class=\"fich1\">","</td></tr>");
+        act.setFather(father);
       }
       if (line.contains(MOTHER_SEED))
       {
-        act._mother=TextTools.findBetween(line,"<td class=\"fich1\">","</td></tr>");
+        String mother=TextTools.findBetween(line,"<td class=\"fich1\">","</td></tr>");
+        act.setMother(mother);
       }
     }
     return act;

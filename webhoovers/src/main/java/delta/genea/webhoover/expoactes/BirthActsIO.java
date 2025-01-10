@@ -32,7 +32,7 @@ public class BirthActsIO
     {
       public int compare(BirthAct o1, BirthAct o2)
       {
-        return o1._date.compareTo(o2._date);
+        return o1.getDate().compareTo(o2.getDate());
       }
     };
     Collections.sort(sortedList,c);
@@ -41,12 +41,12 @@ public class BirthActsIO
     {
       for(BirthAct act : sortedList)
       {
-        w.writeNextLine(act._lastName);
-        w.writeNextLine(act._firstName);
-        w.writeNextLine(act._date.getTime());
-        w.writeNextLine(act._place);
-        w.writeNextLine(act._father);
-        w.writeNextLine(act._mother);
+        w.writeNextLine(act.getLastName());
+        w.writeNextLine(act.getFirstName());
+        w.writeNextLine(act.getDate().getTime());
+        w.writeNextLine(act.getPlace());
+        w.writeNextLine(act.getFather());
+        w.writeNextLine(act.getMother());
       }
       w.terminate();
       ok=true;
@@ -74,20 +74,24 @@ public class BirthActsIO
           break;
         }
         BirthAct act=new BirthAct();
-        act._lastName=lastName;
-        act._firstName=r.getNextLine();
+        act.setLastName(lastName);
+        String firstName=r.getNextLine();
+        act.setFirstName(firstName);
         String dateStr=r.getNextLine();
         if ((dateStr!=null) && (dateStr.length()>0))
         {
           long dateMs=NumericTools.parseLong(dateStr,-1);
           if (dateMs!=-1)
           {
-            act._date=new Date(dateMs);
+            act.setDate(new Date(dateMs));
           }
         }
-        act._place=r.getNextLine();
-        act._father=r.getNextLine();
-        act._mother=r.getNextLine();
+        String place=r.getNextLine();
+        act.setPlace(place);
+        String father=r.getNextLine();
+        act.setFather(father);
+        String mother=r.getNextLine();
+        act.setMother(mother);
         ret.add(act);
       }
       r.terminate();

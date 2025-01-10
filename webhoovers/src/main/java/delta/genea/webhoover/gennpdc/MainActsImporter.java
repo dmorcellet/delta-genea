@@ -1,6 +1,7 @@
 package delta.genea.webhoover.gennpdc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import delta.common.framework.objects.data.ObjectsManager;
@@ -96,17 +97,18 @@ public class MainActsImporter
   private void importBirthAct(BirthAct act)
   {
     PlaceManager p=_data.getPlacesManager();
-    Long placeKey=p.decodePlaceName(act._place);
+    Long placeKey=p.decodePlaceName(act.getPlace());
     Person person=new Person(Long.valueOf(_counter));
     _counter++;
-    person.setFirstname(act._firstName);
-    person.setLastName(act._lastName);
-    if (act._date!=null)
+    person.setFirstname(act.getFirstName());
+    person.setLastName(act.getLastName());
+    Date date=act.getDate();
+    if (date!=null)
     {
-      person.setBirthDate(act._date,null);
+      person.setBirthDate(date,null);
       person.setBirthPlaceProxy(_dataSource.buildProxy(Place.class,placeKey));
     }
-    Person[] parents=findCouple(act._father,act._mother,true);
+    Person[] parents=findCouple(act.getFather(),act.getMother(),true);
     Person father=parents[0];
     if (father!=null)
     {
