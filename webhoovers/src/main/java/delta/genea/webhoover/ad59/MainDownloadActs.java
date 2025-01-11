@@ -19,7 +19,7 @@ import delta.genea.webhoover.utils.FileUtils;
 import delta.genea.webhoover.utils.ImageUtils;
 
 /**
- * Download acts for department 59.
+ * Main class for the AD59 webhoover.
  * @author DAM
  */
 public class MainDownloadActs

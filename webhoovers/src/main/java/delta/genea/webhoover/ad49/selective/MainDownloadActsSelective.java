@@ -19,9 +19,6 @@ public class MainDownloadActsSelective
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(MainDownloadActsSelective.class);
 
-  private static final File IN_FILE=new File("/home/dm/tmp/liste.csv");
-  private static final File IN_FILE2=new File("/home/dm/tmp/liste2.csv");
-
   /**
    * Main method for this tool.
    * @param args Not used.
@@ -31,10 +28,12 @@ public class MainDownloadActsSelective
     AD49Session session=new AD49Session();
     session.start();
     SpecFileParser p=new SpecFileParser();
-    List<PageDescription> pages=p.parse(IN_FILE);
-    parsePages(session,pages);
-    List<PageDescription> pages2=p.parse(IN_FILE2);
-    parsePages(session,pages2);
+    for(String arg : args)
+    {
+      File f=new File(arg);
+      List<PageDescription> pages=p.parse(f);
+      parsePages(session,pages);
+    }
     session.stop();
   }
 
@@ -55,7 +54,7 @@ public class MainDownloadActsSelective
         }
         else
         {
-          System.out.println("Cannot find package index ["+page.getPackageIndex()+"] for place ["+id+"]");
+          LOGGER.warn("Cannot find package index {} for place {}",Integer.valueOf(packageIndex),Integer.valueOf(id));
         }
         if (actsPackage!=null)
         {

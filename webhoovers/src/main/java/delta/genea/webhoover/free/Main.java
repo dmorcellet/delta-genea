@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
@@ -16,6 +19,8 @@ import delta.genea.webhoover.utils.TmpFilesManager;
  */
 public class Main
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(Main.class);
+
   private Downloader _d;
   private int _nbDownloadedActs;
   private TmpFilesManager _tmp;
@@ -33,7 +38,7 @@ public class Main
   {
     _tmp=new TmpFilesManager(Constants.TMP_NAME);
     handleDirPage(Constants.SITE,Constants.OUT_DIR);
-    System.out.println(_nbDownloadedActs);
+    LOGGER.info("Downloaded {} acts",Integer.valueOf(_nbDownloadedActs));
   }
   
   private void handleDirPage(String url, File out) throws Exception
@@ -72,7 +77,7 @@ public class Main
             String dirName=TextTools.findBetween(href,"\">","/");
             dirItems.add(dirName);
           }
-          else //if (line.startsWith("<IMG SRC=\"/icons/image2.gif\""))
+          else
           {
             String href=TextTools.findBetween(line,"<A HREF=","</A>");
             String fileUrl=TextTools.findBetween(href,"\"","\"");
@@ -82,7 +87,7 @@ public class Main
             if (!newFile.canRead())
             {
               fileUrl=url+fileUrl;
-              System.out.println(fileUrl+" -> "+newFile);
+              LOGGER.info("Downloading URL {} to file {}",fileUrl,newFile);
               _d.downloadToFile(fileUrl,newFile);
             }
           }

@@ -11,6 +11,7 @@ import delta.common.utils.NumericTools;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
+import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.utils.TmpFilesManager;
 
@@ -47,9 +48,9 @@ public class BirthPagesManager
    * Download all birth acts for a place.
    * @param placeName Place name.
    * @return A list of birth acts.
-   * @throws Exception If a problem occurs.
+   * @throws DownloadException If a problem occurs.
    */
-  public List<BirthAct> downloadBirthActs(String placeName) throws Exception
+  public List<BirthAct> downloadBirthActs(String placeName) throws DownloadException
   {
     String siteRoot=_session.getSiteRoot();
     String url=siteRoot+PARTIAL_BIRTH_ACTS_FOR_PLACE_URL+placeName;
@@ -60,7 +61,7 @@ public class BirthPagesManager
     return ret;
   }
 
-  private void handleBirthPage(String url, boolean lookForMultiplePages) throws Exception
+  private void handleBirthPage(String url, boolean lookForMultiplePages) throws DownloadException
   {
     TmpFilesManager tmpFilesManager=_session.getTmpFilesManager();
     File tmpFile=tmpFilesManager.newTmpFile("birthIndexPage.html");
@@ -122,7 +123,7 @@ public class BirthPagesManager
     }
   }
 
-  private void handleActPage(int xid, int xct) throws Exception
+  private void handleActPage(int xid, int xct) throws DownloadException
   {
     // Download
     TmpFilesManager tmpFilesManager=_session.getTmpFilesManager();

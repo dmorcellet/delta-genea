@@ -10,12 +10,14 @@ import org.slf4j.LoggerFactory;
 import delta.common.utils.NumericTools;
 import delta.common.utils.text.StringSplitter;
 import delta.common.utils.text.TextUtils;
+import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
 import delta.genea.webhoover.utils.FileUtils;
 import delta.genea.webhoover.utils.ImageUtils;
 
 /**
+ * Main class for the AD62 webhoover.
  * @author DAM
  */
 public class MainDownloadActs
@@ -25,50 +27,19 @@ public class MainDownloadActs
   /**
    * Main method of this tool.
    * @param args Not used.
-   * @throws Exception If a problem occurs.
+   * @throws DownloadException If a problem occurs.
    */
-  public static void main(String[] args) throws Exception
+  public static void main(String[] args) throws DownloadException
   {
     new MainDownloadActs().doIt();
   }
 
-  //private static boolean _useThreads=true;
-
-  /*
-  private void getPages(final ActsPackage actsPackage)
-  {
-    Runnable r=new Runnable()
-    {
-      public void run()
-      {
-        ADSession localSession=new ADSession();
-        localSession.start();
-        //getPages(localSession,actsPackage);
-        localSession.stop();
-      }
-    };
-    if (_useThreads)
-    {
-      Thread t=new Thread(r);
-      t.setDaemon(false);
-      t.start();
-    }
-    else
-    {
-      r.run();
-    }
-  }
-  */
-
-  private void doIt() throws Exception
+  private void doIt() throws DownloadException
   {
     ADSession session=new ADSession();
     session.start();
     List<String> places=getPlaces(session);
     LOGGER.info("Got places: {}",places);
-    /*
-    handlePlace(session,Constants.PLACE_NAME);
-    */
     session.stop();
   }
 
@@ -78,7 +49,7 @@ public class MainDownloadActs
     return urlTile;
   }
 
-  private File downloadTile(ADSession session, String urlTile, int hIndex, int vIndex) throws Exception
+  private File downloadTile(ADSession session, String urlTile, int hIndex, int vIndex) throws DownloadException
   {
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
@@ -93,7 +64,7 @@ public class MainDownloadActs
     return tileFile;
   }
 
-  private void downloadPage(ADSession session, File out, int pageNumber, int width, int height, int tileSize) throws Exception
+  private void downloadPage(ADSession session, File out, int pageNumber, int width, int height, int tileSize) throws DownloadException
   {
     LOGGER.info("Handling page {}",Integer.valueOf(pageNumber));
     int nbH=(width/tileSize)+(((width%tileSize)!=0)?1:0);
@@ -116,7 +87,7 @@ public class MainDownloadActs
     ImageUtils.makeImage(files,out);
   }
 
-  private List<String> getPlaces(ADSession session) throws Exception
+  private List<String> getPlaces(ADSession session) throws DownloadException
   {
     List<String> placeNames=new ArrayList<String>();
     Downloader downloader=session.getDownloader();
@@ -129,11 +100,10 @@ public class MainDownloadActs
     url="http://www.archinoe.net/cg62/visualiseur/visu_init.php?fonds=ec&id="+id;
     downloader.downloadToFile(url, tmpFile2);
     String sessionId=downloader.getCookieValue("PHPSESSID");
-    System.out.println(sessionId);
+    LOGGER.info("Session ID: {}",sessionId);
     File tmpFile3=new File(tmpDir,"page1.html");
 
     url="http://www.archinoe.net/cg62/visualiseur/visu_registre.php?id="+id+"&w=1280&h=1024";
-    //url="http://www.archinoe.net/cg62/visualiseur/visu_affiche.php?PHPSID="+sessionId+"&param=visu_0&page=1";
     downloader.downloadToFile(url, tmpFile3);
 
     int tile=2280;
@@ -153,42 +123,6 @@ public class MainDownloadActs
       out.getParentFile().mkdirs();
       downloadPage(session,out,page,width,height,tile);
     }
-
-    /*
-    http://www.archinoe.net/cg62/visualiseur/visu_affiche_util.php?PHPSID=1ec337e451228a3c3a5ad12f36cbacba&param=visu_0&uid=1254851219878&o=IMG&p=3
-      retourne:
-        /cache/ad62tablesdecennales3e2013e3003e249billyberclau1792190219131922tdnmd3e249frad0623e2490140a0003114088400000.jpg 1140  737 3464  2240
-Les deux derniers chiffres indiquent la taille. On découpe en carrés de max 2280 de côté et on demande chaque bout
-
-    // Pages :
-    http://www.archinoe.net/cg62/visualiseur/visu_affiche_util.php?o=TILE&param=visu_0&p=1&x=0&y=0&l=2280&h=2240&ol=2280&oh=2240&r=0&n=0&b=0&c=0
-      retourne: /cache/_ad62_tablesdecennales_3e2013e300_3e249_billyberclau1792190219131922tdnmd3e249_frad0623e2490140a0001jpg_2280_2240_0_0_2280_2240_0_0_0_0.jpg
-    http://www.archinoe.net/cg62/visualiseur/visu_affiche_util.php?o=TILE&param=visu_0&p=1&x=2280&y=0&l=1160&h=2240&ol=1160&oh=2240&r=0&n=0&b=0&c=0
-      retourne: /cache/_ad62_tablesdecennales_3e2013e300_3e249_billyberclau1792190219131922tdnmd3e249_frad0623e2490140a0001jpg_1160_2240_2280_0_1160_2240_0_0_0_0.jpg
-*/
-      /*
-    List<String> lines=TextTools.splitAsLines(tmpFile);
-    String line=lines.get(0);
-    List<String> places=TextTools.findAllBetween(line,"<option value='","</option>");
-    String separator="'>";
-    String placeName1,placeName2;
-    int index;
-    for(String place :places)
-    {
-      index=place.indexOf(separator);
-      placeName1=place.substring(0,index);
-      placeName2=place.substring(index+separator.length());
-      if (!(placeName1.equals(placeName2)))
-      {
-        System.err.println(place);
-      }
-      if (placeName1.length()>0)
-      {
-        placeNames.add(placeName1);
-      }
-    }
-    tmpFile.delete();
-    */
     return placeNames;
   }
 }

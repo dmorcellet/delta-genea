@@ -3,6 +3,7 @@ package delta.genea.webhoover.gennpdc;
 import java.io.File;
 import java.util.List;
 
+import delta.downloads.DownloadException;
 import delta.genea.webhoover.expoactes.BirthAct;
 import delta.genea.webhoover.expoactes.BirthActsIO;
 import delta.genea.webhoover.expoactes.BirthPagesManager;
@@ -27,14 +28,13 @@ public class Main
   {
   }
 
-  private void doIt() throws Exception
+  private void doIt() throws DownloadException
   {
     String placeName="Billy-Berclau";
     downloadActs(placeName);
-    //parseBirthActs();
   }
 
-  private void downloadActs(String placeName) throws Exception
+  private void downloadActs(String placeName) throws DownloadException
   {
     ExpoActeSession session=new ExpoActeSession("gennpdc","http://www.gennpdc.net",OUTPUT_DIR);
     BirthPagesManager birthManager=new BirthPagesManager(session);
@@ -43,25 +43,6 @@ public class Main
     session.terminate();
     System.out.println(session.getActsCounter());
   }
-
-  /*
-  private void parseBirthActs()
-  {
-    List<BirthAct> acts=new ArrayList<BirthAct>();
-    FilesFinder finder=new FilesFinder();
-    FileFilter htmlFiles=new ExtensionPredicate("html");
-    List<File> files=finder.find(FilesFinder.ABSOLUTE_MODE,OUTPUT_DIR,htmlFiles,true);
-    for(File f : files)
-    {
-      BirthAct act=readFile(f);
-      if (act!=null)
-      {
-        acts.add(act);
-      }
-    }
-    BirthActsIO.writeActs(ACTS_FILE,acts);
-  }
-  */
 
   /**
    * Main method for this tool.

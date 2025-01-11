@@ -2,7 +2,6 @@ package delta.genea.webhoover.ad49;
 
 import java.io.File;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -60,7 +59,7 @@ public class MainDownloadActs
     }
     else
     {
-      System.err.println("Duplicate dir : "+dir);
+      LOGGER.warn("Duplicate dir: {}",dir);
     }
   }
 
@@ -77,16 +76,9 @@ public class MainDownloadActs
       int id=490000359;
       PlacePageParser placeParser=new PlacePageParser(session,id);
       List<ActsPackage> actsPackages=placeParser.parse();
-      ActsPackage actsPackage;
-      for(Iterator<ActsPackage> it=actsPackages.iterator();it.hasNext();)
+      for(ActsPackage actsPackage : actsPackages)
       {
-        actsPackage=it.next();
-        //if ((actsPackage._period.startsWith("17")) || (actsPackage._period.startsWith("16")) || (actsPackage._period.startsWith("15")))
-        //if ((actsPackage._period.startsWith("An")) || (actsPackage._period.startsWith("18")))
-        //if (actsPackage._period.startsWith("18"))
-        {
-          doIt(actsPackage);
-        }
+        doIt(actsPackage);
       }
     }
     catch (Exception e)

@@ -5,12 +5,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Tool to check acts directories.
  * @author DAM
  */
 public class MainCheckActsDir
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(MainCheckActsDir.class);
+
   /**
    * Handle a directory.
    * @param childDir Directory to handle.
@@ -27,7 +32,7 @@ public class MainCheckActsDir
       String expected=Constants.getImageName(i+1);
       if (!names.get(i).equals(expected))
       {
-        System.err.println("Directory: "+childDir+". Expected : "+expected);
+        LOGGER.warn("Directory: {}. Expected: {}",childDir,expected);
       }
     }
   }
