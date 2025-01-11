@@ -196,24 +196,20 @@ public class MainDownloadActs
     return packages;
   }
 
-  /*
-  private void doItSalome() throws Exception
+  void doItSalome() throws DownloadException
   {
     ADSession session=new ADSession();
     session.start();
     List<String> places=getPlaces(session);
-    System.out.println(places);
+    LOGGER.info("Got places: {}",places);
     ActsPackage p=new ActsPackage();
-    p._id="292115";
-    p._placeName="Salomé";
-    p._period="1737-1760";
-    p._actType="BMS";
-    //handlePlace(session,Constants.PLACE_NAME);
+    p.setId("292115");
+    p.setPlaceName("Salomé");
+    p.setPeriod("1737-1760");
+    p.setActType("BMS");
     getPages(session,p,false);
     session.stop();
-    //292115
   }
-  */
 
   private void getPages(ADSession session, ActsPackage actsPackage, boolean td) throws DownloadException
   {

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
+import delta.downloads.DownloadException;
 
 /**
  * Parse a page of birth act.
@@ -42,9 +43,9 @@ public class BirthActPageParser
    * Parse the given file.
    * @param f File to use.
    * @return A birth act or <code>null</code>.
-   * @throws Exception If a problem occurs.
+   * @throws DownloadException If a problem occurs.
    */
-  public BirthAct readFile(File f) throws Exception
+  public BirthAct readFile(File f) throws DownloadException
   {
     BirthAct act=null;
     List<String> lines=TextUtils.readAsLines(f,EncodingNames.ISO8859_1);

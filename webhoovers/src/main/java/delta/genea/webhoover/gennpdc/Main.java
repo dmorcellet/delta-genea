@@ -3,6 +3,9 @@ package delta.genea.webhoover.gennpdc;
 import java.io.File;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import delta.downloads.DownloadException;
 import delta.genea.webhoover.expoactes.BirthAct;
 import delta.genea.webhoover.expoactes.BirthActsIO;
@@ -15,6 +18,8 @@ import delta.genea.webhoover.expoactes.ExpoActeSession;
  */
 public class Main
 {
+  private static final Logger LOGGER=LoggerFactory.getLogger(Main.class);
+
   private static final File OUTPUT_DIR=new File("/home/dm/tmp/gennpdc");
   /**
    * Path of the output file.
@@ -41,7 +46,7 @@ public class Main
     List<BirthAct> acts=birthManager.downloadBirthActs(placeName);
     BirthActsIO.writeActs(ACTS_FILE,acts);
     session.terminate();
-    System.out.println(session.getActsCounter());
+    LOGGER.info("Loaded {} acts",Integer.valueOf(session.getActsCounter()));
   }
 
   /**

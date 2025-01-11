@@ -1,7 +1,7 @@
 package delta.genea.webhoover.ad59;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,8 +24,7 @@ public class MainCheckActsDir
   {
     String[] childs=childDir.list();
     int nbchilds=childs.length;
-    List<String> names=new ArrayList<String>(nbchilds);
-    for(int i=0;i<nbchilds;i++) names.add(childs[i]);
+    List<String> names=Arrays.asList(childs);
     Collections.sort(names);
     for(int i=0;i<nbchilds;i++)
     {
@@ -49,11 +48,11 @@ public class MainCheckActsDir
       File child=childs[i];
       if (!child.isDirectory())
       {
-        System.err.println("Not a directory : "+child);
+        LOGGER.error("Not a directory: {}",child);
       }
       else
       {
-        System.out.println("Handling : "+child);
+        LOGGER.info("Handling: {}",child);
         handleChildDir(child);
       }
     }
