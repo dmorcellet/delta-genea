@@ -22,11 +22,11 @@ import delta.genea.data.sources.GeneaDataSource;
 public class MainDataTransfer
 {
   private static final String SOURCE_DATABASE="genea";
-  private static final File ROOT_DIR=new File("..\\data\\xml\\genea");
+  private static final File ROOT_DIR=new File("..\\..\\delta-genea-webapp\\genea_xml");
 
   private void doIt()
   {
-    GeneaDataSource source=GeneaDataSource.getInstance("sql:"+SOURCE_DATABASE);
+    GeneaDataSource source=GeneaDataSource.getInstance(SOURCE_DATABASE);
     GeneaDataSource target=GeneaDataSource.getInstance("xml:"+ROOT_DIR.getPath());
     handleClass(source,target,Place.class);
     handleClass(source,target,ActType.class);
