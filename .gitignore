@@ -2,7 +2,7 @@
 **/.settings
 **/.classpath
 **/.project
-**/genea.log
+**/*.log
 /data/xml
 genea_xml
 **/*.ged

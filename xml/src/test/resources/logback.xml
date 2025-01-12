@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds">
+
+	<contextName>GENEA</contextName>
+
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
+
+	<property name="LOG_DIR" value="logs" />
+	<property name="LOG_FILENAME" value="${LOG_DIR}/genea" />
+
+	<!-- Rolling file appender -->
+	<appender name="TIME_BASED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- <file>${LOG_DIR}/timeBasedlogFile.log</file>  -->
+		<!-- Clean log file on start up. Seems not working !-->
+		<!--append>false</append-->
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_FILENAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<!-- each file should be at most 10MB, keep 10 days worth of history, but at most 200MB -->
+			<maxFileSize>10MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>100MB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>
+				%date{ISO8601} %-5level [%thread] %logger{0} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>	
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- By default, encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+		<!-- deny all events with a level below INFO, that is TRACE and DEBUG -->
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<!-- simplified display in console -->
+		<encoder>
+			<pattern>
+				%date{ISO8601} %-5level [%thread] %logger{0} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Loggers configuration -->
+	<!-- logger levels: TRACE, DEBUG, INFO, WARN, ERROR, ALL or OFF, INHERITED or NULL-->
+	<!-- Global -->
+	<logger name="delta.common.framework.objects"            level="INFO"/>
+	<logger name="delta.genea"                               level="INFO"/>
+
+	<!-- ********************** COTS ****************** -->
+	<!-- logback himself -->
+	<logger name="ch.qos.logback" level="WARN"/>
+	<!-- Java -->
+	<!--
+	<logger name="java" level="OFF"/>
+	<logger name="sun" level="OFF"/>
+	-->
+	<!-- AWT... -->
+	<!--
+	<logger name="java.awt" level="OFF"/>
+	<logger name="sun.awt" level="OFF"/>
+	-->
+	<!-- Swing, activation... -->
+	<!--
+	<logger name="javax" level="OFF"/>
+	<logger name="javax.swing" level="INHERITED"/>
+	<logger name="javax.activation" level="INHERITED"/>
+	-->
+	<!-- JAXB -->
+	<logger name="com.sun.xml" level="INHERITED"/>
+
+	<!-- root logger level: TRACE, DEBUG, INFO, WARN, ERROR, ALL or OFF-->
+	<root level="WARN">
+		<appender-ref ref="STDOUT" />
+
+		<!-- Use only one at a time: ASYNC-FILE or TIME_BASED_FILE -->
+		<!-- 
+		<appender-ref ref="ASYNC-FILE" />
+		-->
+		<appender-ref ref="TIME_BASED_FILE" />
+
+		<!--
+		<appender-ref ref="SOCKET" />
+		-->
+	</root>
+</configuration>
