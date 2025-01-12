@@ -5,8 +5,7 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import delta.common.utils.configuration.Configuration;
-import delta.common.utils.configuration.Configurations;
+import delta.common.utils.misc.TypedProperties;
 
 /**
  * Provides access to configuration information for the GENEA application.
@@ -15,20 +14,6 @@ import delta.common.utils.configuration.Configurations;
 public class GeneaCfg
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(GeneaCfg.class);
-
-  /**
-   * Section name used to look for configuration data.
-   */
-  private static final String SECTION_NAME="GENEA";
-
-  /**
-   * Root path for act images storage.
-   */
-  private static final String ACTS_ROOT="ACTS_ROOT";
-  /**
-   * Root path for act pictures storage.
-   */
-  private static final String PICTURES_ROOT="PICTURES_ROOT";
 
   private File _actsRootPath;
   private File _picturesRootPath;
@@ -56,10 +41,13 @@ public class GeneaCfg
    */
   private GeneaCfg()
   {
-    Configuration cfg=Configurations.getConfiguration();
-    _actsRootPath=cfg.getFileValue(SECTION_NAME,ACTS_ROOT,null);
+    TypedProperties props=new TypedProperties();
+    props.loadFromFile(new File("genea.cfg"));
+    String actsRootPath=props.getStringProperty("acts_root_dir","acts");
+    _actsRootPath=new File(actsRootPath);
     LOGGER.info("_actsRootPath={}",_actsRootPath);
-    _picturesRootPath=cfg.getFileValue(SECTION_NAME,PICTURES_ROOT,null);
+    String picturesRootPath=props.getStringProperty("pictures_root_dir","pictures");
+    _picturesRootPath=new File(picturesRootPath);
     LOGGER.info("_picturesRootPath={}",_picturesRootPath);
   }
 
