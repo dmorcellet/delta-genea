@@ -113,14 +113,14 @@ public class TestGregorianDate extends TestCase
     }
 
     long end=System.currentTimeMillis();
-    LOGGER.info(nbOccurrences+" occurrences in "+(end-start)+"ms");
+    long duration=end-start;
+    LOGGER.info("{} occurrences in {}ms",Integer.valueOf(nbOccurrences),Long.valueOf(duration));
   }
 
   /**
    * Day of the week test.
-   * @throws Exception
    */
-  public void testDayOfTheWeek() throws Exception
+  public void testDayOfTheWeek()
   {
     // Checks if date incrementation is coherent with day of the week incrementation
     // In the beginning was void...
@@ -135,7 +135,9 @@ public class TestGregorianDate extends TestCase
       if(day==8) day=1;
       if (d.getDayInWeek()!=day)
       {
-        LOGGER.error("Day ("+d+")="+GregorianDate.getLabelForDayOfWeek(day)+" and not "+GregorianDate.getLabelForDayOfWeek(d.getDayInWeek()));
+        String label1=GregorianDate.getLabelForDayOfWeek(day);
+        String label2=GregorianDate.getLabelForDayOfWeek(d.getDayInWeek());
+        LOGGER.error("Day ({})={} and not {}",d,label1,label2);
       }
       Assert.assertEquals(d.getDayInWeek(),day);
     }
@@ -143,9 +145,8 @@ public class TestGregorianDate extends TestCase
 
   /**
    * Test for the gap between julian and gregorian calendar.
-   * @throws Exception
    */
-  public void testJulianToGregorianStep() throws Exception
+  public void testJulianToGregorianStep()
   {
     GregorianDate lastJulianDate=new GregorianDate((byte)4, (byte)10, 1582);
     Assert.assertTrue(lastJulianDate.isJulian());

@@ -74,7 +74,7 @@ public class ImagePage extends GeneaWebPage
     File ret=context.getImagePath(_dir,_image);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Image file ["+ret+"]");
+      LOGGER.debug("Image file [{}]",ret);
     }
     if (!ret.exists())
     {

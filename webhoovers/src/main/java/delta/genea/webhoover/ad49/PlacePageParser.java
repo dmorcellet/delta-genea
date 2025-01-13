@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
 import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
@@ -74,18 +75,14 @@ public class PlacePageParser
         break;
       }
     }
-    String row;
-    while (true)
+    List<String> rows=TextTools.findAllBetween(tableContents,TR_START,TR_END);
+    for(String row : rows)
     {
-      int index=tableContents.indexOf(TR_START);
-      if (index==-1) break;
-      tableContents=tableContents.substring(index+TR_START.length());
-      index=tableContents.indexOf(TR_END);
-      if (index==-1) break;
-      row=tableContents.substring(0,index);
-      tableContents=tableContents.substring(index+TR_END.length());
       ActsPackage packageInfo=handleRow(row);
-      result.add(packageInfo);
+      if (packageInfo!=null)
+      {
+        result.add(packageInfo);
+      }
     }
     FileUtils.deleteFile(placePageFile);
     return result;

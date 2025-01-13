@@ -87,31 +87,39 @@ public class UnionXMLDriver extends ObjectXmlDriver<Union>
     }
     for(Union union : _objectsMgr.getCache().getAll())
     {
-      // Check place
-      if (placeKey!=null)
+      if (useUnion(union,name,pattern,placeKey))
       {
-        Long unionPlaceKey=union.getPlaceKey();
-        if ((unionPlaceKey==null) || (unionPlaceKey.longValue()!=placeKey.longValue()))
-        {
-          continue;
-        }
+        ret.add(union.getPrimaryKey());
       }
-      // Check name
-      if (name!=null)
-      {
-        Person man=union.getMan();
-        if ((man==null) || (checkPerson(man,pattern,name)==false))
-        {
-          Person woman=union.getWoman();
-          if ((woman==null) || (checkPerson(woman,pattern,name)==false))
-          {
-            continue;
-          }
-        }
-      }
-      ret.add(union.getPrimaryKey());
     }
     return ret;
+  }
+
+  private boolean useUnion(Union union, String name, Pattern pattern, Long placeKey)
+  {
+    // Check place
+    if (placeKey!=null)
+    {
+      Long unionPlaceKey=union.getPlaceKey();
+      if ((unionPlaceKey==null) || (unionPlaceKey.longValue()!=placeKey.longValue()))
+      {
+        return false;
+      }
+    }
+    // Check name
+    if (name!=null)
+    {
+      Person man=union.getMan();
+      if ((man==null) || (!checkPerson(man,pattern,name)))
+      {
+        Person woman=union.getWoman();
+        if ((woman==null) || (!checkPerson(woman,pattern,name)))
+        {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   private boolean checkPerson(Person person, Pattern pattern, String name)
