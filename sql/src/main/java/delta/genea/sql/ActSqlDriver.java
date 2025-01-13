@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataProxy;
+import delta.common.framework.objects.data.Identifiable;
 import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.framework.objects.sql.ObjectSqlDriver;
 import delta.common.utils.jdbc.CleanupManager;
@@ -464,59 +465,25 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
           _psInsert.setLong(n,key.longValue());
         }
         n++;
-        DataProxy<ActType> actType=act.getActTypeProxy();
-        if ((actType!=null) && (actType.getPrimaryKey()!=null))
-        {
-          _psInsert.setLong(n,actType.getPrimaryKey().longValue());
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.INTEGER);
-        }
+        setProxy(act.getActTypeProxy(),n);
         n++;
         Long actDate=act.getDate();
-        if (actDate!=null) _psInsert.setDate(n,new java.sql.Date(actDate.longValue()));
-        else _psInsert.setNull(n,Types.DATE);
-        n++;
-        DataProxy<Place> place=act.getPlaceProxy();
-        if ((place!=null) && (place.getPrimaryKey()!=null))
+        if (actDate!=null)
         {
-          _psInsert.setLong(n,place.getPrimaryKey().longValue());
+          _psInsert.setDate(n,new java.sql.Date(actDate.longValue()));
         }
         else
         {
-          _psInsert.setNull(n,Types.INTEGER);
+          _psInsert.setNull(n,Types.DATE);
         }
         n++;
-        DataProxy<Person> p1Proxy=act.getP1Proxy();
-        if ((p1Proxy!=null) && (p1Proxy.getPrimaryKey()!=null))
-        {
-          _psInsert.setLong(n,p1Proxy.getPrimaryKey().longValue());
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.INTEGER);
-        }
+        setProxy(act.getPlaceProxy(),n);
         n++;
-        DataProxy<Person> p2Proxy=act.getP2Proxy();
-        if ((p2Proxy!=null) && (p2Proxy.getPrimaryKey()!=null))
-        {
-          _psInsert.setLong(n,p2Proxy.getPrimaryKey().longValue());
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.INTEGER);
-        }
+        setProxy(act.getP1Proxy(),n);
         n++;
-        DataProxy<ActText> textProxy=act.getTextProxy();
-        if ((textProxy!=null) && (textProxy.getPrimaryKey()!=null))
-        {
-          _psInsert.setLong(n,textProxy.getPrimaryKey().longValue());
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.INTEGER);
-        }
+        setProxy(act.getP2Proxy(),n);
+        n++;
+        setProxy(act.getTextProxy(),n);
         n++;
         _psInsert.setString(n,act.getPath());
         n++;
@@ -549,6 +516,18 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
         LOGGER.error("",sqlException);
         CleanupManager.cleanup(_psInsert);
       }
+    }
+  }
+
+  private void setProxy(DataProxy<? extends Identifiable<Long>> proxy, int n) throws SQLException
+  {
+    if ((proxy!=null) && (proxy.getPrimaryKey()!=null))
+    {
+      _psInsert.setLong(n,proxy.getPrimaryKey().longValue());
+    }
+    else
+    {
+      _psInsert.setNull(n,Types.INTEGER);
     }
   }
 

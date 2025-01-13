@@ -113,7 +113,6 @@ public class UnionsPage extends GeneaWebPage
     StringBuilder sb=new StringBuilder();
     tableFormatter.format(_unions,sb);
     pw.print(sb);
-    // todo Manage wedding contract
     pw.println(HtmlConstants.END_DIV);
     WebPageTools.generatePageFooter(pw);
   }

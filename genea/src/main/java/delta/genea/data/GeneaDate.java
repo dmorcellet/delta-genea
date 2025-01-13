@@ -25,7 +25,7 @@ public class GeneaDate
   }
 
   /**
-   * Full contructor.
+   * Full constructor.
    * @param date Exact date.
    * @param infos Approximative date data.
    */
@@ -140,17 +140,5 @@ public class GeneaDate
       return "???";
     }
     return _infosDate;
-  }
-
-  /**
-   * Compute an age (in years), between two dates.
-   * @param gd1 First date.
-   * @param gd2 Second date.
-   * @return A years count.
-   */
-  public static Integer computeAge(GeneaDate gd1, GeneaDate gd2)
-  {
-    // TODO
-    return null;
   }
 }

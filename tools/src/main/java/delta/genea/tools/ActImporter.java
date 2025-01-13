@@ -37,6 +37,15 @@ public class ActImporter
 
   private static final GregorianDate CHANGE_DATE=FrenchRevolutionCalendar.FIRST_DAY;
 
+  /**
+   * Constructor.
+   * @param from Input directory.
+   */
+  private ActImporter(File from)
+  {
+    _root=from;
+  }
+
   private void init(Long id)
   {
     _map=new HashMap<String,Act>();
@@ -57,99 +66,15 @@ public class ActImporter
   private void handleFile(File fileName)
   {
     LOGGER.info("Handling file [{}]",fileName);
-    long actType;
-    String name=fileName.getName(); 
-    String prefix=""; // or "j_" or "ninie/"
-    String newName=prefix;
-    if (name.endsWith(".jpg"))
-    {
-      name=name.substring(0,name.length()-4);
-    }
-    if (name.startsWith("an"))
-    {
-      actType=ActType.BIRTH;
-    }
-    else if (name.startsWith("ad"))
-    {
-      actType=ActType.DEATH;
-    }
-    else if (name.startsWith("am"))
-    {
-      actType=ActType.UNION;
-    }
-    else
+    String name=fileName.getName();
+    ActPartId id=ActPartId.build(name);
+    if (id==null)
     {
       return;
     }
-    newName=newName+name.substring(0,2);
-    name=name.substring(2);
-    long sosa1=0;
-    long sosa2=0;
-    {
-      int index=0;
-      int n=name.length();
-      while (index<n)
-      {
-        char c=name.charAt(index);
-        if (Character.isDigit(c))
-          sosa1=(sosa1*10)+(c-'0');
-        else break;
-        index++;
-      }
-      name=name.substring(index);
-    }
-    newName=newName+convertSosa(sosa1);
-    if (actType==ActType.UNION)
-    {
-      if ((name.length()==0) || (name.charAt(0)!='-'))
-      {
-        return;
-      }
-      name=name.substring(1);
-      {
-        int index=0;
-        int n=name.length();
-        while (index<n)
-        {
-          char c=name.charAt(index);
-          if (Character.isDigit(c))
-          {
-            sosa2=(sosa2*10)+(c-'0');
-          }
-          else
-          {
-            break;
-          }
-          index++;
-        }
-        name=name.substring(index);
-      }
-      newName=newName+"-"+convertSosa(sosa2);
-    }
-    int pageIndex=0;
-    if ((name.length()>1) && (name.charAt(0)=='-'))
-    {
-      name=name.substring(1);
-      int index=0;
-      int n=name.length();
-      while (index<n)
-      {
-        char c=name.charAt(index);
-        if (Character.isDigit(c))
-          pageIndex=(pageIndex*10)+(c-'0');
-        else break;
-        index++;
-      }
-    }
-    else
-    {
-      pageIndex=1;
-    }
-    if (LOGGER.isDebugEnabled())
-    {
-      LOGGER.debug("Act {}, sosa1={},sosa2={},pageIndex={}",Long.valueOf(actType),Long.valueOf(sosa1),Long.valueOf(sosa2),Long.valueOf(pageIndex));
-    }
+    LOGGER.debug("Act: {}",id);
 
+    long sosa1=id.getSosa1();
     Person p1=null;
     Person p2=null;
     if (sosa1!=0)
@@ -161,6 +86,7 @@ public class ActImporter
         return;
       }
     }
+    long sosa2=id.getSosa2();
     if (sosa2!=0)
     {
       p2=_tree.getSosa(sosa2);
@@ -174,6 +100,9 @@ public class ActImporter
     ActsForPerson acts=new ActsForPerson(_dataSource.getObjectsSource(),p1);
     acts.build();
     Act act=null;
+    String newName=id.getName();
+    long actType=id.getActType();
+    int pageIndex=id.getPageIndex();
     if (actType==ActType.BIRTH)
     {
       act=handleBirth(newName,acts,p1,sosa1,pageIndex);
@@ -365,7 +294,6 @@ public class ActImporter
 
   private void doIt()
   {
-    _root=new File("/home/dm/tmp/actes/ninie");
     init(Long.valueOf(3));
     File[] files=_root.listFiles();
     for(int i=0;i<files.length;i++)
@@ -393,11 +321,7 @@ public class ActImporter
    */
   public static void main(String[] args)
   {
-    new ActImporter().doIt();
-  }
-
-  private long convertSosa(long sosa)
-  {
-    return sosa;
+    File from=new File(args[0]);
+    new ActImporter(from).doIt();
   }
 }

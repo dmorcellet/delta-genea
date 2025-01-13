@@ -6,21 +6,12 @@ import java.util.Comparator;
 import delta.genea.data.Act;
 
 /**
- * A comparator for <tt>Act</tt>s.
+ * A comparator for <tt>Act</tt>s using their date.
  * @author DAM
  */
 public class ActDateComparator implements Comparator<Act>, Serializable
 {
-  private static final long serialVersionUID=1L;
-
-  /**
-   * Constructor.
-   */
-  public ActDateComparator()
-  {
-    // Nothing to do!
-  }
-
+  @Override
   public int compare(Act a1, Act a2)
   {
     Long date1=a1.getDate();
@@ -31,8 +22,7 @@ public class ActDateComparator implements Comparator<Act>, Serializable
     }
     if (date1!=null)
     {
-      long diff = date1.longValue()-date2.longValue();
-      return (diff>0)?1:((diff<0)?-1:0);
+      return Long.compare(date1.longValue(),date2.longValue());
     }
     return -1;
   }

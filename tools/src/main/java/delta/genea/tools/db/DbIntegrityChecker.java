@@ -4,7 +4,7 @@ package delta.genea.tools.db;
  * Database integrity checks.
  * @author DAM
  */
-public class DbIntegrityChecker
+public interface DbIntegrityChecker
 {
   // Vérification à faire :
   // 1) Vu dans l'export GEDCOM :
