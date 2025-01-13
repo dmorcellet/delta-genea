@@ -24,7 +24,7 @@ public class MainStatistics
    * Test some statistics on the main genea database.
    * @param args Not used.
    */
-  public static void main(String args[])
+  public static void main(String[] args)
   {
     ArrayList<Selection<Person>> selections=new ArrayList<Selection<Person>>();
     AncestorsSelectionBuilder ancestorsBuilder=new AncestorsSelectionBuilder(DATA_SOURCE,Long.valueOf(76));

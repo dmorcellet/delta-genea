@@ -19,7 +19,6 @@ public class MainTestExportGEDCOM
    */
   public static void main(String[] args)
   {
-    //String id="sql:genea";
     String id="xml:"+ROOT_DIR.getPath();
     GeneaDataSource dataSource=GeneaDataSource.getInstance(id);
     File toFile=new File("dada.ged");

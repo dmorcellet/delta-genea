@@ -28,7 +28,7 @@ public class NameSelectionBuilder implements SelectionBuilder<Person>
   public Selection<Person> build()
   {
     GeneaDataSource dataSource=GeneaDataSource.getInstance(_dbName);
-    List<Person> list=dataSource.loadObjectSet(Person.class,Person.NAME_SET,new Object[]{_name});
+    List<Person> list=dataSource.loadObjectSet(Person.class,Person.NAME_SET,_name);
     String selectionName="Personne dont le patronyme est "+_name;
     BasicSelection<Person> ret=new BasicSelection<Person>(selectionName);
     for(Person p : list)

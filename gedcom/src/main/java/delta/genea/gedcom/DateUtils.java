@@ -25,7 +25,7 @@ public class DateUtils
   private static final Logger LOGGER=LoggerFactory.getLogger(DateUtils.class);
 
   private static final String FRENCH_REVOLUTION_DATE_SEED="@#DFRENCH R@";
-  //private static final String JULIAN_DATE_SEED="@#DJULIAN@";
+  // For Julian dates: "@#DJULIAN@"
 
   /**
    * Decode a GEDCOM date.
@@ -44,12 +44,6 @@ public class DateUtils
       }
       String dateStr;
       String suffix="";
-      /*
-      if (dateString.startsWith(JULIAN_DATE_SEED))
-      {
-        dateString=dateString.substring(JULIAN_DATE_SEED.length()).trim();
-      }
-      */
       if (dateString.startsWith("ABT"))
       {
         dateStr=dateString.substring(3);

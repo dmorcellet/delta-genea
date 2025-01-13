@@ -14,16 +14,14 @@ import delta.genea.webhoover.utils.TmpFilesManager;
 public class Main
 {
   private ExpoActeSession _session;
-  private static final File OUTPUT_DIR=new File("/home/dm/tmp/agena");
-
-  // private static final File ACTS_FILE=new File("/home/dm/agena.txt");
 
   /**
    * Constructor.
+   * @param outputDir Output directory.
    */
-  private Main()
+  private Main(File outputDir)
   {
-    _session=new ExpoActeSession("agena",Constants.SITE_ROOT,OUTPUT_DIR);
+    _session=new ExpoActeSession("agena",Constants.SITE_ROOT,outputDir);
   }
 
   private void doIt()
@@ -45,6 +43,7 @@ public class Main
    */
   public static void main(String[] args)
   {
-    new Main().doIt();
+    File outputDir=new File(args[0]);
+    new Main(outputDir).doIt();
   }
 }
