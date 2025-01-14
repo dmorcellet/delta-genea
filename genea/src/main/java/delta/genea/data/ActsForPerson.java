@@ -66,6 +66,14 @@ public class ActsForPerson
     List<Act> acts=_dataSource.loadRelation(Act.class,Act.MAIN_ACTS_RELATION,key);
     _otherActs=_dataSource.loadRelation(Act.class,Act.OTHER_ACTS_RELATION,key);
 
+    sortActs(acts);
+    _otherActs.addAll(acts);
+    Collections.sort(_otherActs,new ActDateComparator());
+    return true;
+  }
+
+  private void sortActs(List<Act> acts)
+  {
     _unionActs=new ArrayList<Act>();
     _weddingContractActs=new ArrayList<Act>();
     for(int i=0;i<_unions.size();i++)
@@ -122,9 +130,6 @@ public class ActsForPerson
         }
       }
     }
-    _otherActs.addAll(acts);
-    Collections.sort(_otherActs,new ActDateComparator());
-    return true;
   }
 
   /**

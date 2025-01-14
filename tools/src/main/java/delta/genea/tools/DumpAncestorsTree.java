@@ -117,6 +117,16 @@ public class DumpAncestorsTree
     out.print(" ");
     out.println(p.getLastName());
     // Birth
+    boolean outBirth=doBirth(out,p,step);
+    // Death
+    boolean outDeath=doDeath(out,p,step,outBirth);
+    if (outBirth || outDeath) out.println("");
+    // Unions
+    doUnions(out,p,step);
+  }
+
+  private boolean doBirth(PrintStream out, Person p, int step)
+  {
     Long birthDate=p.getBirthDate();
     String birthInfos=p.getBirthInfos();
     Place birthPlace=p.getBirthPlace();
@@ -133,7 +143,11 @@ public class DumpAncestorsTree
       }
       outBirth=true;
     }
-    // Death
+    return outBirth;
+  }
+
+  private boolean doDeath(PrintStream out, Person p, int step, boolean outBirth)
+  {
     boolean outDeath=false;
     Long deathDate=p.getDeathDate();
     String deathInfos=p.getDeathInfos();
@@ -151,9 +165,11 @@ public class DumpAncestorsTree
       }
       outDeath=true;
     }
-    if (outBirth || outDeath) out.println("");
+    return outDeath;
+  }
 
-    // Unions
+  private void doUnions(PrintStream out, Person p, int step)
+  {
     GeneaDataSource ds=GeneaDataSource.getInstance("genea");
     List<Union> unions=ds.loadRelation(Union.class,Union.UNIONS_RELATION,p.getPrimaryKey());
     for(Union union : unions)

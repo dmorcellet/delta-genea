@@ -101,18 +101,8 @@ public class PersonTools
       if (_useSexIcon)
       {
         pw.print("<IMG SRC=\"ressources/");
-        if (person.getSex()==Sex.MALE)
-        {
-          pw.print("homme.gif");
-        }
-        else if (person.getSex()==Sex.FEMALE)
-        {
-          pw.print("femme.gif");
-        }
-        else
-        {
-          pw.print("inconnu.gif");
-        }
+        String sexIcon=getIcon(person.getSex());
+        pw.print(sexIcon);
         pw.print("\" ALT=\"Sexe\">");
       }
 
@@ -162,6 +152,19 @@ public class PersonTools
     {
       pw.print("???");
     }
+  }
+
+  private String getIcon(Sex sex)
+  {
+    if (sex==Sex.MALE)
+    {
+      return "homme.gif";
+    }
+    if (sex==Sex.FEMALE)
+    {
+      return "femme.gif";
+    }
+    return "inconnu.gif";
   }
 
   private boolean isAncestor(Long key)

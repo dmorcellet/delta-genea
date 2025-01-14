@@ -44,7 +44,9 @@ public class FromGEDCOM
   public static void main(String[] args)
   {
     GeneaApplication.getInstance();
-    new FromGEDCOM(new File("D:\\dam\\Donnees\\docs\\genea\\maryvonne\\Lamour_31-10-2016.ged"),"genea_maryvonne");
+    File from=new File(args[0]);
+    String dbName=args[1];
+    new FromGEDCOM(from,dbName);
   }
 
   private File _fileName;
@@ -138,7 +140,8 @@ public class FromGEDCOM
   private void retrievePlaces()
   {
     _places.clear();
-    if (_placeManager!=null) {
+    if (_placeManager!=null)
+    {
       _placeManager.getPlaces(_places);
     }
   }
@@ -153,141 +156,163 @@ public class FromGEDCOM
   private void handlePerson()
   {
     Person p=new Person(null);
-    {
-      String keyString=_lines.get(_index);
-      int atIndex=keyString.indexOf("@");
-      if (atIndex!=-1) keyString=keyString.substring(atIndex+1);
-      atIndex=keyString.indexOf("@");
-      if (atIndex!=-1) keyString=keyString.substring(0,atIndex);
-      keyString=keyString.replace("I","");
-      Long key=NumericTools.parseLong(keyString);
-      // TODO handle null
-      p.setPrimaryKey(key);
-    }
+    String idLine=_lines.get(_index);
+    Long key=parseIdLine(idLine);
+    // TODO handle null
+    p.setPrimaryKey(key);
 
     while (true)
     {
-      String line;
-      _index++;
-      if (_index<_maxIndex)
+      String line=getNextLine();
+      if (line==null)
       {
-        line=_lines.get(_index);
-        if (line.startsWith("0 "))
-          break;
-        else if (line.startsWith("1 SEX"))
-        {
-          String sexString=line.substring(6).trim();
-          Sex sex=Sex.getFromValue(sexString.charAt(0));
-          p.setSex(sex);
-        }
-        else if (line.startsWith("1 NAME"))
-        {
-          String tmp=line.substring(7).trim();
-          String firstName=tmp;
-          String lastName=tmp;
-          int slash=tmp.indexOf('/');
-          if (slash!=-1)
-          {
-            firstName=tmp.substring(0,slash);
-            lastName=tmp.substring(slash+1);
-            while (true)
-            {
-              slash=lastName.indexOf('/');
-              if (slash!=-1)
-                lastName=lastName.substring(0,slash);
-              else
-                break;
-            }
-          }
-          p.setFirstname(firstName);
-          p.setLastName(lastName);
-        }
-        // END OF NAME
-        else if ((line.startsWith("1 BIRT"))||(line.startsWith("1 CHR")))
-        {
-          while (true)
-          {
-            _index++;
-            if (_index<_maxIndex)
-            {
-              line=_lines.get(_index);
-              if ((line.startsWith("0 "))||(line.startsWith("1 ")))
-              {
-                _index--;
-                break;
-              }
-              else if (line.startsWith(LINE_2_DATE))
-              {
-                String tmp=line.substring(7).trim();
-                GeneaDate d=DateUtils.decodeDate(tmp);
-                if (d!=null)
-                {
-                  p.setBirthDate(d.getDate(),d.getInfosDate());
-                }
-              }
-              else if (line.startsWith(LINE_2_PLAC))
-              {
-                String tmp=line.substring(7).trim();
-                Long key=_placeManager.decodePlaceName(tmp);
-                DataProxy<Place> birthPlaceProxy=_dataSource.buildProxy(Place.class,key);
-                p.setBirthPlaceProxy(birthPlaceProxy);
-              }
-            }
-            else
-              break;
-          }
-        }
-        // END OF BIRT/CHR
-        else if (line.startsWith("1 DEAT"))
-        {
-          while (true)
-          {
-            _index++;
-            if (_index<_maxIndex)
-            {
-              line=_lines.get(_index);
-              if ((line.startsWith("0 "))||(line.startsWith("1 ")))
-              {
-                _index--;
-                break;
-              }
-              else if (line.startsWith(LINE_2_DATE))
-              {
-                String tmp=line.substring(7).trim();
-                GeneaDate d=DateUtils.decodeDate(tmp);
-                if (d!=null)
-                {
-                  p.setDeathDate(d.getDate(),d.getInfosDate());
-                }
-              }
-              else if (line.startsWith(LINE_2_PLAC))
-              {
-                String tmp=line.substring(7).trim();
-                Long key=_placeManager.decodePlaceName(tmp);
-                p.setDeathPlaceProxy(_dataSource.buildProxy(Place.class,key));
-              }
-            }
-            else
-              break;
-          }
-        }
-        // END OF DEAT
-        else if (line.startsWith("1 OCCU"))
-        {
-          String occu=_lines.get(_index);
-          String profession=occu.substring(6);
-          OccupationForPerson o=new OccupationForPerson();
-          o.setOccupation(profession);
-          p.addOccupation(o);
-        }
-        // END OF OCCU
-        else
-        {
-          LOGGER.debug(UNUSED_LINE,line);
-        }
+        return;
+      }
+      if (line.startsWith("0 "))
+      {
+        break;
+      }
+      if (line.startsWith("1 SEX"))
+      {
+        String sexString=line.substring(6).trim();
+        Sex sex=Sex.getFromValue(sexString.charAt(0));
+        p.setSex(sex);
+      }
+      else if (line.startsWith("1 NAME"))
+      {
+        handleName(line,p);
+      }
+      else if ((line.startsWith("1 BIRT"))||(line.startsWith("1 CHR")))
+      {
+        handleBirth(p);
+      }
+      else if (line.startsWith("1 DEAT"))
+      {
+        handleDeath(p);
+      }
+      else if (line.startsWith("1 OCCU"))
+      {
+        String occu=_lines.get(_index);
+        String profession=occu.substring(6);
+        OccupationForPerson o=new OccupationForPerson();
+        o.setOccupation(profession);
+        p.addOccupation(o);
+      }
+      else
+      {
+        LOGGER.debug(UNUSED_LINE,line);
       }
     }
     _persons.add(p);
+  }
+
+  private Long parseIdLine(String idLine)
+  {
+    int atIndex=idLine.indexOf("@");
+    if (atIndex!=-1) idLine=idLine.substring(atIndex+1);
+    atIndex=idLine.indexOf("@");
+    if (atIndex!=-1) idLine=idLine.substring(0,atIndex);
+    idLine=idLine.replace("I","");
+    Long key=NumericTools.parseLong(idLine);
+    return key;
+  }
+
+  private void handleName(String line, Person p)
+  {
+    String tmp=line.substring(7).trim();
+    String firstName=tmp;
+    String lastName=tmp;
+    int slash=tmp.indexOf('/');
+    if (slash!=-1)
+    {
+      firstName=tmp.substring(0,slash);
+      lastName=tmp.substring(slash+1);
+      while (true)
+      {
+        slash=lastName.indexOf('/');
+        if (slash!=-1)
+          lastName=lastName.substring(0,slash);
+        else
+          break;
+      }
+    }
+    p.setFirstname(firstName);
+    p.setLastName(lastName);
+  }
+
+  private void handleBirth(Person p)
+  {
+    while (true)
+    {
+      String line=getNextLine();
+      if (line==null)
+      {
+        return;
+      }
+      if ((line.startsWith("0 "))||(line.startsWith("1 ")))
+      {
+        _index--;
+        return;
+      }
+      if (line.startsWith(LINE_2_DATE))
+      {
+        String tmp=line.substring(7).trim();
+        GeneaDate d=DateUtils.decodeDate(tmp);
+        if (d!=null)
+        {
+          p.setBirthDate(d.getDate(),d.getInfosDate());
+        }
+      }
+      else if (line.startsWith(LINE_2_PLAC))
+      {
+        String tmp=line.substring(7).trim();
+        Long key=_placeManager.decodePlaceName(tmp);
+        DataProxy<Place> birthPlaceProxy=_dataSource.buildProxy(Place.class,key);
+        p.setBirthPlaceProxy(birthPlaceProxy);
+      }
+    }
+  }
+
+  private void handleDeath(Person p)
+  {
+    while (true)
+    {
+      String line=getNextLine();
+      if (line==null)
+      {
+        return;
+      }
+      if ((line.startsWith("0 "))||(line.startsWith("1 ")))
+      {
+        _index--;
+        return;
+      }
+      if (line.startsWith(LINE_2_DATE))
+      {
+        String tmp=line.substring(7).trim();
+        GeneaDate d=DateUtils.decodeDate(tmp);
+        if (d!=null)
+        {
+          p.setDeathDate(d.getDate(),d.getInfosDate());
+        }
+      }
+      else if (line.startsWith(LINE_2_PLAC))
+      {
+        String tmp=line.substring(7).trim();
+        Long key=_placeManager.decodePlaceName(tmp);
+        p.setDeathPlaceProxy(_dataSource.buildProxy(Place.class,key));
+      }
+    }
+  }
+
+  private String getNextLine()
+  {
+    _index++;
+    if (_index<_maxIndex)
+    {
+      return _lines.get(_index);
+    }
+    return null;
   }
 
   private void handleFamily()
@@ -334,70 +359,12 @@ public class FromGEDCOM
         // END OF WIFE
         else if (line.startsWith("1 MARR"))
         {
-          while (true)
-          {
-            _index++;
-            if (_index<_maxIndex)
-            {
-              line=_lines.get(_index);
-              if (!line.startsWith("2 "))
-              {
-                _index--;
-                break;
-              }
-              else if (line.startsWith(LINE_2_DATE))
-              {
-                String tmp=line.substring(7).trim();
-                GeneaDate d=DateUtils.decodeDate(tmp);
-                if (d!=null)
-                {
-                  u.setDate(d);
-                }
-              }
-              else if (line.startsWith(LINE_2_PLAC))
-              {
-                String tmp=line.substring(7).trim();
-                Long key=_placeManager.decodePlaceName(tmp);
-                u.setPlaceProxy(_dataSource.buildProxy(Place.class,key));
-              }
-            }
-            else
-              break;
-          }
+          handleMarriage(u);
         }
-        // END OF MARR
         else if (line.startsWith("1 CHIL "))
         {
-          line=line.trim();
-          String key=line.substring(8); /* "1 CHIL @" */
-          Long childKey=decodePersonID(key);
-
-          int nbPersons=_persons.size();
-          boolean found=false;
-          Person tmp;
-          for(int i=0;i<nbPersons;i++)
-          {
-            tmp=_persons.get(i);
-            if (tmp.getPrimaryKey().equals(childKey))
-            {
-              found=true;
-              if (manKey!=null)
-              {
-                tmp.setFatherProxy(_dataSource.buildProxy(Person.class,manKey));
-              }
-              if (womanKey!=null)
-              {
-                tmp.setMotherProxy(_dataSource.buildProxy(Person.class,womanKey));
-              }
-              break;
-            }
-          }
-          if (!found)
-          {
-            LOGGER.warn("Person ID: {} not found!",childKey);
-          }
+          handleChild(line,manKey,womanKey);
         }
-        // END OF CHIL
         else
         {
           LOGGER.debug(UNUSED_LINE,line);
@@ -405,6 +372,67 @@ public class FromGEDCOM
       }
     }
     _unions.add(u);
+  }
+
+  private void handleMarriage(Union u)
+  {
+    String line=getNextLine();
+    if (line==null)
+    {
+      return;
+    }
+    if (!line.startsWith("2 "))
+    {
+      _index--;
+      return;
+    }
+    if (line.startsWith(LINE_2_DATE))
+    {
+      String tmp=line.substring(7).trim();
+      GeneaDate d=DateUtils.decodeDate(tmp);
+      if (d!=null)
+      {
+        u.setDate(d);
+      }
+    }
+    else if (line.startsWith(LINE_2_PLAC))
+    {
+      String tmp=line.substring(7).trim();
+      Long key=_placeManager.decodePlaceName(tmp);
+      u.setPlaceProxy(_dataSource.buildProxy(Place.class,key));
+    }
+  }
+
+  private void handleChild(String line, Long manKey, Long womanKey)
+  {
+    line=line.trim();
+    String key=line.substring(8); /* "1 CHIL @" */
+    Long childKey=decodePersonID(key);
+
+    int nbPersons=_persons.size();
+    boolean found=false;
+    Person tmp;
+    for(int i=0;i<nbPersons;i++)
+    {
+      tmp=_persons.get(i);
+      if (tmp.getPrimaryKey().equals(childKey))
+      {
+        found=true;
+        if (manKey!=null)
+        {
+          tmp.setFatherProxy(_dataSource.buildProxy(Person.class,manKey));
+        }
+        if (womanKey!=null)
+        {
+          tmp.setMotherProxy(_dataSource.buildProxy(Person.class,womanKey));
+        }
+        break;
+      }
+    }
+    if (!found)
+    {
+      LOGGER.warn("Person ID: {} not found!",childKey);
+    }
   }
 
   private Long decodePersonID(String id)

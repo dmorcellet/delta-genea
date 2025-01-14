@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataProxy;
+import delta.common.framework.objects.data.Identifiable;
 import delta.common.framework.objects.data.ObjectsSource;
 import delta.common.framework.objects.sql.ObjectSqlDriver;
 import delta.common.utils.jdbc.CleanupManager;
@@ -32,6 +33,8 @@ import delta.genea.data.Sex;
 public class PersonSqlDriver extends ObjectSqlDriver<Person>
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(PersonSqlDriver.class);
+
+  private static final String SELECT="SELECT ";
 
   private PreparedStatement _psGetByPrimaryKey;
   private PreparedStatement _psGetAll;
@@ -79,10 +82,10 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     try
     {
       String fields="cle,nom,prenoms,sexe,signature,date_naissance,infos_n,cle_ln,date_deces,infos_d,cle_ld,cle_pere,cle_mere,cle_parrain,cle_marraine,commentaire,sans_descendance";
-      String sql="SELECT "+fields+" FROM personne WHERE cle = ?";
+      String sql=SELECT+fields+" FROM personne WHERE cle = ?";
       _psGetByPrimaryKey=newConnection.prepareStatement(sql);
       _psGetByPrimaryKey=PreparedStatementWrapper.buildProxy(_psGetByPrimaryKey);
-      sql="SELECT "+fields+" FROM personne";
+      sql=SELECT+fields+" FROM personne";
       _psGetAll=newConnection.prepareStatement(sql);
       sql="INSERT INTO personne ("+fields
           +") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -116,7 +119,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       sql="INSERT INTO residence (cle_personne,annee,lieu,cle_commune) VALUES (?,?,?,?)";
       _psInsertHome=newConnection.prepareStatement(sql);
       String partialFields="cle,nom,prenoms,sexe,date_naissance,infos_n,date_deces,infos_d,sans_descendance";
-      sql="SELECT "+partialFields+" FROM personne WHERE cle = ?";
+      sql=SELECT+partialFields+" FROM personne WHERE cle = ?";
       _psPartialGetByPrimaryKey=newConnection.prepareStatement(sql);
     }
     catch (SQLException sqlException)
@@ -671,89 +674,25 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         n++;
         _psInsert.setString(n,person.getSignature());
         n++;
-        Long birthDate=person.getBirthDate();
-        if (birthDate!=null)
-        {
-          _psInsert.setDate(n,new java.sql.Date(birthDate.longValue()));
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.DATE);
-        }
+        setDate(person.getBirthDate(),n);
         n++;
         _psInsert.setString(n,person.getBirthInfos());
         n++;
-        DataProxy<Place> birthPlace=person.getBirthPlaceProxy();
-        if ((birthPlace!=null) && (birthPlace.getPrimaryKey()!=null))
-        {
-          _psInsert.setLong(n,birthPlace.getPrimaryKey().longValue());
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.INTEGER);
-        }
+        setProxy(person.getBirthPlaceProxy(),n);
         n++;
-        Long deathDate=person.getDeathDate();
-        if (deathDate!=null)
-        {
-          _psInsert.setDate(n,new java.sql.Date(deathDate.longValue()));
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.DATE);
-        }
+        setDate(person.getDeathDate(),n);
         n++;
         _psInsert.setString(n,person.getDeathInfos());
         n++;
-        DataProxy<Place> deathPlace=person.getDeathPlaceProxy();
-        if ((deathPlace!=null) && (deathPlace.getPrimaryKey()!=null))
-        {
-          _psInsert.setLong(n,deathPlace.getPrimaryKey().longValue());
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.INTEGER);
-        }
+        setProxy(person.getDeathPlaceProxy(),n);
         n++;
-        DataProxy<Person> fatherProxy=person.getFatherProxy();
-        if ((fatherProxy!=null) && (fatherProxy.getPrimaryKey()!=null))
-        {
-          _psInsert.setLong(n,fatherProxy.getPrimaryKey().longValue());
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.INTEGER);
-        }
+        setProxy(person.getFatherProxy(),n);
         n++;
-        DataProxy<Person> motherProxy=person.getMotherProxy();
-        if ((motherProxy!=null) && (motherProxy.getPrimaryKey()!=null))
-        {
-          _psInsert.setLong(n,motherProxy.getPrimaryKey().longValue());
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.INTEGER);
-        }
+        setProxy(person.getMotherProxy(),n);
         n++;
-        DataProxy<Person> godFatherProxy=person.getGodFatherProxy();
-        if ((godFatherProxy!=null) && (godFatherProxy.getPrimaryKey()!=null))
-        {
-          _psInsert.setLong(n,godFatherProxy.getPrimaryKey().longValue());
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.INTEGER);
-        }
+        setProxy(person.getGodFatherProxy(),n);
         n++;
-        DataProxy<Person> godMotherProxy=person.getGodMotherProxy();
-        if ((godMotherProxy!=null) && (godMotherProxy.getPrimaryKey()!=null))
-        {
-          _psInsert.setLong(n,godMotherProxy.getPrimaryKey().longValue());
-        }
-        else
-        {
-          _psInsert.setNull(n,Types.INTEGER);
-        }
+        setProxy(person.getGodMotherProxy(),n);
         n++;
         _psInsert.setString(n,person.getComments());
         n++;
@@ -776,24 +715,10 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
             }
           }
         }
-        List<OccupationForPerson> occupations=person.getOccupations();
-        if ((occupations!=null)&&(!occupations.isEmpty()))
-        {
-          int nb=occupations.size();
-          for (int i=0; i<nb; i++)
-          {
-            createOccupation(person,occupations.get(i));
-          }
-        }
-        List<HomeForPerson> homes=person.getHomes();
-        if ((homes!=null)&&(!homes.isEmpty()))
-        {
-          int nb=homes.size();
-          for (int i=0; i<nb; i++)
-          {
-            createHome(person,homes.get(i));
-          }
-        }
+        // Occupations
+        handleOccupations(person);
+        // Homes
+        handleHomes(person);
       }
       catch (SQLWarning sqlWarning)
       {
@@ -807,12 +732,62 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     }
   }
 
+  private void setProxy(DataProxy<? extends Identifiable<Long>> proxy, int n) throws SQLException
+  {
+    if ((proxy!=null) && (proxy.getPrimaryKey()!=null))
+    {
+      _psInsert.setLong(n,proxy.getPrimaryKey().longValue());
+    }
+    else
+    {
+      _psInsert.setNull(n,Types.INTEGER);
+    }
+  }
+
+  private void setDate(Long date, int n) throws SQLException
+  {
+    if (date!=null)
+    {
+      _psInsert.setDate(n,new java.sql.Date(date.longValue()));
+    }
+    else
+    {
+      _psInsert.setNull(n,Types.DATE);
+    }
+  }
+
+  private void handleOccupations(Person person)
+  {
+    List<OccupationForPerson> occupations=person.getOccupations();
+    if ((occupations!=null)&&(!occupations.isEmpty()))
+    {
+      int nb=occupations.size();
+      for (int i=0; i<nb; i++)
+      {
+        createOccupation(person,occupations.get(i));
+      }
+    }
+  }
+
+  private void handleHomes(Person person)
+  {
+    List<HomeForPerson> homes=person.getHomes();
+    if ((homes!=null)&&(!homes.isEmpty()))
+    {
+      int nb=homes.size();
+      for (int i=0; i<nb; i++)
+      {
+        createHome(person,homes.get(i));
+      }
+    }
+  }
+
   /**
    * Add a new occupation for a person.
    * @param person Targeted person.
    * @param occupation Occupation to add.
    */
-  public void createOccupation(Person person, OccupationForPerson occupation)
+  private void createOccupation(Person person, OccupationForPerson occupation)
   {
     if (person==null)
     {
