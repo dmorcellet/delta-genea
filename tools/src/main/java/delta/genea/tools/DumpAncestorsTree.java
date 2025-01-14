@@ -7,12 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataProxy;
-import delta.common.utils.NumericTools;
 import delta.common.utils.collections.BinaryTreeNode;
 import delta.common.utils.collections.TreeNode;
-import delta.common.utils.configuration.Configuration;
-import delta.common.utils.configuration.Configurations;
-import delta.common.utils.text.StringSplitter;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.Sex;
@@ -20,7 +16,6 @@ import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.data.trees.AncestorsTree;
 import delta.genea.data.trees.DescendantsTree;
-import delta.genea.misc.DataSourceConfiguration;
 import delta.genea.time.GregorianDate;
 
 /**
@@ -39,14 +34,12 @@ public class DumpAncestorsTree
    * @param id Root person identifier.
    * @param type Tree type (0=ancestors, 1=descendants).
    */
-  public void handle(Long id, int type)
+  public void handle(long id, int type)
   {
     try
     {
-      String dbName=DataSourceConfiguration.getInstance().getDefaultDatasourceName();
-      GeneaDataSource dataSource=GeneaDataSource.getInstance(dbName);
-
-      DataProxy<Person> pp=dataSource.buildProxy(Person.class,id);
+      GeneaDataSource dataSource=GeneaDataSource.getInstance("genea");
+      DataProxy<Person> pp=dataSource.buildProxy(Person.class,Long.valueOf(id));
       if (type==ANCESTORS_TREE)
       {
         Person moi=pp.getDataObject();
@@ -206,41 +199,8 @@ public class DumpAncestorsTree
 
   private void doIt()
   {
-    Configuration cfg=Configurations.getConfiguration();
-    // Ancestors tree
-    {
-      String keysStr=cfg.getStringValue("GENEA","ANCESTORS_TREES","1");
-      String[] keys=StringSplitter.split(keysStr,',');
-      if (keys!=null)
-      {
-        Long key;
-        for(int i=0;i<keys.length;i++)
-        {
-          key=NumericTools.parseLong(keys[i]);
-          if (key!=null)
-          {
-            handle(key,ANCESTORS_TREE);
-          }
-        }
-      }
-    }
-    // Descendants tree
-    {
-      String keysStr=cfg.getStringValue("GENEA","DESCENDANTS_TREES","1");
-      String[] keys=StringSplitter.split(keysStr,',');
-      if (keys!=null)
-      {
-        Long key;
-        for(int i=0;i<keys.length;i++)
-        {
-          key=NumericTools.parseLong(keys[i]);
-          if (key!=null)
-          {
-            handle(key,DESCENDANTS_TREE);
-          }
-        }
-      }
-    }
+    handle(668,ANCESTORS_TREE);
+    handle(11323,DESCENDANTS_TREE);
   }
 
   /**
