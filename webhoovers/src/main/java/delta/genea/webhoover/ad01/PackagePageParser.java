@@ -27,16 +27,19 @@ public class PackagePageParser
 
   private int _nbPages=0;
   private Downloader _downloader;
+  private File _rootDir;
   private ActsPackage _actsPackage;
 
   /**
    * Constructor.
    * @param downloader Downloader to use.
+   * @param rootDir Root directory for files.
    * @param actsPackage Acts package to use.
    */
-  public PackagePageParser(Downloader downloader, ActsPackage actsPackage)
+  public PackagePageParser(Downloader downloader, File rootDir, ActsPackage actsPackage)
   {
     _downloader=downloader;
+    _rootDir=rootDir;
     _actsPackage=actsPackage;
   }
 
@@ -76,7 +79,7 @@ public class PackagePageParser
   {
     File out=getImageFileName(nb);
     File bigOut=getBigImageFileName(nb);
-    File rootDir=new File(Constants.ROOT_DIR,getDirName());
+    File rootDir=new File(_rootDir,getDirName());
     rootDir.mkdirs();
     File page=new File(rootDir,"page.html");
     String url=_actsPackage.getLink();
@@ -157,7 +160,7 @@ public class PackagePageParser
 
   private File getImageFileName(int nb)
   {
-    File rootDir=new File(Constants.ROOT_DIR,getDirName());
+    File rootDir=new File(_rootDir,getDirName());
     String nbStr=String.valueOf(nb);
     if (nb<10) nbStr="0"+nbStr;
     if (nb<100) nbStr="0"+nbStr;
@@ -167,7 +170,7 @@ public class PackagePageParser
 
   private File getBigImageFileName(int nb)
   {
-    File rootDir=new File(Constants.ROOT_DIR,getDirName());
+    File rootDir=new File(_rootDir,getDirName());
     String nbStr=String.valueOf(nb);
     if (nb<10) nbStr="0"+nbStr;
     if (nb<100) nbStr="0"+nbStr;

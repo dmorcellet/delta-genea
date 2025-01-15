@@ -28,12 +28,12 @@ public class MainDownloadActs
   {
     HashSet<String> dirNames=new HashSet<String>();
     Downloader downloader=new Downloader();
-    File mainPage=Constants.MAIN_PAGE_FILE;
-    File parent=mainPage.getParentFile();
-    parent.mkdirs();
+    File rootDir=new File(args[0]);
+    File mainPageFile=new File(rootDir,"mainPage.html");
+    rootDir.mkdirs();
     LOGGER.info("Main page: {}",Constants.MAIN_PAGE);
-    downloader.downloadToFile(Constants.MAIN_PAGE,Constants.MAIN_PAGE_FILE);
-    List<ActsPackage> actsPackages=new PlacePageParser().parseFile(Constants.MAIN_PAGE_FILE);
+    downloader.downloadToFile(Constants.MAIN_PAGE,mainPageFile);
+    List<ActsPackage> actsPackages=new PlacePageParser().parseFile(mainPageFile);
     ActsPackage p=new ActsPackage();
     p.setLink(Constants.ROOT_SITE+"/visu2/visu.html?NumLot=2&COD=MATMORCELLETAlexis,%20Fran%C3%A7ois5251905");
     p.setActType("Registre matricule");
@@ -47,7 +47,7 @@ public class MainDownloadActs
       boolean doIt=doIt(a);
       if (doIt)
       {
-        PackagePageParser parser=new PackagePageParser(downloader,a);
+        PackagePageParser parser=new PackagePageParser(downloader,rootDir,a);
         String dirName=parser.getDirName();
         if (dirNames.contains(dirName))
         {
@@ -57,7 +57,7 @@ public class MainDownloadActs
         parser.parse();
       }
     }
-    FileUtils.deleteFile(mainPage);
+    FileUtils.deleteFile(mainPageFile);
   }
 
   private static boolean doIt(ActsPackage a)

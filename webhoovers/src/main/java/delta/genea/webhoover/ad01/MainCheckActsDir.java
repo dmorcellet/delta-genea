@@ -101,6 +101,7 @@ public class MainCheckActsDir
    */
   public static void main(String[] args)
   {
-    doIt(Constants.ROOT_DIR);
+    File rootDir=new File(args[0]);
+    doIt(rootDir);
   }
 }

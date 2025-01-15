@@ -2,6 +2,7 @@ package delta.genea.webhoover;
 
 import java.io.File;
 
+import delta.common.utils.environment.FileSystem;
 import delta.common.utils.files.FilesDeleter;
 import delta.downloads.Downloader;
 
@@ -17,7 +18,7 @@ import delta.downloads.Downloader;
 public class ADSession
 {
   private static int _counter=0;
-  private static final File ROOT_DIR=new File("/tmp");
+  private static final File ROOT_DIR=FileSystem.getTmpDir();
   private Downloader _downloader;
   private File _tmpDir;
 

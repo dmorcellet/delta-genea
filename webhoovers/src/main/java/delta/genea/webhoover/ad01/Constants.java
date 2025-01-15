@@ -1,7 +1,5 @@
 package delta.genea.webhoover.ad01;
 
-import java.io.File;
-
 /**
  * Constants for the AD01 web hoover.
  * @author DAM
@@ -25,8 +23,6 @@ class Constants
   // Pugieu: /etatcivil.html?btCom=405&btComMere=&BT-Com=Pugieu+%5B140+lots%5D
   // Saint-Bois: /etatcivil.html?btCom=435&btComMere=&BT-Com=Saint-Bois+%5B170+lots%5D
   // Saint-Germain-les-Paroisses: /etatcivil.html?btCom=456&btComMere=&BT-Com=Saint-Germain-les-Paroisses+%5B223+lots%5D
-  static final File ROOT_DIR=new File("/home/dm/data/genealogie/archives en ligne/ad01");
-  static final File MAIN_PAGE_FILE=new File(ROOT_DIR,"mainPage.html");
 
   static final String VISU_PAGE=ROOT_SITE+"/visu2/visui.php?";
 }
