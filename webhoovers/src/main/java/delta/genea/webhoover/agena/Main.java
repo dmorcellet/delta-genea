@@ -17,11 +17,10 @@ public class Main
 
   /**
    * Constructor.
-   * @param outputDir Output directory.
    */
-  private Main(File outputDir)
+  private Main()
   {
-    _session=new ExpoActeSession("agena",Constants.SITE_ROOT,outputDir);
+    _session=new ExpoActeSession("agena",Constants.SITE_ROOT);
   }
 
   private void doIt()
@@ -43,7 +42,6 @@ public class Main
    */
   public static void main(String[] args)
   {
-    File outputDir=new File(args[0]);
-    new Main(outputDir).doIt();
+    new Main().doIt();
   }
 }

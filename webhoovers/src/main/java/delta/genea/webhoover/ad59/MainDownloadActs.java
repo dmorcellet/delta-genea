@@ -26,17 +26,14 @@ public class MainDownloadActs
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(MainDownloadActs.class);
 
-  /**
-   * Main method of this tool.
-   * @param args Not used.
-   * @throws Exception If a problem occurs.
-   */
-  public static void main(String[] args) throws Exception
-  {
-    new MainDownloadActs().doIt();
-  }
-
   private static final boolean USE_THREADS=true;
+
+  private File _rootDir;
+
+  private MainDownloadActs(File rootDir)
+  {
+    _rootDir=rootDir;
+  }
 
   private void getPages(final ActsPackage actsPackage,final boolean td)
   {
@@ -225,7 +222,7 @@ public class MainDownloadActs
   {
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
-    File toDir=actsPackage.getDirFile(Constants.ROOT_DIR);
+    File toDir=actsPackage.getDirFile(_rootDir);
     File imageFile=Constants.getImageFile(toDir,pageNumber);
     File parent=imageFile.getParentFile();
     parent.mkdirs();
@@ -271,5 +268,16 @@ public class MainDownloadActs
     }
     ImageUtils.makeImage(files,imageFile);
     return nbPages;
+  }
+
+  /**
+   * Main method of this tool.
+   * @param args Output directory.
+   * @throws Exception If a problem occurs.
+   */
+  public static void main(String[] args) throws Exception
+  {
+    File toDir=new File(args[0]);
+    new MainDownloadActs(toDir).doIt();
   }
 }

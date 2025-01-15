@@ -24,14 +24,11 @@ public class MainDownloadActs
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(MainDownloadActs.class);
 
-  /**
-   * Main method of this tool.
-   * @param args Not used.
-   * @throws DownloadException If a problem occurs.
-   */
-  public static void main(String[] args) throws DownloadException
+  private File _toDir;
+
+  private MainDownloadActs(File toDir)
   {
-    new MainDownloadActs().doIt();
+    _toDir=toDir;
   }
 
   private void doIt() throws DownloadException
@@ -119,10 +116,21 @@ public class MainDownloadActs
       String[] items=StringSplitter.split(line,'\t');
       int width=NumericTools.parseInt(items[3],0);
       int height=NumericTools.parseInt(items[4],0);
-      File out=new File(Constants.ROOT_DIR,Constants.getImageName(page));
+      File out=new File(_toDir,Constants.getImageName(page));
       out.getParentFile().mkdirs();
       downloadPage(session,out,page,width,height,tile);
     }
     return placeNames;
+  }
+
+  /**
+   * Main method of this tool.
+   * @param args Output directory.
+   * @throws DownloadException If a problem occurs.
+   */
+  public static void main(String[] args) throws DownloadException
+  {
+    File toDir=new File(args[0]);
+    new MainDownloadActs(toDir).doIt();
   }
 }

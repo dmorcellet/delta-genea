@@ -1,5 +1,6 @@
 package delta.genea.webhoover.gennpdc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -122,11 +123,11 @@ public class MainActsImporter
     _data.getPersons().add(person);
   }
 
-  private void doIt()
+  private void doIt(File actsFile)
   {
     _dataSource=GeneaDataSource.getInstance("genea_tmp");
     _data=new RawDataManager(_dataSource.getObjectsSource());
-    List<BirthAct> acts=BirthActsIO.readActs(Main.ACTS_FILE);
+    List<BirthAct> acts=BirthActsIO.readActs(actsFile);
     if ((acts!=null) && (!acts.isEmpty()))
     {
       for(BirthAct act : acts)
@@ -167,10 +168,12 @@ public class MainActsImporter
   }
 
   /**
-   * @param args
+   * Main method for this tool.
+   * @param args Input file.
    */
   public static void main(String[] args)
   {
-    new MainActsImporter().doIt();
+    File actsFile=new File(args[0]);
+    new MainActsImporter().doIt(actsFile);
   }
 }

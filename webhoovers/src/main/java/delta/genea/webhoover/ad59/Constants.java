@@ -11,25 +11,21 @@ public class Constants
   /**
    * Place name.
    */
-  public static final String PLACE_NAME="PROVIN";
-  /**
-   * Root directory for storage.
-   */
-  public static final File ROOT_DIR=new File("d:\\ad59");
+  static final String PLACE_NAME="PROVIN";
   /**
    * Use tables or acts packages.
    */
-  public static final boolean TD=true;
+  static final boolean TD=true;
 
   /**
    * Site root.
    */
-  public static final String SITE_ROOT="http://www.archivesdepartementales.cg59.fr";
+  private static final String SITE_ROOT="http://www.archivesdepartementales.cg59.fr";
 
   /**
    * Another site root.
    */
-  public static final String SITE_ROOT2="http://www.archivesdepartementales.lenord.fr";
+  private static final String SITE_ROOT2="http://www.archivesdepartementales.lenord.fr";
 
   /**
    * Get the URL of the index page for a place.

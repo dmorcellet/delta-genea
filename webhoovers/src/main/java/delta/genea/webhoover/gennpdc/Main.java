@@ -20,12 +20,6 @@ public class Main
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(Main.class);
 
-  private static final File OUTPUT_DIR=new File("/home/dm/tmp/gennpdc");
-  /**
-   * Path of the output file.
-   */
-  public static final File ACTS_FILE=new File("/home/dm/bb.txt");
-
   /**
    * Constructor.
    */
@@ -33,18 +27,18 @@ public class Main
   {
   }
 
-  private void doIt() throws DownloadException
+  private void doIt(File toFile) throws DownloadException
   {
     String placeName="Billy-Berclau";
-    downloadActs(placeName);
+    downloadActs(placeName,toFile);
   }
 
-  private void downloadActs(String placeName) throws DownloadException
+  private void downloadActs(String placeName, File toFile) throws DownloadException
   {
-    ExpoActeSession session=new ExpoActeSession("gennpdc","http://www.gennpdc.net",OUTPUT_DIR);
+    ExpoActeSession session=new ExpoActeSession("gennpdc","http://www.gennpdc.net");
     BirthPagesManager birthManager=new BirthPagesManager(session);
     List<BirthAct> acts=birthManager.downloadBirthActs(placeName);
-    BirthActsIO.writeActs(ACTS_FILE,acts);
+    BirthActsIO.writeActs(toFile,acts);
     session.terminate();
     LOGGER.info("Loaded {} acts",Integer.valueOf(session.getActsCounter()));
   }
@@ -56,6 +50,7 @@ public class Main
    */
   public static void main(String[] args) throws Exception
   {
-    new Main().doIt();
+    File toFile=new File(args[0]);
+    new Main().doIt(toFile);
   }
 }

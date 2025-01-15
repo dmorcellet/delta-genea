@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import delta.common.utils.text.EncodingNames;
 import delta.common.utils.text.TextTools;
 import delta.common.utils.text.TextUtils;
+import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.utils.TmpFilesManager;
 
@@ -20,6 +21,18 @@ import delta.genea.webhoover.utils.TmpFilesManager;
 public class Main
 {
   private static final Logger LOGGER=LoggerFactory.getLogger(Main.class);
+
+  /**
+   * Root site URL.
+   */
+  // Could use: http://geneasion.free.fr/Numerisation/BMSCamphin/
+  // Could use: http://ph.sion.free.fr/tabsion/
+  private static final String SITE="http://geneavenir.free.fr/prisonniers%20de%20guerres/";
+
+  /**
+   * Name for the directory of temporary files.
+   */
+  private static final String TMP_NAME="prisonniers";
 
   private Downloader _d;
   private int _nbDownloadedActs;
@@ -34,14 +47,14 @@ public class Main
     _nbDownloadedActs=0;
   }
 
-  private void downloadActs() throws Exception
+  private void downloadActs(File toDir) throws DownloadException
   {
-    _tmp=new TmpFilesManager(Constants.TMP_NAME);
-    handleDirPage(Constants.SITE,Constants.OUT_DIR);
+    _tmp=new TmpFilesManager(TMP_NAME);
+    handleDirPage(SITE,toDir);
     LOGGER.info("Downloaded {} acts",Integer.valueOf(_nbDownloadedActs));
   }
   
-  private void handleDirPage(String url, File out) throws Exception
+  private void handleDirPage(String url, File out) throws DownloadException
   {
     out.mkdirs();
     File tmpFile=_tmp.newTmpFile("main.html");
@@ -106,11 +119,12 @@ public class Main
 
   /**
    * Main method for this tool.
-   * @param args Not used.
-   * @throws Exception
+   * @param args Output directory.
+   * @throws DownloadException
    */
-  public static void main(String[] args) throws Exception
+  public static void main(String[] args) throws DownloadException
   {
-    new Main().downloadActs();
+    File toDir=new File(args[0]);
+    new Main().downloadActs(toDir);
   }
 }

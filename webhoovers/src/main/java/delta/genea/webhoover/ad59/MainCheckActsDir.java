@@ -60,11 +60,12 @@ public class MainCheckActsDir
 
   /**
    * Main method for this tool.
-   * @param args Not used.
+   * @param args Output directory.
    */
   public static void main(String[] args)
   {
-    File dir=new File(Constants.ROOT_DIR,Constants.PLACE_NAME);
+    File toDir=new File(args[0]);
+    File dir=new File(toDir,Constants.PLACE_NAME);
     doIt(dir);
   }
 }
