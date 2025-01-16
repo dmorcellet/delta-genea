@@ -10,8 +10,8 @@ import delta.common.utils.text.TextUtils;
 import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ActsPackage;
-import delta.genea.webhoover.HtmlTools;
 import delta.genea.webhoover.utils.FileUtils;
+import delta.genea.webhoover.utils.ParsingUtils;
 
 /**
  * Parser for a place index page.
@@ -27,9 +27,6 @@ public class PlacePageParser
   private static final String TD_START="<td ";
   private static final String BEFORE_ID="registre_prepare.php?id=";
   private static final String AFTER_ID="&PHPSID";
-  private static final String START_TAG="<";
-  private static final String END_TAG=">";
-  private static final String SLASH="/";
 
   private AD49Session _session;
   private int _placeID;
@@ -101,7 +98,7 @@ public class PlacePageParser
     index=tmp.indexOf(AFTER_ID);
     if (index==-1) return null;
     String id=tmp.substring(0,index);
-    List<String> items=splitAsTags("td",cells);
+    List<String> items=ParsingUtils.splitAsTags("td",cells);
     ActsPackage actsPackage=new ActsPackage();
     actsPackage.setId(id);
     actsPackage.setPlaceName(items.get(0));
@@ -111,31 +108,5 @@ public class PlacePageParser
     actsPackage.setSource(items.get(4));
     actsPackage.setComments(items.get(5));
     return actsPackage;
-  }
-
-  private List<String> splitAsTags(String tag, String contents)
-  {
-    String startTag=START_TAG+tag;
-    String endTag=START_TAG+SLASH+tag+END_TAG;
-    List<String> tags=new ArrayList<String>();
-    int index;
-    String contentsLeft=contents;
-    String item;
-    while (true)
-    {
-      index=contentsLeft.indexOf(startTag);
-      if (index==-1) break;
-      contentsLeft=contentsLeft.substring(index+startTag.length());
-      index=contentsLeft.indexOf(END_TAG);
-      if (index==-1) break;
-      contentsLeft=contentsLeft.substring(index+END_TAG.length());
-      index=contentsLeft.indexOf(endTag);
-      if (index==-1) break;
-      item=contentsLeft.substring(0,index);
-      contentsLeft=contentsLeft.substring(index+endTag.length());
-      item=HtmlTools.htmlToString(item);
-      tags.add(item);
-    }
-    return tags;
   }
 }
