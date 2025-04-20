@@ -5,7 +5,6 @@ import delta.common.framework.web.WebApplication;
 import delta.common.framework.web.WebUserContext;
 import delta.common.utils.ParameterFinder;
 import delta.common.utils.ParametersNode;
-import delta.genea.data.Person;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.misc.DataSourceConfiguration;
 import delta.genea.web.pages.PersonPageParameters;
@@ -55,12 +54,7 @@ public class GeneaUserContext extends WebUserContext
     Long previous=getDeCujus();
     if (!DataObject.keysAreEqual(previous,key))
     {
-      String dbName=getDbName();
-      Person p=GeneaDataSource.getInstance(dbName).load(Person.class,key);
-      if (p!=null)
-      {
-        putLongParameter(DE_CUJUS,key.longValue());
-      }
+      putLongParameter(DE_CUJUS,key.longValue());
     }
   }
 
