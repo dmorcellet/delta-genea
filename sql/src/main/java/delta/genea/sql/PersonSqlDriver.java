@@ -42,7 +42,6 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   private PreparedStatement _psCount;
   private PreparedStatement _psChildren;
   private PreparedStatement _psGodChildren;
-  private PreparedStatement _psCousins;
   private PreparedStatement _psPatronyme;
   private PreparedStatement _psGetOccupations;
   private PreparedStatement _psGetHomes;
@@ -108,8 +107,6 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       // Added date_naissance to field list for HSQLDB compatibility
       sql="SELECT DISTINCT cle,date_naissance FROM personne WHERE cle_parrain = ? OR cle_marraine = ? order by date_naissance";
       _psGodChildren=newConnection.prepareStatement(sql);
-      sql="SELECT DISTINCT cle_cousin1,cle_cousin2 FROM cousins WHERE cle_cousin1 = ? OR cle_cousin2 = ?";
-      _psCousins=newConnection.prepareStatement(sql);
       sql="SELECT cle_personne,annee,profession,lieu FROM profession WHERE cle_personne = ? ORDER BY annee,profession";
       _psGetOccupations=newConnection.prepareStatement(sql);
       sql="SELECT cle_personne,annee,lieu,cle_commune FROM residence WHERE cle_personne = ? ORDER BY annee";
@@ -531,44 +528,6 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   }
 
   /**
-   * Get the identifiers of the cousins of the person identified
-   * by <code>primaryKey</code>.
-   * @param primaryKey Identifier of the targeted person.
-   * @return A list of person identifiers.
-   */
-  public List<Long> getCousins(long primaryKey)
-  {
-    Connection connection=getConnection();
-    synchronized (connection)
-    {
-      ArrayList<Long> ret=new ArrayList<Long>();
-      ResultSet rs=null;
-      try
-      {
-        LOGGER.debug("GET cousins FOR {}",Long.valueOf(primaryKey));
-        _psCousins.setLong(1,primaryKey);
-        _psCousins.setLong(2,primaryKey);
-        rs=_psCousins.executeQuery();
-        while (rs.next())
-        {
-          if (rs.getLong(1)!=primaryKey) ret.add(Long.valueOf(rs.getLong(1)));
-          else if (rs.getLong(2)!=primaryKey) ret.add(Long.valueOf(rs.getLong(2)));
-        }
-      }
-      catch (SQLException sqlException)
-      {
-        LOGGER.error("",sqlException);
-        CleanupManager.cleanup(_psCousins);
-      }
-      finally
-      {
-        CleanupManager.cleanup(rs);
-      }
-      return ret;
-    }
-  }
-
-  /**
    * Get the identifiers of the persons whose last name is <code>name</code>.
    * @param name Last name of the persons to search.
    * @return A list of person identifiers.
@@ -618,10 +577,6 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     else if (relationName.equals(Person.GOD_CHILDREN_RELATION))
     {
       ret=getGodChildren(primaryKey.longValue());
-    }
-    else if (relationName.equals(Person.COUSINS_RELATION))
-    {
-      ret=getCousins(primaryKey.longValue());
     }
     return ret;
   }

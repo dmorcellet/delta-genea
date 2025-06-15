@@ -73,10 +73,6 @@ public class PersonXMLDriver extends ObjectXmlDriver<Person>
     {
       ret=getGodChildren(primaryKey.longValue());
     }
-    else if (relationName.equals(Person.COUSINS_RELATION))
-    {
-      ret=getCousins(primaryKey.longValue());
-    }
     return ret;
   }
 

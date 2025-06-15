@@ -8,12 +8,14 @@ import delta.common.framework.objects.sql.SqlObjectsSource;
 import delta.genea.data.Act;
 import delta.genea.data.ActText;
 import delta.genea.data.ActType;
+import delta.genea.data.Cousinage;
 import delta.genea.data.Person;
 import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.Union;
 import delta.genea.sql.ActSqlDriver;
 import delta.genea.sql.ActTypeSqlDriver;
+import delta.genea.sql.CousinageSqlDriver;
 import delta.genea.sql.PersonSqlDriver;
 import delta.genea.sql.PictureSqlDriver;
 import delta.genea.sql.PlaceSqlDriver;
@@ -66,6 +68,7 @@ public class GeneaSqlDataSource extends SqlObjectsSource
       addClass(Picture.class,new PictureSqlDriver(this));
       addClass(ActText.class,new TextSqlDriver());
       addClass(ActType.class,new ActTypeSqlDriver());
+      addClass(Cousinage.class,new CousinageSqlDriver(this));
     }
     catch(Exception e)
     {

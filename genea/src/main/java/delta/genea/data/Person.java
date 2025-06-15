@@ -22,10 +22,6 @@ public class Person extends DataObject<Person>
    */
   public static final String GOD_CHILDREN_RELATION="GOD_CHILDREN";
   /**
-   * Relation that gives the registered cousins of a person.
-   */
-  public static final String COUSINS_RELATION="COUSINS";
-  /**
    * Set of the persons with a given name.
    */
   public static final String NAME_SET="NAME";

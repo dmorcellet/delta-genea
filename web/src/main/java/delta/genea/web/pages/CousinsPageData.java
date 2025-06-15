@@ -3,6 +3,7 @@ package delta.genea.web.pages;
 import java.util.List;
 
 import delta.common.framework.objects.data.ObjectsSource;
+import delta.genea.data.Cousinage;
 import delta.genea.data.Person;
 
 /**
@@ -13,7 +14,7 @@ public class CousinsPageData
 {
   private Long _key;
   private Person _main;
-  private List<Person> _cousins;
+  private List<Cousinage> _cousinages;
 
   /**
    * Constructor.
@@ -34,12 +35,12 @@ public class CousinsPageData
   }
 
   /**
-   * Get the list of cousins.
-   * @return a list of persons.
+   * Get the list of cousinages.
+   * @return a list of cousinages.
    */
-  public List<Person> getCousins()
+  public List<Cousinage> getCousinages()
   {
-    return _cousins;
+    return _cousinages;
   }
 
   /**
@@ -56,7 +57,7 @@ public class CousinsPageData
       return false;
     }
 
-    _cousins=source.loadRelation(Person.class, Person.COUSINS_RELATION, _key);
+    _cousinages=source.loadRelation(Cousinage.class, Cousinage.COUSINAGES_RELATION, _key);
     return true;
   }
 }

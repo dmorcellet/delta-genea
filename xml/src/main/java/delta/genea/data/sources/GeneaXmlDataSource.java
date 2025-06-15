@@ -10,6 +10,7 @@ import delta.common.framework.objects.xml.XmlObjectsSource;
 import delta.genea.data.Act;
 import delta.genea.data.ActText;
 import delta.genea.data.ActType;
+import delta.genea.data.Cousinage;
 import delta.genea.data.Person;
 import delta.genea.data.Picture;
 import delta.genea.data.Place;
@@ -18,6 +19,8 @@ import delta.genea.xml.ActTextXMLIO;
 import delta.genea.xml.ActTypeXMLIO;
 import delta.genea.xml.ActXMLDriver;
 import delta.genea.xml.ActXMLIO;
+import delta.genea.xml.CousinageXMLDriver;
+import delta.genea.xml.CousinageXMLIO;
 import delta.genea.xml.PersonXMLDriver;
 import delta.genea.xml.PersonXMLIO;
 import delta.genea.xml.PictureXMLDriver;
@@ -81,6 +84,15 @@ public class GeneaXmlDataSource extends XmlObjectsSource
       ObjectXmlDriver<Person> driver=new PersonXMLDriver();
       driver.setup(xmlFile,xmlIO,xmlIO);
       addClass(Person.class,driver);
+    }
+    // Cousinage
+    {
+      File xmlFile=getXmlFileForClass(Cousinage.CLASS_NAME);
+      CousinageXMLIO xmlIO=new CousinageXMLIO();
+      xmlIO.setObjectSource(this);
+      ObjectXmlDriver<Cousinage> driver=new CousinageXMLDriver();
+      driver.setup(xmlFile,xmlIO,xmlIO);
+      addClass(Cousinage.class,driver);
     }
     // Act
     {

@@ -1,12 +1,12 @@
 package delta.genea.web.pages;
 
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.List;
 
 import delta.common.framework.web.WebPageTools;
 import delta.common.utils.ParameterFinder;
 import delta.common.utils.html.HtmlConstants;
+import delta.genea.data.Cousinage;
 import delta.genea.data.Person;
 import delta.genea.web.GeneaUserContext;
 import delta.genea.web.pages.tools.PersonTools;
@@ -60,17 +60,16 @@ public class CousinsPage extends GeneaWebPage
     WebPageTools.generateHorizontalRuler(pw);
 
     pw.println(HtmlConstants.DIV);
-    List<Person> persons=_data.getCousins();
-    if ((persons!=null) && (!persons.isEmpty()))
+    List<Cousinage> cousinages=_data.getCousinages();
+    if ((cousinages!=null) && (!cousinages.isEmpty()))
     {
       pw.println("<ul>");
       CommonAncestorsPageParameters params;
-      Person p;
       pTools.setUseSexIcon(true);
-      for(Iterator<Person> it=persons.iterator();it.hasNext();)
+      for(Cousinage cousinage : cousinages)
       {
         pw.print(HtmlConstants.LI);
-        p=it.next();
+        Person p=cousinage.getCousin(root.getPrimaryKey().longValue());
         pTools.generatePersonName(p);
         params=new CommonAncestorsPageParameters(root.getPrimaryKey(),p.getPrimaryKey());
         params.setParameter(GeneaUserContext.DB_NAME,context.getDbName());

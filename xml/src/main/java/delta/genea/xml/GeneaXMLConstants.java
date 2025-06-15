@@ -217,4 +217,13 @@ public class GeneaXMLConstants
    * Home: attribute 'placeId'.
    */
   public static final String HOME_PLACE_ATTR="placeId";
+
+  /**
+   * Cousinage: attribute 'cousin1'.
+   */
+  public static final String COUSIN1_ATTR="cousin1";
+  /**
+   * Cousinage: attribute 'cousin2'.
+   */
+  public static final String COUSIN2_ATTR="cousin2";
 }
