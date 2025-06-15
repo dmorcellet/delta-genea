@@ -20,6 +20,7 @@ import delta.genea.xml.ActXMLDriver;
 import delta.genea.xml.ActXMLIO;
 import delta.genea.xml.PersonXMLDriver;
 import delta.genea.xml.PersonXMLIO;
+import delta.genea.xml.PictureXMLDriver;
 import delta.genea.xml.PictureXMLIO;
 import delta.genea.xml.PlaceXMLIO;
 import delta.genea.xml.UnionXMLDriver;
@@ -112,7 +113,8 @@ public class GeneaXmlDataSource extends XmlObjectsSource
       File xmlFile=getXmlFileForClass(Picture.CLASS_NAME);
       PictureXMLIO xmlIO=new PictureXMLIO();
       xmlIO.setObjectSource(this);
-      ObjectXmlDriver<Picture> driver=new ObjectXmlDriver<Picture>(xmlFile,xmlIO,xmlIO);
+      ObjectXmlDriver<Picture> driver=new PictureXMLDriver();
+      driver.setup(xmlFile,xmlIO,xmlIO);
       addClass(Picture.class,driver);
     }
   }
