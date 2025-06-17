@@ -56,7 +56,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
   {
     try
     {
-      String fields="cle,cle_homme,cle_femme,date_debut,infos_m,cle_lm,cle_contrat,commentaire";
+      String fields="cle,cle_homme,ordre_homme,ordre_femme,cle_femme,date_debut,infos_m,cle_lm,cle_contrat,commentaire";
       // Select
       String sql="SELECT "+fields+" FROM mariage WHERE cle = ?";
       _psGetByPrimaryKey=newConnection.prepareStatement(sql);
@@ -64,7 +64,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
       sql="SELECT "+fields+" FROM mariage";
       _psGetAll=newConnection.prepareStatement(sql);
       // Insert
-      sql="INSERT INTO mariage ("+fields+") VALUES (?,?,?,?,?,?,?,?)";
+      sql="INSERT INTO mariage ("+fields+") VALUES (?,?,?,?,?,?,?,?,?,?)";
       if (usesHSQLDB())
       {
         _psInsert=newConnection.prepareStatement(sql);
@@ -126,6 +126,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
   private void fillUnion(Union union, ResultSet rs) throws SQLException
   {
     int n=2;
+    // Man
     DataProxy<Person> manProxy=null;
     long manKey=rs.getLong(n);
     if (!rs.wasNull())
@@ -134,6 +135,14 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     }
     union.setManProxy(manProxy);
     n++;
+    // Man order
+    int manOrder=rs.getInt(n);
+    if (!rs.wasNull())
+    {
+      union.setManOrder(Integer.valueOf(manOrder));
+    }
+    n++;
+    // Woman
     DataProxy<Person> womanProxy=null;
     long womanKey=rs.getLong(n);
     if (!rs.wasNull())
@@ -142,7 +151,16 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     }
     union.setWomanProxy(womanProxy);
     n++;
+    // Woman order
+    int womanOrder=rs.getInt(n);
+    if (!rs.wasNull())
+    {
+      union.setWomanOrder(Integer.valueOf(womanOrder));
+    }
+    n++;
+    // Date
     union.setDate(rs.getDate(n++),rs.getString(n++));
+    // Place
     DataProxy<Place> placeProxy=null;
     long placeKey=rs.getLong(n);
     if (!rs.wasNull())
@@ -151,6 +169,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     }
     union.setPlaceProxy(placeProxy);
     n++;
+    // Contract
     DataProxy<Act> contractProxy=null;
     long contractKey=rs.getLong(n);
     if (!rs.wasNull())
@@ -159,6 +178,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
     }
     union.setWeddingContractProxy(contractProxy);
     n++;
+    // Comments
     union.setComments(rs.getString(n));
   }
 
@@ -346,6 +366,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
           _psInsert.setLong(n,key.longValue());
         }
         n++;
+        // Man key
         DataProxy<Person> manPerson=union.getManProxy();
         if (manPerson!=null)
         {
@@ -356,6 +377,18 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
           _psInsert.setNull(n,Types.INTEGER);
         }
         n++;
+        // Man order
+        Integer manOrder=union.getManOrder();
+        if (manOrder!=null)
+        {
+          _psInsert.setInt(n,manOrder.intValue());
+        }
+        else
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
+        n++;
+        // Woman key
         DataProxy<Person> womanPerson=union.getWomanProxy();
         if (womanPerson!=null)
         {
@@ -366,6 +399,18 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
           _psInsert.setNull(n,Types.INTEGER);
         }
         n++;
+        // Woman order
+        Integer womanOrder=union.getWomanOrder();
+        if (womanOrder!=null)
+        {
+          _psInsert.setInt(n,womanOrder.intValue());
+        }
+        else
+        {
+          _psInsert.setNull(n,Types.INTEGER);
+        }
+        n++;
+        // Date
         Long date=union.getDate();
         if (date!=null)
         {
@@ -378,6 +423,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
         n++;
         _psInsert.setString(n,union.getInfos());
         n++;
+        // Place
         DataProxy<Place> placeProxy=union.getPlaceProxy();
         if ((placeProxy!=null) && (placeProxy.getPrimaryKey()!=null))
         {
@@ -389,6 +435,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
           _psInsert.setNull(n,Types.INTEGER);
         }
         n++;
+        // Contract
         DataProxy<Act> weddingContractProxy=union.getWeddingContractProxy();
         if ((weddingContractProxy!=null) && (weddingContractProxy.getPrimaryKey()!=null))
         {
@@ -400,6 +447,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
           _psInsert.setNull(n,Types.INTEGER);
         }
         n++;
+        // Comments
         _psInsert.setString(n,union.getComments());
         _psInsert.executeUpdate();
         if (key==null)

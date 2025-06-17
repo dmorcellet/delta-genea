@@ -32,8 +32,12 @@ public class Union extends DataObject<Union>
   private DataProxy<Place> _place;
 
   // Persons
+  // - man
   private DataProxy<Person> _man;
+  private Integer _manOrder;
+  // - woman
   private DataProxy<Person> _woman;
+  private Integer _womanOrder;
 
   // Wedding contract
   private DataProxy<Act> _weddingContract;
@@ -241,6 +245,24 @@ public class Union extends DataObject<Union>
   }
 
   /**
+   * Get the man order.
+   * @return the man order.
+   */
+  public Integer getManOrder()
+  {
+    return _manOrder;
+  }
+
+  /**
+   * Set the man order.
+   * @param manOrder Order to set.
+   */
+  public void setManOrder(Integer manOrder)
+  {
+    _manOrder=manOrder;
+  }
+
+  /**
    * Get the proxy for the female person involved in this union.
    * @return A proxy or <code>null</code>.
    */
@@ -283,6 +305,24 @@ public class Union extends DataObject<Union>
       return _woman.getDataObject();
     }
     return null;
+  }
+
+  /**
+   * Get the woman order.
+   * @return the woman order.
+   */
+  public Integer getWomanOrder()
+  {
+    return _womanOrder;
+  }
+
+  /**
+   * Set the woman order.
+   * @param womanOrder Order to set.
+   */
+  public void setWomanOrder(Integer womanOrder)
+  {
+    _womanOrder=womanOrder;
   }
 
   /**

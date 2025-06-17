@@ -43,12 +43,16 @@ public class UnionXMLIO extends DefaultXMLIO<Union>
     {
       ret.setManProxy(_source.buildProxy(Person.class,Long.valueOf(manKey)));
     }
+    Integer manOrder=DOMParsingTools.getIntegerAttribute(attrs,GeneaXMLConstants.UNION_MAN_ORDER_ATTR,null);
+    ret.setManOrder(manOrder);
     // Woman
     long womanKey=DOMParsingTools.getLongAttribute(attrs,GeneaXMLConstants.UNION_WOMAN_ATTR,-1);
     if (womanKey>=0)
     {
       ret.setWomanProxy(_source.buildProxy(Person.class,Long.valueOf(womanKey)));
     }
+    Integer womanOrder=DOMParsingTools.getIntegerAttribute(attrs,GeneaXMLConstants.UNION_WOMAN_ORDER_ATTR,null);
+    ret.setWomanOrder(womanOrder);
     // Wedding contract ID
     long weddingContractKey=DOMParsingTools.getLongAttribute(attrs,GeneaXMLConstants.UNION_WEDDING_CONTRACT_ID_ATTR,-1);
     if (weddingContractKey>=0)
@@ -71,8 +75,18 @@ public class UnionXMLIO extends DefaultXMLIO<Union>
     XMLUtils.writeProxy(objectAttrs,GeneaXMLConstants.PLACE_ATTR,object.getPlaceProxy());
     // Man
     XMLUtils.writeProxy(objectAttrs,GeneaXMLConstants.UNION_MAN_ATTR,object.getManProxy());
+    Integer manOrder=object.getManOrder();
+    if (manOrder!=null)
+    {
+      objectAttrs.addAttribute("","",GeneaXMLConstants.UNION_MAN_ORDER_ATTR,XmlWriter.CDATA,manOrder.toString());
+    }
     // Woman
     XMLUtils.writeProxy(objectAttrs,GeneaXMLConstants.UNION_WOMAN_ATTR,object.getWomanProxy());
+    Integer womanOrder=object.getWomanOrder();
+    if (womanOrder!=null)
+    {
+      objectAttrs.addAttribute("","",GeneaXMLConstants.UNION_WOMAN_ORDER_ATTR,XmlWriter.CDATA,womanOrder.toString());
+    }
     // Wedding contract
     XMLUtils.writeProxy(objectAttrs,GeneaXMLConstants.UNION_WEDDING_CONTRACT_ID_ATTR,object.getWeddingContractProxy());
     // Comments

@@ -100,9 +100,17 @@ public class GeneaXMLConstants
    */
   public static final String UNION_MAN_ATTR="manId";
   /**
+   * Union : man order.
+   */
+  public static final String UNION_MAN_ORDER_ATTR="manOrder";
+  /**
    * Union : woman key.
    */
   public static final String UNION_WOMAN_ATTR="womanId";
+  /**
+   * Union : woman order.
+   */
+  public static final String UNION_WOMAN_ORDER_ATTR="womanOrder";
   /**
    * Union : wedding contract ID.
    */
