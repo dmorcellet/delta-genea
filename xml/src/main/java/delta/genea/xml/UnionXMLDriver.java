@@ -1,12 +1,14 @@
 package delta.genea.xml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import delta.common.framework.objects.xml.ObjectXmlDriver;
 import delta.genea.data.Person;
 import delta.genea.data.Union;
+import delta.genea.data.comparators.UnionOrderComparator;
 
 /**
  * XML driver for unions.
@@ -33,19 +35,30 @@ public class UnionXMLDriver extends ObjectXmlDriver<Union>
    */
   public List<Long> getFromPerson(long primaryKey)
   {
-    List<Long> ret=new ArrayList<Long>();
+    boolean isMan=true;
+    List<Union> unions=new ArrayList<Union>();
     for(Union union : _objectsMgr.getCache().getAll())
     {
       // Man
       Long manKey=union.getManKey();
       if ((manKey!=null) && (manKey.longValue()==primaryKey))
       {
-        ret.add(union.getPrimaryKey());
+        unions.add(union);
         continue;
       }
       // Woman
       Long womanKey=union.getWomanKey();
       if ((womanKey!=null) && (womanKey.longValue()==primaryKey))
+      {
+        unions.add(union);
+        isMan=false;
+      }
+    }
+    List<Long> ret=new ArrayList<Long>();
+    if (!unions.isEmpty())
+    {
+      Collections.sort(unions,new UnionOrderComparator(isMan));
+      for(Union union : unions)
       {
         ret.add(union.getPrimaryKey());
       }

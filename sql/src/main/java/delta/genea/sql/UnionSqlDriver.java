@@ -56,7 +56,7 @@ public class UnionSqlDriver extends ObjectSqlDriver<Union>
   {
     try
     {
-      String fields="cle,cle_homme,ordre_homme,ordre_femme,cle_femme,date_debut,infos_m,cle_lm,cle_contrat,commentaire";
+      String fields="cle,cle_homme,ordre_homme,cle_femme,ordre_femme,date_debut,infos_m,cle_lm,cle_contrat,commentaire";
       // Select
       String sql="SELECT "+fields+" FROM mariage WHERE cle = ?";
       _psGetByPrimaryKey=newConnection.prepareStatement(sql);
