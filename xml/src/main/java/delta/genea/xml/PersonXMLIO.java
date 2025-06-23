@@ -19,6 +19,7 @@ import delta.genea.data.OccupationForPerson;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.Sex;
+import delta.genea.data.TitleForPerson;
 
 /**
  * XML I/O for persons.
@@ -99,6 +100,10 @@ public class PersonXMLIO extends DefaultXMLIO<Person>
 
     // Known homes
     readHomes(tag,ret);
+
+    // Known titles
+    readTitles(tag,ret);
+
     return ret;
   }
 
@@ -150,6 +155,25 @@ public class PersonXMLIO extends DefaultXMLIO<Person>
       homesForPerson.add(homeForPerson);
     }
     person.setHomes(homesForPerson);
+  }
+
+  private void readTitles(Element tag, Person person)
+  {
+    List<Element> childTags=DOMParsingTools.getChildTagsByName(tag,GeneaXMLConstants.PERSON_TITLE_TAG);
+    List<TitleForPerson> titlesForPerson=new ArrayList<TitleForPerson>();
+    for(Element childTag : childTags)
+    {
+      TitleForPerson titleForPerson=new TitleForPerson();
+      NamedNodeMap childAttrs=childTag.getAttributes();
+      // Year
+      Integer year=DOMParsingTools.getIntegerAttribute(childAttrs,GeneaXMLConstants.TITLE_YEAR_ATTR,null);
+      titleForPerson.setYear(year);
+      // Text
+      String text=DOMParsingTools.getStringAttribute(childAttrs,GeneaXMLConstants.TITLE_TEXT_ATTR,"");
+      titleForPerson.setTitle(text);
+      titlesForPerson.add(titleForPerson);
+    }
+    person.setTitles(titlesForPerson);
   }
 
   @Override
@@ -211,6 +235,7 @@ public class PersonXMLIO extends DefaultXMLIO<Person>
   {
     writeOccupations(hd,object);
     writeHomes(hd,object);
+    writeTitles(hd,object);
   }
 
   private void writeOccupations(TransformerHandler hd, Person object) throws SAXException
@@ -265,6 +290,32 @@ public class PersonXMLIO extends DefaultXMLIO<Person>
         XMLUtils.writeProxy(attrs,GeneaXMLConstants.HOME_PLACE_ATTR,home.getPlaceProxy());
         hd.startElement("","",GeneaXMLConstants.PERSON_HOME_TAG,attrs);
         hd.endElement("","",GeneaXMLConstants.PERSON_HOME_TAG);
+      }
+    }
+  }
+
+  private void writeTitles(TransformerHandler hd, Person object) throws SAXException
+  {
+    List<TitleForPerson> titles=object.getTitles();
+    if ((titles!=null) && (!titles.isEmpty()))
+    {
+      for(TitleForPerson title : titles)
+      {
+        AttributesImpl attrs=new AttributesImpl();
+        // Year
+        Integer year=title.getYear();
+        if (year!=null)
+        {
+          attrs.addAttribute("","",GeneaXMLConstants.TITLE_YEAR_ATTR,XmlWriter.CDATA,year.toString());
+        }
+        // Title
+        String titleText=title.getTitle();
+        if (!titleText.isEmpty())
+        {
+          attrs.addAttribute("","",GeneaXMLConstants.TITLE_TEXT_ATTR,XmlWriter.CDATA,titleText);
+        }
+        hd.startElement("","",GeneaXMLConstants.PERSON_TITLE_TAG,attrs);
+        hd.endElement("","",GeneaXMLConstants.PERSON_TITLE_TAG);
       }
     }
   }

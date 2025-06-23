@@ -16,6 +16,7 @@ import delta.genea.data.Person;
 import delta.genea.data.Picture;
 import delta.genea.data.Place;
 import delta.genea.data.Sex;
+import delta.genea.data.TitleForPerson;
 import delta.genea.data.Union;
 import delta.genea.data.comparators.PersonComparator;
 import delta.genea.data.comparators.PersonComparator.COMPARISON_CRITERIA;
@@ -209,6 +210,8 @@ public class PersonPage extends GeneaWebPage
     boolean previousWasAList=false;
     // Professions
     previousWasAList=doProfessions(pw,tools,main,previousWasAList);
+    // Titles
+    previousWasAList=doTitles(pw,tools,main,previousWasAList);
     // Homes
     previousWasAList=doHomes(pw,tools,main,previousWasAList);
     // Unions
@@ -285,6 +288,37 @@ public class PersonPage extends GeneaWebPage
           pw.print(' ');
         }
         tools.generatePlace(place,"","");
+        pw.println(HtmlConstants.END_LI);
+      }
+      pw.println(HtmlConstants.END_UL);
+      previousWasAList=true;
+    }
+    return previousWasAList;
+  }
+
+  private boolean doTitles(PrintWriter pw, PageTools tools, Person main, boolean previousWasAList)
+  {
+    List<TitleForPerson> titles=main.getTitles();
+    if ((titles!=null)&&(!titles.isEmpty()))
+    {
+      if (!previousWasAList)
+      {
+        pw.println("<br>");
+      }
+      pw.println("<b>Titres :</b>");
+      pw.println(HtmlConstants.UL);
+      for(TitleForPerson title : titles)
+      {
+        pw.print(HtmlConstants.LI);
+        Integer year=title.getYear();
+        if (year!=null)
+        {
+          pw.print("(");
+          pw.print(year);
+          pw.print(") ");
+        }
+        String text=title.getTitle();
+        pw.print(text);
         pw.println(HtmlConstants.END_LI);
       }
       pw.println(HtmlConstants.END_UL);

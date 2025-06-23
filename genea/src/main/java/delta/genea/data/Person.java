@@ -53,6 +53,8 @@ public class Person extends DataObject<Person>
   private List<OccupationForPerson> _occupations;
   // Known homes
   private List<HomeForPerson> _homes;
+  // Known titles
+  private List<TitleForPerson> _titles;
 
   // Comments
   private String _comments;
@@ -619,6 +621,37 @@ public class Person extends DataObject<Person>
       _homes=new ArrayList<HomeForPerson>();
     }
     _homes.add(h);
+  }
+
+  /**
+   * Get all titles for this person.
+   * @return A possibly empty list of titles.
+   */
+  public List<TitleForPerson> getTitles()
+  {
+    return _titles;
+  }
+
+  /**
+   * Set the titles for this person.
+   * @param list Titles to set.
+   */
+  public void setTitles(List<TitleForPerson> list)
+  {
+    _titles=list;
+  }
+
+  /**
+   * Add a title for this person.
+   * @param t Title to add.
+   */
+  public void addTitle(TitleForPerson t)
+  {
+    if (_homes==null)
+    {
+      _titles=new ArrayList<TitleForPerson>();
+    }
+    _titles.add(t);
   }
 
   /**

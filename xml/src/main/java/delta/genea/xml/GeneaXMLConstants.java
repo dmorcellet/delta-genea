@@ -225,6 +225,18 @@ public class GeneaXMLConstants
    * Home: attribute 'placeId'.
    */
   public static final String HOME_PLACE_ATTR="placeId";
+  /**
+   * Person title tag.
+   */
+  public static final String PERSON_TITLE_TAG="title";
+  /**
+   * Title: attribute 'text'.
+   */
+  public static final String TITLE_TEXT_ATTR="text";
+  /**
+   * Title: attribute 'year'.
+   */
+  public static final String TITLE_YEAR_ATTR="year";
 
   /**
    * Cousinage: attribute 'cousin1'.

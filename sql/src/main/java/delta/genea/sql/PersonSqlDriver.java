@@ -25,6 +25,7 @@ import delta.genea.data.OccupationForPerson;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
 import delta.genea.data.Sex;
+import delta.genea.data.TitleForPerson;
 
 /**
  * SQL driver for persons.
@@ -45,6 +46,7 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
   private PreparedStatement _psPatronyme;
   private PreparedStatement _psGetOccupations;
   private PreparedStatement _psGetHomes;
+  private PreparedStatement _psGetTitles;
   private PreparedStatement _psInsertOccupation;
   private PreparedStatement _psInsertHome;
   private PreparedStatement _psPartialGetByPrimaryKey;
@@ -111,6 +113,8 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
       _psGetOccupations=newConnection.prepareStatement(sql);
       sql="SELECT cle_personne,annee,lieu,cle_commune FROM residence WHERE cle_personne = ? ORDER BY annee";
       _psGetHomes=newConnection.prepareStatement(sql);
+      sql="SELECT cle_personne,annee,titre FROM titre WHERE cle_personne = ? ORDER BY annee";
+      _psGetTitles=newConnection.prepareStatement(sql);
       sql="INSERT INTO profession (cle_personne,annee,profession,lieu) VALUES (?,?,?,?)";
       _psInsertOccupation=newConnection.prepareStatement(sql);
       sql="INSERT INTO residence (cle_personne,annee,lieu,cle_commune) VALUES (?,?,?,?)";
@@ -150,6 +154,8 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           ret.setOccupations(occupations);
           List<HomeForPerson> homes=loadHomes(primaryKey);
           ret.setHomes(homes);
+          List<TitleForPerson> titles=loadTitles(primaryKey);
+          ret.setTitles(titles);
         }
       }
       catch (SQLException sqlException)
@@ -376,6 +382,52 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
     }
   }
 
+  private List<TitleForPerson> loadTitles(Long primaryKey)
+  {
+    if (primaryKey==null)
+    {
+      throw new IllegalArgumentException("loadTitles: primaryKey is null");
+    }
+    Connection connection=getConnection();
+    synchronized (connection)
+    {
+      List<TitleForPerson> ret=null;
+      ResultSet rs=null;
+      try
+      {
+        _psGetTitles.setLong(1,primaryKey.longValue());
+        rs=_psGetTitles.executeQuery();
+        while (rs.next())
+        {
+          TitleForPerson title=new TitleForPerson();
+          int n=2;
+          int year=rs.getInt(n);
+          if (!rs.wasNull())
+          {
+            title.setYear(Integer.valueOf(year));
+          }
+          n++;
+          title.setTitle(rs.getString(n));
+          if (ret==null)
+          {
+            ret=new ArrayList<TitleForPerson>();
+          }
+          ret.add(title);
+        }
+      }
+      catch (SQLException sqlException)
+      {
+        LOGGER.error("",sqlException);
+        CleanupManager.cleanup(_psGetTitles);
+      }
+      finally
+      {
+        CleanupManager.cleanup(rs);
+      }
+      return ret;
+    }
+  }
+
   @Override
   public List<Person> getAll()
   {
@@ -398,6 +450,8 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
           person.setOccupations(occupations);
           List<HomeForPerson> homes=loadHomes(primaryKey);
           person.setHomes(homes);
+          List<TitleForPerson> titles=loadTitles(primaryKey);
+          person.setTitles(titles);
           ret.add(person);
         }
       }
@@ -674,6 +728,8 @@ public class PersonSqlDriver extends ObjectSqlDriver<Person>
         handleOccupations(person);
         // Homes
         handleHomes(person);
+        // Titles
+        // TODO
       }
       catch (SQLWarning sqlWarning)
       {
