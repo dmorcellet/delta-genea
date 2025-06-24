@@ -34,6 +34,8 @@ public class ActsForCouple
    */
   public boolean build()
   {
+    _actsForMan=null;
+    _actsForWoman=null;
     if (_man!=null)
     {
       _actsForMan=new ActsForPerson(_source,_man);

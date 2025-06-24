@@ -110,13 +110,12 @@ public class ActsFromPlacePage extends GeneaWebPage
 
     pw.println("<ul>");
     int nb=list.size();
-    Act act;
     GeneaUserContext context=(GeneaUserContext)getUserContext();
     PageTools tools=new PageTools(context,pw);
     for(int i=0;i<nb;i++)
     {
       pw.println(HtmlConstants.LI);
-      act=list.get(i);
+      Act act=list.get(i);
       tools.generateActLink(act,act.getP1(),act.getP2());
       pw.println(HtmlConstants.END_LI);
     }

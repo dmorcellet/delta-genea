@@ -17,16 +17,7 @@ public class Constants
   /**
    * Root URL of the site.
    */
-  private static final String SITE_ROOT="http://www.archinoe.net/cg62/registre.php#";
-
-  /**
-   * Get the URL of the main page.
-   * @return an URL.
-   */
-  public static String getMainURL()
-  {
-    return SITE_ROOT;
-  }
+  static final String SITE_ROOT="http://www.archinoe.net/cg62/registre.php#";
 
   /**
    * Get the filename to use for a page.

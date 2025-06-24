@@ -211,7 +211,7 @@ public class PersonPage extends GeneaWebPage
     // Professions
     previousWasAList=doProfessions(pw,tools,main,previousWasAList);
     // Titles
-    previousWasAList=doTitles(pw,tools,main,previousWasAList);
+    previousWasAList=doTitles(pw,main,previousWasAList);
     // Homes
     previousWasAList=doHomes(pw,tools,main,previousWasAList);
     // Unions
@@ -296,7 +296,7 @@ public class PersonPage extends GeneaWebPage
     return previousWasAList;
   }
 
-  private boolean doTitles(PrintWriter pw, PageTools tools, Person main, boolean previousWasAList)
+  private boolean doTitles(PrintWriter pw, Person main, boolean previousWasAList)
   {
     List<TitleForPerson> titles=main.getTitles();
     if ((titles!=null)&&(!titles.isEmpty()))

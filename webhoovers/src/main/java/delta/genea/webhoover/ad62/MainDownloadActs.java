@@ -90,11 +90,10 @@ public class MainDownloadActs
     Downloader downloader=session.getDownloader();
     File tmpDir=session.getTmpDir();
     File tmpFile=new File(tmpDir,"TD_placesIndex.html");
-    String url=Constants.getMainURL();
-    downloader.downloadToFile(url, tmpFile);
+    downloader.downloadToFile(Constants.SITE_ROOT, tmpFile);
     File tmpFile2=new File(tmpDir,"visuInit.html");
     String id=Constants.ID;
-    url="http://www.archinoe.net/cg62/visualiseur/visu_init.php?fonds=ec&id="+id;
+    String url="http://www.archinoe.net/cg62/visualiseur/visu_init.php?fonds=ec&id="+id;
     downloader.downloadToFile(url, tmpFile2);
     String sessionId=downloader.getCookieValue("PHPSESSID");
     LOGGER.info("Session ID: {}",sessionId);

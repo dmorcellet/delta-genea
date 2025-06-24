@@ -64,7 +64,7 @@ public class GeneaDataSource
         return source;
       }
     }
-    if ((source==null) && (hasFactories))
+    if (hasFactories)
     {
       return buildSource("sql:"+id);
     }

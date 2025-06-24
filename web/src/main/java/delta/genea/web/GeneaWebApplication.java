@@ -24,13 +24,13 @@ public class GeneaWebApplication extends WebApplication
   }
 
   @Override
-  public void initApplication() throws Exception
+  public void initApplication()
   {
     GeneaApplication.getInstance();
   }
 
   @Override
-  public void closeApplication() throws Exception
+  public void closeApplication()
   {
     GeneaApplication.getInstance().stop();
   }

@@ -285,7 +285,7 @@ public class ActImporter
       }
       act.setPath(newName);
     }
-    if ((act!=null) && (pageIndex>act.getNbFiles())) 
+    if (pageIndex>act.getNbFiles())
     {
       act.setNbFiles(pageIndex);
     }
