@@ -1,9 +1,5 @@
 package delta.genea.misc;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,22 +36,7 @@ public class DataSourceConfiguration
    */
   private DataSourceConfiguration()
   {
-    InputStream is=getClass().getClassLoader().getResourceAsStream("delta/genea/misc/datasource.properties");
-    Properties props=new Properties();
-    try
-    {
-      props.load(is);
-    }
-    catch(IOException ioe)
-    {
-      LOGGER.error("",ioe);
-    }
-    loadFromProperties(props);
-  }
-  
-  private void loadFromProperties(Properties props)
-  {
-    _datasourceName=props.getProperty("datasource.default.name","genea");
+    _datasourceName=GeneaCfg.getInstance().getDefaultDatasource();
     LOGGER.info("_datasourceName={}",_datasourceName);
   }
 

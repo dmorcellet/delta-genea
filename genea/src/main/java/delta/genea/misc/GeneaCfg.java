@@ -17,6 +17,8 @@ public class GeneaCfg
 
   private File _actsRootPath;
   private File _picturesRootPath;
+  private String _defaultDatasource;
+  private int _port;
 
   /**
    * Reference to the sole instance of this class.
@@ -49,6 +51,10 @@ public class GeneaCfg
     String picturesRootPath=props.getStringProperty("pictures_root_dir","pictures");
     _picturesRootPath=new File(picturesRootPath);
     LOGGER.info("_picturesRootPath={}",_picturesRootPath);
+    _defaultDatasource=props.getStringProperty("datasource.default.name","genea");
+    LOGGER.info("_defaultDatasource={}",_defaultDatasource);
+    _port=props.getIntProperty("server.port",8081);
+    LOGGER.info("_port={}",Integer.valueOf(_port));
   }
 
   /**
@@ -67,5 +73,23 @@ public class GeneaCfg
   public File getPicturesRootPath()
   {
     return _picturesRootPath;
+  }
+
+  /**
+   * get the default datasource.
+   * @return A datasource spec.
+   */
+  public String getDefaultDatasource()
+  {
+    return _defaultDatasource;
+  }
+
+  /**
+   * Get the web server port.
+   * @return A port.
+   */
+  public int getServerPort()
+  {
+    return _port;
   }
 }
