@@ -50,12 +50,15 @@ public class ImagePage extends GeneaWebPage
     try
     {
       File file=getFile();
-      fis=new FileInputStream(file);
-      while (true)
+      if (file.exists())
       {
-        int bytesRead=fis.read(buffer);
-        if (bytesRead<=0) break;
-        os.write(buffer,0,bytesRead);
+        fis=new FileInputStream(file);
+        while (true)
+        {
+          int bytesRead=fis.read(buffer);
+          if (bytesRead<=0) break;
+          os.write(buffer,0,bytesRead);
+        }
       }
     }
     catch(IOException e)
