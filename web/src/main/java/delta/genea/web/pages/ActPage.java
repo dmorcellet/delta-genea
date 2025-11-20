@@ -77,6 +77,7 @@ public class ActPage extends GeneaWebPage
       pw.println("<B>Acte non trouvé !</B>");
       pw.println(HtmlConstants.END_DIV);
       WebPageTools.generatePageFooter(pw);
+      return;
     }
 
     GeneaUserContext context=(GeneaUserContext)getUserContext();
