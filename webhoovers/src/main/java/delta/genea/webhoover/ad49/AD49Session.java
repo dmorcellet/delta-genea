@@ -1,7 +1,6 @@
 package delta.genea.webhoover.ad49;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -65,12 +64,9 @@ public class AD49Session extends ADSession
     // Parse registry page to get PHP session ID
     {
       List<String> lines=TextUtils.readAsLines(registryPageFile);
-      String line;
-      int index;
-      for(Iterator<String> it=lines.iterator();it.hasNext();)
+      for(String line : lines)
       {
-        line=it.next();
-        index=line.indexOf(PHPSID_SEED);
+        int index=line.indexOf(PHPSID_SEED);
         if (index!=-1)
         {
           _phpSID=line.substring(index+PHPSID_SEED.length());

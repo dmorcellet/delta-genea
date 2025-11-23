@@ -2,7 +2,6 @@ package delta.genea.webhoover.ad49;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import delta.common.utils.text.TextTools;
@@ -58,9 +57,8 @@ public class PlacePageParser
     List<ActsPackage> result=new ArrayList<ActsPackage>();
     String tableContents="";
     List<String> lines=TextUtils.readAsLines(placePageFile);
-    for(Iterator<String> it=lines.iterator();it.hasNext();)
+    for(String line : lines)
     {
-      String line=it.next();
       int index=line.indexOf(TABLE_START);
       if (index!=-1)
       {

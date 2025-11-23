@@ -1,7 +1,6 @@
 package delta.genea.web.pages;
 
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.List;
 
 import delta.common.framework.web.WebPageTools;
@@ -50,16 +49,13 @@ public class UnionsPage extends GeneaWebPage
 
     List<Union> unions=getDataSource().loadObjectSet(Union.class,Union.NAME_AND_PLACE_SET,_name,_key);
     _unions=new UnionsTable();
-    Union u;
-    DataTableRow row;
     int dateColumnIndex=_unions.getColumnByKey(UnionsTable.DATE_COLUMN).getIndex();
     int placeColumnIndex=_unions.getColumnByKey(UnionsTable.PLACE_COLUMN).getIndex();
     int manColumnIndex=_unions.getColumnByKey(UnionsTable.MAN_COLUMN).getIndex();
     int womanColumnIndex=_unions.getColumnByKey(UnionsTable.WOMAN_COLUMN).getIndex();
-    for(Iterator<Union> it=unions.iterator();it.hasNext();)
+    for(Union u : unions)
     {
-      u=it.next();
-      row=_unions.addRow();
+      DataTableRow row=_unions.addRow();
       row.setData(dateColumnIndex,u.getGeneaDate());
       row.setData(placeColumnIndex,u.getPlace());
       row.setData(manColumnIndex,u.getMan());

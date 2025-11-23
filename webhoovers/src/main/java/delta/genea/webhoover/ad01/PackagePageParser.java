@@ -1,7 +1,6 @@
 package delta.genea.webhoover.ad01;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 import delta.common.utils.NumericTools;
@@ -94,23 +93,20 @@ public class PackagePageParser
     }
     _downloader.downloadToFile(url,page);
     List<String> lines=TextUtils.readAsLines(page);
-    String line;
-    int index;
     String imageName="";
     int value;
     int chunkHSize=0;
     int chunkVSize=0;
     int hsize=0;
     int vsize=0;
-    for(Iterator<String> it=lines.iterator();it.hasNext();)
+    for(String line : lines)
     {
-      line=it.next();
       if (nb==0)
       {
         value=parseIntValue(line,START_OF_NB_PAGES_LINE);
         if (value!=-1) _nbPages=value;
       }
-      index=line.indexOf(START_IMAGE_NAME_LINE);
+      int index=line.indexOf(START_IMAGE_NAME_LINE);
       if (index!=-1)
       {
         imageName=line.substring(START_IMAGE_NAME_LINE.length());

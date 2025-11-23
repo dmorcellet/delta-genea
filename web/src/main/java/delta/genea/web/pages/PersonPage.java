@@ -2,7 +2,6 @@ package delta.genea.web.pages;
 
 import java.io.PrintWriter;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import delta.common.framework.web.PageParameters;
@@ -492,10 +491,8 @@ public class PersonPage extends GeneaWebPage
     {
       pw.println("<b>Photos :</b>");
       pw.println(HtmlConstants.UL);
-      Picture picture;
-      for(Iterator<Picture> it=pictures.iterator();it.hasNext();)
+      for(Picture picture : pictures)
       {
-        picture=it.next();
         pw.print(HtmlConstants.LI);
         tools.generatePictureLink(picture);
         pw.println(HtmlConstants.END_LI);

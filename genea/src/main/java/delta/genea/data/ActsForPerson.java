@@ -2,7 +2,6 @@ package delta.genea.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import delta.common.framework.objects.data.DataObject;
@@ -67,8 +66,6 @@ public class ActsForPerson
     _otherActs=_dataSource.loadRelation(Act.class,Act.OTHER_ACTS_RELATION,key);
 
     sortActs(acts);
-    _otherActs.addAll(acts);
-    Collections.sort(_otherActs,new ActDateComparator());
     return true;
   }
 
@@ -81,22 +78,24 @@ public class ActsForPerson
       _unionActs.add(null);
       _weddingContractActs.add(null);
     }
-    for(Iterator<Act> it=acts.iterator();it.hasNext();)
+    List<Act> otherActs=new ArrayList<Act>(acts);
+    for(Act current : acts)
     {
-      Act current=it.next();
       current.getP1();
       current.getP2();
       ActType type=current.getActType();
-      if (type!=null) {
+      if (type!=null)
+      {
         if (type.isBirthAct())
         {
           _birthAct=current;
-          it.remove();
+          
+          otherActs.remove(current);
         }
         else if (type.isDeathAct())
         {
           _deathAct=current;
-          it.remove();
+          otherActs.remove(current);
         }
         else if (DataObject.keysAreEqual(current.getActTypeKey(),Long.valueOf(ActType.UNION)))
         {
@@ -107,7 +106,7 @@ public class ActsForPerson
                 (DataObject.keysAreEqual(currentUnion.getWomanKey(),current.getP2Key())))
             {
               _unionActs.set(index,current);
-              it.remove();
+              otherActs.remove(current);
               break;
             }
             index++;
@@ -122,7 +121,7 @@ public class ActsForPerson
                 (DataObject.keysAreEqual(currentUnion.getWomanKey(),current.getP2Key())))
             {
               _weddingContractActs.set(index,current);
-              it.remove();
+              otherActs.remove(current);
               break;
             }
             index++;
@@ -130,6 +129,8 @@ public class ActsForPerson
         }
       }
     }
+    _otherActs.addAll(otherActs);
+    Collections.sort(_otherActs,new ActDateComparator());
   }
 
   /**

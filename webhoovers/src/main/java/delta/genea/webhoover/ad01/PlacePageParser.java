@@ -2,7 +2,6 @@ package delta.genea.webhoover.ad01;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -33,20 +32,21 @@ public class PlacePageParser
   {
     List<ActsPackage> ret=new ArrayList<ActsPackage>();
     List<String> lines=TextUtils.readAsLines(file);
-    String line;
-    ActsPackage actsPackage;
-    for(Iterator<String> it=lines.iterator();it.hasNext();)
+    int nbLines=lines.size();
+    for(int i=0;i<nbLines;i++)
     {
-      line=it.next();
+      String line=lines.get(i);
       if (line.startsWith(START_OF_PLACE_ENTRY))
       {
         List<String> linesOfInterest=new ArrayList<String>();
         linesOfInterest.add(line);
-        for(int i=0;i<4;i++)
+        for(int j=0;j<4;j++)
         {
-          linesOfInterest.add(it.next());
+          String lineOfInterest=lines.get(i);
+          linesOfInterest.add(lineOfInterest);
+          i++;
         }
-        actsPackage=handleEntry(linesOfInterest);
+        ActsPackage actsPackage=handleEntry(linesOfInterest);
         ret.add(actsPackage);
       }
     }

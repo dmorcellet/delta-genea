@@ -42,17 +42,12 @@ public class ActsFromPlacePage extends GeneaWebPage
     if ((acts!=null) && (!acts.isEmpty()))
     {
       _nbActs=acts.size();
-      int nb=_nbActs;
-      Act act;
-      ActType type;
-      List<Act> list;
-      for(int i=0;i<nb;i++)
+      for(Act act : acts)
       {
-        act=acts.get(i);
-        type=act.getActType();
+        ActType type=act.getActType();
         if (type!=null)
         {
-          list=_actsMap.get(type.getType());
+          List<Act> list=_actsMap.get(type.getType());
           if (list==null)
           {
             list=new ArrayList<Act>();
