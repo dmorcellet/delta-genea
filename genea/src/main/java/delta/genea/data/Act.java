@@ -6,6 +6,7 @@ import java.util.List;
 
 import delta.common.framework.objects.data.DataObject;
 import delta.common.framework.objects.data.DataProxy;
+import delta.genea.ActFileResolver;
 import delta.genea.misc.GeneaCfg;
 
 /**
@@ -498,9 +499,25 @@ public class Act extends DataObject<Act>
   }
 
   /**
-   * Get the filename for a page of screenshot for this act.
+   * Get the file for a page of screenshot for this act.
    * @param index Index of screenshot (starting at 0).
-   * @return A file name.
+   * @return A file.
+   */
+  public File getActFile(int index)
+  {
+    if (_path==null)
+    {
+      return null;
+    }
+    File rootDir=GeneaCfg.getInstance().getActsRootPath();
+    String filename=ActFileResolver.resolveFilename(rootDir,_path,index+1);
+    return new File(rootDir,filename);
+  }
+
+  /**
+   * Get the file for a page of screenshot for this act.
+   * @param index Index of screenshot (starting at 0).
+   * @return A file.
    */
   public String getActFilename(int index)
   {
@@ -508,15 +525,9 @@ public class Act extends DataObject<Act>
     {
       return null;
     }
-    StringBuilder sb=new StringBuilder(_path);
-    if (index>0)
-    {
-      sb.append('-');
-      sb.append(index+1);
-    }
-    sb.append(".jpg");
-    String imgName=sb.toString();
-    return imgName;
+    File rootDir=GeneaCfg.getInstance().getActsRootPath();
+    String filename=ActFileResolver.resolveFilename(rootDir,_path,index+1);
+    return filename;
   }
 
   /**
@@ -526,11 +537,10 @@ public class Act extends DataObject<Act>
    */
   public boolean checkFiles()
   {
-    File rootPath=GeneaCfg.getInstance().getActsRootPath();
     File file;
     for(int i=0;i<_nbFiles;i++)
     {
-      file=new File(rootPath,getActFilename(i));
+      file=getActFile(i);
       if (!file.exists())
       {
         return false;

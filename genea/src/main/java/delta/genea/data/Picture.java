@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import delta.common.framework.objects.data.DataObject;
+import delta.genea.ActFileResolver;
 import delta.genea.misc.GeneaCfg;
 
 /**
@@ -130,10 +131,8 @@ public class Picture extends DataObject<Picture>
     {
       return null;
     }
-    String imageName;
-    if (index==1) imageName=_path+".jpg";
-    else imageName=_path+"-"+index+".jpg";
-    return imageName;
+    File rootDir=GeneaCfg.getInstance().getPicturesRootPath();
+    return ActFileResolver.resolveFilename(rootDir,_path,index);
   }
 
   /**

@@ -74,24 +74,11 @@ public class ImagePage extends GeneaWebPage
   private File getFile()
   {
     GeneaApplicationContext context=(GeneaApplicationContext)getAppContext();
-    File model=context.getImagePath(_dir,_image);
+    File file=context.getImagePath(_dir,_image);
     if (LOGGER.isDebugEnabled())
     {
-      LOGGER.debug("Image file [{}]",model);
+      LOGGER.debug("Image file [{}]",file);
     }
-    String filename=model.getName();
-    if (filename.contains(".png"))
-    {
-      filename=filename.replace(".png","");
-    }
-    String jpgFilename=filename;
-    File jpgFile=new File(model.getParentFile(),jpgFilename);
-    if (jpgFile.exists())
-    {
-      return jpgFile;
-    }
-    String pngFilename=filename.replace(".jpg",".png");
-    File pngFile=new File(model.getParentFile(),pngFilename);
-    return pngFile;
+    return file;
   }
 }
