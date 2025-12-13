@@ -84,7 +84,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       _psCount=newConnection.prepareStatement(sql);
       sql="SELECT cle_acte FROM acte WHERE cle_p1 = ? OR cle_p2 = ?";
       _psGetMainFromPerson=newConnection.prepareStatement(sql);
-      sql="SELECT DISTINCT cle_acte FROM personne_acte WHERE cle_personne = ?";
+      sql="SELECT DISTINCT cle_acte FROM personne_acte WHERE cle_personne = ? OR ref_lien = ?";
       _psGetOtherFromPerson=newConnection.prepareStatement(sql);
       sql="SELECT cle_personne,presence,signature,lien,ref_lien FROM personne_acte WHERE cle_acte = ?";
       _psGetPersonInAct=newConnection.prepareStatement(sql);
@@ -366,6 +366,7 @@ public class ActSqlDriver extends ObjectSqlDriver<Act>
       try
       {
         _psGetOtherFromPerson.setLong(1,primaryKey.longValue());
+        _psGetOtherFromPerson.setLong(2,primaryKey.longValue());
         rs=_psGetOtherFromPerson.executeQuery();
         while (rs.next())
         {

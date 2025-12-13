@@ -56,8 +56,14 @@ public class ActXMLDriver extends ObjectXmlDriver<Act>
     {
       for(PersonInAct pia : act.getPersonsInAct())
       {
-        DataProxy<Person> proxy=pia.getPersonProxy();
-        if ((proxy!=null) && (primaryKey.equals(proxy.getPrimaryKey())))
+        DataProxy<Person> person=pia.getPersonProxy();
+        if ((person!=null) && (primaryKey.equals(person.getPrimaryKey())))
+        {
+          ret.add(act.getPrimaryKey());
+          break;
+        }
+        DataProxy<Person> refLink=pia.getLinkRefProxy();
+        if ((refLink!=null) && (primaryKey.equals(refLink.getPrimaryKey())))
         {
           ret.add(act.getPrimaryKey());
           break;

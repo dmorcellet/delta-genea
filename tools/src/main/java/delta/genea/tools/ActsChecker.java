@@ -225,7 +225,6 @@ public class ActsChecker
     }
   }
 
-  
   private void showSosa(long sosa1, long sosa2)
   {
     if (sosa1!=-1)
