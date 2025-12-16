@@ -1,34 +1,24 @@
-package delta.genea.data;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+package delta.genea.data.places;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import delta.common.framework.objects.data.ObjectsSource;
-import delta.common.utils.places.FrenchDepartment;
-import delta.common.utils.places.FrenchDepartmentDirectory;
 import delta.common.utils.text.StringSplitter;
+import delta.genea.data.Place;
 import delta.genea.misc.GenealogySoftware;
 
 /**
- * Manages the places found in a GEDCOM file.
+ * Decodes places descriptions.
  * @author DAM
  */
-public class PlaceManager
+public class PlacesDecoder
 {
-  private static final Logger LOGGER=LoggerFactory.getLogger(PlaceManager.class);
+  private static final Logger LOGGER=LoggerFactory.getLogger(PlacesDecoder.class);
 
-  private ObjectsSource _dataSource;
   private int _nbFields;
   private int[] _meanings;
   private int[] _fieldIndices;
-  private long _placeKey;
-  private Map<String,Place> _townPlaces;
-  private Map<String,Place> _deptPlaces;
-  private Map<String,Place> _countryPlaces;
+  private PlaceManager _placesMgr;
 
   /**
    * Identifier for an unused field.
@@ -65,19 +55,15 @@ public class PlaceManager
 
   /**
    * Constructor.
-   * @param dataSource Data source.
+   * @param placesMgr Places manager.
    * @param nbFields Number of fields.
    */
-  public PlaceManager(ObjectsSource dataSource, int nbFields)
+  public PlacesDecoder(PlaceManager placesMgr, int nbFields)
   {
-    _dataSource=dataSource;
+    _placesMgr=placesMgr;
     _nbFields=nbFields;
     _meanings=new int[nbFields];
     _fieldIndices=new int[NB_FIELD_MEANINGS];
-    _townPlaces=new HashMap<String,Place>();
-    _deptPlaces=new HashMap<String,Place>();
-    _countryPlaces=new HashMap<String,Place>();
-    _placeKey=1;
   }
 
   /**
@@ -119,13 +105,13 @@ public class PlaceManager
   }
 
   /**
-   * Decode a place statement.
-   * @param name Place definition.
-   * @return A place key or <code>null</code> if decoding failed.
+   * Decode a place.
+   * @param placeDescription Place description.
+   * @return A place or <code>null</code> if decoding failed.
    */
-  public Long decodePlaceName(String name)
+  public Place decodePlace(String placeDescription)
   {
-    String[] parts=StringSplitter.split(name,',');
+    String[] parts=StringSplitter.split(placeDescription,',');
     if (parts.length!=_nbFields)
     {
       LOGGER.error("Bad number of fields: {} instead of {}",Integer.valueOf(parts.length),Integer.valueOf(_nbFields));
@@ -137,8 +123,19 @@ public class PlaceManager
     String deptName=getPart(parts,DEPT_NAME);
     String country=getPart(parts,COUNTRY_NAME);
 
-    Place place=getPlace(placeName,deptName,deptCode,country);
-    return place.getPrimaryKey();
+    Place place=_placesMgr.getPlace(placeName,deptName,deptCode,country);
+    return place;
+  }
+
+  /**
+   * Get the key for the given place.
+   * @param placeName Place description.
+   * @return A place key or <code>null</code>.
+   */
+  public Long getPlaceKey(String placeName)
+  {
+    Place place=decodePlace(placeName);
+    return (place!=null)?place.getPrimaryKey():null;
   }
 
   private String getPart(String[] parts, int meaning)
@@ -148,98 +145,20 @@ public class PlaceManager
     return "";
   }
 
-  private Place getPlace(String name,String deptName,String deptCode,String country)
-  {
-    if ((country==null) || (country.length()==0)) country="FRANCE";
-    Place countryPlace=_countryPlaces.get(country);
-    if (countryPlace==null)
-    {
-      countryPlace=new Place(Long.valueOf(_placeKey));
-      countryPlace.setLevel(PlaceLevel.COUNTRY);
-      countryPlace.setName(country);
-      _countryPlaces.put(country,countryPlace);
-      _placeKey++;
-    }
-
-    Place deptPlace=null;
-    if (country.equalsIgnoreCase("FRANCE"))
-    {
-      FrenchDepartment frenchDept;
-      if ((deptName==null) || (deptName.length()==0)) deptName="Nord";
-      if ((deptCode==null) || (deptCode.length()==0))
-      {
-        deptCode="";
-        frenchDept=FrenchDepartmentDirectory.getInstance().getByName(deptName);
-      }
-      else
-      {
-        frenchDept=FrenchDepartmentDirectory.getInstance().getByCode(deptCode);
-      }
-      if (frenchDept!=null)
-      {
-        deptCode=frenchDept.getShortLabel();
-        deptName=frenchDept.getLabel();
-      }
-      String deptKey=deptName+"/"+deptCode;
-      deptPlace=_deptPlaces.get(deptKey);
-      if (deptPlace==null)
-      {
-        deptPlace=new Place(Long.valueOf(_placeKey));
-        deptPlace.setLevel(PlaceLevel.DEPARTMENT);
-        deptPlace.setName(deptName);
-        deptPlace.setShortName(deptCode);
-        deptPlace.setParentPlaceProxy(_dataSource.buildProxy(Place.class,countryPlace.getPrimaryKey()));
-        _deptPlaces.put(deptKey,deptPlace);
-        _placeKey++;
-      }
-    }
-    Place parent=countryPlace;
-    if (deptPlace!=null)
-    {
-      parent=deptPlace;
-    }
-    Place place=_townPlaces.get(name);
-    if (place==null)
-    {
-      place=new Place(Long.valueOf(_placeKey));
-      place.setLevel(PlaceLevel.TOWN);
-      place.setName(name);
-      if (parent!=null)
-      {
-        place.setParentPlaceProxy(_dataSource.buildProxy(Place.class,parent.getPrimaryKey()));
-      }
-      _townPlaces.put(name,place);
-      _placeKey++;
-    }
-    return place;
-  }
-
   /**
-   * Get all the known places.
-   * @param places Storage for these places.
-   */
-  public void getPlaces(List<Place> places)
-  {
-    places.addAll(_countryPlaces.values());
-    places.addAll(_deptPlaces.values());
-    places.addAll(_townPlaces.values());
-  }
-
-  /**
-   * Build a places manager and configure it for a given
-   * genealogy software.
-   * @param dataSource Data source.
+   * Build a places manager and configure it for a given genealogy software.
+   * @param placesMgr Places manager.
    * @param softwareType Genealogy software to use.
    * @return A places manager.
    */
-  public static PlaceManager buildFor(ObjectsSource dataSource, int softwareType)
+  public static PlacesDecoder buildFor(PlaceManager placesMgr, int softwareType)
   {
-    PlaceManager pm=null;
+    PlacesDecoder pm=null;
     if (softwareType==GenealogySoftware.PERSONAL_ANCESTRAL_FILE)
     {
       //   Personal Ancestral File (PAF 4.0) : 1 SOUR PAF 4.0
       //   Nom commune, Code postal, vide, Nom département, Pays
-      pm=new PlaceManager(dataSource,5);
+      pm=new PlacesDecoder(placesMgr,5);
       pm.indicateFieldMeaning(1,TOWN_NAME);
       pm.indicateFieldMeaning(2,POSTAL_CODE);
       pm.indicateFieldMeaning(3,UNUSED);
@@ -250,7 +169,7 @@ public class PlaceManager
     {
       //   Base Gén 98 : 1 SOUR BASGEN98
       //   Nom commune, Code départment, Pays
-      pm=new PlaceManager(dataSource,3);
+      pm=new PlacesDecoder(placesMgr,3);
       pm.indicateFieldMeaning(1,TOWN_NAME);
       pm.indicateFieldMeaning(4,DEPT_CODE);
       pm.indicateFieldMeaning(5,COUNTRY_NAME);
@@ -260,7 +179,7 @@ public class PlaceManager
       //   HEREDIS 6.1 PC : 1 SOUR HEREDIS 6.1 PC
       //   Nom ville, Code Postal, Nom département, Nom région, Pays, Subdivision
       //   2 PLAC Lassigny, 60350, Oise, Picardie, France, 
-      pm=new PlaceManager(dataSource,6);
+      pm=new PlacesDecoder(placesMgr,6);
       pm.indicateFieldMeaning(1,TOWN_NAME);
       pm.indicateFieldMeaning(2,POSTAL_CODE);
       pm.indicateFieldMeaning(3,DEPT_NAME);
@@ -270,7 +189,7 @@ public class PlaceManager
     }
     else if (softwareType==GenealogySoftware.GENEA)
     {
-      pm=new PlaceManager(dataSource,3);
+      pm=new PlacesDecoder(placesMgr,3);
       pm.indicateFieldMeaning(1,TOWN_NAME);
       pm.indicateFieldMeaning(2,DEPT_NAME);
       pm.indicateFieldMeaning(3,COUNTRY_NAME);

@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import delta.common.framework.objects.data.ObjectsManager;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
-import delta.genea.data.PlaceManager;
+import delta.genea.data.RawDataManager;
 import delta.genea.data.Sex;
-import delta.genea.data.Union;
+import delta.genea.data.places.PlacesDecoder;
 import delta.genea.data.sources.GeneaDataSource;
 import delta.genea.webhoover.expoactes.BirthAct;
 import delta.genea.webhoover.expoactes.BirthActsIO;
@@ -23,6 +22,7 @@ public class MainActsImporter
 {
   private GeneaDataSource _dataSource;
   private RawDataManager _data;
+  private PlacesDecoder _placesDecoder;
   private long _counter;
   private List<Person[]> _couples;
 
@@ -80,7 +80,7 @@ public class MainActsImporter
     p.setLastName(lastName);
     p.setFirstname(firstName);
     _counter++;
-    _data.getPersons().add(p);
+    _data.addPerson(p);
     return p;
   }
 
@@ -97,8 +97,7 @@ public class MainActsImporter
 
   private void importBirthAct(BirthAct act)
   {
-    PlaceManager p=_data.getPlacesManager();
-    Long placeKey=p.decodePlaceName(act.getPlace());
+    Long placeKey=_placesDecoder.getPlaceKey(act.getPlace());
     Person person=new Person(Long.valueOf(_counter));
     _counter++;
     person.setFirstname(act.getFirstName());
@@ -120,13 +119,16 @@ public class MainActsImporter
     {
       person.setMotherProxy(_dataSource.buildProxy(Person.class,mother.getPrimaryKey()));
     }
-    _data.getPersons().add(person);
+    _data.addPerson(person);
   }
 
   private void doIt(File actsFile)
   {
     _dataSource=GeneaDataSource.getInstance("genea_tmp");
     _data=new RawDataManager(_dataSource.getObjectsSource());
+    _placesDecoder=new PlacesDecoder(_data.getPlacesManager(),1);
+    _placesDecoder.indicateFieldMeaning(1,PlacesDecoder.TOWN_NAME);
+
     List<BirthAct> acts=BirthActsIO.readActs(actsFile);
     if ((acts!=null) && (!acts.isEmpty()))
     {
@@ -136,35 +138,7 @@ public class MainActsImporter
       }
       
     }
-    writeDB();
-  }
-
-  private void writeDB()
-  {
-    // Persons
-    ObjectsManager<Person> dSource=_dataSource.getManager(Person.class);
-    List<Person> persons=_data.getPersons();
-    int nbPersons=persons.size();
-    for(int i=0;i<nbPersons;i++)
-    {
-      dSource.create(persons.get(i));
-    }
-    // Unions
-    List<Union> unions=_data.getUnions();
-    ObjectsManager<Union> uSource=_dataSource.getManager(Union.class);
-    int nbUnions=unions.size();
-    for(int i=0;i<nbUnions;i++)
-    {
-      uSource.create(unions.get(i));
-    }
-    // Places
-    List<Place> places=_data.getPlaces();
-    ObjectsManager<Place> pSource=_dataSource.getManager(Place.class);
-    int nbPlaces=places.size();
-    for(int i=0;i<nbPlaces;i++)
-    {
-      pSource.create(places.get(i));
-    }
+    _data.writeDB();
   }
 
   /**

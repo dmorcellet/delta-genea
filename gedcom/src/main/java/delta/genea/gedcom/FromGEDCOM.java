@@ -1,7 +1,6 @@
 package delta.genea.gedcom;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import delta.common.framework.objects.data.DataProxy;
 import delta.common.framework.objects.data.ObjectsSource;
-import delta.common.framework.objects.sql.SqlObjectsSource;
 import delta.common.utils.NumericTools;
 import delta.common.utils.files.TextFileReader;
 import delta.common.utils.text.TextUtils;
@@ -19,7 +17,6 @@ import delta.genea.data.GeneaDate;
 import delta.genea.data.OccupationForPerson;
 import delta.genea.data.Person;
 import delta.genea.data.Place;
-import delta.genea.data.PlaceManager;
 import delta.genea.data.Sex;
 import delta.genea.data.Union;
 import delta.genea.data.sources.GeneaDataSource;
@@ -50,10 +47,7 @@ public class FromGEDCOM
   }
 
   private File _fileName;
-  private List<Person> _persons;
-  private List<Union> _unions;
-  private List<Place> _places;
-  private PlaceManager _placeManager;
+  private GedcomDataStorage _storage;
   private ObjectsSource _dataSource;
   private List<String> _lines;
   private int _index;
@@ -69,7 +63,7 @@ public class FromGEDCOM
     long time=System.currentTimeMillis();
     _fileName=fileName;
     _dataSource=GeneaDataSource.getInstance(dbName).getObjectsSource();
-    reset();
+    _storage=new GedcomDataStorage(_dataSource);
     parseFileLines();
     go();
     long time2=System.currentTimeMillis();
@@ -77,21 +71,11 @@ public class FromGEDCOM
     LOGGER.info("Time to import: {}ms",Long.valueOf(duration));
   }
 
-  private void reset()
-  {
-    _persons=new ArrayList<Person>();
-    _unions=new ArrayList<Union>();
-    _places=new ArrayList<Place>();
-    _lines=new ArrayList<String>();
-    _index=0;
-    _maxIndex=0;
-    _placeManager=null;
-  }
-
   private void parseFileLines()
   {
     TextFileReader fp=new TextFileReader(_fileName,new AnselCharset());
     _lines=TextUtils.readAsLines(fp);
+    _index=0;
     _maxIndex=_lines.size();
   }
 
@@ -133,24 +117,14 @@ public class FromGEDCOM
         _index++;
       }
     }
-    retrievePlaces();
-    writeDB();
-  }
-
-  private void retrievePlaces()
-  {
-    _places.clear();
-    if (_placeManager!=null)
-    {
-      _placeManager.getPlaces(_places);
-    }
+    _storage.writeDB();
   }
 
   private void handleSource()
   {
     int softwareType=SourceDecoder.getSourceSoftware(_lines.get(_index));
     _index++;
-    _placeManager=PlaceManager.buildFor(_dataSource,softwareType);
+    _storage.initSource(softwareType);
   }
 
   private void handlePerson()
@@ -203,7 +177,7 @@ public class FromGEDCOM
         LOGGER.debug(UNUSED_LINE,line);
       }
     }
-    _persons.add(p);
+    _storage.addPerson(p);
   }
 
   private Long parseIdLine(String idLine)
@@ -266,7 +240,7 @@ public class FromGEDCOM
       else if (line.startsWith(LINE_2_PLAC))
       {
         String tmp=line.substring(7).trim();
-        Long key=_placeManager.decodePlaceName(tmp);
+        Long key=_storage.getPlaceKey(tmp);
         DataProxy<Place> birthPlaceProxy=_dataSource.buildProxy(Place.class,key);
         p.setBirthPlaceProxy(birthPlaceProxy);
       }
@@ -299,7 +273,7 @@ public class FromGEDCOM
       else if (line.startsWith(LINE_2_PLAC))
       {
         String tmp=line.substring(7).trim();
-        Long key=_placeManager.decodePlaceName(tmp);
+        Long key=_storage.getPlaceKey(tmp);
         p.setDeathPlaceProxy(_dataSource.buildProxy(Place.class,key));
       }
     }
@@ -371,7 +345,7 @@ public class FromGEDCOM
         }
       }
     }
-    _unions.add(u);
+    _storage.addUnion(u);
   }
 
   private void handleMarriage(Union u)
@@ -398,7 +372,7 @@ public class FromGEDCOM
     else if (line.startsWith(LINE_2_PLAC))
     {
       String tmp=line.substring(7).trim();
-      Long key=_placeManager.decodePlaceName(tmp);
+      Long key=_storage.getPlaceKey(tmp);
       u.setPlaceProxy(_dataSource.buildProxy(Place.class,key));
     }
   }
@@ -409,29 +383,21 @@ public class FromGEDCOM
     String key=line.substring(8); /* "1 CHIL @" */
     Long childKey=decodePersonID(key);
 
-    int nbPersons=_persons.size();
-    boolean found=false;
-    Person tmp;
-    for(int i=0;i<nbPersons;i++)
+    Person child=_storage.getPersonByGedcomKey(childKey);
+    if (child!=null)
     {
-      tmp=_persons.get(i);
-      if (tmp.getPrimaryKey().equals(childKey))
-      {
-        found=true;
         if (manKey!=null)
         {
-          tmp.setFatherProxy(_dataSource.buildProxy(Person.class,manKey));
+          child.setFatherProxy(_dataSource.buildProxy(Person.class,manKey));
         }
         if (womanKey!=null)
         {
-          tmp.setMotherProxy(_dataSource.buildProxy(Person.class,womanKey));
+          child.setMotherProxy(_dataSource.buildProxy(Person.class,womanKey));
         }
-        break;
-      }
     }
-    if (!found)
+    else
     {
-      LOGGER.warn("Person ID: {} not found!",childKey);
+      LOGGER.warn("Person ID (child): {} not found!",childKey);
     }
   }
 
@@ -446,35 +412,5 @@ public class FromGEDCOM
     }
     long ret=NumericTools.parseLong(sb.toString(),0);
     return (ret==0)?null:Long.valueOf(ret);
-  }
-
-  private void writeDB()
-  {
-    if (_dataSource instanceof SqlObjectsSource)
-    {
-      ((SqlObjectsSource)_dataSource).setForeignKeyChecks(false);
-    }
-    // Places
-    int nbPlaces=_places.size();
-    for(int i=0;i<nbPlaces;i++)
-    {
-      _dataSource.create(Place.class,_places.get(i));
-    }
-    // Persons
-    int nbPersons=_persons.size();
-    for(int i=0;i<nbPersons;i++)
-    {
-      _dataSource.create(Person.class,_persons.get(i));
-    }
-    // Unions
-    int nbUnions=_unions.size();
-    for(int i=0;i<nbUnions;i++)
-    {
-      _dataSource.create(Union.class,_unions.get(i));
-    }
-    if (_dataSource instanceof SqlObjectsSource)
-    {
-      ((SqlObjectsSource)_dataSource).setForeignKeyChecks(true);
-    }
   }
 }
