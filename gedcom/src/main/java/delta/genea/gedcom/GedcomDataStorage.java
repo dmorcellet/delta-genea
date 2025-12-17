@@ -13,7 +13,6 @@ import delta.genea.data.places.PlacesDecoder;
  */
 public class GedcomDataStorage extends RawDataManager
 {
-  private PlaceManager _placesMgr;
   private PlacesDecoder _placesDecoder;
 
   /**
@@ -23,7 +22,6 @@ public class GedcomDataStorage extends RawDataManager
   public GedcomDataStorage(ObjectsSource dataSource)
   {
     super(dataSource);
-    _placesMgr=new PlaceManager(dataSource);
   }
 
   /**
@@ -33,7 +31,8 @@ public class GedcomDataStorage extends RawDataManager
    */
   public void initSource(int softwareType)
   {
-    _placesDecoder=PlacesDecoder.buildFor(_placesMgr,softwareType);
+    PlaceManager placesManager=getPlacesManager();
+    _placesDecoder=PlacesDecoder.buildFor(placesManager,softwareType);
   }
 
   /**
