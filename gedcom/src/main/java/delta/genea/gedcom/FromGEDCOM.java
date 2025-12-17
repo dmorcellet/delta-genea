@@ -350,30 +350,33 @@ public class FromGEDCOM
 
   private void handleMarriage(Union u)
   {
-    String line=getNextLine();
-    if (line==null)
+    while(true)
     {
-      return;
-    }
-    if (!line.startsWith("2 "))
-    {
-      _index--;
-      return;
-    }
-    if (line.startsWith(LINE_2_DATE))
-    {
-      String tmp=line.substring(7).trim();
-      GeneaDate d=DateUtils.decodeDate(tmp);
-      if (d!=null)
+      String line=getNextLine();
+      if (line==null)
       {
-        u.setDate(d);
+        return;
       }
-    }
-    else if (line.startsWith(LINE_2_PLAC))
-    {
-      String tmp=line.substring(7).trim();
-      Long key=_storage.getPlaceKey(tmp);
-      u.setPlaceProxy(_dataSource.buildProxy(Place.class,key));
+      if (!line.startsWith("2 "))
+      {
+        _index--;
+        return;
+      }
+      if (line.startsWith(LINE_2_DATE))
+      {
+        String tmp=line.substring(7).trim();
+        GeneaDate d=DateUtils.decodeDate(tmp);
+        if (d!=null)
+        {
+          u.setDate(d);
+        }
+      }
+      else if (line.startsWith(LINE_2_PLAC))
+      {
+        String tmp=line.substring(7).trim();
+        Long key=_storage.getPlaceKey(tmp);
+        u.setPlaceProxy(_dataSource.buildProxy(Place.class,key));
+      }
     }
   }
 
