@@ -146,27 +146,37 @@ public class DateUtils
 
   private static GeneaDate decode3Parts(String dateStr, final String suffix, String[] strings)
   {
-    String dateInfos;
+    Date date=null;
+    String dateInfos=null;
     // Full date ?
     int day=NumericTools.parseInt(strings[0],1);
     int month=Month.decodeEnglishMonth(strings[1]);
     int year=NumericTools.parseInt(strings[2],0);
     if ((day>0)&&(month>0)&&(year>0))
     {
-      StringBuilder sb=new StringBuilder();
-      sb.append(day);
-      sb.append('-');
-      sb.append(month);
-      sb.append('-');
-      sb.append(year);
-      sb.append(suffix);
-      dateInfos=sb.toString();
+      if (suffix.isEmpty())
+      {
+        Calendar c=Calendar.getInstance();
+        c.set(year,month-1,day);
+        date=c.getTime();
+      }
+      else
+      {
+        StringBuilder sb=new StringBuilder();
+        sb.append(day);
+        sb.append('-');
+        sb.append(month);
+        sb.append('-');
+        sb.append(year);
+        sb.append(suffix);
+        dateInfos=sb.toString();
+      }
     }
     else
     {
-      dateInfos=dateStr;
+      dateInfos=dateStr+suffix;
     }
-    return new GeneaDate((Long)null,dateInfos);
+    return new GeneaDate(date,dateInfos);
   }
 
   private static GeneaDate decode2Parts(final String suffix, String[] strings)
