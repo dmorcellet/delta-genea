@@ -1,11 +1,14 @@
 package delta.genea.xml;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.List;
 
 import delta.common.framework.objects.data.Identifiable;
 import delta.common.framework.objects.data.ObjectsManager;
 import delta.common.framework.objects.xml.ObjectXmlDriver;
+import delta.common.utils.files.FilesDeleter;
+import delta.common.utils.files.filter.ExtensionPredicate;
 import delta.genea.data.Act;
 import delta.genea.data.ActText;
 import delta.genea.data.ActType;
@@ -28,6 +31,12 @@ public class MainDataTransfer
   private void doIt()
   {
     GeneaDataSource source=GeneaDataSource.getInstance(SOURCE_DATABASE);
+    // Remove the contents of the XML source directory
+    // Otherwise, deleted elements will still be there after transfer!
+    FileFilter filter=new ExtensionPredicate("xml");
+    FilesDeleter deleter=new FilesDeleter(ROOT_DIR,filter,false);
+    deleter.doIt();
+    // Perform transfer
     GeneaDataSource target=GeneaDataSource.getInstance("xml:"+ROOT_DIR.getPath());
     handleClass(source,target,Place.class);
     handleClass(source,target,ActType.class);
