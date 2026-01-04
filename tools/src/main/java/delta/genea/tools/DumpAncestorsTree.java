@@ -28,6 +28,7 @@ public class DumpAncestorsTree
 
   private static final int ANCESTORS_TREE=0;
   private static final int DESCENDANTS_TREE=1;
+  private GeneaDataSource _dataSource;
 
   /**
    * Do the job.
@@ -38,8 +39,7 @@ public class DumpAncestorsTree
   {
     try
     {
-      GeneaDataSource dataSource=GeneaDataSource.getInstance("genea");
-      DataProxy<Person> pp=dataSource.buildProxy(Person.class,Long.valueOf(id));
+      DataProxy<Person> pp=_dataSource.buildProxy(Person.class,Long.valueOf(id));
       if (type==ANCESTORS_TREE)
       {
         Person moi=pp.getDataObject();
@@ -53,7 +53,6 @@ public class DumpAncestorsTree
         tree.build(false);
         dumpDescendantsTree(tree);
       }
-      dataSource.close();
     }
     catch (Exception e)
     {
@@ -163,8 +162,7 @@ public class DumpAncestorsTree
 
   private void doUnions(PrintStream out, Person p, int step)
   {
-    GeneaDataSource ds=GeneaDataSource.getInstance("genea");
-    List<Union> unions=ds.loadRelation(Union.class,Union.UNIONS_RELATION,p.getPrimaryKey());
+    List<Union> unions=_dataSource.loadRelation(Union.class,Union.UNIONS_RELATION,p.getPrimaryKey());
     for(Union union : unions)
     {
       Person partner;
@@ -199,8 +197,10 @@ public class DumpAncestorsTree
 
   private void doIt()
   {
+    _dataSource=GeneaDataSource.getInstance("genea");
     handle(668,ANCESTORS_TREE);
     handle(11323,DESCENDANTS_TREE);
+    _dataSource.close();
   }
 
   /**
