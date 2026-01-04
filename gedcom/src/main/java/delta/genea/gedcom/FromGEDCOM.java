@@ -345,7 +345,10 @@ public class FromGEDCOM
         }
       }
     }
-    _storage.addUnion(u);
+    if ((manKey!=null) && (womanKey!=null))
+    {
+      _storage.addUnion(u);
+    }
   }
 
   private void handleMarriage(Union u)
