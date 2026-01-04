@@ -192,6 +192,10 @@ public class DumpAncestorsTree
       {
         out.println("avec "+partner.getFirstname()+" "+partner.getLastName());
       }
+      else
+      {
+        out.println("");
+      }
     }
   }
 
