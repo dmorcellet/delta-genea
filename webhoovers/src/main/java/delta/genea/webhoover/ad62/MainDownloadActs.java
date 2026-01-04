@@ -8,13 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import delta.common.utils.NumericTools;
-import delta.common.utils.text.StringSplitter;
-import delta.common.utils.text.TextUtils;
+import delta.common.utils.misc.SleepManager;
 import delta.downloads.DownloadException;
 import delta.downloads.Downloader;
 import delta.genea.webhoover.ADSession;
-import delta.genea.webhoover.utils.FileUtils;
-import delta.genea.webhoover.utils.ImageUtils;
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.Source;
 
 /**
  * Main class for the AD62 webhoover.
@@ -25,6 +24,7 @@ public class MainDownloadActs
   private static final Logger LOGGER=LoggerFactory.getLogger(MainDownloadActs.class);
 
   private File _toDir;
+  private ADSession _session;
 
   private MainDownloadActs(File toDir)
   {
@@ -33,101 +33,91 @@ public class MainDownloadActs
 
   private void doIt() throws DownloadException
   {
-    ADSession session=new ADSession();
-    session.start();
-    List<String> places=getPlaces(session);
-    LOGGER.info("Got places: {}",places);
-    session.stop();
-  }
-
-  private String getTileURL(int pageNumber, int x, int y, int width, int height)
-  {
-    String urlTile=Constants.ROOT_SITE+"/cg62/visualiseur/visu_affiche_util.php?o=TILE&param=visu_0&p="+pageNumber+"&x="+x+"&y="+y+"&l="+width+"&h="+height+"&ol="+width+"&oh="+height+"&r=0&n=0&b=0&c=0";
-    return urlTile;
-  }
-
-  private File downloadTile(ADSession session, String urlTile, int hIndex, int vIndex) throws DownloadException
-  {
-    Downloader downloader=session.getDownloader();
-    File tmpDir=session.getTmpDir();
-    File tileFileCacheFile=new File(tmpDir,"tileFileName.txt");
-    File tileFile=new File(tmpDir,"tile"+hIndex+"_"+vIndex+".jpg");
-    downloader.downloadToFile(urlTile,tileFileCacheFile);
-    List<String> lines=TextUtils.readAsLines(tileFileCacheFile);
-    String cacheFileUrl=lines.get(0);
-    String tileUrl=Constants.ROOT_SITE+cacheFileUrl;
-    downloader.downloadToFile(tileUrl,tileFile);
-    FileUtils.deleteFile(tileFileCacheFile);
-    return tileFile;
-  }
-
-  private void downloadPage(ADSession session, File out, int pageNumber, int width, int height, int tileSize) throws DownloadException
-  {
-    LOGGER.info("Handling page {}",Integer.valueOf(pageNumber));
-    int nbH=(width/tileSize)+(((width%tileSize)!=0)?1:0);
-    int nbV=(height/tileSize)+(((height%tileSize)!=0)?1:0);
-    int x=0;
-    File[][] files=new File[nbH][nbV];
-    for(int hIndex=0;hIndex<nbH;hIndex++)
+    _session=new ADSession();
+    _session.start();
+    // BB 1 : 381133539
+    // BB 2 : 381133567
+    // Douvrin 1 : 381146209
+    // Béthencourt 1 : 210197507
+    // Béthencourt 2 : 210197532
+    String mainSetPage=downloadMainSetPage(381133567);
+    List<String> pages=parseMainSetPage(mainSetPage);
+    int nbPages=pages.size();
+    for(int i=0;i<nbPages;i++)
     {
-      int tileWidth=Math.min(tileSize,width-x);
-      int y=0;
-      for(int vIndex=0;vIndex<nbV;vIndex++)
+      try
       {
-        int tileHeight=Math.min(tileSize,height-y);
-        String urlTile=getTileURL(pageNumber,x,y,tileWidth,tileHeight);
-        files[hIndex][vIndex]=downloadTile(session,urlTile,hIndex,vIndex);
-        y+=tileHeight;
+        handlePage(pages.get(i),i);
       }
-      x+=tileWidth;
+      catch(Exception e)
+      {
+        String msg="Error with page "+i;
+        LOGGER.error(msg,e);
+      }
     }
-    ImageUtils.makeImage(files,out);
+    _session.stop();
   }
 
-  private List<String> getPlaces(ADSession session) throws DownloadException
+  private String downloadMainSetPage(int id) throws DownloadException
   {
-    List<String> placeNames=new ArrayList<String>();
-    Downloader downloader=session.getDownloader();
-    File tmpDir=session.getTmpDir();
-    File tmpFile=new File(tmpDir,"TD_placesIndex.html");
-    downloader.downloadToFile(Constants.SITE_ROOT, tmpFile);
-    File tmpFile2=new File(tmpDir,"visuInit.html");
-    String id=Constants.ID;
-    String url="http://www.archinoe.net/cg62/visualiseur/visu_init.php?fonds=ec&id="+id;
-    downloader.downloadToFile(url, tmpFile2);
-    String sessionId=downloader.getCookieValue("PHPSESSID");
-    LOGGER.info("Session ID: {}",sessionId);
-    File tmpFile3=new File(tmpDir,"page1.html");
+    String url=Constants.buildMainSetPageURL(id);
+    Downloader downloader=_session.getDownloader();
+    String ret=downloader.downloadString(url);
+    return ret;
+  }
 
-    url="http://www.archinoe.net/cg62/visualiseur/visu_registre.php?id="+id+"&w=1280&h=1024";
-    downloader.downloadToFile(url, tmpFile3);
-
-    int tile=2280;
-    int nbPages=200;
-    for(int page=1;page<=nbPages;page++)
+  private List<String> parseMainSetPage(String input)
+  {
+    List<String> ret=new ArrayList<String>();
+    Source source=new Source(input);
+    List<Element> pages=JerichoHtmlUtils.findElementsByTagNameAndAttributeValue(source,"img","data-type","IMG");
+    for(Element page : pages)
     {
-      url="http://www.archinoe.net/cg62/visualiseur/visu_affiche_util.php?PHPSID="+sessionId+"&param=visu_0&o=IMG&p="+page;
-
-      File tmpFile4=new File(tmpDir,"cache.txt");
-      downloader.downloadToFile(url, tmpFile4);
-      List<String> lines=TextUtils.readAsLines(tmpFile4);
-      String line=lines.get(0);
-      String[] items=StringSplitter.split(line,'\t');
-      int width=NumericTools.parseInt(items[3],0);
-      int height=NumericTools.parseInt(items[4],0);
-      File out=new File(_toDir,Constants.getImageName(page));
-      out.getParentFile().mkdirs();
-      downloadPage(session,out,page,width,height,tile);
+      String imageFile=page.getAttributeValue("data-original");
+      if ((imageFile!=null) && (!imageFile.isEmpty()))
+      {
+        ret.add(imageFile);
+      }
     }
-    return placeNames;
+    return ret;
+  }
+
+  private void handlePage(String page, int index) throws DownloadException
+  {
+    File toFile=Constants.getImageFile(_toDir,index+1);
+    if (toFile.exists())
+    {
+      return;
+    }
+    Downloader downloader=_session.getDownloader();
+    String url=Constants.buildGenereImageURL(1000,1000,page);
+    LOGGER.debug("Image generation URL: {}",url);
+    String ret=downloader.downloadString(url);
+    LOGGER.debug("Image generation result: {}",ret);
+    // Returns :
+    // 4 /cache/mnt_lustre_ad62_etat_civil_registres_1_132_frad062_5mir_132_01_frad062_5mir_132_01_0547_1800_1800_0_0_0_0_img.jpg  1800  1345  2944  2200  image_single
+    String[] elements=ret.split("\t");
+    int largeur=NumericTools.parseInt(elements[4],0);
+    int hauteur=NumericTools.parseInt(elements[5],0);
+    url=Constants.buildGenereImageURL(largeur,hauteur,page);
+    LOGGER.debug("Image generation URL (right sizes): {}",url);
+    ret=downloader.downloadString(url);
+    elements=ret.split("\t");
+    String cachedImage=elements[1];
+    String imageURL=Constants.buildCachedImageURL(cachedImage);
+    LOGGER.debug("Cached image URL: {}",imageURL);
+    LOGGER.info("File to write: {}",toFile);
+    downloader.downloadToFile(imageURL,toFile);
+    LOGGER.info("Wrote file: {}",toFile);
+    SleepManager.sleep(2000);
   }
 
   /**
    * Main method of this tool.
    * @param args Output directory.
-   * @throws DownloadException If a problem occurs.
+   * @throws Exception If a problem occurs.
    */
-  public static void main(String[] args) throws DownloadException
+  public static void main(String[] args) throws Exception
   {
     File toDir=new File(args[0]);
     new MainDownloadActs(toDir).doIt();
