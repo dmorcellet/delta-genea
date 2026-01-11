@@ -120,9 +120,13 @@ public class ActsForPerson
             if ((DataObject.keysAreEqual(currentUnion.getManKey(),current.getP1Key())) &&
                 (DataObject.keysAreEqual(currentUnion.getWomanKey(),current.getP2Key())))
             {
-              _weddingContractActs.set(index,current);
-              otherActs.remove(current);
-              break;
+              Act oldAct=_weddingContractActs.get(index);
+              if (oldAct==null)
+              {
+                _weddingContractActs.set(index,current);
+                otherActs.remove(current);
+                break;
+              }
             }
             index++;
           }
